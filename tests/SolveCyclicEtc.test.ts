@@ -1,18 +1,18 @@
 //Typescript Unit test
 import assert = require('assert');
-import { ValidateRowsOfSheet } from "../ValidateRowsOfSheet";
+import { SolveCyclicEtc } from "../SolveCyclicEtc";
 import { RowOfSheet } from "../RowOfSheet";
 
 const actions: Array<string> = ["examine", "grab"];
 
 
-describe("ValidateRowsOfSheet", () => {
+describe("SolveCyclicEtc", () => {
     it("TestInitKeywordIsOk", () => {
         const r1 = new RowOfSheet();
         r1.name = "oWater";
         r1.commandToMakeVisible = "init";
         const rows: Array<RowOfSheet> = [r1];
-        assert.equal("ok", ValidateRowsOfSheet(rows, actions));
+        assert.equal("ok", SolveCyclicEtc(rows, actions));
     });
 
     it("TestInitKeywordInCapsIsOk", ()=> {
@@ -21,7 +21,7 @@ describe("ValidateRowsOfSheet", () => {
         r1.commandToMakeVisible = "INIT";
         const rows: Array<RowOfSheet> = [r1];
 
-        assert.equal("ok", ValidateRowsOfSheet(rows, actions));
+        assert.equal("ok", SolveCyclicEtc(rows, actions));
     });
 
     it("TestComplicatedDependencyIsOk", ()=> {
@@ -39,7 +39,7 @@ describe("ValidateRowsOfSheet", () => {
         r3.commandToMakeVisible = "use oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2, r3];
-        assert.equal("ok", ValidateRowsOfSheet(rows, actions))
+        assert.equal("ok", SolveCyclicEtc(rows, actions))
     });
 
     it("TestTwoObjectCyclicalDependencyIsBad", () => {
@@ -52,7 +52,7 @@ describe("ValidateRowsOfSheet", () => {
         r2.commandToMakeVisible = "use oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2];
-        assert.notEqual("ok", ValidateRowsOfSheet(rows, actions))
+        assert.notEqual("ok", SolveCyclicEtc(rows, actions))
     });
 
     it("TestOneObjectCyclicalDependencyIsBad", () => {
@@ -61,7 +61,7 @@ describe("ValidateRowsOfSheet", () => {
         r1.commandToMakeVisible = "grab oObjA";
 
         const rows: Array<RowOfSheet> = [r1];
-        assert.notEqual("ok", ValidateRowsOfSheet(rows, actions))
+        assert.notEqual("ok", SolveCyclicEtc(rows, actions))
     });
 
     it("TestTwoObjectWithUseIsOk", () => {
@@ -78,7 +78,7 @@ describe("ValidateRowsOfSheet", () => {
         r3.commandToMakeVisible = "use oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2, r3];
-        assert.equal("ok", ValidateRowsOfSheet(rows, actions))
+        assert.equal("ok", SolveCyclicEtc(rows, actions))
     });
 
     it("TestTwoObjectWithoutUseIsBad", () => {
@@ -95,7 +95,7 @@ describe("ValidateRowsOfSheet", () => {
         r3.commandToMakeVisible = "grab oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2, r3];
-        assert.notEqual("ok", ValidateRowsOfSheet(rows, actions))
+        assert.notEqual("ok", SolveCyclicEtc(rows, actions))
     });
 });
 

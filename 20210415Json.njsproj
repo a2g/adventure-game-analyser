@@ -32,14 +32,28 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="EXAMPLE2.JSON" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="SCHEMA.JSON" />
+    <Content Include="schema\EXAMPLE.JSON" />
+    <Content Include="schema\EXAMPLE.XML" />
+    <Content Include="schema\EXAMPLE2.JSON" />
+    <Content Include="schema\json.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="schema\Json1.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="schema\SCHEMA.JSON" />
+    <Content Include="schema\XSD.XSD" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Colors.ts" />
     <TypeScriptCompile Include="Game.ts" />
     <TypeScriptCompile Include="GameReporter.ts" />
+    <TypeScriptCompile Include="GameRuleEnforcer.ts" />
     <TypeScriptCompile Include="GameRuleEnforcerCallbacksInterface.ts" />
     <TypeScriptCompile Include="GetDisplayName.ts" />
     <TypeScriptCompile Include="GetThreeStringsFromCommand.ts" />
@@ -49,15 +63,26 @@
     <TypeScriptCompile Include="PlayerAI.ts" />
     <TypeScriptCompile Include="RowOfSheet.ts" />
     <TypeScriptCompile Include="SingleFileData.ts" />
+    <TypeScriptCompile Include="SolveBruteForce.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="SolveLeaves.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="tests\GetDisplayName.test.ts" />
     <TypeScriptCompile Include="tests\ParseRowsFromSheet.test.ts" />
     <TypeScriptCompile Include="tests\TruthTable.test.ts" />
-    <TypeScriptCompile Include="tests\ValidateRowsOfSheet.test.ts" />
+    <TypeScriptCompile Include="tests\UnitTest1.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="tests\SolveCyclicEtc.test.ts" />
     <TypeScriptCompile Include="TruthTable.ts" />
-    <TypeScriptCompile Include="ValidateRowsOfSheet.ts" />
+    <TypeScriptCompile Include="SolveCyclicEtc.ts" />
     <TypeScriptCompile Include="app.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="schema\" />
     <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

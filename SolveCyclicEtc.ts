@@ -2,8 +2,9 @@ import { RowOfSheet } from "./RowOfSheet";
 import { GetThreeStringsFromCommand } from "./GetThreeStringsFromCommand";
 import { IsOk } from './IsOk';
 import { LogAndReturnError } from './LogAndReturnError'
+import transactionsFile from './example2.json';
 
-export function ValidateRowsOfSheet(rows: RowOfSheet[], actionArray: Array<string>, isActionose = false): string {
+export function SolveCyclicEtc() {
     const names: Set<string> = new Set<string>();
     rows.forEach((row: RowOfSheet) => {
         names.add(row.name);
