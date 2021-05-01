@@ -28,8 +28,15 @@ export function SolveLeaves() {
     const mapOfTransactionsByInput = new Map<string, Transaction>();
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         switch (transactionsFile.transactions[i].type) {
-            case schema2.definitions.blah.blahblahblah:
+            case _.inv1_and_inv2_create_an_inv:
+                {
+                    const inputA = "" + transactionsFile.transactions[i].inv1;
+                    const inputB = "" + transactionsFile.transactions[i].inv2;
+                    const output = "" + transactionsFile.transactions[i].inv3;
+                    mapOfTransactionsByInput.set(output, new Transaction(Verb.Grab, output, inputA, inputB));
+                }
                 break;
+            case _.inv1_and_inv2_generate_inv:
             case _.prop_is_picked_up:
                 {
                     const input = "" +transactionsFile.transactions[i].inv1;

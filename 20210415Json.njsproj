@@ -36,8 +36,8 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="SCHEMA.JSON" />
+    <Content Include="schema2.json" />
     <Content Include="schema\EXAMPLE.JSON" />
-    <Content Include="schema\EXAMPLE.XML" />
     <Content Include="schema\EXAMPLE2.JSON" />
     <Content Include="schema\json.json">
       <SubType>Code</SubType>
@@ -46,7 +46,6 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="schema\SCHEMA.JSON" />
-    <Content Include="schema\XSD.XSD" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>

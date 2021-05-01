@@ -184,7 +184,7 @@
                 {
                     "if": {
                         "properties": {
-                            "type": { "const": "inv1_and_inv2_create_an_inv" }
+                            "type": { "const": "inv1_and_inv2_form_an_inv" }
                         }
                     },
                     "then": {
@@ -199,7 +199,7 @@
         },
         "type_type": {
             "enum": [
-                "inv1_and_inv2_create_an_inv",
+                "inv1_and_inv2_form_an_inv",
                 "inv1_and_inv2_generate_inv",
                 "inv_becomes_inv_via_losing_inv",
                 "open_prop_with_inv_reveals_prop",
@@ -212,7 +212,7 @@
         }
     },
 
-    "inv1_and_inv2_create_an_inv": "inv1_and_inv2_create_an_inv",
+    "inv1_and_inv2_form_an_inv": "inv1_and_inv2_form_an_inv",
     "inv1_and_inv2_generate_inv": "inv1_and_inv2_generate_inv",
     "inv_becomes_inv_via_losing_inv": "inv_becomes_inv_via_losing_inv",
     "open_prop_with_inv_reveals_prop": "open_prop_with_inv_reveals_prop",
