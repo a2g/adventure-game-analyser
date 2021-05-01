@@ -1,4 +1,4 @@
-import { GameRuleEnforcer } from "./app";
+import { GameRuleEnforcer } from "./GameRuleEnforcer";
 import { GameReporter } from "./GameReporter";
 
 export class Game {

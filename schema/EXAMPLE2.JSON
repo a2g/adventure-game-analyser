@@ -1,4 +1,5 @@
 {
+	"solution": "prop-death-by-guitar",
 	"transactions": [
 		{
 			"type": "prop_is_picked_up",
