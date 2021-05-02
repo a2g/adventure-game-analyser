@@ -3,6 +3,144 @@ import transactionsFile from './schema/example2.json';
 import _ from './schema/schema.json';
 
 
+class SolutionNode {
+    constructor(type: string) {
+        this.objectToObtain = type;
+        this.a = this.b;
+        this.b = this.a;
+
+    }
+    setA(a: SolutionNode): void {
+        this.a = a;
+    }
+
+    setB(b: SolutionNode): void {
+        this.b = b;
+    }
+    createClone(uncompleted: Array<SolutionNode>): SolutionNode {
+        let clone = new SolutionNode(this.objectToObtain);
+        if (this.a != null)
+            clone.a = this.a.createClone(uncompleted);
+        if (this.b != null)
+            clone.b = this.b.createClone(uncompleted);
+        if (!this.a || !this.b)
+            uncompleted.push(clone);
+        return clone;
+    }
+
+    objectToObtain!: string;
+    a?: SolutionNode;
+    b?: SolutionNode;
+}
+
+class SolutionStillNeededNode extends SolutionNode{
+    constructor() {
+        super("stillNeeded");
+        this.objectToObtain = "constructor";
+    }
+}
+
+class SolutionOtherOneWasGrabNode extends SolutionNode {
+    constructor() {
+        super("notNeeded-transactionIsAGrab");
+        this.objectToObtain = "constructor";
+    }
+}
+
+
+
+class SolutionUncompletedNode extends SolutionNode {
+    static const Uncompleted = "uncompleted";
+    constructor() {
+        super(SolutionUncompletedNode.Uncompleted);
+        this.objectToObtain = "constructor";
+    }
+}
+
+class Solution {
+
+    rootNode: SolutionNode;
+    hasGivenUp: boolean;
+    uncompletedNodes: Array<SolutionNode>;
+
+    constructor(root: SolutionNode) {
+        this.rootNode = root;
+        this.uncompletedNodes = new Array<SolutionNode>();
+        this.uncompletedNodes.push(root);
+        this.hasGivenUp = false;
+    }
+
+
+    Clone(): Solution {
+        let clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
+        let clonedSolution = new Solution(clonedRootNode)
+        if (this.rootNode.a) 
+            clonedSolution.rootNode.setA(this.rootNode.a.createClone(clonedSolution.uncompletedNodes));
+        if (this.rootNode.b)
+            clonedSolution.rootNode.setA(this.rootNode.b.createClone(clonedSolution.uncompletedNodes));
+        if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
+            clonedSolution.uncompletedNodes.push(clonedRootNode);
+        return clonedSolution;
+    }
+
+    HasNodesItStillNeedsToProcess(): boolean {
+        const hasNodesItStillNeedsToProcess = this.uncompletedNodes.length > 0;
+        return hasNodesItStillNeedsToProcess;
+    }
+
+    HasGivenUp(): boolean {
+        return this.hasGivenUp;
+    }
+
+    Process(map: Map<string, Transaction[]>, node: SolutionCollection): void {
+        this.uncompletedNodes.forEach((node: SolutionNode) => {
+            let output = node.objectToObtain;
+
+        });
+    }
+
+
+}
+
+class SolutionCollection {
+
+    array: Array<Solution>;
+
+    constructor() {
+        this.array = new Array<Solution>();
+    }
+
+    HasNodesItStillNeedsToProcess(): boolean {
+        this.array.forEach((solution: Solution) => {
+            if (solution.HasNodesItStillNeedsToProcess())
+                return true;
+        });
+        return false;
+    }
+
+    HasGivenUp(): boolean {
+        this.array.forEach((solution: Solution) => {
+            if (solution.HasGivenUp())
+                return true;
+        });
+        return false;
+    }
+
+    Process(map: Map<string, Transaction[]>) {
+        this.array.forEach((solution: Solution) => {
+            if (solution.HasGivenUp())
+                continue;
+            if (solution.HasNodesItStillNeedsToProcess()) {
+                solution.Process(map, this);
+            }
+        });
+        return false;
+    }
+
+
+}
+
+
 export enum Verb {
     Use = 0,
     Grab = 1
@@ -24,6 +162,8 @@ class Transaction {
     output: string;
 }
 
+
+
 function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
     // initiatize array, if it hasn't yet been
     if (!map.has(t.output)) {
@@ -33,8 +173,14 @@ function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
     map.get(t.output)?.push(t);
 }
 
-export function SolveLeaves() {
-    const solution = transactionsFile.solution;
+function processSolutions(collection: SolutionCollection, map: Map<string, Transaction[]>): boolean {
+    while (collection.HasNodesItStillNeedsToProcess() && !collection.HasGivenUp()) {
+        collection.process(map);
+    }
+    return true;
+}
+
+export function SolveLeaves() : SolutionCollection{
     const mapOfTransactionsByInput = new Map<string, Transaction[]>();
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
@@ -115,4 +261,14 @@ export function SolveLeaves() {
     // 
 
     // Map class, is complete
+    let collection = new SolutionCollection();
+    let solutionGoal = new SolutionNode(transactionsFile.solutionRootPropName);
+    let firstSolution = new Solution(solutionGoal);
+    collection.array.push(firstSolution);
+    processSolution(collection, 
+
+    
+    return collection;
 }
+
+
