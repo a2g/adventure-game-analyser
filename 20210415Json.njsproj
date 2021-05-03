@@ -48,20 +48,27 @@
     <TypeScriptCompile Include="GameRuleEnforcer.ts" />
     <TypeScriptCompile Include="GameRuleEnforcerCallbacksInterface.ts" />
     <TypeScriptCompile Include="GetDisplayName.ts" />
+    <TypeScriptCompile Include="GetMapFromJSonGlossy.ts" />
     <TypeScriptCompile Include="GetThreeStringsFromCommand.ts" />
+    <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.ts" />
     <TypeScriptCompile Include="IsOk.ts" />
     <TypeScriptCompile Include="LogAndReturnError.ts" />
     <TypeScriptCompile Include="ParseRowsFromSheet.ts" />
     <TypeScriptCompile Include="PlayerAI.ts" />
     <TypeScriptCompile Include="RowOfSheet.ts" />
     <TypeScriptCompile Include="SingleFileData.ts" />
+    <TypeScriptCompile Include="Solution.ts" />
+    <TypeScriptCompile Include="SolutionCollection.ts" />
+    <TypeScriptCompile Include="SolutionNode.ts" />
     <TypeScriptCompile Include="SolveBruteForce.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SolveLeaves.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="SpecialNodes.ts" />
     <TypeScriptCompile Include="tests\GetDisplayName.test.ts" />
+    <TypeScriptCompile Include="tests\GetTreeSolutionViaOutputMatching.test.ts" />
     <TypeScriptCompile Include="tests\ParseRowsFromSheet.test.ts" />
     <TypeScriptCompile Include="tests\TruthTable.test.ts" />
     <TypeScriptCompile Include="tests\UnitTest1.ts">
@@ -69,9 +76,11 @@
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="tests\SolveCyclicEtc.test.ts" />
+    <TypeScriptCompile Include="Transaction.ts" />
     <TypeScriptCompile Include="TruthTable.ts" />
     <TypeScriptCompile Include="SolveCyclicEtc.ts" />
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Verb.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="schema\" />
