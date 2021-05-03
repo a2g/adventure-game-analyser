@@ -236,7 +236,7 @@ function FindSolutions(map: Map<string, Transaction[]>, solutionGoal: string): S
     return collection;
 }
 
-export function SolveLeaves(): SolutionCollection {
+export function SolveLeaves(): SolutionCollection{
     const mapOfTransactionsByInput = new Map<string, Transaction[]>();
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
