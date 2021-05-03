@@ -4,7 +4,7 @@ import { IsOk } from './IsOk';
 import { LogAndReturnError } from './LogAndReturnError'
 import transactionsFile from './example2.json';
 
-export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string>) {
+export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string>, isVerbose = false ) {
     const names: Set<string> = new Set<string>();
     rows.forEach((row: RowOfSheet) => {
         names.add(row.name);

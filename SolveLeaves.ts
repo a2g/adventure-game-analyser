@@ -1,9 +1,21 @@
 
 import transactionsFile from './schema/example2.json';
 import _ from './schema/schema.json';
+import { assert } from 'console';
+
+
+enum SpecialNodes {
+    TransactionIsGrab = "TransactionIsAGrab",
+    NotFound = "NotFound"
+}
 
 
 class SolutionNode {
+
+    objectToObtain!: string;
+    a?: SolutionNode;
+    b?: SolutionNode;
+
     constructor(type: string) {
         this.objectToObtain = type;
         this.a = this.b;
@@ -18,62 +30,93 @@ class SolutionNode {
         this.b = b;
     }
     createClone(uncompleted: Array<SolutionNode>): SolutionNode {
-        let clone = new SolutionNode(this.objectToObtain);
-        if (this.a != null)
+        const clone = new SolutionNode(this.objectToObtain);
+        if (this.a)
             clone.a = this.a.createClone(uncompleted);
-        if (this.b != null)
+        if (this.b)
             clone.b = this.b.createClone(uncompleted);
         if (!this.a || !this.b)
             uncompleted.push(clone);
         return clone;
     }
 
-    objectToObtain!: string;
-    a?: SolutionNode;
-    b?: SolutionNode;
-}
+    Process(map: Map<string, Transaction[]>, currentSolution: Solution, solutions: SolutionCollection): boolean {
+        //const isGrab = (this.b && this.b.objectToObtain == SpecialNodes.TransactionIsGrab);
+        if (this.a) {
+            if (this.a.objectToObtain === SpecialNodes.NotFound)
+                return false;// this means its already been searhed for in the map, without success.
+            else if (this.a.objectToObtain === SpecialNodes.TransactionIsGrab)
+                return false;// this means its a grab, so doesn't need searching.
+            const result = this.a.Process(map, currentSolution, solutions);
+            if (result)
+                return true;
+        }
+        if (this.b) {
+            if (this.b.objectToObtain === SpecialNodes.NotFound)
+                return false;// this means its already been searhed for in the map, without success.
+            else if (this.b.objectToObtain === SpecialNodes.TransactionIsGrab)
+                return false;// this means its a grab, so doesn't need searching.
+            const result = this.b.Process(map, currentSolution, solutions);
+            if (result)
+                return true;
+        }
+        if (this.a === null) {
+            const objectToObtain = this.objectToObtain;
+            if (map.get(objectToObtain)) {
+                const list = map.get(objectToObtain);
+                assert(list); // we deliberately don't handle if(list) because it should never be null
 
-class SolutionStillNeededNode extends SolutionNode{
-    constructor() {
-        super("stillNeeded");
-        this.objectToObtain = "constructor";
+                if (list) {
+                    assert(list[0].output === objectToObtain);
+
+                    // we have the convention that zero is the currentSolution
+                    // so we start at the highest index in the list
+                    // we when we finish the loop, we are with
+
+                    for (let i = list.length - 1; i >= 0; i--) {
+                        // doing it one at a time is a bit inefficient
+                        // eg in the case a Cloning Event, we'll be double/triple processing.
+                        // but this is easier to maintain.
+                        if (this.a === null) {
+                            this.a = new SolutionNode(list[i].inputA);
+                        }
+                        if (this.b === null) {
+                            this.b = new SolutionNode(list[i].inputB);
+                        }
+                        if (i > 0) {
+                            const clonedSolution = currentSolution.Clone();
+                            solutions.array.push(clonedSolution);
+                        }
+                    }
+                    return true;// true triggers it to go up for air.
+                }
+            }
+            else {
+                this.a = new SolutionNode(SpecialNodes.NotFound);
+            }
+        }
+        return false;
     }
 }
 
-class SolutionOtherOneWasGrabNode extends SolutionNode {
-    constructor() {
-        super("notNeeded-transactionIsAGrab");
-        this.objectToObtain = "constructor";
-    }
-}
-
-
-
-class SolutionUncompletedNode extends SolutionNode {
-    static const Uncompleted = "uncompleted";
-    constructor() {
-        super(SolutionUncompletedNode.Uncompleted);
-        this.objectToObtain = "constructor";
-    }
-}
 
 class Solution {
 
     rootNode: SolutionNode;
-    hasGivenUp: boolean;
+    hasExhaustedAll: boolean;
     uncompletedNodes: Array<SolutionNode>;
 
     constructor(root: SolutionNode) {
         this.rootNode = root;
         this.uncompletedNodes = new Array<SolutionNode>();
         this.uncompletedNodes.push(root);
-        this.hasGivenUp = false;
+        this.hasExhaustedAll = false;
     }
 
 
     Clone(): Solution {
-        let clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
-        let clonedSolution = new Solution(clonedRootNode)
+        const clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
+        const clonedSolution = new Solution(clonedRootNode)
         if (this.rootNode.a) 
             clonedSolution.rootNode.setA(this.rootNode.a.createClone(clonedSolution.uncompletedNodes));
         if (this.rootNode.b)
@@ -88,14 +131,21 @@ class Solution {
         return hasNodesItStillNeedsToProcess;
     }
 
-    HasGivenUp(): boolean {
-        return this.hasGivenUp;
+    HasExhaustedAll(): boolean {
+        return this.hasExhaustedAll;
     }
 
-    Process(map: Map<string, Transaction[]>, node: SolutionCollection): void {
-        this.uncompletedNodes.forEach((node: SolutionNode) => {
-            let output = node.objectToObtain;
+    Process(map: Map<string, Transaction[]>, solutions: SolutionCollection): boolean {
+        return this.rootNode.Process(map, this, solutions);
+    }
 
+    ProcessCached(map: Map<string, Transaction[]>): void {
+        this.uncompletedNodes.forEach((node: SolutionNode) => {
+            const objectToObtain = node.objectToObtain;
+            if (!map.has(objectToObtain)) {
+                node.a = new SolutionNode(SpecialNodes.NotFound);
+                node.b = new SolutionNode(SpecialNodes.NotFound);
+            }
         });
     }
 
@@ -118,20 +168,20 @@ class SolutionCollection {
         return false;
     }
 
-    HasGivenUp(): boolean {
+    HasExhaustedAll(): boolean {
         this.array.forEach((solution: Solution) => {
-            if (solution.HasGivenUp())
+            if (solution.HasExhaustedAll())
                 return true;
         });
         return false;
     }
 
-    Process(map: Map<string, Transaction[]>) {
+    Process(map: Map<string, Transaction[]>) : boolean {
         this.array.forEach((solution: Solution) => {
-            if (solution.HasGivenUp())
-                continue;
-            if (solution.HasNodesItStillNeedsToProcess()) {
-                solution.Process(map, this);
+            if (!solution.HasExhaustedAll()) {
+                if (solution.HasNodesItStillNeedsToProcess()) {
+                    const result = solution.Process(map, this);
+                }
             }
         });
         return false;
@@ -147,7 +197,8 @@ export enum Verb {
 }
 
 class Transaction {
-    constructor(type: string, verb: Verb, output: string, inputA: string, inputB = "") {
+    constructor(type: string, verb: Verb, output: string, inputA: string, inputB = SpecialNodes.TransactionIsGrab.toString()) {
+        assert(inputB !== SpecialNodes.TransactionIsGrab || verb === Verb.Grab);
         this.type = type;
         this.verb = verb;
         this.inputA = inputA;
@@ -173,14 +224,19 @@ function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
     map.get(t.output)?.push(t);
 }
 
-function processSolutions(collection: SolutionCollection, map: Map<string, Transaction[]>): boolean {
-    while (collection.HasNodesItStillNeedsToProcess() && !collection.HasGivenUp()) {
-        collection.process(map);
+function FindSolutions(map: Map<string, Transaction[]>, solutionGoal: string): SolutionCollection {
+
+    const collection = new SolutionCollection();
+    collection.array.push(new Solution(new SolutionNode(solutionGoal)));
+
+    while (collection.HasNodesItStillNeedsToProcess() && !collection.HasExhaustedAll()) {
+        collection.Process(map);
     }
-    return true;
+
+    return collection;
 }
 
-export function SolveLeaves() : SolutionCollection{
+export function SolveLeaves(): SolutionCollection{
     const mapOfTransactionsByInput = new Map<string, Transaction[]>();
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
@@ -261,14 +317,10 @@ export function SolveLeaves() : SolutionCollection{
     // 
 
     // Map class, is complete
-    let collection = new SolutionCollection();
-    let solutionGoal = new SolutionNode(transactionsFile.solutionRootPropName);
-    let firstSolution = new Solution(solutionGoal);
-    collection.array.push(firstSolution);
-    processSolution(collection, 
+    const result = FindSolutions(mapOfTransactionsByInput, transactionsFile.solutionRootPropName)
 
     
-    return collection;
+    return result;
 }
 
 

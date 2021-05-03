@@ -4,7 +4,7 @@
     "description": "A representation of a person, company, organization, or place",
     "type": "object",
     "properties": {
-        "solution": { "$ref": "#/definitions/prop_type" },
+        "solutionRootPropName": { "$ref": "#/definitions/prop_type" },
         "transactions": {
             "type": "array",
             "minItems": 1,
