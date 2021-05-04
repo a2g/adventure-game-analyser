@@ -39,23 +39,24 @@ export class SolutionNode {
         return clone;
     }
 
-    Process(map: Map<string, Transaction[]>, currentSolution: Solution, solutions: SolutionCollection): boolean {
+    Process(map: Map<string, Transaction[]>, currentSolution: Solution, solutions: SolutionCollection, path: string): boolean {
+        path += "/" + this.objectToObtain
         //const isGrab = (this.b && this.b.objectToObtain == SpecialNodes.TransactionIsGrab);
         if (this.a) {
-            if (this.a.objectToObtain === SpecialNodes.NotFound)
+            if (this.a.objectToObtain === SpecialNodes.VerifiedLeaf)
                 return false;// this means its already been searhed for in the map, without success.
             else if (this.a.objectToObtain === SpecialNodes.TransactionIsGrab)
                 return false;// this means its a grab, so doesn't need searching.
-            const result = this.a.Process(map, currentSolution, solutions);
+            const result = this.a.Process(map, currentSolution, solutions, path);
             if (result)
                 return true;
         }
         if (this.b) {
-            if (this.b.objectToObtain === SpecialNodes.NotFound)
+            if (this.b.objectToObtain === SpecialNodes.VerifiedLeaf)
                 return false;// this means its already been searhed for in the map, without success.
             else if (this.b.objectToObtain === SpecialNodes.TransactionIsGrab)
                 return false;// this means its a grab, so doesn't need searching.
-            const result = this.b.Process(map, currentSolution, solutions);
+            const result = this.b.Process(map, currentSolution, solutions, path );
             if (result)
                 return true;
         }
@@ -65,8 +66,9 @@ export class SolutionNode {
         if (this.a === null) {
             const objectToObtain = this.objectToObtain;
             if (!map.has(objectToObtain) || !map.get(objectToObtain)) {
-                this.a = new SolutionNode(SpecialNodes.NotFound);
-                this.b = new SolutionNode(SpecialNodes.NotFound);
+                this.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
+                this.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
+                currentSolution.AddVerifiedLeaf([objectToObtain, path]);
             } else
             {
                 const list = map.get(objectToObtain);

@@ -15,7 +15,7 @@ function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
     map.get(t.output)?.push(t);
 }
 
-describe("TruthTable", () => {
+describe("GetTreeSolutionViaOutputMatching", () => {
     it("CreateMapAndTest", () => {
 
         const map = GetMapFromJSonGlossy();
@@ -24,7 +24,8 @@ describe("TruthTable", () => {
         assert.equal(1, collections.array.length);
 
         const collection = collections.array[0];
-        const tableOfLeafs = collection.GetLeafNodes();
+        const leafNodes = collection.GetLeafNodes();
+        assert.equal(4, leafNodes.length);
         
     })
 })

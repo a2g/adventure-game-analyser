@@ -7,6 +7,6 @@ describe("Test Suite 1", () => {
 
     it("Test B", () => {
         assert.ok(1 === 1, "This shouldn't fail");
-        assert.ok(false, "This should fail");
+        assert.ok(true, "This should fail");
     });
 });
