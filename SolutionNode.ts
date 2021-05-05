@@ -10,13 +10,13 @@ import { SpecialNodes } from './SpecialNodes';
 export class SolutionNode {
 
     objectToObtain: string;
-    a?: SolutionNode;
-    b?: SolutionNode;
+    a: SolutionNode|null;
+    b: SolutionNode|null;
 
     constructor(type: string) {
         this.objectToObtain = type;
-        this.a = this.b;
-        this.b = this.a;
+        this.a = null;
+        this.b = null;
     }
 
     SetA(a: SolutionNode): void {

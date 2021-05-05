@@ -14,7 +14,6 @@ export class Solution {
     uncompletedNodes: Set<SolutionNode>;
     absoluteLeafNodes: Array<[string, string]>;
 
-
     constructor(root: SolutionNode) {
         this.rootNode = root;
         this.uncompletedNodes = new Set<SolutionNode>();
@@ -22,11 +21,13 @@ export class Solution {
         this.absoluteLeafNodes = new Array<[string, string]>();
     }
 
-    AddUncompletedNode(node:SolutionNode): void {
-        this.uncompletedNodes.add(node);
+    AddUncompletedNode(node: SolutionNode | null): void {
+        if (node) {
+            this.uncompletedNodes.add(node);
+        }
     }
 
-    RemoveUncompletedNode(node?: SolutionNode): void {
+    RemoveUncompletedNode(node: SolutionNode|null): void {
         if (node) {
             if (this.uncompletedNodes.has(node)) {
                 this.uncompletedNodes.delete(node);
@@ -44,11 +45,6 @@ export class Solution {
         if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
             clonedSolution.uncompletedNodes.add(clonedRootNode);
         return clonedSolution;
-    }
-
-    HasNodesItStillNeedsToProcess(): boolean {
-        const hasNodesItStillNeedsToProcess = this.uncompletedNodes.size > 0;
-        return hasNodesItStillNeedsToProcess;
     }
 
     HasExhaustedAll(): boolean {

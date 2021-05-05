@@ -13,9 +13,9 @@ export function GetTreeSolutionViaOutputMatching(map: Map<string, Transaction[]>
     const collection = new SolutionCollection();
     collection.array.push(new Solution(new SolutionNode(solutionGoal)));
 
-    while (collection.HasNodesItStillNeedsToProcess() && !collection.HasExhaustedAll()) {
+    do {
         collection.Process(map);
-    }
+    } while (!collection.HasExhaustedAll());
 
     return collection;
 }

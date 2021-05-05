@@ -1,5 +1,6 @@
 
 export enum SpecialNodes {
     SingleObjectVerb = "TransactionIsAGrab",
-    VerifiedLeaf = "VerifiedLeaf"
+    VerifiedLeaf = "VerifiedLeaf",
+    Null = "Null"
 }

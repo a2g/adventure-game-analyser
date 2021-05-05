@@ -1,6 +1,11 @@
 {
-	"solutionRootPropName": "prop-death-by-guitar",
+	"solutionRootPropName": "prop-death-by-slamdunk",
 	"transactions": [
+		{ "type": "prop_becomes_prop_via_keeping_inv"
+		,"prop1": "prop-lowered backboard"
+		, "prop2": "prop-death-by-slamdunk"
+		, "inv1": "inv-inflated ball"
+		},
 		{
 			"type": "prop_is_picked_up",
 			"prop1": "prop-screwdriver",

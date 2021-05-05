@@ -1,8 +1,8 @@
 //Typescript Unit test
 import assert = require('assert');
-import { GetTreeSolutionViaOutputMatching } from '../GetTreeSolutionViaOutputMatching';
-import { Transaction } from '../Transaction';
-import { GetMapFromJSonGlossy } from '../GetMapFromJSonGlossy';
+import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
+import { Transaction } from './Transaction';
+import { GetMapFromJSonGlossy } from './GetMapFromJSonGlossy';
 
 
  

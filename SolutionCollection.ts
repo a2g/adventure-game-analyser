@@ -14,14 +14,6 @@ export class SolutionCollection {
         this.array = new Array<Solution>();
     }
 
-    HasNodesItStillNeedsToProcess(): boolean {
-        this.array.forEach((solution: Solution) => {
-            if (solution.HasNodesItStillNeedsToProcess())
-                return true;
-        });
-        return false;
-    }
-
     HasExhaustedAll(): boolean {
         this.array.forEach((solution: Solution) => {
             if (solution.HasExhaustedAll())
@@ -30,12 +22,10 @@ export class SolutionCollection {
         return false;
     }
 
-    Process(map: Map<string, Transaction[]>) : boolean {
+    Process(map: Map<string, Transaction[]>): boolean {
         this.array.forEach((solution: Solution) => {
             if (!solution.HasExhaustedAll()) {
-                if (solution.HasNodesItStillNeedsToProcess()) {
-                    const result = solution.Process(map, this);
-                }
+                const result = solution.Process(map, this);
             }
         });
         return false;
