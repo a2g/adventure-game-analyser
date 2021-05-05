@@ -6,7 +6,7 @@
     <RootNamespace>20210415Json</RootNamespace>
     <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
-    <JavaScriptTestRoot>tests\</JavaScriptTestRoot>
+    <JavaScriptTestRoot>.\</JavaScriptTestRoot>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,11 +32,8 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="EXAMPLE2.JSON" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="SCHEMA.JSON" />
-    <Content Include="schema2.json" />
     <Content Include="schema\EXAMPLE2.JSON" />
     <Content Include="schema\SCHEMA.JSON" />
     <Content Include="tsconfig.json" />
@@ -67,15 +64,27 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SpecialNodes.ts" />
-    <TypeScriptCompile Include="tests\GetDisplayName.test.ts" />
-    <TypeScriptCompile Include="tests\ParseRowsFromSheet.test.ts" />
-    <TypeScriptCompile Include="tests\TruthTable.test.ts" />
-    <TypeScriptCompile Include="tests\UnitTest1.ts">
+    <TypeScriptCompile Include="GetDisplayName.test.ts">
+      <TestFramework>Mocha</TestFramework>
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ParseRowsFromSheet.test.ts">
+      <TestFramework>Mocha</TestFramework>
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="TruthTable.test.ts">
+      <TestFramework>Mocha</TestFramework>
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="UnitTest1.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="tests\SolveCyclicEtc.test.ts" />
-    <TypeScriptCompile Include="tests\GetTreeSolutionViaOutputMatching.test.ts">
+    <TypeScriptCompile Include="SolveCyclicEtc.test.ts">
+      <TestFramework>Mocha</TestFramework>
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
@@ -87,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="schema\" />
-    <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

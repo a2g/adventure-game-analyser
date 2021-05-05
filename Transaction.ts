@@ -6,8 +6,8 @@ import { SpecialNodes } from './SpecialNodes';
 import { Verb } from './Verb';
 
 export class Transaction {
-    constructor(type: string, verb: Verb, output: string, inputA: string, inputB = SpecialNodes.TransactionIsGrab.toString()) {
-        assert(inputB !== SpecialNodes.TransactionIsGrab || verb === Verb.Grab);
+    constructor(type: string, verb: Verb, output: string, inputA: string, inputB = SpecialNodes.SingleObjectVerb.toString()) {
+        assert(inputB !== SpecialNodes.SingleObjectVerb || verb === Verb.Grab);
         this.type = type;
         this.verb = verb;
         this.inputA = inputA;

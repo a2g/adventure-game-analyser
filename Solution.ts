@@ -11,16 +11,27 @@ import { SpecialNodes } from './SpecialNodes';
 export class Solution {
 
     rootNode: SolutionNode;
-    hasExhaustedAll: boolean;
-    uncompletedNodes: Array<SolutionNode>;
-    leafNodes: Array<[string, string]>;
+    uncompletedNodes: Set<SolutionNode>;
+    absoluteLeafNodes: Array<[string, string]>;
+
 
     constructor(root: SolutionNode) {
         this.rootNode = root;
-        this.uncompletedNodes = new Array<SolutionNode>();
-        this.uncompletedNodes.push(root);
-        this.hasExhaustedAll = false;
-        this.leafNodes = new Array<[string, string]>();
+        this.uncompletedNodes = new Set<SolutionNode>();
+        this.uncompletedNodes.add(root);
+        this.absoluteLeafNodes = new Array<[string, string]>();
+    }
+
+    AddUncompletedNode(node:SolutionNode): void {
+        this.uncompletedNodes.add(node);
+    }
+
+    RemoveUncompletedNode(node?: SolutionNode): void {
+        if (node) {
+            if (this.uncompletedNodes.has(node)) {
+                this.uncompletedNodes.delete(node);
+            }
+        }
     }
 
     Clone(): Solution {
@@ -31,21 +42,21 @@ export class Solution {
         if (this.rootNode.b)
             clonedSolution.rootNode.SetA(this.rootNode.b.CreateClone(clonedSolution.uncompletedNodes));
         if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
-            clonedSolution.uncompletedNodes.push(clonedRootNode);
+            clonedSolution.uncompletedNodes.add(clonedRootNode);
         return clonedSolution;
     }
 
     HasNodesItStillNeedsToProcess(): boolean {
-        const hasNodesItStillNeedsToProcess = this.uncompletedNodes.length > 0;
+        const hasNodesItStillNeedsToProcess = this.uncompletedNodes.size > 0;
         return hasNodesItStillNeedsToProcess;
     }
 
     HasExhaustedAll(): boolean {
-        return this.hasExhaustedAll;
+        return this.uncompletedNodes.size===0;
     }
 
     AddVerifiedLeaf(args: [string, string]): void {
-        this.leafNodes.push(args);
+        this.absoluteLeafNodes.push(args);
     }
 
     Process(map: Map<string, Transaction[]>, solutions: SolutionCollection): boolean {
@@ -63,7 +74,7 @@ export class Solution {
     }
 
     GetLeafNodes(): Array<[string, string]> {
-        return this.leafNodes;
+        return this.absoluteLeafNodes;
     }
 }
 

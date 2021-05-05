@@ -9,7 +9,7 @@ import { GetThreeStringsFromCommand } from './GetThreeStringsFromCommand';
 import { GameRuleEnforcerCallbacksInterface } from './GameRuleEnforcerCallbacksInterface';
 
 import { GameRuleEnforcer } from './GameRuleEnforcer';
-import transactionsFile from './example2.json';
+import transactionsFile from './schema/example2.json';
 
 console.log('Hello world');
 
