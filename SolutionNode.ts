@@ -42,24 +42,6 @@ export class SolutionNode {
     Process(map: Map<string, Transaction[]>, currentSolution: Solution, solutions: SolutionCollection, path: string): boolean {
         path += "/" + this.objectToObtain
         //const isGrab = (this.b && this.b.objectToObtain == SpecialNodes.TransactionIsGrab);
-        if (this.a) {
-            if (this.a.objectToObtain === SpecialNodes.VerifiedLeaf)
-                return false;// this means its already been searhed for in the map, without success.
-            else if (this.a.objectToObtain === SpecialNodes.SingleObjectVerb)
-                return false;// this means its a grab, so doesn't need searching.
-            const result = this.a.Process(map, currentSolution, solutions, path);
-            if (result)
-                return true;
-        }
-        if (this.b) {
-            if (this.b.objectToObtain === SpecialNodes.VerifiedLeaf)
-                return false;// this means its already been searhed for in the map, without success.
-            else if (this.b.objectToObtain === SpecialNodes.SingleObjectVerb)
-                return false;// this means its a grab, so doesn't need searching.
-            const result = this.b.Process(map, currentSolution, solutions, path );
-            if (result)
-                return true;
-        }
 
         // to simplify things, we always set a and b at the same time
         // so either both are null or neither are.
@@ -69,14 +51,22 @@ export class SolutionNode {
                 this.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 this.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 currentSolution.AddVerifiedLeaf([objectToObtain, path]);
-                currentSolution.AddUncompletedNode(this);
-            } else
+                currentSolution.RemoveUncompletedNode(this);
+                // since we are at a dead end
+                // and since we don't need to process later on
+                // then we can simply return here
+                return false;
+            }
+            else
             {
                 const list = map.get(objectToObtain);
                 assert(list); // we deliberately don't handle if(list) because it should never be null
 
                 if (list) {
                     assert(list[0].output === objectToObtain);
+
+                    // this is the point we set it as completed
+                    currentSolution.RemoveUncompletedNode(this);
 
                     // we have the convention that zero is the currentSolution
                     // so we start at the highest index in the list
@@ -115,11 +105,33 @@ export class SolutionNode {
                     // this.a.Process
                     // this.b.Process
                     // but I think we want to debug, right? so we go up for air.
-                    
-                    return true;// true triggers it to go up for air.
+
+                    // actually only go up for air if we've created new Solutions
+                    // otherwise, fall through and process the nodes
+                    if (list.length > 1)
+                        return true;
+
                 }
             }
-       
+        }
+
+        if (this.a) {
+            if (this.a.objectToObtain === SpecialNodes.VerifiedLeaf)
+                return false;// this means its already been searhed for in the map, without success.
+            else if (this.a.objectToObtain === SpecialNodes.SingleObjectVerb)
+                return false;// this means its a grab, so doesn't need searching.
+            const result = this.a.Process(map, currentSolution, solutions, path);
+            if (result)
+                return true;
+        }
+        if (this.b) {
+            if (this.b.objectToObtain === SpecialNodes.VerifiedLeaf)
+                return false;// this means its already been searhed for in the map, without success.
+            else if (this.b.objectToObtain === SpecialNodes.SingleObjectVerb)
+                return false;// this means its a grab, so doesn't need searching.
+            const result = this.b.Process(map, currentSolution, solutions, path);
+            if (result)
+                return true;
         }
         return false;
     }

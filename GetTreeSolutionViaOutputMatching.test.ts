@@ -11,13 +11,17 @@ describe("GetTreeSolutionViaOutputMatching", () => {
     it("CreateMapAndTest", () => {
 
         const map = GetMapFromJSonGlossy();
-        const collections = GetTreeSolutionViaOutputMatching(map, "prop-death-by-guitar");
+        const collections = GetTreeSolutionViaOutputMatching(map, "prop-death-by-slamdunk");
 
         assert.strictEqual(1, collections.array.length);
 
         const collection = collections.array[0];
-        const leafNodes = collection.GetLeafNodes();
-        assert.strictEqual(4, leafNodes.length);
-
+        const leafNodeMap = collection.GetLeafNodes();
+        assert.strictEqual(5, leafNodeMap.size);
+        assert.ok(leafNodeMap.has("inv-deflated-ball"));
+        assert.ok(leafNodeMap.has("inv-pump-with-bike-adapter"));
+        assert.ok(leafNodeMap.has("inv-needle"));
+        assert.ok(leafNodeMap.has("prop-raised-backboard"));
+        assert.ok(leafNodeMap.has("inv-pole-hook"));
     })
 })

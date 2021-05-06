@@ -14,9 +14,9 @@ export class SolutionCollection {
         this.array = new Array<Solution>();
     }
 
-    HasExhaustedAll(): boolean {
+    IsNodesRemaining(): boolean {
         this.array.forEach((solution: Solution) => {
-            if (solution.HasExhaustedAll())
+            if (solution.IsNodesRemaining())
                 return true;
         });
         return false;
@@ -24,7 +24,7 @@ export class SolutionCollection {
 
     Process(map: Map<string, Transaction[]>): boolean {
         this.array.forEach((solution: Solution) => {
-            if (!solution.HasExhaustedAll()) {
+            if (solution.IsNodesRemaining()) {
                 const result = solution.Process(map, this);
             }
         });

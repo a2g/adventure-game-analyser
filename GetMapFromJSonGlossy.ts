@@ -42,6 +42,15 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
+            case _.inv_with_prop_reveals_prop_kept_all:
+                {
+                    const inputA = "" + transactionsFile.transactions[i].inv1;
+                    const inputB = "" + transactionsFile.transactions[i].prop1;
+                    const output = "" + transactionsFile.transactions[i].prop2;
+                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                }
+                break;
+            case _.inv_becomes_inv_via_keeping_inv:
             case _.inv_becomes_inv_via_losing_inv:
                 {
                     // losing inv

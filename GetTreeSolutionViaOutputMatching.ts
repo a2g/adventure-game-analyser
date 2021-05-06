@@ -15,7 +15,7 @@ export function GetTreeSolutionViaOutputMatching(map: Map<string, Transaction[]>
 
     do {
         collection.Process(map);
-    } while (!collection.HasExhaustedAll());
+    } while (collection.IsNodesRemaining());
 
     return collection;
 }

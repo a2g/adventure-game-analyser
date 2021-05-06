@@ -21,18 +21,18 @@
         "inv_type": {
             "enum": [
                 "inv-screwdriver",
-                "inv-radio tube",
-                "inv-broken amp",
-                "inv-fixed amp",
+                "inv-radio-tube",
+                "inv-broken-amp",
+                "inv-fixed-amp",
                 "inv-guitar",
-                "inv-inflated ball",
-                "inv-pole hook",
-                "inv-deflated ball",
-                "inv-pump with needle adapter",
+                "inv-inflated-ball",
+                "inv-pole-hook",
+                "inv-deflated-ball",
+                "inv-pump-with-needle-adapter",
                 "inv-needle",
-                "inv-pump with bike adapter",
-                "inv-jar of protons",
-                "inv-vacuum tubes",
+                "inv-pump-with-bike-adapter",
+                "inv-jar-of-protons",
+                "inv-vacuum-tubes",
                 "inv-electromagnets"
             ]
         },
@@ -40,22 +40,22 @@
             "enum": [
                 "prop-screwdriver",
                 "prop-radio",
-                "prop-radio tube",
-                "prop-broken amp",
+                "prop-radio-tube",
+                "prop-broken-amp",
                 "prop-powerpoint",
                 "prop-plugged-in amp",
                 "prop-death-by-guitar",
                 "prop-death-by-slamdunk",
-                "prop-lowered backboard",
-                "prop-raised backboard",
-                "prop-accelerated vacuum tube",
-                "prop-off, magged-up vacuum tube",
-                "prop-on, magged-up vacuum tube",
-                "prop-exposed vacuum tube pipe 1",
-                "prop-exposed vacuum tube pipe 2",
-                "prop-exposed vacuum tube pipe 3",
-                "prop-three phase powerpoint",
-                "prop-tube system topology button"
+                "prop-lowered-backboard",
+                "prop-raised-backboard",
+                "prop-accelerated-vacuum-tube",
+                "prop-off,-magged-up-vacuum-tube",
+                "prop-on,-magged-up-vacuum-tube",
+                "prop-exposed-vacuum-tube-pipe-1",
+                "prop-exposed-vacuum-tube-pipe-2",
+                "prop-exposed-vacuum-tube-pipe-3",
+                "prop-three-phase-powerpoint",
+                "prop-tube-system-topology-button"
             ]
         },
         "transaction_type": {
@@ -71,6 +71,48 @@
                 "prop3": { "$ref": "#/definitions/prop_type" }
             },
             "allOf": [
+            	     {
+                    "if": {
+                        "properties": {
+                            "type": { "const": "inv1_and_inv2_generate_inv" }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "inv1",
+                            "inv2",
+                            "inv3"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": { "const": "inv1_and_inv2_form_an_inv" }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "inv1",
+                            "inv2",
+                            "inv3"
+                        ]
+                    }
+                },
+                {
+                	"if": {
+                        "properties": {
+                            "type": { "const": "inv_with_prop_reveals_prop_kept_all" }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "inv1",
+                            "prop1",
+                            "prop2"
+                        ]
+                    }
+                },
                 {
                     "if": {
                         "properties": {
@@ -95,6 +137,20 @@
                             "prop1",
                             "inv1",
                             "prop2"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": { "const": "inv_becomes_inv_via_keeping_inv" }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "inv1",
+                            "inv2",
+                            "inv3"
                         ]
                     }
                 },
@@ -167,34 +223,6 @@
                             "prop3"
                         ]
                     }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": { "const": "inv1_and_inv2_generate_inv" }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "inv1",
-                            "inv2",
-                            "inv3"
-                        ]
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": { "const": "inv1_and_inv2_form_an_inv" }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "inv1",
-                            "inv2",
-                            "inv3"
-                        ]
-                    }
                 }
             ]
         },
@@ -202,7 +230,9 @@
             "enum": [
                 "inv1_and_inv2_form_an_inv",
                 "inv1_and_inv2_generate_inv",
+                "inv_becomes_inv_via_keeping_inv",
                 "inv_becomes_inv_via_losing_inv",
+                "inv_with_prop_reveals_prop_kept_all",
                 "open_prop_with_inv_reveals_prop",
                 "prop_becomes_prop_via_keeping_inv",
                 "prop_becomes_prop_via_keeping_prop",
@@ -215,7 +245,9 @@
 
     "inv1_and_inv2_form_an_inv": "inv1_and_inv2_form_an_inv",
     "inv1_and_inv2_generate_inv": "inv1_and_inv2_generate_inv",
+    "inv_becomes_inv_via_keeping_inv": "inv_becomes_inv_via_keeping_inv",
     "inv_becomes_inv_via_losing_inv": "inv_becomes_inv_via_losing_inv",
+    "inv_with_prop_reveals_prop_kept_all" : "inv_with_prop_reveals_prop_kept_all",
     "open_prop_with_inv_reveals_prop": "open_prop_with_inv_reveals_prop",
     "prop_becomes_prop_via_keeping_inv": "prop_becomes_prop_via_keeping_inv",
     "prop_becomes_prop_via_keeping_prop": "prop_becomes_prop_via_keeping_prop",
