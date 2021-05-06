@@ -10,8 +10,8 @@ import { SpecialNodes } from './SpecialNodes';
 export class SolutionNode {
 
     objectToObtain: string;
-    a: SolutionNode|null;
-    b: SolutionNode|null;
+    a: SolutionNode | null;
+    b: SolutionNode | null;
 
     constructor(type: string) {
         this.objectToObtain = type;
@@ -27,7 +27,7 @@ export class SolutionNode {
         this.b = b;
     }
 
-    
+
     CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
         const clone = new SolutionNode(this.objectToObtain);
         if (this.a)
@@ -51,14 +51,13 @@ export class SolutionNode {
                 this.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 this.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 currentSolution.AddVerifiedLeaf([objectToObtain, path]);
-                currentSolution.RemoveUncompletedNode(this);
+                currentSolution.SetNodeComplete(this);
                 // since we are at a dead end
                 // and since we don't need to process later on
                 // then we can simply return here
                 return false;
             }
-            else
-            {
+            else {
                 const list = map.get(objectToObtain);
                 assert(list); // we deliberately don't handle if(list) because it should never be null
 
@@ -66,7 +65,7 @@ export class SolutionNode {
                     assert(list[0].output === objectToObtain);
 
                     // this is the point we set it as completed
-                    currentSolution.RemoveUncompletedNode(this);
+                    currentSolution.SetNodeComplete(this);
 
                     // we have the convention that zero is the currentSolution
                     // so we start at the highest index in the list
@@ -78,9 +77,9 @@ export class SolutionNode {
                         // eg in the case a Cloning Event, we'll be double/triple processing.
                         // but this is easier to maintain.
                         if (wasANull) {
-                            currentSolution.RemoveUncompletedNode(this.a)
+                            currentSolution.SetNodeComplete(this.a)
                             this.a = new SolutionNode(list[i].inputA);
-                            currentSolution.AddUncompletedNode(this.a);
+                            currentSolution.SetNodeIncomplete(this.a);
                         }
 
                         // we handle the Single Object Verbs by having
@@ -89,18 +88,18 @@ export class SolutionNode {
                                 // could have just assigned inputB to this.b, but this is more explicit
                                 this.b = new SolutionNode(SpecialNodes.SingleObjectVerb);
                             } else {
-                                currentSolution.RemoveUncompletedNode(this.b);
+                                currentSolution.SetNodeComplete(this.b);
                                 this.b = new SolutionNode(list[i].inputB);
-                                currentSolution.AddUncompletedNode(this.b);
+                                currentSolution.SetNodeIncomplete(this.b);
                             }
                         }
                         if (i > 0) {
                             const clonedSolution = currentSolution.Clone();
                             solutions.array.push(clonedSolution);
                         }
-   
+
                     }
-                    
+
                     // if we were being efficient, then we would call the following:
                     // this.a.Process
                     // this.b.Process

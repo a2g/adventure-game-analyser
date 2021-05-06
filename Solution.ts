@@ -11,26 +11,26 @@ import { SpecialNodes } from './SpecialNodes';
 export class Solution {
 
     rootNode: SolutionNode;
-    remainingNodesToProcess: Set<SolutionNode>;
+    incompleteNodes: Set<SolutionNode>;
     absoluteLeafNodes: Map<string, string>;
 
     constructor(root: SolutionNode) {
         this.rootNode = root;
-        this.remainingNodesToProcess = new Set<SolutionNode>();
-        this.remainingNodesToProcess.add(root);
+        this.incompleteNodes = new Set<SolutionNode>();
+        this.incompleteNodes.add(root);
         this.absoluteLeafNodes = new Map<string, string>();
     }
 
-    AddUncompletedNode(node: SolutionNode | null): void {
+    SetNodeIncomplete(node: SolutionNode | null): void {
         if (node) {
-            this.remainingNodesToProcess.add(node);
+            this.incompleteNodes.add(node);
         }
     }
 
-    RemoveUncompletedNode(node: SolutionNode|null): void {
+    SetNodeComplete(node: SolutionNode|null): void {
         if (node) {
-            if (this.remainingNodesToProcess.has(node)) {
-                this.remainingNodesToProcess.delete(node);
+            if (this.incompleteNodes.has(node)) {
+                this.incompleteNodes.delete(node);
             }
         }
     }
@@ -39,16 +39,16 @@ export class Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
         const clonedSolution = new Solution(clonedRootNode)
         if (this.rootNode.a)
-            clonedSolution.rootNode.SetA(this.rootNode.a.CreateClone(clonedSolution.remainingNodesToProcess));
+            clonedSolution.rootNode.SetA(this.rootNode.a.CreateClone(clonedSolution.incompleteNodes));
         if (this.rootNode.b)
-            clonedSolution.rootNode.SetA(this.rootNode.b.CreateClone(clonedSolution.remainingNodesToProcess));
+            clonedSolution.rootNode.SetA(this.rootNode.b.CreateClone(clonedSolution.incompleteNodes));
         if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
-            clonedSolution.remainingNodesToProcess.add(clonedRootNode);
+            clonedSolution.incompleteNodes.add(clonedRootNode);
         return clonedSolution;
     }
 
     IsNodesRemaining(): boolean {
-        return this.remainingNodesToProcess.size>0;
+        return this.incompleteNodes.size>0;
     }
 
     AddVerifiedLeaf(args: [string, string]): void {
@@ -60,7 +60,7 @@ export class Solution {
     }
 
     ProcessCached(map: Map<string, Transaction[]>): void {
-        this.remainingNodesToProcess.forEach((node: SolutionNode) => {
+        this.incompleteNodes.forEach((node: SolutionNode) => {
             const objectToObtain = node.objectToObtain;
             if (!map.has(objectToObtain)) {
                 node.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
