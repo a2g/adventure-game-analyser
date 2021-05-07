@@ -1,7 +1,7 @@
 {
-    "$id": "https://example.com/arrays.schema.json",
+    "$id": "https://antcassidy.com/anthony",
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "description": "A representation of a person, company, organization, or place",
+    "description": "a list of specific objects, and the transactions you can use on them",
     "type": "object",
     "properties": {
         "solutionRootPropName": { "$ref": "#/definitions/prop_type" },
@@ -12,12 +12,6 @@
         }
     },
     "definitions": {
-        "verb_type": {
-            "enum": [
-                "use",
-                "pick-up"
-            ]
-        },
         "inv_type": {
             "enum": [
                 "inv-screwdriver",
@@ -58,6 +52,12 @@
                 "prop-tube-system-topology-button"
             ]
         },
+        "verb_type": {
+            "enum": [
+                "use",
+                "pick-up"
+            ]
+        },
         "transaction_type": {
             "type": "object",
             "required": [ "type" ],
@@ -71,7 +71,7 @@
                 "prop3": { "$ref": "#/definitions/prop_type" }
             },
             "allOf": [
-            	     {
+                {
                     "if": {
                         "properties": {
                             "type": { "const": "inv1_and_inv2_generate_inv" }
@@ -100,7 +100,7 @@
                     }
                 },
                 {
-                	"if": {
+                    "if": {
                         "properties": {
                             "type": { "const": "inv_with_prop_reveals_prop_kept_all" }
                         }

@@ -2,7 +2,6 @@ import { RowOfSheet } from "./RowOfSheet";
 import { GetThreeStringsFromCommand } from "./GetThreeStringsFromCommand";
 import { IsOk } from './IsOk';
 import { LogAndReturnError } from './LogAndReturnError'
-import transactionsFile from './schema/example2.json';
 
 export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string>, isVerbose = false ) {
     const names: Set<string> = new Set<string>();

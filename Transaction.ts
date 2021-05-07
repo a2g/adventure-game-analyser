@@ -1,6 +1,6 @@
 
-import transactionsFile from './schema/example2.json';
-import _ from './schema/schema.json';
+import transactionsFile from './schema/transactions.ghost.json';
+import _ from './schema/ghost.schema.json';
 import { assert } from 'console';
 import { SpecialNodes } from './SpecialNodes';
 import { Verb } from './Verb';

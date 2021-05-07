@@ -1,5 +1,5 @@
 {
-	"solutionRootPropName": "prop-death-by-slamdunk",
+    "solutionRootPropName": "prop-death-by-slamdunk",
     "transactions": [
         {
             "type": "inv_with_prop_reveals_prop_kept_all",

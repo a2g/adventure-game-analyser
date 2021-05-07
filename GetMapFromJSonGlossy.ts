@@ -1,13 +1,12 @@
 
-import transactionsFile from './schema/example2.json';
-import _ from './schema/schema.json';
-import { assert } from 'console';
 import { SolutionCollection } from './SolutionCollection';
+import { SolutionNode } from './SolutionNode';
 import { Transaction } from './Transaction';
 import { Solution } from './Solution';
-import { SolutionNode } from './SolutionNode';
 import { Verb } from './Verb';
-
+import { assert } from 'console';
+import transactionsFile from './schema/transactions.ghost.json';
+import _ from './schema/ghost.schema.json';
 
 
 function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
@@ -18,7 +17,9 @@ function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
     // always add to list
     map.get(t.output)?.push(t);
 }
-
+export function GetObjectiveFromJsonGlossy() : string{
+    return transactionsFile.solutionRootPropName;
+}
 export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
     const mapOfTransactionsByInput = new Map<string, Transaction[]>();
     for (let i = 0; i < transactionsFile.transactions.length; i++) {

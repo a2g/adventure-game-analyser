@@ -1,12 +1,9 @@
 
-import transactionsFile from './schema/example2.json';
-import _ from './schema/schema.json';
-import { assert } from 'console';
 import { SolutionCollection } from './SolutionCollection';
+import { SolutionNode } from './SolutionNode';
 import { Transaction } from './Transaction';
 import { Solution } from './Solution';
-import { SolutionNode } from './SolutionNode';
-
+import { assert } from 'console';
 
 export function GetTreeSolutionViaOutputMatching(map: Map<string, Transaction[]>, solutionGoal: string): SolutionCollection {
 

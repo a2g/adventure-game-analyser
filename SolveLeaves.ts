@@ -1,14 +1,8 @@
-
-import transactionsFile from './schema/example2.json';
-import _ from './schema/schema.json';
-import { assert } from 'console';
-import { SolutionCollection } from './SolutionCollection';
-import { Transaction } from './Transaction';
-import { Solution } from './Solution';
-import { SolutionNode } from './SolutionNode';
-import { Verb } from './Verb';
-import { GetMapFromJSonGlossy } from './GetMapFromJSonGlossy';
 import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
+import { GetObjectiveFromJsonGlossy} from './GetMapFromJSonGlossy'
+import { GetMapFromJSonGlossy } from './GetMapFromJSonGlossy';
+import { SolutionCollection } from './SolutionCollection';
+import { assert } from 'console';
 
 export function SolveLeaves(): SolutionCollection {
    
@@ -24,7 +18,8 @@ export function SolveLeaves(): SolutionCollection {
     // 
 
     const mapOfTransactionsByInput = GetMapFromJSonGlossy();
-    const result = GetTreeSolutionViaOutputMatching(mapOfTransactionsByInput, transactionsFile.solutionRootPropName)
+    const objective = GetObjectiveFromJsonGlossy();
+    const result = GetTreeSolutionViaOutputMatching(mapOfTransactionsByInput, objective)
 
     
     return result;

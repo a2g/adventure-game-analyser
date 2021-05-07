@@ -7,9 +7,7 @@ import { PlayerAI } from './PlayerAI';
 import { RowOfSheet } from './RowOfSheet';
 import { GetThreeStringsFromCommand } from './GetThreeStringsFromCommand';
 import { GameRuleEnforcerCallbacksInterface } from './GameRuleEnforcerCallbacksInterface';
-
 import { GameRuleEnforcer } from './GameRuleEnforcer';
-import transactionsFile from './schema/example2.json';
 
 console.log('Hello world');
 

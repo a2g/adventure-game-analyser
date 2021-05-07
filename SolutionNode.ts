@@ -1,11 +1,8 @@
-
-import transactionsFile from './schema/example2.json';
-import _ from './schema/schema.json';
-import { assert } from 'console';
-import { Transaction } from './Transaction';
 import { SolutionCollection } from './SolutionCollection';
-import { Solution } from './Solution';
 import { SpecialNodes } from './SpecialNodes';
+import { Transaction } from './Transaction';
+import { Solution } from './Solution';
+import { assert } from 'console';
 
 export class SolutionNode {
 

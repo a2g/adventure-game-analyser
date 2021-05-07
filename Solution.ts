@@ -1,12 +1,9 @@
 
-import transactionsFile from './schema/example2.json';
-import _ from './schema/schema.json';
-import { assert } from 'console';
-import { SolutionNode } from './SolutionNode';
 import { SolutionCollection } from './SolutionCollection';
-import { Transaction } from './Transaction';
+import { SolutionNode } from './SolutionNode';
 import { SpecialNodes } from './SpecialNodes';
-
+import { Transaction } from './Transaction';
+import { assert } from 'console';
 
 export class Solution {
 
@@ -27,7 +24,7 @@ export class Solution {
         }
     }
 
-    SetNodeComplete(node: SolutionNode|null): void {
+    SetNodeComplete(node: SolutionNode | null): void {
         if (node) {
             if (this.incompleteNodes.has(node)) {
                 this.incompleteNodes.delete(node);
@@ -48,11 +45,11 @@ export class Solution {
     }
 
     IsNodesRemaining(): boolean {
-        return this.incompleteNodes.size>0;
+        return this.incompleteNodes.size > 0;
     }
 
     AddVerifiedLeaf(args: [string, string]): void {
-        this.absoluteLeafNodes.set(args[0],args[1]);
+        this.absoluteLeafNodes.set(args[0], args[1]);
     }
 
     Process(map: Map<string, Transaction[]>, solutions: SolutionCollection): boolean {
