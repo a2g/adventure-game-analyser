@@ -3,6 +3,12 @@
     "json.schemas": [
         {
             "fileMatch": [
+                "/*.schmea.json"
+            ],
+            "url": "http://json-schema.org/draft-07/schema",
+            
+        },{
+            "fileMatch": [
                 "/*.ghost.json"
             ],
             "url": "./schemas/ghost.json"

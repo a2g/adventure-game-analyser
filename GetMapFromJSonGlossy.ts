@@ -18,7 +18,7 @@ function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
     map.get(t.output)?.push(t);
 }
 export function GetObjectiveFromJsonGlossy() : string{
-    return transactionsFile.solutionRootPropName;
+    return transactionsFile.objectivePropName;
 }
 export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
     const mapOfTransactionsByInput = new Map<string, Transaction[]>();
@@ -61,14 +61,6 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.open_prop_with_inv_reveals_prop:
-                {
-                    const inputA = "" + transactionsFile.transactions[i].prop1;
-                    const inputB = "" + transactionsFile.transactions[i].inv1;
-                    const output = "" + transactionsFile.transactions[i].prop2;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
-                }
-                break;
             /*
             case _.prop_becomes_prop_via_keeping_prop:
             case _.prop_becomes_prop_via_losing_prop:
@@ -88,11 +80,19 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.prop_is_picked_up:
+            case _.prop_goes_when_grab_inv:
                 {
                     const input = "" + transactionsFile.transactions[i].inv1;
                     const output = "" + transactionsFile.transactions[i].prop1;
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Grab, output, input));
+                }
+                break;
+            case _.prop_becomes_prop_when_grab_inv:
+                {
+                    const inputA = "" + transactionsFile.transactions[i].prop1;
+                    const output = "" + transactionsFile.transactions[i].prop2;
+                    const inputB = "" + transactionsFile.transactions[i].inv1;
+                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
         }// end switch

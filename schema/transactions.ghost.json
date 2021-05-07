@@ -1,52 +1,71 @@
 {
-    "solutionRootPropName": "prop-death-by-slamdunk",
+    "objectivePropName": "prop_demon_death",
     "transactions": [
         {
             "type": "inv_with_prop_reveals_prop_kept_all",
-            "inv1": "inv-inflated-ball",
-            "prop1": "prop-lowered-backboard",
-            "prop2": "prop-death-by-slamdunk"
+            "inv1": "inv_inflated_ball",
+            "prop1": "prop_lowered_backboard",
+            "prop2": "prop_demon_death"
         },
         {
-            "type": "prop_is_picked_up",
-            "prop1": "prop-screwdriver",
-            "inv1": "inv-screwdriver"
+            "type": "inv_with_prop_reveals_prop_kept_all",
+            "inv1": "inv_guitar",
+            "prop1": "prop_plugged_in_amp",
+            "prop2": "prop_demon_death"
         },
         {
-            "type": "open_prop_with_inv_reveals_prop",
-            "prop1": "prop-radio",
-            "inv1": "inv-screwdriver",
-            "prop2": "prop-radio-tube"
-        },
-        {
-            "type": "inv_becomes_inv_via_losing_inv",
-            "inv1": "inv-broken-amp",
-            "inv2": "inv-fixed-amp",
-            "inv3": "inv-radio-tube"
+            "type": "prop_goes_when_grab_inv",
+            "prop1": "prop_screwdriver",
+            "inv1": "inv_screwdriver"
         },
         {
             "type": "inv_becomes_inv_via_keeping_inv",
-            "inv1": "inv-deflated-ball",
-            "inv2": "inv-inflated-ball",
-            "inv3": "inv-pump-with-needle-adapter"
-        },
-        {
-            "type": "prop_becomes_prop_via_losing_inv",
-            "prop1": "prop-powerpoint",
-            "prop2": "prop-plugged-in amp",
-            "inv1": "inv-fixed-amp"
+            "inv1": "inv_deflated_ball",
+            "inv2": "inv_inflated_ball",
+            "inv3": "inv_pump_with_needle_adapter"
         },
         {
             "type": "prop_becomes_prop_via_keeping_inv",
-            "prop1": "prop-raised-backboard",
-            "prop2": "prop-lowered-backboard",
-            "inv1": "inv-pole-hook"
+            "prop1": "prop_raised_backboard",
+            "prop2": "prop_lowered_backboard",
+            "inv1": "inv_pole_hook"
         },
         {
             "type": "inv_becomes_inv_via_losing_inv",
-            "inv1": "inv-pump-with-bike-adapter",
-            "inv2": "inv-pump-with-needle-adapter",
-            "inv3": "inv-needle"
+            "inv1": "inv_pump_with_bike_adapter",
+            "inv2": "inv_pump_with_needle_adapter",
+            "inv3": "inv_needle"
+        },
+
+        {
+            "type": "inv_becomes_inv_via_losing_inv",
+            "inv1": "inv_broken_amp",
+            "inv2": "inv_fixed_amp",
+            "inv3": "inv_radio_tube"
+        },
+        {
+            "type": "prop_becomes_prop_via_losing_inv",
+            "prop1": "prop_powerpoint",
+            "prop2": "prop_plugged_in_amp",
+            "inv3": "inv_fixed_amp"
+        },
+        {
+            "type": "prop_becomes_prop_when_grab_inv",
+            "prop1": "prop_opened_radio_with_radio_tube",
+            "prop2": "prop_opened_radio",
+            "inv1": "inv_radio_tube"
+        },
+        {
+            "type": "prop_becomes_prop_via_keeping_inv",
+            "prop1": "prop_closed_radio",
+            "prop2": "prop_opened_radio_with_radio_tube",
+            "inv1": "inv_screwdriver"
+        },
+        {
+            "type": "prop_becomes_prop_when_grab_inv",
+            "prop1": "prop_opened_radio_with_radio_tube",
+            "prop2": "prop_opened_radio",
+            "inv1": "inv_radio_tube"
         }
     ]
 }

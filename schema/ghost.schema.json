@@ -1,10 +1,10 @@
 {
     "$id": "https://antcassidy.com/anthony",
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema",
     "description": "a list of specific objects, and the transactions you can use on them",
     "type": "object",
     "properties": {
-        "solutionRootPropName": { "$ref": "#/definitions/prop_type" },
+        "objectivePropName": { "$ref": "#/definitions/prop_type" },
         "transactions": {
             "type": "array",
             "minItems": 1,
@@ -14,48 +14,48 @@
     "definitions": {
         "inv_type": {
             "enum": [
-                "inv-screwdriver",
-                "inv-radio-tube",
-                "inv-broken-amp",
-                "inv-fixed-amp",
-                "inv-guitar",
-                "inv-inflated-ball",
-                "inv-pole-hook",
-                "inv-deflated-ball",
-                "inv-pump-with-needle-adapter",
-                "inv-needle",
-                "inv-pump-with-bike-adapter",
-                "inv-jar-of-protons",
-                "inv-vacuum-tubes",
-                "inv-electromagnets"
+                "inv_screwdriver",
+                "inv_radio_tube",
+                "inv_broken_amp",
+                "inv_fixed_amp",
+                "inv_guitar",
+                "inv_inflated_ball",
+                "inv_pole_hook",
+                "inv_deflated_ball",
+                "inv_pump_with_needle_adapter",
+                "inv_needle",
+                "inv_pump_with_bike_adapter",
+                "inv_jar_of_protons",
+                "inv_vacuum_tubes",
+                "inv_electromagnets"
             ]
         },
         "prop_type": {
             "enum": [
-                "prop-screwdriver",
-                "prop-radio",
-                "prop-radio-tube",
-                "prop-broken-amp",
-                "prop-powerpoint",
-                "prop-plugged-in amp",
-                "prop-death-by-guitar",
-                "prop-death-by-slamdunk",
-                "prop-lowered-backboard",
-                "prop-raised-backboard",
-                "prop-accelerated-vacuum-tube",
-                "prop-off,-magged-up-vacuum-tube",
-                "prop-on,-magged-up-vacuum-tube",
-                "prop-exposed-vacuum-tube-pipe-1",
-                "prop-exposed-vacuum-tube-pipe-2",
-                "prop-exposed-vacuum-tube-pipe-3",
-                "prop-three-phase-powerpoint",
-                "prop-tube-system-topology-button"
+                "prop_screwdriver",
+                "prop_closed_radio",
+                "prop_opened_radio",
+                "prop_opened_radio_with_radio_tube",
+                "prop_broken_amp",
+                "prop_powerpoint",
+                "prop_demon_death",
+                "prop_death_by_slamdunk",
+                "prop_lowered_backboard",
+                "prop_raised_backboard",
+                "prop_accelerated_vacuum_tube",
+                "prop_off_magged_up_vacuum_tube",
+                "prop_on_magged_up_vacuum_tube",
+                "prop_exposed_vacuum_tube_pipe_1",
+                "prop_exposed_vacuum_tube_pipe_2",
+                "prop_exposed_vacuum_tube_pipe_3",
+                "prop_three_phase_powerpoint",
+                "prop_tube_system_topology_button"
             ]
         },
         "verb_type": {
             "enum": [
                 "use",
-                "pick-up"
+                "pick_up"
             ]
         },
         "transaction_type": {
@@ -77,12 +77,20 @@
                             "type": { "const": "inv1_and_inv2_generate_inv" }
                         }
                     },
+                    "description": "FOR EXAMPLE ",
                     "then": {
                         "required": [
                             "inv1",
                             "inv2",
                             "inv3"
-                        ]
+                        ],
+                        "not": {
+                            "required": [
+                                "prop1",
+                                "prop2",
+                                "prop3"
+                            ]
+                        }
                     }
                 },
                 {
@@ -105,6 +113,7 @@
                             "type": { "const": "inv_with_prop_reveals_prop_kept_all" }
                         }
                     },
+                    "description": "eg use ball with backboard transforms prop to prop",
                     "then": {
                         "required": [
                             "inv1",
@@ -113,39 +122,14 @@
                         ]
                     }
                 },
-                {
-                    "if": {
-                        "properties": {
-                            "type": { "const": "prop_is_picked_up" }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "prop1",
-                            "inv1"
-                        ]
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": { "const": "open_prop_with_inv_reveals_prop" }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "prop1",
-                            "inv1",
-                            "prop2"
-                        ]
-                    }
-                },
+
                 {
                     "if": {
                         "properties": {
                             "type": { "const": "inv_becomes_inv_via_keeping_inv" }
                         }
                     },
+                    "description": "eg FLAT BALL becomes INFLATED BALL via keeping PUMP",
                     "then": {
                         "required": [
                             "inv1",
@@ -160,6 +144,7 @@
                             "type": { "const": "inv_becomes_inv_via_losing_inv" }
                         }
                     },
+                    "description": "eg BROKEN AMP becomes FIXED AMP via losing RADIO_TUBE",
                     "then": {
                         "required": [
                             "inv1",
@@ -168,12 +153,14 @@
                         ]
                     }
                 },
+
                 {
                     "if": {
                         "properties": {
                             "type": { "const": "prop_becomes_prop_via_losing_inv" }
                         }
                     },
+                    "description": "POWERPOINT -> PLUGGED-IN-AMP via losing INV_FIXEDAMP",
                     "then": {
                         "required": [
                             "prop1",
@@ -188,6 +175,8 @@
                             "type": { "const": "prop_becomes_prop_via_keeping_inv" }
                         }
                     },
+                    "description": "eg RAISED BBOARD becomes LOWEREDBACKBOARD vie keeping POLEHOOK",
+                    "title": " eg CLOSED_RADIO becomes  OPENED_RADIO_WITH_TUBE via keeping SCREWDRIVER",
                     "then": {
                         "required": [
                             "prop1",
@@ -223,6 +212,35 @@
                             "prop3"
                         ]
                     }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": { "const": "prop_becomes_prop_when_grab_inv" }
+                        }
+                    },
+                    "description": "eg open   OPENED RADIO WITH RADIOTUBE becomes OPENED RADIO and you keep theSCREWDRIVER",
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "inv1"
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": { "const": "prop_goes_when_grab_inv" }
+                        }
+                    },
+                    "description": "everywhere!",
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "inv1"
+                        ]
+                    }
                 }
             ]
         },
@@ -233,12 +251,12 @@
                 "inv_becomes_inv_via_keeping_inv",
                 "inv_becomes_inv_via_losing_inv",
                 "inv_with_prop_reveals_prop_kept_all",
-                "open_prop_with_inv_reveals_prop",
                 "prop_becomes_prop_via_keeping_inv",
                 "prop_becomes_prop_via_keeping_prop",
                 "prop_becomes_prop_via_losing_inv",
                 "prop_becomes_prop_via_losing_prop",
-                "prop_is_picked_up"
+                "prop_becomes_prop_when_grab_inv",
+                "prop_goes_when_grab_inv"
             ]
         }
     },
@@ -247,11 +265,11 @@
     "inv1_and_inv2_generate_inv": "inv1_and_inv2_generate_inv",
     "inv_becomes_inv_via_keeping_inv": "inv_becomes_inv_via_keeping_inv",
     "inv_becomes_inv_via_losing_inv": "inv_becomes_inv_via_losing_inv",
-    "inv_with_prop_reveals_prop_kept_all" : "inv_with_prop_reveals_prop_kept_all",
-    "open_prop_with_inv_reveals_prop": "open_prop_with_inv_reveals_prop",
+    "inv_with_prop_reveals_prop_kept_all": "inv_with_prop_reveals_prop_kept_all",
     "prop_becomes_prop_via_keeping_inv": "prop_becomes_prop_via_keeping_inv",
     "prop_becomes_prop_via_keeping_prop": "prop_becomes_prop_via_keeping_prop",
     "prop_becomes_prop_via_losing_inv": "prop_becomes_prop_via_losing_inv",
     "prop_becomes_prop_via_losing_prop": "prop_becomes_prop_via_losing_prop",
-    "prop_is_picked_up": "prop_is_picked_up"
+    "prop_becomes_prop_when_grab_inv": "prop_becomes_prop_when_grab_inv",
+    "prop_goes_when_grab_inv": "prop_goes_when_grab_inv"
 }

@@ -6,7 +6,8 @@
     <RootNamespace>20210415Json</RootNamespace>
     <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
-    <JavaScriptTestRoot></JavaScriptTestRoot>
+    <JavaScriptTestRoot>
+    </JavaScriptTestRoot>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -34,8 +35,8 @@
   <ItemGroup>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="schema\EXAMPLE2.JSON" />
-    <Content Include="schema\SCHEMA.JSON" />
+    <Content Include="schema\ghost.schema.json" />
+    <Content Include="schema\transactions.ghost.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>

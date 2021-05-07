@@ -24,7 +24,6 @@ export class SolutionNode {
         this.b = b;
     }
 
-
     CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
         const clone = new SolutionNode(this.objectToObtain);
         if (this.a)
