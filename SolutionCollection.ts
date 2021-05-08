@@ -12,20 +12,23 @@ export class SolutionCollection {
     }
 
     IsNodesRemaining(): boolean {
+        let isNodesRemaining = false;
         this.array.forEach((solution: Solution) => {
             if (solution.IsNodesRemaining())
-                return true;
+                isNodesRemaining = true;
         });
-        return false;
+        return isNodesRemaining;
     }
 
     Process(map: Map<string, Transaction[]>): boolean {
+        let hasACloneJustBeenCreated = false
         this.array.forEach((solution: Solution) => {
             if (solution.IsNodesRemaining()) {
-                const result = solution.Process(map, this);
+                if (solution.Process(map, this))
+                    hasACloneJustBeenCreated = true;
             }
         });
-        return false;
+        return hasACloneJustBeenCreated;
     }
 
 

@@ -34,7 +34,7 @@
             "type": "inv_becomes_inv_via_losing_inv",
             "inv1": "inv_pump_with_bike_adapter",
             "inv2": "inv_pump_with_needle_adapter",
-            "inv3": "inv_needle"
+            "inv3": "inv_inflating_needle"
         },
 
         {
@@ -47,7 +47,7 @@
             "type": "prop_becomes_prop_via_losing_inv",
             "prop1": "prop_powerpoint",
             "prop2": "prop_plugged_in_amp",
-            "inv3": "inv_fixed_amp"
+            "inv1": "inv_fixed_amp"
         },
         {
             "type": "prop_becomes_prop_when_grab_inv",
@@ -60,12 +60,6 @@
             "prop1": "prop_closed_radio",
             "prop2": "prop_opened_radio_with_radio_tube",
             "inv1": "inv_screwdriver"
-        },
-        {
-            "type": "prop_becomes_prop_when_grab_inv",
-            "prop1": "prop_opened_radio_with_radio_tube",
-            "prop2": "prop_opened_radio",
-            "inv1": "inv_radio_tube"
         }
     ]
 }

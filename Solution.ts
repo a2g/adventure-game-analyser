@@ -19,12 +19,21 @@ export class Solution {
     }
 
     SetNodeIncomplete(node: SolutionNode | null): void {
-        if (node) {
-            this.incompleteNodes.add(node);
-        }
+        if (node)
+            if (node.objectToObtain !== SpecialNodes.VerifiedLeaf)
+                if (node.objectToObtain!== SpecialNodes.SingleObjectVerb) 
+                    this.incompleteNodes.add(node);
     }
 
     SetNodeComplete(node: SolutionNode | null): void {
+        if (node) {
+            if (this.incompleteNodes.has(node)) {
+                this.incompleteNodes.delete(node);
+            }
+        }
+    }
+
+    SetNodeCompleteGenuine(node: SolutionNode | null): void {
         if (node) {
             if (this.incompleteNodes.has(node)) {
                 this.incompleteNodes.delete(node);
@@ -38,7 +47,7 @@ export class Solution {
         if (this.rootNode.a)
             clonedSolution.rootNode.SetA(this.rootNode.a.CreateClone(clonedSolution.incompleteNodes));
         if (this.rootNode.b)
-            clonedSolution.rootNode.SetA(this.rootNode.b.CreateClone(clonedSolution.incompleteNodes));
+            clonedSolution.rootNode.SetB(this.rootNode.b.CreateClone(clonedSolution.incompleteNodes));
         if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
             clonedSolution.incompleteNodes.add(clonedRootNode);
         return clonedSolution;
@@ -48,8 +57,8 @@ export class Solution {
         return this.incompleteNodes.size > 0;
     }
 
-    AddVerifiedLeaf(args: [string, string]): void {
-        this.absoluteLeafNodes.set(args[0], args[1]);
+    AddVerifiedLeaf(leafName:string, path:string): void {
+        this.absoluteLeafNodes.set(leafName, path);
     }
 
     Process(map: Map<string, Transaction[]>, solutions: SolutionCollection): boolean {
@@ -68,6 +77,14 @@ export class Solution {
 
     GetLeafNodes(): Map<string, string> {
         return this.absoluteLeafNodes;
+    }
+
+    GetIncompleteNodes(): Set<SolutionNode> {
+        return this.incompleteNodes;
+    }
+
+    GetRootNode(): SolutionNode {
+        return this.rootNode;
     }
 }
 

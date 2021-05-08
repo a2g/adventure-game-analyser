@@ -10,8 +10,9 @@ export class SolutionNode {
     a: SolutionNode | null;
     b: SolutionNode | null;
 
-    constructor(type: string) {
-        this.objectToObtain = type;
+    constructor(objective: string) {
+        assert(objective!="undefined")
+        this.objectToObtain = objective;
         this.a = null;
         this.b = null;
     }
@@ -41,12 +42,12 @@ export class SolutionNode {
 
         // to simplify things, we always set a and b at the same time
         // so either both are null or neither are.
-        if (this.a === null || this.b === null) {
+        if (this.a === null && this.b === null) {
             const objectToObtain = this.objectToObtain;
             if (!map.has(objectToObtain) || !map.get(objectToObtain)) {
                 this.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 this.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
-                currentSolution.AddVerifiedLeaf([objectToObtain, path]);
+                currentSolution.AddVerifiedLeaf(objectToObtain, path);
                 currentSolution.SetNodeComplete(this);
                 // since we are at a dead end
                 // and since we don't need to process later on
@@ -54,46 +55,51 @@ export class SolutionNode {
                 return false;
             }
             else {
-                const list = map.get(objectToObtain);
-                assert(list); // we deliberately don't handle if(list) because it should never be null
+                const matchingTransactions = map.get(objectToObtain);
+                assert(matchingTransactions); // we deliberately don't handle if(list) because it should never be null
 
-                if (list) {
-                    assert(list[0].output === objectToObtain);
+                if (matchingTransactions) {
+                    assert(matchingTransactions[0].output === objectToObtain);
 
                     // this is the point we set it as completed
-                    currentSolution.SetNodeComplete(this);
+                    currentSolution.SetNodeCompleteGenuine(this);
 
                     // we have the convention that zero is the currentSolution
                     // so we start at the highest index in the list
                     // we when we finish the loop, we are with
-                    const wasANull = this.a === null;
-                    const wasBNull = this.b === null;
-                    for (let i = list.length - 1; i >= 0; i--) {
-                        // doing it one at a time is a bit inefficient
-                        // eg in the case a Cloning Event, we'll be double/triple processing.
-                        // but this is easier to maintain.
-                        if (wasANull) {
-                            currentSolution.SetNodeComplete(this.a)
-                            this.a = new SolutionNode(list[i].inputA);
-                            currentSolution.SetNodeIncomplete(this.a);
-                        }
 
-                        // we handle the Single Object Verbs by having
-                        if (wasBNull) {
-                            if (list[i].inputB === SpecialNodes.SingleObjectVerb) {
-                                // could have just assigned inputB to this.b, but this is more explicit
-                                this.b = new SolutionNode(SpecialNodes.SingleObjectVerb);
-                            } else {
-                                currentSolution.SetNodeComplete(this.b);
-                                this.b = new SolutionNode(list[i].inputB);
-                                currentSolution.SetNodeIncomplete(this.b);
+                    for (let i = matchingTransactions.length - 1; i >= 0; i--) {
+
+                        // 1. get solution - because we might be cloning one;
+                        const isCloneBeingUsed = i > 0;
+                        const theSolution = isCloneBeingUsed ? currentSolution.Clone() : currentSolution;
+                        theSolution.SetNodeComplete(theSolution.rootNode);
+                        if (isCloneBeingUsed)
+                            solutions.array.push(theSolution);
+
+                        // rediscover the current node in theSolution - again because we might be cloned
+                        const theNode = theSolution.GetRootNode().FindNodeMatchingObjectiveRecursively(objectToObtain);
+                        assert(theNode && "if node is null then we are cloning wrong");
+                        if (theNode) {
+                            // doing it one at a time is a bit inefficient
+                            // eg in the case a Cloning Event, we'll be double/triple processing.
+                            // but this is easier to maintain.
+                            if (theNode.a == null) {
+                                theNode.a = new SolutionNode(matchingTransactions[i].inputA);
+                                theSolution.SetNodeIncomplete(theNode.a);
+                            }
+
+                            // we handle the Single Object Verbs by having
+                            if (theNode.b == null) {
+                                if (matchingTransactions[i].inputB === SpecialNodes.SingleObjectVerb) {
+                                    // could have just assigned inputB to this.b, but this is more explicit
+                                    theNode.b = new SolutionNode(SpecialNodes.SingleObjectVerb);
+                                } else {
+                                    theNode.b = new SolutionNode(matchingTransactions[i].inputB);
+                                    theSolution.SetNodeIncomplete(theNode.b);
+                                }
                             }
                         }
-                        if (i > 0) {
-                            const clonedSolution = currentSolution.Clone();
-                            solutions.array.push(clonedSolution);
-                        }
-
                     }
 
                     // if we were being efficient, then we would call the following:
@@ -103,8 +109,9 @@ export class SolutionNode {
 
                     // actually only go up for air if we've created new Solutions
                     // otherwise, fall through and process the nodes
-                    if (list.length > 1)
-                        return true;
+                    const hasACloneJustBeenCreated = matchingTransactions.length > 1;
+                    if (hasACloneJustBeenCreated)
+                        return true;// yes is incomplete
 
                 }
             }
@@ -115,8 +122,8 @@ export class SolutionNode {
                 return false;// this means its already been searhed for in the map, without success.
             else if (this.a.objectToObtain === SpecialNodes.SingleObjectVerb)
                 return false;// this means its a grab, so doesn't need searching.
-            const result = this.a.Process(map, currentSolution, solutions, path);
-            if (result)
+            const hasACloneJustBeenCreated = this.a.Process(map, currentSolution, solutions, path);
+            if (hasACloneJustBeenCreated)
                 return true;
         }
         if (this.b) {
@@ -124,11 +131,27 @@ export class SolutionNode {
                 return false;// this means its already been searhed for in the map, without success.
             else if (this.b.objectToObtain === SpecialNodes.SingleObjectVerb)
                 return false;// this means its a grab, so doesn't need searching.
-            const result = this.b.Process(map, currentSolution, solutions, path);
-            if (result)
+            const hasACloneJustBeenCreated = this.b.Process(map, currentSolution, solutions, path);
+            if (hasACloneJustBeenCreated)
                 return true;
         }
         return false;
+    }
+
+    FindNodeMatchingObjectiveRecursively(objectToObtain: string): SolutionNode | null {
+        if (this.objectToObtain === objectToObtain)
+            return this;
+        if (this.a) {
+            const result = this.a.FindNodeMatchingObjectiveRecursively(objectToObtain);
+            if (result)
+                return result;
+        }
+        if (this.b) {
+            const result = this.b.FindNodeMatchingObjectiveRecursively(objectToObtain);
+            if (result)
+                return result;
+        }
+        return null;
     }
 }
 

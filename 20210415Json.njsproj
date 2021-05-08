@@ -85,7 +85,7 @@
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.test.ts">
+    <TypeScriptCompile Include="Solution.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>

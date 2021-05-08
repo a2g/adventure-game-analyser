@@ -90,9 +90,9 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
             case _.prop_becomes_prop_when_grab_inv:
                 {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
-                    const output = "" + transactionsFile.transactions[i].prop2;
-                    const inputB = "" + transactionsFile.transactions[i].inv1;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                    const outputThatsNotUseful = "" + transactionsFile.transactions[i].prop2;
+                    const output = "" + transactionsFile.transactions[i].inv1;
+                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Grab, output, inputA));
                 }
                 break;
         }// end switch
