@@ -44,5 +44,20 @@ describe("Solution", () => {
             //assert.ok(leafNodeMap.has("prop_raised_backboard"));
             //assert.ok(leafNodeMap.has("inv_pole_hook"));
         }
-    })
+    }),
+        it("Testing just the grabbing of screwdriver", () => {
+            const map = GetMapFromJSonGlossy();
+            const objective = "inv_screwdriver";
+            const collection = new SolutionCollection();
+            collection.array.push(new Solution(new SolutionNode(objective)));
+            const isBreakEarly = collection.Process(map);
+
+            assert.strictEqual(false, isBreakEarly);
+            assert.strictEqual(1, collection.array.length);
+            const solution0 = collection.array[0];
+            assert.strictEqual(0, solution0.GetIncompleteNodes().size);
+            const leafNodes = solution0.GetLeafNodes();
+            assert.ok(leafNodes.has("prop_screwdriver"));
+            assert.strictEqual(1, leafNodes.size);
+        })
 })
