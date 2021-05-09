@@ -8,31 +8,37 @@ import { RowOfSheet } from './RowOfSheet';
 import { GetThreeStringsFromCommand } from './GetThreeStringsFromCommand';
 import { GameRuleEnforcerCallbacksInterface } from './GameRuleEnforcerCallbacksInterface';
 import { GameRuleEnforcer } from './GameRuleEnforcer';
+import { GetMapFromJSonGlossy } from './GetMapFromJSonGlossy';
+import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
+import { Solution } from './Solution';
 
 const prompt = require('prompt-sync')({ sigint: true });
 
-// Random number from 1 - 10
-const numberToGuess = Math.floor(Math.random() * 10) + 1;
-// This variable is used to determine if the app should continue prompting the user for input
-let foundCorrectNumber = false;
-
-while (!foundCorrectNumber) {
+while (true) {
     // Get user input
+    console.log(" ");
     console.log("Choose an option");
-    console.log("1. death by slamdunk");
-    console.log("1. death by guitar");
-
+    const array = new Array<string>();
+    array.push("inv_demon_death");
+    array.push("prop_death_by_guitar");
+    array.push("prop_death_by_slamdunk");
+    for (let i = 0; i < array.length; i++) {
+        console.log(" " + (i+1) + ". " + array[i]);
+    };
     console.log("Choose an option");
-    let guess = prompt('Guess a number from 1 to 10: ');
+    let choice = prompt('Guess a number from 1 to 10: ');
     // Convert the string input to a number
-    guess = Number(guess);
-
-    // Compare the guess to the secret answer and let the user know.
-    if (guess === numberToGuess) {
-        console.log('Congrats, you got it!');
-        foundCorrectNumber = true;
-    } else {
-        console.log('Sorry, guess again!');
+    choice = Number(choice);
+    if (choice > 0 && choice <= array.length) {
+        const mapOfTransactionsByInput = GetMapFromJSonGlossy();
+        const result = GetTreeSolutionViaOutputMatching(mapOfTransactionsByInput, array[choice-1]);
+        result.forEach(function (solution: Solution){
+            console.log("SOLUTION");
+            const needs = solution.absoluteLeafNodes;
+            needs.forEach( (value:string, key: string, map: Map<string, string>) =>{
+                console.log("    "+key);
+            });
+        });
     }
 }
 
