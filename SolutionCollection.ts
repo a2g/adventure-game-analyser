@@ -3,17 +3,14 @@ import { Solution } from './Solution';
 import { assert } from 'console';
 
 
-export class SolutionCollection {
-
-    array: Array<Solution>;
-
+export class SolutionCollection extends Array<Solution>{
     constructor() {
-        this.array = new Array<Solution>();
+        super();
     }
 
     IsNodesRemaining(): boolean {
         let isNodesRemaining = false;
-        this.array.forEach((solution: Solution) => {
+        this.forEach((solution: Solution) => {
             if (solution.IsNodesRemaining())
                 isNodesRemaining = true;
         });
@@ -22,7 +19,7 @@ export class SolutionCollection {
 
     Process(map: Map<string, Transaction[]>): boolean {
         let hasACloneJustBeenCreated = false
-        this.array.forEach((solution: Solution) => {
+        this.forEach((solution: Solution) => {
             if (solution.IsNodesRemaining()) {
                 if (solution.Process(map, this))
                     hasACloneJustBeenCreated = true;
@@ -30,6 +27,4 @@ export class SolutionCollection {
         });
         return hasACloneJustBeenCreated;
     }
-
-
 }

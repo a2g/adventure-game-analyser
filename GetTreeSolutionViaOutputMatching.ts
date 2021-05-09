@@ -8,7 +8,7 @@ import { assert } from 'console';
 export function GetTreeSolutionViaOutputMatching(map: Map<string, Transaction[]>, solutionGoal: string): SolutionCollection {
 
     const collection = new SolutionCollection();
-    collection.array.push(new Solution(new SolutionNode(solutionGoal)));
+    collection.push(new Solution(new SolutionNode(solutionGoal)));
 
     do {
         collection.Process(map);

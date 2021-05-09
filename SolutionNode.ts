@@ -75,7 +75,7 @@ export class SolutionNode {
                         const theSolution = isCloneBeingUsed ? currentSolution.Clone() : currentSolution;
                         theSolution.SetNodeComplete(theSolution.rootNode);
                         if (isCloneBeingUsed)
-                            solutions.array.push(theSolution);
+                            solutions.push(theSolution);
 
                         // rediscover the current node in theSolution - again because we might be cloned
                         const theNode = theSolution.GetRootNode().FindNodeMatchingObjectiveRecursively(objectToObtain);

@@ -35,8 +35,12 @@
   <ItemGroup>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="schema\ghost.schema.json" />
-    <Content Include="schema\transactions.ghost.json" />
+    <Content Include="schema\ghost.schema.json">
+      <Publish>True</Publish>
+    </Content>
+    <Content Include="schema\transactions.ghost.json">
+      <Publish>True</Publish>
+    </Content>
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>

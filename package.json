@@ -19,6 +19,7 @@
     "typescript": "^3.9.9"
   },
   "dependencies": {
-    "@types/mocha": "^8.2.2"
+    "@types/mocha": "^8.2.2",
+    "prompt-sync": "^4.2.0"
   }
 }

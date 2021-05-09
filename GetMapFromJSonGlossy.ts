@@ -25,7 +25,7 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
         switch (transactionsFile.transactions[i].type) {
-            case _.inv1_and_inv2_form_an_inv:
+            case _.INV1_AND_INV2_FORM_AN_INV:
                 {
                     // losing all
                     const inputA = "" + transactionsFile.transactions[i].inv1;
@@ -34,7 +34,7 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.inv1_and_inv2_generate_inv:
+            case _.INV1_AND_INV2_GENERATE_INV:
                 {
                     // losing none
                     const inputA = "" + transactionsFile.transactions[i].inv1;
@@ -43,7 +43,7 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.inv_with_prop_reveals_prop_kept_all:
+            case _.INV_WITH_PROP_REVEALS_PROP_KEPT_ALL:
                 {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].prop1;
@@ -51,8 +51,8 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.inv_becomes_inv_via_keeping_inv:
-            case _.inv_becomes_inv_via_losing_inv:
+            case _.INV_BECOMES_INV_VIA_KEEPING_INV:
+            case _.INV_BECOMES_INV_VIA_LOSING_INV:
                 {
                     // losing inv
                     const inputA = "" + transactionsFile.transactions[i].inv1;
@@ -61,18 +61,8 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            /*
-            case _.prop_becomes_prop_via_keeping_prop:
-            case _.prop_becomes_prop_via_losing_prop:
-                {
-                    const inputA = "" + transactionsFile.transactions[i].prop1;
-                    const output = "" + transactionsFile.transactions[i].prop2;
-                    const inputB = "" + transactionsFile.transactions[i].prop3;
-                    mapOfTransactionsByInput.set(output, new Transaction(type, Verb.Use, output, inputA, inputB));
-                }
-                break;*/
-            case _.prop_becomes_prop_via_keeping_inv:
-            case _.prop_becomes_prop_via_losing_inv:
+            case _.PROP_BECOMES_PROP_VIA_KEEPING_INV:
+            case _.PROP_BECOMES_PROP_VIA_LOSING_INV:
                 {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
@@ -80,14 +70,14 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.prop_goes_when_grab_inv:
+            case _.PROP_GOES_WHEN_GRAB_INV:
                 {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].inv1;
                     AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Grab, output, input));
                 }
                 break;
-            case _.prop_becomes_prop_when_grab_inv:
+            case _.PROP_BECOMES_PROP_WHEN_GRAB_INV:
                 {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
                     const outputThatsNotUseful = "" + transactionsFile.transactions[i].prop2;

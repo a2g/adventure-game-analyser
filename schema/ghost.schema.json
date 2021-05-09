@@ -31,7 +31,8 @@
                 "inv_pump_with_bike_adapter",
                 "inv_jar_of_protons",
                 "inv_vacuum_tubes",
-                "inv_electromagnets"
+                "inv_electromagnets",
+                "inv_demon_death",
             ]
         },
         "prop_type": {
@@ -43,7 +44,7 @@
                 "prop_broken_amp",
                 "prop_plugged_in_amp",
                 "prop_powerpoint",
-                "prop_demon_death",
+                "prop_death_by_guitar",
                 "prop_death_by_slamdunk",
                 "prop_lowered_backboard",
                 "prop_raised_backboard",
@@ -93,7 +94,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "inv1_and_inv2_generate_inv",
+                                        "const": "INV1_AND_INV2_GENERATE_INV",
                                         "description": "eg none yet"
                                     }
                                 }
@@ -101,7 +102,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "inv1_and_inv2_form_an_inv",
+                                        "const": "INV1_AND_INV2_FORM_AN_INV",
                                         "description": "not quite the amp fixing - but close"
                                     }
                                 }
@@ -109,7 +110,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "inv_becomes_inv_via_keeping_inv",
+                                        "const": "INV_BECOMES_INV_VIA_KEEPING_INV",
                                         "description": "eg FLAT BALL becomes INFLATED BALL via keeping PUMP"
                                     }
                                 }
@@ -117,8 +118,8 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "inv_becomes_inv_via_losing_inv",
-                                        "description": "eg BROKEN AMP becomes FIXED AMP via losing RADIO_TUBE"
+                                        "const": "INV_BECOMES_INV_VIA_LOSING_INV",
+                                        "description": "eg broken amp becomes FIXED AMP via losing RADIO_TUBE"
                                     }
                                 }
                             }
@@ -137,7 +138,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "inv_with_prop_reveals_prop_kept_all",
+                                        "const": "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL",
                                         "description": "eg use ball with backboard generate prop"
                                     }
                                 }
@@ -145,15 +146,15 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "prop_becomes_prop_via_losing_inv",
-                                        "description": "POWERPOINT -> PLUGGED-IN-AMP via losing INV_FIXEDAMP"
+                                        "const": "PROP_BECOMES_PROP_VIA_LOSING_INV",
+                                        "description": "powerpoint -> plugged-in-amp via losing INV_FIXEDAMP"
                                     }
                                 }
                             },
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "prop_becomes_prop_via_keeping_inv",
+                                        "const": "PROP_BECOMES_PROP_VIA_KEEPING_INV",
                                         "description": "eg RAISEDBACKBOARD becomes LOWEREDBACKBOARD vie keeping POLEHOOK",
                                         "title": " eg CLOSED_RADIO becomes  OPENED_RADIO_WITH_TUBE via keeping SCREWDRIVER"
                                     }
@@ -162,8 +163,8 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "prop_becomes_prop_when_grab_inv",
-                                        "description": "eg OPENED RADIO WITH RADIOTUBE becomes merely OPENED RADIO when you grab RADIOTUBE"
+                                        "const": "PROP_BECOMES_PROP_WHEN_GRAB_INV",
+                                        "description": "eg opened raio with radiotube becomes merely OPENED RADIO when you grab RADIOTUBE"
                                     }
                                 }
                             }
@@ -182,7 +183,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "prop_becomes_prop_via_losing_prop",
+                                        "const": "PROP_BECOMES_PROP_VIA_LOSING_PROP",
                                         "description": "eg none yet"
                                     }
                                 }
@@ -202,7 +203,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "prop_goes_when_grab_inv",
+                                        "const": "PROP_GOES_WHEN_GRAB_INV",
                                         "description": "everywhere!"
                                     }
                                 }
@@ -220,29 +221,29 @@
         },
         "type_type": {
             "enum": [
-                "inv1_and_inv2_form_an_inv",
-                "inv1_and_inv2_generate_inv",
-                "inv_becomes_inv_via_keeping_inv",
-                "inv_becomes_inv_via_losing_inv",
-                "inv_with_prop_reveals_prop_kept_all",
-                "prop_becomes_prop_via_keeping_inv",
-                "prop_becomes_prop_via_keeping_prop",
-                "prop_becomes_prop_via_losing_inv",
-                "prop_becomes_prop_via_losing_prop",
-                "prop_becomes_prop_when_grab_inv",
-                "prop_goes_when_grab_inv"
+                "INV1_AND_INV2_FORM_AN_INV",
+                "INV1_AND_INV2_GENERATE_INV",
+                "INV_BECOMES_INV_VIA_KEEPING_INV",
+                "INV_BECOMES_INV_VIA_LOSING_INV",
+                "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL",
+                "PROP_BECOMES_PROP_VIA_KEEPING_INV",
+                "PROP_BECOMES_PROP_VIA_KEEPING_PROP",
+                "PROP_BECOMES_PROP_VIA_LOSING_INV",
+                "PROP_BECOMES_PROP_VIA_LOSING_PROP",
+                "PROP_BECOMES_PROP_WHEN_GRAB_INV",
+                "PROP_GOES_WHEN_GRAB_INV"
             ]
         }
     },
-    "inv1_and_inv2_form_an_inv": "inv1_and_inv2_form_an_inv",
-    "inv1_and_inv2_generate_inv": "inv1_and_inv2_generate_inv",
-    "inv_becomes_inv_via_keeping_inv": "inv_becomes_inv_via_keeping_inv",
-    "inv_becomes_inv_via_losing_inv": "inv_becomes_inv_via_losing_inv",
-    "inv_with_prop_reveals_prop_kept_all": "inv_with_prop_reveals_prop_kept_all",
-    "prop_becomes_prop_via_keeping_inv": "prop_becomes_prop_via_keeping_inv",
-    "prop_becomes_prop_via_keeping_prop": "prop_becomes_prop_via_keeping_prop",
-    "prop_becomes_prop_via_losing_inv": "prop_becomes_prop_via_losing_inv",
-    "prop_becomes_prop_via_losing_prop": "prop_becomes_prop_via_losing_prop",
-    "prop_becomes_prop_when_grab_inv": "prop_becomes_prop_when_grab_inv",
-    "prop_goes_when_grab_inv": "prop_goes_when_grab_inv"
+    "INV1_AND_INV2_FORM_AN_INV": "INV1_AND_INV2_FORM_AN_INV",
+    "INV1_AND_INV2_GENERATE_INV": "INV1_AND_INV2_GENERATE_INV",
+    "INV_BECOMES_INV_VIA_KEEPING_INV": "INV_BECOMES_INV_VIA_KEEPING_INV",
+    "INV_BECOMES_INV_VIA_LOSING_INV": "INV_BECOMES_INV_VIA_LOSING_INV",
+    "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL": "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL",
+    "PROP_BECOMES_PROP_VIA_KEEPING_INV": "PROP_BECOMES_PROP_VIA_KEEPING_INV",
+    "PROP_BECOMES_PROP_VIA_KEEPING_PROP": "PROP_BECOMES_PROP_VIA_KEEPING_PROP",
+    "PROP_BECOMES_PROP_VIA_LOSING_INV": "PROP_BECOMES_PROP_VIA_LOSING_INV",
+    "PROP_BECOMES_PROP_VIA_LOSING_PROP": "PROP_BECOMES_PROP_VIA_LOSING_PROP",
+    "PROP_BECOMES_PROP_WHEN_GRAB_INV": "PROP_BECOMES_PROP_WHEN_GRAB_INV",
+    "PROP_GOES_WHEN_GRAB_INV": "PROP_GOES_WHEN_GRAB_INV"
 }
