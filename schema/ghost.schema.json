@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
         "objectivePropName": {
-            "$ref": "#/definitions/prop_type"
+            "$ref": "#/definitions/inv_type"
         },
         "transactions": {
             "type": "array",
@@ -27,12 +27,12 @@
                 "inv_pole_hook",
                 "inv_deflated_ball",
                 "inv_pump_with_needle_adapter",
-                "inv_needle",
+                "inv_inflating_needle",
                 "inv_pump_with_bike_adapter",
                 "inv_jar_of_protons",
                 "inv_vacuum_tubes",
                 "inv_electromagnets",
-                "inv_demon_death",
+                "inv_demon_death"
             ]
         },
         "prop_type": {

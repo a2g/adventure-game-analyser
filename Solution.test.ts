@@ -13,7 +13,7 @@ import { Solution } from './Solution';
 describe("Solution", () => {
     it("CreateMapAndTest", () => {
         const map = GetMapFromJSonGlossy();
-        const objective = "prop_demon_death";
+        const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(objective)));
         const isBreakEarly = collection.Process(map);
@@ -21,12 +21,12 @@ describe("Solution", () => {
 
         assert.strictEqual(2, collection.length);
         const solution0 = collection[0];;
-        assert.equal(0, solution0.GetLeafNodes().size);
-        assert.equal(2, solution0.GetIncompleteNodes().size);
+        assert.strictEqual(0, solution0.GetLeafNodes().size);
+        assert.strictEqual(1, solution0.GetIncompleteNodes().size);
 
         const solution1 = collection[1];;
-        assert.equal(0, solution1.GetLeafNodes().size);
-        assert.equal(2, solution1.GetIncompleteNodes().size);
+        assert.strictEqual(0, solution1.GetLeafNodes().size);
+        assert.strictEqual(1, solution1.GetIncompleteNodes().size);
 
         // process the rest of the transactions
         do {

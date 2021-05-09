@@ -1,5 +1,5 @@
 {
-    "objectivePropName": "prop_demon_death",
+    "objectivePropName": "inv_demon_death",
     "transactions": [
          {
             "type": "PROP_GOES_WHEN_GRAB_INV",
