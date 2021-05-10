@@ -46,6 +46,7 @@
                 "prop_powerpoint",
                 "prop_death_by_guitar",
                 "prop_death_by_slamdunk",
+                "prop_death_by_physics",
                 "prop_lowered_backboard",
                 "prop_raised_backboard",
                 "prop_accelerated_vacuum_tube",
@@ -216,6 +217,34 @@
                             "required": [ "prop2", "prop3", "inv2", "inv3" ]
                         }
                     }
+                },
+                {
+                    "if": {
+                        "anyOf": [
+                            {
+                                "properties": {
+                                    "type": {
+                                        "const": "TURN_ON",
+                                        "description": "turn on magged up vacuum tubes"
+                                    }
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "type": {
+                                        "const": "TURN_OFF",
+                                        "description": "turn on magged up vacuum tubes"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "then": {
+                        "required": [ "prop1", "prop2" ],
+                        "not": {
+                            "required": [ "prop3", "inv1", "inv2", "inv3" ]
+                        }
+                    }
                 }
             ]
         },
@@ -231,7 +260,9 @@
                 "PROP_BECOMES_PROP_VIA_LOSING_INV",
                 "PROP_BECOMES_PROP_VIA_LOSING_PROP",
                 "PROP_BECOMES_PROP_WHEN_GRAB_INV",
-                "PROP_GOES_WHEN_GRAB_INV"
+                "PROP_GOES_WHEN_GRAB_INV",
+                "TURN_OFF",
+                "TURN_ON"  
             ]
         }
     },
@@ -245,5 +276,7 @@
     "PROP_BECOMES_PROP_VIA_LOSING_INV": "PROP_BECOMES_PROP_VIA_LOSING_INV",
     "PROP_BECOMES_PROP_VIA_LOSING_PROP": "PROP_BECOMES_PROP_VIA_LOSING_PROP",
     "PROP_BECOMES_PROP_WHEN_GRAB_INV": "PROP_BECOMES_PROP_WHEN_GRAB_INV",
-    "PROP_GOES_WHEN_GRAB_INV": "PROP_GOES_WHEN_GRAB_INV"
+    "PROP_GOES_WHEN_GRAB_INV": "PROP_GOES_WHEN_GRAB_INV",
+    "TURN_OFF":"TURN_OFF", 
+    "TURN_ON":"TURN_ON"
 }

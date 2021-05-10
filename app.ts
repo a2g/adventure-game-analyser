@@ -22,11 +22,12 @@ while (true) {
     array.push("inv_demon_death");
     array.push("prop_death_by_guitar");
     array.push("prop_death_by_slamdunk");
+    array.push("prop_death_by_physics");
     for (let i = 0; i < array.length; i++) {
         console.log(" " + (i+1) + ". " + array[i]);
     };
-    console.log("Choose an option");
-    let choice = prompt('Guess a number from 1 to 10: ');
+
+    let choice = prompt('Choose an option: ');
     // Convert the string input to a number
     choice = Number(choice);
     if (choice > 0 && choice <= array.length) {
