@@ -10,12 +10,28 @@ export class Solution {
     rootNode: SolutionNode;
     incompleteNodes: Set<SolutionNode>;
     absoluteLeafNodes: Map<string, string>;
+    usedVerbNounCombos: Set<string>;
+    transactionMap: Map<string, Transaction[]>;
 
-    constructor(root: SolutionNode) {
+    constructor(root: SolutionNode, map : Map<string, Transaction[]>) {
         this.rootNode = root;
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
         this.absoluteLeafNodes = new Map<string, string>();
+        this.usedVerbNounCombos = new Set<string>();
+        this.transactionMap = new Map<string, Transaction[]>();
+        map.forEach((array: Transaction[], key: string) => {
+            const cloned = array.map(x => Object.assign({}, x));
+            this.transactionMap.set(key, cloned);
+        });
+    }
+
+    AddVerbNounCombo(verb: string, noun: string): void {
+        this.usedVerbNounCombos.add(verb + noun);
+    }
+    HasAlreadyUsedVerbNounCombo(verb: string, noun: string): boolean {
+        const isIncluded = this.usedVerbNounCombos.has(verb + noun);
+        return isIncluded;
     }
 
     SetNodeIncomplete(node: SolutionNode | null): void {
@@ -43,13 +59,16 @@ export class Solution {
 
     Clone(): Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
-        const clonedSolution = new Solution(clonedRootNode)
+        const clonedSolution = new Solution(clonedRootNode, this.transactionMap)
         if (this.rootNode.a)
             clonedSolution.rootNode.SetA(this.rootNode.a.CreateClone(clonedSolution.incompleteNodes));
         if (this.rootNode.b)
             clonedSolution.rootNode.SetB(this.rootNode.b.CreateClone(clonedSolution.incompleteNodes));
         if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
             clonedSolution.incompleteNodes.add(clonedRootNode);
+        this.usedVerbNounCombos.forEach((combo: string) => {
+            clonedSolution.AddVerbNounCombo(combo,"");
+        });
         return clonedSolution;
     }
 
@@ -61,8 +80,8 @@ export class Solution {
         this.absoluteLeafNodes.set(leafName, path);
     }
 
-    Process(map: Map<string, Transaction[]>, solutions: SolutionCollection): boolean {
-        return this.rootNode.Process(map, this, solutions, this.rootNode.objectToObtain);
+    Process( solutions: SolutionCollection): boolean {
+        return this.rootNode.Process(this, solutions, this.rootNode.objectToObtain);
     }
 
     ProcessCached(map: Map<string, Transaction[]>): void {
@@ -85,6 +104,32 @@ export class Solution {
 
     GetRootNode(): SolutionNode {
         return this.rootNode;
+    }
+
+    HasAnyTransactionsThatOutputObject(objectToObtain: string): boolean{
+        return this.transactionMap.has(objectToObtain);
+    }
+
+
+    GetTransactionsThatOutputObject(objectToObtain: string): Transaction[] |undefined{
+        return this.transactionMap.get(objectToObtain);
+    }
+
+    RemoveTransaction(transaction: Transaction) {
+        if (transaction) {
+            if (this.transactionMap.has(transaction.output)) {
+                const oldArray = this.transactionMap.get(transaction.output);
+                if (oldArray) {
+                    const newArray = new Array<Transaction>();
+                    this.transactionMap.set(transaction.output, newArray);
+                    oldArray.forEach((t: Transaction) => {
+                        if (t !== transaction) {
+                            newArray.push(t);
+                        }
+                    });
+                }
+            }
+        }
     }
 }
 

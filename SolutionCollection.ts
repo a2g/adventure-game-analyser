@@ -17,11 +17,11 @@ export class SolutionCollection extends Array<Solution>{
         return isNodesRemaining;
     }
 
-    Process(map: Map<string, Transaction[]>): boolean {
+    Process(): boolean {
         let hasACloneJustBeenCreated = false
         this.forEach((solution: Solution) => {
             if (solution.IsNodesRemaining()) {
-                if (solution.Process(map, this))
+                if (solution.Process(this))
                     hasACloneJustBeenCreated = true;
             }
         });

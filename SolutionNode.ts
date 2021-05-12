@@ -36,7 +36,7 @@ export class SolutionNode {
         return clone;
     }
 
-    Process(map: Map<string, Transaction[]>, currentSolution: Solution, solutions: SolutionCollection, path: string): boolean {
+    Process(solution: Solution, solutions: SolutionCollection, path: string): boolean {
         path += "/" + this.objectToObtain
         //const isGrab = (this.b && this.b.objectToObtain == SpecialNodes.TransactionIsGrab);
 
@@ -44,25 +44,25 @@ export class SolutionNode {
         // so either both are null or neither are.
         if (this.a === null && this.b === null) {
             const objectToObtain = this.objectToObtain;
-            if (!map.has(objectToObtain) || !map.get(objectToObtain)) {
+            if (!solution.HasAnyTransactionsThatOutputObject(objectToObtain) || !solution.GetTransactionsThatOutputObject(objectToObtain)) {
                 this.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 this.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
-                currentSolution.AddVerifiedLeaf(objectToObtain, path);
-                currentSolution.SetNodeComplete(this);
+                solution.AddVerifiedLeaf(objectToObtain, path);
+                solution.SetNodeComplete(this);
                 // since we are at a dead end
                 // and since we don't need to process later on
                 // then we can simply return here
                 return false;
             }
             else {
-                const matchingTransactions = map.get(objectToObtain);
+                const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
                 assert(matchingTransactions); // we deliberately don't handle if(list) because it should never be null
 
                 if (matchingTransactions) {
                     assert(matchingTransactions[0].output === objectToObtain);
 
                     // this is the point we set it as completed
-                    currentSolution.SetNodeCompleteGenuine(this);
+                    solution.SetNodeCompleteGenuine(this);
 
                     // we have the convention that zero is the currentSolution
                     // so we start at the highest index in the list
@@ -72,7 +72,7 @@ export class SolutionNode {
 
                         // 1. get solution - because we might be cloning one;
                         const isCloneBeingUsed = i > 0;
-                        const theSolution = isCloneBeingUsed ? currentSolution.Clone() : currentSolution;
+                        const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
                         theSolution.SetNodeComplete(theSolution.rootNode);
                         if (isCloneBeingUsed)
                             solutions.push(theSolution);
@@ -122,7 +122,7 @@ export class SolutionNode {
                 return false;// this means its already been searhed for in the map, without success.
             else if (this.a.objectToObtain === SpecialNodes.SingleObjectVerb)
                 return false;// this means its a grab, so doesn't need searching.
-            const hasACloneJustBeenCreated = this.a.Process(map, currentSolution, solutions, path);
+            const hasACloneJustBeenCreated = this.a.Process(solution, solutions, path);
             if (hasACloneJustBeenCreated)
                 return true;
         }
@@ -131,7 +131,7 @@ export class SolutionNode {
                 return false;// this means its already been searhed for in the map, without success.
             else if (this.b.objectToObtain === SpecialNodes.SingleObjectVerb)
                 return false;// this means its a grab, so doesn't need searching.
-            const hasACloneJustBeenCreated = this.b.Process(map, currentSolution, solutions, path);
+            const hasACloneJustBeenCreated = this.b.Process(solution, solutions, path);
             if (hasACloneJustBeenCreated)
                 return true;
         }

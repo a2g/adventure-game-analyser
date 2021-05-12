@@ -15,8 +15,8 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode(objective)));
-        const isBreakEarly = collection.Process(map);
+        collection.push(new Solution(new SolutionNode(objective), map));
+        const isBreakEarly = collection.Process();
         assert.ok(isBreakEarly);
 
         assert.strictEqual(2, collection.length);
@@ -30,7 +30,7 @@ describe("Solution", () => {
 
         // process the rest of the transactions
         do {
-            collection.Process(map);
+            collection.Process();
         } while (collection.IsNodesRemaining());
 
 
@@ -49,8 +49,8 @@ describe("Solution", () => {
             const map = GetMapFromJSonGlossy();
             const objective = "inv_screwdriver";
             const collection = new SolutionCollection();
-            collection.push(new Solution(new SolutionNode(objective)));
-            const isBreakEarly = collection.Process(map);
+            collection.push(new Solution(new SolutionNode(objective), map));
+            const isBreakEarly = collection.Process();
 
             assert.strictEqual(false, isBreakEarly);
             assert.strictEqual(1, collection.length);
