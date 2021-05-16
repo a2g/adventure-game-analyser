@@ -77,8 +77,15 @@
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="TransactionMap.test.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="TruthTable.test.ts">
       <TestFramework>Mocha</TestFramework>
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="TransactionMap.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="UnitTest1.ts">

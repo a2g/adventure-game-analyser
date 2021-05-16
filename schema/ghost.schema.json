@@ -31,7 +31,7 @@
                 "inv_pump_with_bike_adapter",
                 "inv_jar_of_protons",
                 "inv_vacuum_tubes",
-                "inv_electromagnets",
+                "inv_box_of_electromagnets",
                 "inv_demon_death"
             ]
         },
@@ -50,13 +50,44 @@
                 "prop_lowered_backboard",
                 "prop_raised_backboard",
                 "prop_accelerated_vacuum_tube",
-                "prop_off_magged_up_vacuum_tube",
-                "prop_on_magged_up_vacuum_tube",
+                "prop_powerpoint1",
+                "prop_exposed_vacuum_tube1",
+                "prop_attached_electromagnet1",
+                "prop_plugged_in_electromagnet1",
+                "prop_switched_on_electromagnet1",
+                "prop_powerpoint2",
+                "prop_exposed_vacuum_tube2",
+                "prop_attached_electromagnet2",
+                "prop_plugged_in_electromagnet2",
+                "prop_switched_on_electromagnet2",
+                "prop_powerpoint3",
+                "prop_exposed_vacuum_tube3",
+                "prop_attached_electromagnet3",
+                "prop_plugged_in_electromagnet3",
+                "prop_switched_on_electromagnet3",
+                "prop_powerpoint4",
+                "prop_exposed_vacuum_tube4",
+                "prop_attached_electromagnet4",
+                "prop_plugged_in_electromagnet4",
+                "prop_switched_on_electromagnet4",
+                "prop_powerpoint5",
+                "prop_exposed_vacuum_tube5",
+                "prop_attached_electromagnet5",
+                "prop_plugged_in_electromagnet5",
+                "prop_switched_on_electromagnet5",
+                "prop_vacuum_tube",
+                "prop_slightly_accelerated_vacuum_tube",
+                "prop_mildly_accelerated_vacuum_tube",
+                "prop_moderately_accelerated_vacuum_tube",
+                "prop_partly_accelerated_vacuum_tube",
+                "prop_fully_accelerated_vacuum_tube",
                 "prop_exposed_vacuum_tube_pipe_1",
                 "prop_exposed_vacuum_tube_pipe_2",
                 "prop_exposed_vacuum_tube_pipe_3",
+                "prop_exposed_vacuum_tube_pipe_4",
+                "prop_exposed_vacuum_tube_pipe_5",
                 "prop_three_phase_powerpoint",
-                "prop_tube_system_topology_button"
+                "prop_button_set_to_star"
             ]
         },
         "verb_type": {
@@ -86,6 +117,15 @@
                 },
                 "prop3": {
                     "$ref": "#/definitions/prop_type"
+                },
+                "prop4": {
+                    "$ref": "#/definitions/prop_type"
+                },
+                "prop5": {
+                    "$ref": "#/definitions/prop_type"
+                },
+                "prop6": {
+                    "$ref": "#/definitions/prop_type"
                 }
             },
             "allOf": [
@@ -111,7 +151,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "INV_BECOMES_INV_VIA_KEEPING_INV",
+                                        "const": "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
                                         "description": "eg FLAT BALL becomes INFLATED BALL via keeping PUMP"
                                     }
                                 }
@@ -119,7 +159,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "INV_BECOMES_INV_VIA_LOSING_INV",
+                                        "const": "INV1_BECOMES_INV2_VIA_LOSING_INV3",
                                         "description": "eg broken amp becomes FIXED AMP via losing RADIO_TUBE"
                                     }
                                 }
@@ -127,9 +167,17 @@
                         ]
                     },
                     "then": {
-                        "required": [ "inv1", "inv2", "inv3" ],
+                        "required": [
+                            "inv1",
+                            "inv2",
+                            "inv3"
+                        ],
                         "not": {
-                            "required": [ "prop1", "prop2", "prop3" ]
+                            "required": [
+                                "prop1",
+                                "prop2",
+                                "prop3"
+                            ]
                         }
                     }
                 },
@@ -139,7 +187,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL",
+                                        "const": "INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL",
                                         "description": "eg use ball with backboard generate prop"
                                     }
                                 }
@@ -147,7 +195,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "PROP_BECOMES_PROP_VIA_LOSING_INV",
+                                        "const": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
                                         "description": "powerpoint -> plugged-in-amp via losing INV_FIXEDAMP"
                                     }
                                 }
@@ -155,7 +203,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "PROP_BECOMES_PROP_VIA_KEEPING_INV",
+                                        "const": "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1",
                                         "description": "eg RAISEDBACKBOARD becomes LOWEREDBACKBOARD vie keeping POLEHOOK",
                                         "title": " eg CLOSED_RADIO becomes  OPENED_RADIO_WITH_TUBE via keeping SCREWDRIVER"
                                     }
@@ -164,7 +212,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "PROP_BECOMES_PROP_WHEN_GRAB_INV",
+                                        "const": "PROP1_BECOMES_PROP2_WHEN_GRAB_INV1",
                                         "description": "eg opened raio with radiotube becomes merely OPENED RADIO when you grab RADIOTUBE"
                                     }
                                 }
@@ -172,9 +220,17 @@
                         ]
                     },
                     "then": {
-                        "required": [ "inv1", "prop1", "prop2" ],
+                        "required": [
+                            "inv1",
+                            "prop1",
+                            "prop2"
+                        ],
                         "not": {
-                            "required": [ "inv2", "inv3", "prop3" ]
+                            "required": [
+                                "inv2",
+                                "inv3",
+                                "prop3"
+                            ]
                         }
                     }
                 },
@@ -184,7 +240,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "PROP_BECOMES_PROP_VIA_LOSING_PROP",
+                                        "const": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
                                         "description": "eg none yet"
                                     }
                                 }
@@ -192,9 +248,17 @@
                         ]
                     },
                     "then": {
-                        "required": [ "prop1", "prop2", "prop3" ],
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "prop3"
+                        ],
                         "not": {
-                            "required": [ "inv1", "inv2", "inv3" ]
+                            "required": [
+                                "inv1",
+                                "inv2",
+                                "inv3"
+                            ]
                         }
                     }
                 },
@@ -204,7 +268,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "PROP_GOES_WHEN_GRAB_INV",
+                                        "const": "PROP1_GOES_WHEN_GRAB_INV1",
                                         "description": "everywhere!"
                                     }
                                 }
@@ -214,7 +278,12 @@
                     "then": {
                         "required": [ "prop1", "inv1" ],
                         "not": {
-                            "required": [ "prop2", "prop3", "inv2", "inv3" ]
+                            "required": [
+                                "prop2",
+                                "prop3",
+                                "inv2",
+                                "inv3"
+                            ]
                         }
                     }
                 },
@@ -224,7 +293,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "TURN_ON",
+                                        "const": "TURN_ON_PROP1_BECOMES_PROP2_PROP_BECOMES_PROP",
                                         "description": "turn on magged up vacuum tubes"
                                     }
                                 }
@@ -232,7 +301,7 @@
                             {
                                 "properties": {
                                     "type": {
-                                        "const": "TURN_OFF",
+                                        "const": "TURN_ON_PROP1_BECOMES_PROP2_PROP_BECOMES_PROP",
                                         "description": "turn on magged up vacuum tubes"
                                     }
                                 }
@@ -240,9 +309,157 @@
                         ]
                     },
                     "then": {
-                        "required": [ "prop1", "prop2" ],
+                        "required": [
+                            "prop1",
+                            "prop2"
+                        ],
                         "not": {
-                            "required": [ "prop3", "inv1", "inv2", "inv3" ]
+                            "required": [
+                                "prop3",
+                                "inv1",
+                                "inv2",
+                                "inv3"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP",
+                                "description": "updated the vacuum tube"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "prop3"
+                        ],
+                        "not": {
+                            "required": [
+                                "inv1",
+                                "inv2",
+                                "inv3",
+                                "prop7",
+                                "prop6",
+                                "prop5",
+                                "prop4"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS",
+                                "description": "updated the vacuum tube"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "prop3",
+                            "prop4"
+                        ],
+                        "not": {
+                            "required": [
+                                "inv1",
+                                "inv2",
+                                "inv3",
+                                "prop7",
+                                "prop6",
+                                "prop5"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS",
+                                "description": "updated the vacuum tube"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "prop3",
+                            "prop4",
+                            "prop5"
+                        ],
+                        "not": {
+                            "required": [
+                                "inv1",
+                                "inv2",
+                                "inv3",
+                                "prop7",
+                                "prop6"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS",
+                                "description": "updated the vacuum tube"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "prop3",
+                            "prop4",
+                            "prop5",
+                            "prop6"
+                        ],
+                        "not": {
+                            "required": [
+                                "inv1",
+                                "inv2",
+                                "inv3",
+                                "prop7"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS",
+                                "description": "updated the vacuum tube"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "prop1",
+                            "prop2",
+                            "prop3",
+                            "prop4",
+                            "prop5",
+                            "prop6",
+                            "prop7"
+                        ],
+                        "not": {
+                            "required": [
+                                "inv1",
+                                "inv2",
+                                "inv3"
+                            ]
                         }
                     }
                 }
@@ -252,31 +469,42 @@
             "enum": [
                 "INV1_AND_INV2_FORM_AN_INV",
                 "INV1_AND_INV2_GENERATE_INV",
-                "INV_BECOMES_INV_VIA_KEEPING_INV",
-                "INV_BECOMES_INV_VIA_LOSING_INV",
-                "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL",
-                "PROP_BECOMES_PROP_VIA_KEEPING_INV",
-                "PROP_BECOMES_PROP_VIA_KEEPING_PROP",
-                "PROP_BECOMES_PROP_VIA_LOSING_INV",
-                "PROP_BECOMES_PROP_VIA_LOSING_PROP",
-                "PROP_BECOMES_PROP_WHEN_GRAB_INV",
-                "PROP_GOES_WHEN_GRAB_INV",
-                "TURN_OFF",
-                "TURN_ON"  
+                "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
+                "INV1_BECOMES_INV2_VIA_LOSING_INV3",
+                "INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL",
+                "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1",
+                "PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3",
+                "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
+                "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
+                "PROP1_BECOMES_PROP2_WHEN_GRAB_INV1",
+                "PROP1_GOES_WHEN_GRAB_INV1",
+                "TURN_OFF_PROP1_BECOMES_PROP2",
+                "TURN_ON_PROP1_BECOMES_PROP2",
+                "AUTO_PROP_GENERATED_BY_MANY_PROPS",
+                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP",
+                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS",
+                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS",
+                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS",
+                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS"
             ]
         }
     },
     "INV1_AND_INV2_FORM_AN_INV": "INV1_AND_INV2_FORM_AN_INV",
     "INV1_AND_INV2_GENERATE_INV": "INV1_AND_INV2_GENERATE_INV",
-    "INV_BECOMES_INV_VIA_KEEPING_INV": "INV_BECOMES_INV_VIA_KEEPING_INV",
-    "INV_BECOMES_INV_VIA_LOSING_INV": "INV_BECOMES_INV_VIA_LOSING_INV",
-    "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL": "INV_WITH_PROP_REVEALS_PROP_KEPT_ALL",
-    "PROP_BECOMES_PROP_VIA_KEEPING_INV": "PROP_BECOMES_PROP_VIA_KEEPING_INV",
-    "PROP_BECOMES_PROP_VIA_KEEPING_PROP": "PROP_BECOMES_PROP_VIA_KEEPING_PROP",
-    "PROP_BECOMES_PROP_VIA_LOSING_INV": "PROP_BECOMES_PROP_VIA_LOSING_INV",
-    "PROP_BECOMES_PROP_VIA_LOSING_PROP": "PROP_BECOMES_PROP_VIA_LOSING_PROP",
-    "PROP_BECOMES_PROP_WHEN_GRAB_INV": "PROP_BECOMES_PROP_WHEN_GRAB_INV",
-    "PROP_GOES_WHEN_GRAB_INV": "PROP_GOES_WHEN_GRAB_INV",
-    "TURN_OFF":"TURN_OFF", 
-    "TURN_ON":"TURN_ON"
+    "INV1_BECOMES_INV2_VIA_KEEPING_INV3": "INV1_BECOMES_INV2_VIA_KEEPING_INV",
+    "INV1_BECOMES_INV2_VIA_LOSING_INV3": "INV1_BECOMES_INV2_VIA_LOSING_INV3",
+    "INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL": "INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL",
+    "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1": "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1",
+    "PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3": "PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3",
+    "PROP1_BECOMES_PROP2_VIA_LOSING_INV1": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
+    "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
+    "PROP1_BECOMES_PROP2_WHEN_GRAB_INV1": "PROP1_BECOMES_PROP2_WHEN_GRAB_INV1",
+    "PROP1_GOES_WHEN_GRAB_INV1": "PROP1_GOES_WHEN_GRAB_INV1",
+    "TURN_OFF_PROP1_BECOMES_PROP2": "TURN_OFF_PROP1_BECOMES_PROP2",
+    "TURN_ON_PROP1_BECOMES_PROP2": "TURN_ON_PROP1_BECOMES_PROP2",
+    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP",
+    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS",
+    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS",
+    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS",
+    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS"
 }

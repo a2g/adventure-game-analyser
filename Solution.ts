@@ -4,6 +4,7 @@ import { SolutionNode } from './SolutionNode';
 import { SpecialNodes } from './SpecialNodes';
 import { Transaction } from './Transaction';
 import { assert } from 'console';
+import { TransactionMap } from './TransactionMap';
 
 export class Solution {
 
@@ -11,19 +12,16 @@ export class Solution {
     incompleteNodes: Set<SolutionNode>;
     absoluteLeafNodes: Map<string, string>;
     usedVerbNounCombos: Set<string>;
-    transactionMap: Map<string, Transaction[]>;
+    transactionMap: TransactionMap;
 
-    constructor(root: SolutionNode, map : Map<string, Transaction[]>) {
+    constructor(root: SolutionNode, map : TransactionMap) {
         this.rootNode = root;
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
         this.absoluteLeafNodes = new Map<string, string>();
         this.usedVerbNounCombos = new Set<string>();
-        this.transactionMap = new Map<string, Transaction[]>();
-        map.forEach((array: Transaction[], key: string) => {
-            const cloned = array.map(x => Object.assign({}, x));
-            this.transactionMap.set(key, cloned);
-        });
+        this.transactionMap = new TransactionMap(map);
+        
     }
 
     AddVerbNounCombo(verb: string, noun: string): void {
@@ -84,10 +82,10 @@ export class Solution {
         return this.rootNode.Process(this, solutions, this.rootNode.objectToObtain);
     }
 
-    ProcessCached(map: Map<string, Transaction[]>): void {
+    ProcessCached(map: TransactionMap): void {
         this.incompleteNodes.forEach((node: SolutionNode) => {
             const objectToObtain = node.objectToObtain;
-            if (!map.has(objectToObtain)) {
+            if (!map.Has(objectToObtain)) {
                 node.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
                 node.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
             }
@@ -107,29 +105,15 @@ export class Solution {
     }
 
     HasAnyTransactionsThatOutputObject(objectToObtain: string): boolean{
-        return this.transactionMap.has(objectToObtain);
+        return this.transactionMap.Has(objectToObtain);
     }
 
 
     GetTransactionsThatOutputObject(objectToObtain: string): Transaction[] |undefined{
-        return this.transactionMap.get(objectToObtain);
+        return this.transactionMap.Get(objectToObtain);
     }
 
     RemoveTransaction(transaction: Transaction) {
-        if (transaction) {
-            if (this.transactionMap.has(transaction.output)) {
-                const oldArray = this.transactionMap.get(transaction.output);
-                if (oldArray) {
-                    const newArray = new Array<Transaction>();
-                    this.transactionMap.set(transaction.output, newArray);
-                    oldArray.forEach((t: Transaction) => {
-                        if (t !== transaction) {
-                            newArray.push(t);
-                        }
-                    });
-                }
-            }
-        }
+        this.transactionMap.RemoveTransaction(transaction);
     }
 }
-

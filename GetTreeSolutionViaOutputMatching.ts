@@ -4,8 +4,9 @@ import { SolutionNode } from './SolutionNode';
 import { Transaction } from './Transaction';
 import { Solution } from './Solution';
 import { assert } from 'console';
+import { TransactionMap } from './TransactionMap';
 
-export function GetTreeSolutionViaOutputMatching(map: Map<string, Transaction[]>, solutionGoal: string): SolutionCollection {
+export function GetTreeSolutionViaOutputMatching(map: TransactionMap, solutionGoal: string): SolutionCollection {
 
     const collection = new SolutionCollection();
     collection.push(new Solution(new SolutionNode(solutionGoal), map));

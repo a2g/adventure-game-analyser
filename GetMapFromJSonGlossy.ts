@@ -1,27 +1,18 @@
 
-import { SolutionCollection } from './SolutionCollection';
-import { SolutionNode } from './SolutionNode';
+import { TransactionMap } from './TransactionMap';
 import { Transaction } from './Transaction';
-import { Solution } from './Solution';
 import { Verb } from './Verb';
 import { assert } from 'console';
 import transactionsFile from './schema/transactions.ghost.json';
 import _ from './schema/ghost.schema.json';
 
 
-function AddToMap(map: Map<string, Transaction[]>, t: Transaction) {
-    // initiatize array, if it hasn't yet been
-    if (!map.has(t.output)) {
-        map.set(t.output, new Array<Transaction>());
-    }
-    // always add to list
-    map.get(t.output)?.push(t);
-}
+
 export function GetObjectiveFromJsonGlossy() : string{
     return transactionsFile.objectivePropName;
 }
-export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
-    const mapOfTransactionsByInput = new Map<string, Transaction[]>();
+export function GetMapFromJSonGlossy(): TransactionMap {
+    const mapOfTransactionsByInput = new TransactionMap(null);
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
         switch (transactionsFile.transactions[i].type) {
@@ -31,7 +22,7 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].inv2;
                     const output = "" + transactionsFile.transactions[i].inv3;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
             case _.INV1_AND_INV2_GENERATE_INV:
@@ -40,57 +31,73 @@ export function GetMapFromJSonGlossy(): Map<string, Transaction[]> {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].inv2;
                     const output = "" + transactionsFile.transactions[i].inv3;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.INV_WITH_PROP_REVEALS_PROP_KEPT_ALL:
+            case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
                 {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap( new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.INV_BECOMES_INV_VIA_KEEPING_INV:
-            case _.INV_BECOMES_INV_VIA_LOSING_INV:
+            case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
+            case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
                 {
                     // losing inv
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const output = "" + transactionsFile.transactions[i].inv2;
                     const inputB = "" + transactionsFile.transactions[i].inv3;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.PROP_BECOMES_PROP_VIA_KEEPING_INV:
-            case _.PROP_BECOMES_PROP_VIA_LOSING_INV:
+            case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
+            case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
                 {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
                     const inputB = "" + transactionsFile.transactions[i].inv1;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
                 }
                 break;
-            case _.PROP_GOES_WHEN_GRAB_INV:
+            case _.PROP1_GOES_WHEN_GRAB_INV1:
                 {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].inv1;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Grab, output, input));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, input));
                 }
                 break;
-            case _.PROP_BECOMES_PROP_WHEN_GRAB_INV:
+            case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
                 {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
                     const outputThatsNotUseful = "" + transactionsFile.transactions[i].prop2;
                     const output = "" + transactionsFile.transactions[i].inv1;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Grab, output, inputA));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, inputA));
                 }
                 break;
-            case _.TURN_OFF:
-            case _.TURN_ON:
+            case _.TURN_OFF_PROP1_BECOMES_PROP2:
+            case _.TURN_ON_PROP1_BECOMES_PROP2:
                 {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
-                    AddToMap(mapOfTransactionsByInput, new Transaction(type, Verb.Grab, output, input));
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, input));
+                }
+                break;
+            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP:
+            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS:
+            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS:
+            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS:
+            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS:
+                {
+                    const input = "" + transactionsFile.transactions[i].prop1;
+                    const output = "" + transactionsFile.transactions[i].prop2;
+                    const prop1 = "" + transactionsFile.transactions[i].prop3;
+                    const prop2 = "" + transactionsFile.transactions[i].prop4;
+                    const prop3 = "" + transactionsFile.transactions[i].prop5;
+                    const prop4 = "" + transactionsFile.transactions[i].prop6;
+                    const prop5 = "" + transactionsFile.transactions[i].prop7;
+                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
         }// end switch
