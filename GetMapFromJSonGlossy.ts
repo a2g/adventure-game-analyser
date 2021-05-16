@@ -1,6 +1,6 @@
 
 import { TransactionMap } from './TransactionMap';
-import { Transaction } from './Transaction';
+import { SolutionNode } from './SolutionNode';
 import { Verb } from './Verb';
 import { assert } from 'console';
 import transactionsFile from './schema/transactions.ghost.json';
@@ -8,7 +8,7 @@ import _ from './schema/ghost.schema.json';
 
 
 
-export function GetObjectiveFromJsonGlossy() : string{
+export function GetObjectiveFromJsonGlossy(): string {
     return transactionsFile.objectivePropName;
 }
 export function GetMapFromJSonGlossy(): TransactionMap {
@@ -22,7 +22,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].inv2;
                     const output = "" + transactionsFile.transactions[i].inv3;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.INV1_AND_INV2_GENERATE_INV:
@@ -31,7 +31,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].inv2;
                     const output = "" + transactionsFile.transactions[i].inv3;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
@@ -39,7 +39,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const inputB = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
-                    mapOfTransactionsByInput.AddToMap( new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
@@ -49,7 +49,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const output = "" + transactionsFile.transactions[i].inv2;
                     const inputB = "" + transactionsFile.transactions[i].inv3;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
@@ -58,22 +58,22 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
                     const inputB = "" + transactionsFile.transactions[i].inv1;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Use, output, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.PROP1_GOES_WHEN_GRAB_INV1:
                 {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].inv1;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, input));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input));
                 }
                 break;
             case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
                 {
                     const inputA = "" + transactionsFile.transactions[i].prop1;
-                    const outputThatsNotUseful = "" + transactionsFile.transactions[i].prop2;
+                    const inputB = "" + transactionsFile.transactions[i].prop2;
                     const output = "" + transactionsFile.transactions[i].inv1;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, inputA));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.TURN_OFF_PROP1_BECOMES_PROP2:
@@ -81,7 +81,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                 {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, input));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input));
                 }
                 break;
             case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP:
@@ -97,7 +97,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const prop3 = "" + transactionsFile.transactions[i].prop5;
                     const prop4 = "" + transactionsFile.transactions[i].prop6;
                     const prop5 = "" + transactionsFile.transactions[i].prop7;
-                    mapOfTransactionsByInput.AddToMap(new Transaction(type, Verb.Grab, output, input, prop1, prop2, prop3, prop4, prop5));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
         }// end switch

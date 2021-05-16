@@ -100,7 +100,6 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Transaction.ts" />
     <TypeScriptCompile Include="TruthTable.ts" />
     <TypeScriptCompile Include="SolveCyclicEtc.ts" />
     <TypeScriptCompile Include="app.ts" />

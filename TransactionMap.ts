@@ -1,17 +1,22 @@
-import { Transaction } from "./Transaction";
+import { SolutionNode } from "./SolutionNode";
 /**
  * need to test
  */
 export class TransactionMap {
-    private transactionMap: Map<string, Transaction[]>;
+    private transactionMap: Map<string, SolutionNode[]>;
 
     constructor(cloneFromMe: TransactionMap | null) {
-        this.transactionMap = new Map<string, Transaction[]>();
+        this.transactionMap = new Map<string, SolutionNode[]>();
 
         if (cloneFromMe) {
-            cloneFromMe.transactionMap.forEach((array: Transaction[], key: string) => {
-                const cloned = array.map(x => Object.assign({}, x));
-                this.transactionMap.set(key, cloned);
+            cloneFromMe.transactionMap.forEach((array: SolutionNode[], key: string) => {
+                let clonedArray = new Array<SolutionNode>();
+                let throwawaySet = new Set<SolutionNode>();
+                array.forEach((node: SolutionNode) => {
+                    let clonedNode = node.CreateClone(throwawaySet);
+                    clonedArray.push(clonedNode);
+                });
+                this.transactionMap.set(key, clonedArray);
             });
         }
     }
@@ -20,7 +25,7 @@ export class TransactionMap {
         return this.transactionMap.has(objectToObtain);
     }
 
-    GetTransactionsThatOutputObject(objectToObtain: string): Transaction[] | undefined {
+    GetTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
         return this.transactionMap.get(objectToObtain);
     }
 
@@ -28,27 +33,27 @@ export class TransactionMap {
         return this.transactionMap.has(objectToObtain);
     }
 
-    Get(objectToObtain: string): Transaction[] | undefined {
+    Get(objectToObtain: string): SolutionNode[] | undefined {
         return this.transactionMap.get(objectToObtain);
     }
 
-    AddToMap(t: Transaction) {
+    AddToMap(t: SolutionNode) {
         // initiatize array, if it hasn't yet been
         if (!this.transactionMap.has(t.output)) {
-            this.transactionMap.set(t.output, new Array<Transaction>());
+            this.transactionMap.set(t.output, new Array<SolutionNode>());
         }
         // always add to list
         this.transactionMap.get(t.output)?.push(t);
     }
 
-    RemoveTransaction(transaction: Transaction) {
+    RemoveTransaction(transaction: SolutionNode) {
         if (transaction) {
             if (this.transactionMap.has(transaction.output)) {
                 const oldArray = this.transactionMap.get(transaction.output);
                 if (oldArray) {
-                    const newArray = new Array<Transaction>();
+                    const newArray = new Array<SolutionNode>();
                     this.transactionMap.set(transaction.output, newArray);
-                    oldArray.forEach((t: Transaction) => {
+                    oldArray.forEach((t: SolutionNode) => {
                         if (t !== transaction) {
                             newArray.push(t);
                         }

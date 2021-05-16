@@ -7,6 +7,22 @@ import { Solution } from './Solution';
 
 
 describe("Solution", () => {
+    it("Testing just the grabbing of screwdriver", () => {
+        const map = GetMapFromJSonGlossy();
+        const objective = "inv_screwdriver";
+        const collection = new SolutionCollection();
+        collection.push(new Solution(new SolutionNode(objective), map));
+        const isBreakEarly = collection.Process();
+
+        assert.strictEqual(false, isBreakEarly);
+        assert.strictEqual(1, collection.length);
+        const solution0 = collection[0];
+        assert.strictEqual(0, solution0.GetIncompleteNodes().size);
+        const leafNodes = solution0.GetLeafNodes();
+        assert.ok(leafNodes.has("prop_screwdriver"));
+        assert.strictEqual(1, leafNodes.size);
+    });
+
     it("Test the cloning at numerous ways to kill demon", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "inv_demon_death";
@@ -42,21 +58,7 @@ describe("Solution", () => {
         }
     });
 
-    it("Testing just the grabbing of screwdriver", () => {
-        const map = GetMapFromJSonGlossy();
-        const objective = "inv_screwdriver";
-        const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode(objective), map));
-        const isBreakEarly = collection.Process();
-
-        assert.strictEqual(false, isBreakEarly);
-        assert.strictEqual(1, collection.length);
-        const solution0 = collection[0];
-        assert.strictEqual(0, solution0.GetIncompleteNodes().size);
-        const leafNodes = solution0.GetLeafNodes();
-        assert.ok(leafNodes.has("prop_screwdriver"));
-        assert.strictEqual(1, leafNodes.size);
-    });
+  
 
     it("Test cloning with turn on/turn off", () => {
         const map = GetMapFromJSonGlossy();

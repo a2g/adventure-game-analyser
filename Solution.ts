@@ -34,8 +34,8 @@ export class Solution {
 
     SetNodeIncomplete(node: SolutionNode | null): void {
         if (node)
-            if (node.objectToObtain !== SpecialNodes.VerifiedLeaf)
-                if (node.objectToObtain!== SpecialNodes.SingleObjectVerb) 
+            if (node.output !== SpecialNodes.VerifiedLeaf)
+                if (node.output!== SpecialNodes.SingleObjectVerb) 
                     this.incompleteNodes.add(node);
     }
 
@@ -56,14 +56,14 @@ export class Solution {
     }
 
     Clone(): Solution {
-        const clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
+        const clonedRootNode = new SolutionNode(this.rootNode.output);
         const clonedSolution = new Solution(clonedRootNode, this.transactionMap)
-        for (let i = 0; i < this.rootNode.arrayOfInputs.length; i++) {
-            const clonedNode = this.rootNode.arrayOfInputs[i].CreateClone(clonedSolution.incompleteNodes);
-            clonedSolution.rootNode.arrayOfInputs.push(clonedNode);
+        for (let i = 0; i < this.rootNode.nodesThatMatch.length; i++) {
+            const clonedNode = this.rootNode.nodesThatMatch[i].CreateClone(clonedSolution.incompleteNodes);
+            clonedSolution.rootNode.nodesThatMatch.push(clonedNode);
         }
 
-        if (!clonedSolution.rootNode.arrayOfInputs[0] || !clonedSolution.rootNode.arrayOfInputs[1])
+        if (!clonedSolution.rootNode.namesToMatch[0] || !clonedSolution.rootNode.namesToMatch[1])
             clonedSolution.incompleteNodes.add(clonedRootNode);
         this.usedVerbNounCombos.forEach((combo: string) => {
             clonedSolution.AddVerbNounCombo(combo,"");
@@ -80,18 +80,7 @@ export class Solution {
     }
 
     Process( solutions: SolutionCollection): boolean {
-        return this.rootNode.Process(this, solutions, this.rootNode.objectToObtain);
-    }
-
-    ProcessCached(map: TransactionMap): void {
-        this.incompleteNodes.forEach((node: SolutionNode) => {
-            const objectToObtain = node.objectToObtain;
-            if (!map.Has(objectToObtain)) {
-                for (let i = 0; i < node.arrayOfInputs.length; i++) {
-                    node.arrayOfInputs.push(new SolutionNode(SpecialNodes.VerifiedLeaf));
-                }
-            }
-        });
+        return this.rootNode.Process(this, solutions, this.rootNode.output);
     }
 
     GetLeafNodes(): Map<string, string> {
@@ -111,11 +100,11 @@ export class Solution {
     }
 
 
-    GetTransactionsThatOutputObject(objectToObtain: string): Transaction[] |undefined{
+    GetTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
         return this.transactionMap.Get(objectToObtain);
     }
 
-    RemoveTransaction(transaction: Transaction) {
+    RemoveTransaction(transaction: SolutionNode) {
         this.transactionMap.RemoveTransaction(transaction);
     }
 }
