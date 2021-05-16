@@ -7,22 +7,14 @@ import { assert } from 'console';
 export class SolutionNode {
 
     objectToObtain: string;
-    a: SolutionNode | null;
-    b: SolutionNode | null;
+    nodesThatMatch: Array<SolutionNode>;
+    namesToMatch: Arryay<
 
     constructor(objective: string) {
         assert(objective!="undefined")
         this.objectToObtain = objective;
-        this.a = null;
-        this.b = null;
-    }
-
-    SetA(a: SolutionNode): void {
-        this.a = a;
-    }
-
-    SetB(b: SolutionNode): void {
-        this.b = b;
+        this.nodeArray = new Array<SolutionNode>();
+        this.namesToMatch = new Array<SolutionNode>();
     }
 
     CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
@@ -84,13 +76,13 @@ export class SolutionNode {
                             // doing it one at a time is a bit inefficient
                             // eg in the case a Cloning Event, we'll be double/triple processing.
                             // but this is easier to maintain.
-                            if (theNode.a == null) {
+                            if (theNode.a === null) {
                                 theNode.a = new SolutionNode(matchingTransactions[i].inputA);
                                 theSolution.SetNodeIncomplete(theNode.a);
                             }
 
                             // we handle the Single Object Verbs by having
-                            if (theNode.b == null) {
+                            if (theNode.b === null) {
                                 if (matchingTransactions[i].inputB === SpecialNodes.SingleObjectVerb) {
                                     // could have just assigned inputB to this.b, but this is more explicit
                                     theNode.b = new SolutionNode(SpecialNodes.SingleObjectVerb);
@@ -99,6 +91,7 @@ export class SolutionNode {
                                     theSolution.SetNodeIncomplete(theNode.b);
                                 }
                             }
+                            theSolution.RemoveTransaction(matchingTransactions[i]);
                         }
                     }
 
@@ -120,8 +113,6 @@ export class SolutionNode {
         if (this.a) {
             if (this.a.objectToObtain === SpecialNodes.VerifiedLeaf)
                 return false;// this means its already been searhed for in the map, without success.
-            else if (this.a.objectToObtain === SpecialNodes.SingleObjectVerb)
-                return false;// this means its a grab, so doesn't need searching.
             const hasACloneJustBeenCreated = this.a.Process(solution, solutions, path);
             if (hasACloneJustBeenCreated)
                 return true;

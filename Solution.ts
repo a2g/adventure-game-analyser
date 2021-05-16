@@ -58,11 +58,12 @@ export class Solution {
     Clone(): Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.objectToObtain);
         const clonedSolution = new Solution(clonedRootNode, this.transactionMap)
-        if (this.rootNode.a)
-            clonedSolution.rootNode.SetA(this.rootNode.a.CreateClone(clonedSolution.incompleteNodes));
-        if (this.rootNode.b)
-            clonedSolution.rootNode.SetB(this.rootNode.b.CreateClone(clonedSolution.incompleteNodes));
-        if (!clonedSolution.rootNode.a || !clonedSolution.rootNode.b)
+        for (let i = 0; i < this.rootNode.arrayOfInputs.length; i++) {
+            const clonedNode = this.rootNode.arrayOfInputs[i].CreateClone(clonedSolution.incompleteNodes);
+            clonedSolution.rootNode.arrayOfInputs.push(clonedNode);
+        }
+
+        if (!clonedSolution.rootNode.arrayOfInputs[0] || !clonedSolution.rootNode.arrayOfInputs[1])
             clonedSolution.incompleteNodes.add(clonedRootNode);
         this.usedVerbNounCombos.forEach((combo: string) => {
             clonedSolution.AddVerbNounCombo(combo,"");
@@ -86,8 +87,9 @@ export class Solution {
         this.incompleteNodes.forEach((node: SolutionNode) => {
             const objectToObtain = node.objectToObtain;
             if (!map.Has(objectToObtain)) {
-                node.a = new SolutionNode(SpecialNodes.VerifiedLeaf);
-                node.b = new SolutionNode(SpecialNodes.VerifiedLeaf);
+                for (let i = 0; i < node.arrayOfInputs.length; i++) {
+                    node.arrayOfInputs.push(new SolutionNode(SpecialNodes.VerifiedLeaf));
+                }
             }
         });
     }
