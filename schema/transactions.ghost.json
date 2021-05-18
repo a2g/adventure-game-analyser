@@ -94,11 +94,6 @@
             "prop2": "prop_switched_on_electromagnet1"
         },
         {
-            "type": "TURN_OFF_PROP1_BECOMES_PROP2",
-            "prop1": "prop_switched_on_electromagnet1",
-            "prop2": "prop_plugged_in_electromagnet1"
-        },
-        {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
             "prop1": "prop_exposed_vacuum_tube2",
             "prop2": "prop_attached_electromagnet2",
@@ -116,9 +111,19 @@
             "prop2": "prop_switched_on_electromagnet2"
         },
         {
-            "type": "TURN_OFF_PROP1_BECOMES_PROP2",
-            "prop1": "prop_switched_on_electromagnet2",
-            "prop2": "prop_plugged_in_electromagnet2"
+            "type": "TURN_ON_PROP1_BECOMES_PROP2",
+            "prop1": "prop_plugged_in_electromagnet3",
+            "prop2": "prop_switched_on_electromagnet3"
+        },
+        {
+            "type": "TURN_ON_PROP1_BECOMES_PROP2",
+            "prop1": "prop_plugged_in_electromagnet4",
+            "prop2": "prop_switched_on_electromagnet4"
+        },
+        {
+            "type": "TURN_ON_PROP1_BECOMES_PROP2",
+            "prop1": "prop_plugged_in_electromagnet5",
+            "prop2": "prop_switched_on_electromagnet5"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
@@ -129,8 +134,8 @@
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
             "prop1": "prop_attached_electromagnet3",
-            "prop1": "prop_plugged_in_electromagnet3",
-            "prop2": "prop_powerpoint3"
+            "prop2": "prop_plugged_in_electromagnet3",
+            "prop3": "prop_powerpoint3"
         },
         {
             "type": "TURN_ON_PROP1_BECOMES_PROP2",

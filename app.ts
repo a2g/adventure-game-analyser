@@ -23,6 +23,7 @@ while (true) {
     array.push("prop_death_by_guitar");
     array.push("prop_death_by_slamdunk");
     array.push("prop_death_by_physics");
+    array.push("prop_switched_on_electromagnet2");
     for (let i = 0; i < array.length; i++) {
         console.log(" " + (i+1) + ". " + array[i]);
     };

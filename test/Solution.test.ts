@@ -113,17 +113,20 @@ describe("Solution", () => {
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));
         const isBreakEarly = collection.Process();
-        assert.strictEqual(false, isBreakEarly);
+        assert.strictEqual(true, isBreakEarly);
 
-        assert.strictEqual(1, collection.length);
-        const solution0 = collection[0];;
+        const solution0 = collection[0];
+        const solution1 = collection[1];;
+
+        /*
+        assert.strictEqual(2, collection.length);
+        
         assert.strictEqual(0, solution0.GetLeafNodes().size);
         assert.strictEqual(1, solution0.GetIncompleteNodes().size);
-
-        const solution1 = collection[1];;
+        
         assert.strictEqual(0, solution1.GetLeafNodes().size);
         assert.strictEqual(1, solution1.GetIncompleteNodes().size);
-
+        */
         // process the rest of the transactions
         do {
             collection.Process();
@@ -131,7 +134,8 @@ describe("Solution", () => {
 
 
         {
-            const leafNodeMap = solution1.GetLeafNodes();
+            const solution0 = collection[0];
+            const leafNodeMap = solution0.GetLeafNodes();
             assert.strictEqual(5, leafNodeMap.size);
             // commenting out the things below, because they will change
             //assert.ok(leafNodeMap.has("inv_deflated_ball"));

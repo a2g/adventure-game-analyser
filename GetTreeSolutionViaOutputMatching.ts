@@ -8,7 +8,7 @@ import { TransactionMap } from './TransactionMap';
 export function GetTreeSolutionViaOutputMatching(map: TransactionMap, solutionGoal: string): SolutionCollection {
 
     const collection = new SolutionCollection();
-    collection.push(new Solution(new SolutionNode(solutionGoal), map));
+    collection.push(new Solution(new SolutionNode("","",solutionGoal), map));
 
     do {
         collection.Process();
