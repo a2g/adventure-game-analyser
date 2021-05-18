@@ -2,6 +2,12 @@
     "objectivePropName": "inv_demon_death",
     "transactions": [
         {
+            "type": "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
+            "inv1": "inv_deflated_ball",
+            "inv2": "inv_inflated_ball",
+            "inv3": "inv_pump_with_needle_adapter"
+        },
+        {
             "type": "INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL",
             "inv1": "inv_guitar",
             "prop1": "prop_plugged_in_amp",
@@ -11,12 +17,6 @@
             "type": "PROP1_GOES_WHEN_GRAB_INV1",
             "prop1": "prop_screwdriver",
             "inv1": "inv_screwdriver"
-        },
-        {
-            "type": "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
-            "inv1": "inv_deflated_ball",
-            "inv2": "inv_inflated_ball",
-            "inv3": "inv_pump_with_needle_adapter"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1",
@@ -78,9 +78,9 @@
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
-            "prop1": "prop_exposed_vacuum_tube1",           
+            "prop1": "prop_exposed_vacuum_tube1",
             "prop2": "prop_attached_electromagnet1",
-            "inv1":  "inv_box_of_electromagnets"
+            "inv1": "inv_box_of_electromagnets"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
@@ -100,9 +100,9 @@
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
-            "prop1": "prop_exposed_vacuum_tube2",           
+            "prop1": "prop_exposed_vacuum_tube2",
             "prop2": "prop_attached_electromagnet2",
-            "inv1":  "inv_box_of_electromagnets"
+            "inv1": "inv_box_of_electromagnets"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
@@ -122,9 +122,9 @@
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
-            "prop1": "prop_exposed_vacuum_tube3",           
+            "prop1": "prop_exposed_vacuum_tube3",
             "prop2": "prop_attached_electromagnet3",
-            "inv1":  "inv_box_of_electromagnets"
+            "inv1": "inv_box_of_electromagnets"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
@@ -144,9 +144,9 @@
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
-            "prop1": "prop_exposed_vacuum_tube4",           
+            "prop1": "prop_exposed_vacuum_tube4",
             "prop2": "prop_attached_electromagnet4",
-            "inv1":  "inv_box_of_electromagnets"
+            "inv1": "inv_box_of_electromagnets"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
@@ -166,9 +166,9 @@
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
-            "prop1": "prop_exposed_vacuum_tube5",           
+            "prop1": "prop_exposed_vacuum_tube5",
             "prop2": "prop_attached_electromagnet5",
-            "inv1":  "inv_box_of_electromagnets"
+            "inv1": "inv_box_of_electromagnets"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_PROP3",
@@ -226,6 +226,6 @@
             "prop2": "prop_slightly_accelerated_vacuum_tube",
             "prop3": "prop_switched_on_electromagnet1"
         }
-      
+
     ]
 }

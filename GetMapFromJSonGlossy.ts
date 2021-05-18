@@ -15,7 +15,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
     const mapOfTransactionsByInput = new TransactionMap(null);
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
-        switch (transactionsFile.transactions[i].type) {
+        switch (type) {
             case _.INV1_AND_INV2_FORM_AN_INV:
                 {
                     // losing all
@@ -70,10 +70,12 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                 break;
             case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
                 {
+                    // This is a weird one, because there are two real-life outputs
+                    // but only one puzzle output. I forget how I was going to deal with this.
                     const inputA = "" + transactionsFile.transactions[i].prop1;
-                    const inputB = "" + transactionsFile.transactions[i].prop2;
+                    //const inputB = "" + transactionsFile.transactions[i].prop2;
                     const output = "" + transactionsFile.transactions[i].inv1;
-                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA));
                 }
                 break;
             case _.TURN_OFF_PROP1_BECOMES_PROP2:
@@ -82,6 +84,15 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input));
+                }
+                break;
+            case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
+            case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
+                {
+                    const inputA = "" + transactionsFile.transactions[i].prop1;
+                    const output = "" + transactionsFile.transactions[i].prop2;
+                    const inputB = "" + transactionsFile.transactions[i].prop3;
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
             case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP:
@@ -100,6 +111,8 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
+            default:
+                assert(false && "We didn't handle a type that we're supposed to. Check to see if constant names are the same as their values in the schema.");
         }// end switch
     }// end loop
 

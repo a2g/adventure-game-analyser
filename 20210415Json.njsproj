@@ -6,8 +6,7 @@
     <RootNamespace>20210415Json</RootNamespace>
     <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
-    <JavaScriptTestRoot>
-    </JavaScriptTestRoot>
+    <JavaScriptTestRoot>test/</JavaScriptTestRoot>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -41,6 +40,7 @@
     <Content Include="schema\transactions.ghost.json">
       <Publish>True</Publish>
     </Content>
+    <Content Include="test\mocha.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
@@ -69,19 +69,19 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SpecialNodes.ts" />
-    <TypeScriptCompile Include="GetDisplayName.test.ts">
+    <TypeScriptCompile Include="test/GetDisplayName.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ParseRowsFromSheet.test.ts">
+    <TypeScriptCompile Include="test/ParseRowsFromSheet.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="TransactionMap.test.ts">
+    <TypeScriptCompile Include="test/TransactionMap.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="TruthTable.test.ts">
+    <TypeScriptCompile Include="test/TruthTable.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -95,21 +95,26 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SolveCyclicEtc.test.ts">
+    <TypeScriptCompile Include="test/SolveCyclicEtc.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Solution.test.ts">
+    <TypeScriptCompile Include="test/Solution.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="TruthTable.ts" />
     <TypeScriptCompile Include="SolveCyclicEtc.ts" />
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="UnitTest2.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Verb.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="schema\" />
+    <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

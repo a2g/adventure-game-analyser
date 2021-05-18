@@ -1,7 +1,6 @@
 
 import { SolutionCollection } from './SolutionCollection';
 import { SolutionNode } from './SolutionNode';
-import { Transaction } from './Transaction';
 import { Solution } from './Solution';
 import { assert } from 'console';
 import { TransactionMap } from './TransactionMap';
