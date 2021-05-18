@@ -1,0 +1,5 @@
+{
+"ui": "tdd",
+"timeout": 30000,
+"reporter": "xunit"
+}

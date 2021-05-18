@@ -57,13 +57,16 @@ export class Solution {
 
     Clone(): Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.output);
-        const clonedSolution = new Solution(clonedRootNode, this.transactionMap)
-        for (let i = 0; i < this.rootNode.nodesThatMatch.length; i++) {
-            const clonedNode = this.rootNode.nodesThatMatch[i].CreateClone(clonedSolution.incompleteNodes);
-            clonedSolution.rootNode.nodesThatMatch.push(clonedNode);
+        const clonedSolution = new Solution(clonedRootNode, this.transactionMap);
+        let isAnyIncomplete = false;
+        for (let i = 0; i < this.rootNode.inputs.length; i++) {
+            const clonedNode = this.rootNode.inputs[i].CreateClone(clonedSolution.incompleteNodes);
+            clonedSolution.rootNode.inputs.push(clonedNode);
+            if (clonedNode.inputNode === null)
+                isAnyIncomplete = true;
         }
 
-        if (!clonedSolution.rootNode.namesToMatch[0] || !clonedSolution.rootNode.namesToMatch[1])
+        if (isAnyIncomplete)
             clonedSolution.incompleteNodes.add(clonedRootNode);
         this.usedVerbNounCombos.forEach((combo: string) => {
             clonedSolution.AddVerbNounCombo(combo,"");
@@ -80,7 +83,12 @@ export class Solution {
     }
 
     Process( solutions: SolutionCollection): boolean {
-        return this.rootNode.Process(this, solutions, this.rootNode.output);
+        let isBreakingDueToSolutionCloning = this.rootNode.Process(this, solutions, this.rootNode.output);
+        if (!isBreakingDueToSolutionCloning) {
+            // then this means the root node has rolled to completion
+            this.SetNodeComplete(this.rootNode);
+        }
+        return isBreakingDueToSolutionCloning;
     }
 
     GetLeafNodes(): Map<string, string> {

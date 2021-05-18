@@ -1,15 +1,17 @@
 import { SolutionCollection } from './SolutionCollection';
 import { SpecialNodes } from './SpecialNodes';
-import { Transaction } from './Transaction';
 import { Solution } from './Solution';
 import { assert } from 'console';
 import { Verb } from './Verb';
+import { SolutionNodeInput } from './SolutionNodeInput';
+
+let globalId = 1;
 
 export class SolutionNode {
+    id: number;
     type: string;
     output: string;
-    namesToMatch: Array<string>;
-    nodesThatMatch: Array<SolutionNode>;
+    inputs : Array<SolutionNodeInput>;
 
     constructor(output: string,
         type = "Null",
@@ -20,51 +22,52 @@ export class SolutionNode {
         inputE = "Null",
         inputF = "Null",// no statics in typescript, so this seemed preferable than global let Null = "Null";
     ) {
+        this.id = globalId++;
         this.output = output;
         this.type = type;
-        this.namesToMatch = new Array<string>();
-        this.nodesThatMatch = new Array<SolutionNode>();
+        this.inputs = new Array<SolutionNodeInput>();
         if (inputA !== "Null")
-            this.namesToMatch.push(inputA);
+            this.inputs.push(new SolutionNodeInput(inputA));
         if (inputB !== "Null")
-            this.namesToMatch.push(inputB);
+            this.inputs.push(new SolutionNodeInput(inputB));
         if (inputC !== "Null")
-            this.namesToMatch.push(inputC);
+            this.inputs.push(new SolutionNodeInput(inputC));
         if (inputD !== "Null")
-            this.namesToMatch.push(inputD);
+            this.inputs.push(new SolutionNodeInput(inputD));
         if (inputE !== "Null")
-            this.namesToMatch.push(inputE);
+            this.inputs.push(new SolutionNodeInput(inputE));
         if (inputF !== "Null")
-            this.namesToMatch.push(inputF);
+            this.inputs.push(new SolutionNodeInput(inputF));
     }
-
-
 
     CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
         const clone = new SolutionNode(this.output);
+        clone.id = this.id;
+        clone.type = this.type;
+        clone.output = this.output;
 
-        this.nodesThatMatch.forEach((node: SolutionNode) => {
-            const child = node.CreateClone(uncompleted);
-            clone.nodesThatMatch.push(child);
+        let isIncomplete = false;
+        this.inputs.forEach((input: SolutionNodeInput) => {
+            if (!input)
+                isIncomplete = true;
+            const child = input.CreateClone(uncompleted);
+            clone.inputs.push(child);
         });
+        if (isIncomplete)
+            uncompleted.add(this);
 
-        this.namesToMatch.forEach((name: string) => {
-            clone.namesToMatch.push(name);
-        });
-        // if (!this.a || !this.b)
-        //   uncompleted.add(clone);
         return clone;
     }
 
-
-    FindNodeMatchingObjectiveRecursively(objectToObtain: string): SolutionNode | null {
-        if (this.output === objectToObtain)
+    FindAnyNodeMatchingGivenOutputRecursively(id: number): SolutionNode | null {
+        if (this.id == id)
             return this;
-        for (let i = 0; i < this.nodesThatMatch.length; i++) {
-            const result = this.nodesThatMatch[i].FindNodeMatchingObjectiveRecursively(objectToObtain);
+        for (let i = 0; i < this.inputs.length; i++) {
+            const input = this.inputs[i];
+            const result = input.inputNode ? input.inputNode.FindAnyNodeMatchingGivenOutputRecursively(id) : null;
             if (result)
                 return result;
-        }
+        };
         return null;
     }
 
@@ -73,72 +76,62 @@ export class SolutionNode {
         if (this.output === SpecialNodes.VerifiedLeaf)
             return false;// false just means keep processing.
 
-        // to simplify things, we always set a and b at the same time
-        // so either both are null or neither are.
-        if (this.namesToMatch.length == 0) {
-            const objectToObtain = this.output;
-            if (!solution.HasAnyTransactionsThatOutputObject(objectToObtain) || !solution.GetTransactionsThatOutputObject(objectToObtain)) {
-                let node = new SolutionNode(SpecialNodes.VerifiedLeaf);
-                solution.AddVerifiedLeaf(objectToObtain, path);
-                solution.SetNodeComplete(this);
-        		// since we are at a dead end
-                // and since we don't need to process later on
-                // then we can simply return here
-                return false;
+        // we do need to use a for-loop because, we clone this array then index it with k
+        for (let k = 0; k < this.inputs.length; k++) {
+            const objectToObtain = this.inputs[k].inputName;
+            const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
+            if (!matchingTransactions || matchingTransactions.length === 0) {
+                this.inputs[k].inputNode = new SolutionNode(SpecialNodes.VerifiedLeaf);
+                solution.AddVerifiedLeaf(this.inputs[k].inputName, path + "/" + this.inputs[k].inputName);
             }
-            else {
-                const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
-                assert(matchingTransactions); // we deliberately don't handle if(list) because it should never be null
+            else if (matchingTransactions) {
+                // we have the convention that zero is the currentSolution
+                // so we start at the highest index in the list
+                // we when we finish the loop, we are with
+                for (let i = matchingTransactions.length - 1; i >= 0; i--) {
 
-                if (matchingTransactions) {
-                    assert(matchingTransactions[0].output === objectToObtain);
+                    const theMatchingTransaction = matchingTransactions[i];
+                    // 1. get solution - because we might be cloning one;
+                    const isCloneBeingUsed = i > 0;
+                    const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
+                    // this is only here to make the unit tests make sense
+                    solution.SetNodeComplete(solution.rootNode);
+                    if (isCloneBeingUsed)
+                        solutions.push(theSolution);
 
-                    // this is the point we set it as completed
-                    solution.SetNodeCompleteGenuine(this);
-
-                    // we have the convention that zero is the currentSolution
-                    // so we start at the highest index in the list
-                    // we when we finish the loop, we are with
-
-                    for (let i = matchingTransactions.length - 1; i >= 0; i--) {
-
-                        const theMatchingTransaction = matchingTransactions[i];
-                        // 1. get solution - because we might be cloning one;
-                        const isCloneBeingUsed = i > 0;
-                        const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
-                        theSolution.SetNodeComplete(theSolution.rootNode);
-                        if (isCloneBeingUsed)
-                            solutions.push(theSolution);
-
-                        // rediscover the current node in theSolution - again because we might be cloned
-                        const theNode = theSolution.GetRootNode().FindNodeMatchingObjectiveRecursively(objectToObtain);
-                        assert(theNode && "if node is null then we are cloning wrong");
-                        if (theNode) {
-                            for (let j = 0; j < theMatchingTransaction.namesToMatch.length; j++) {
-                                theNode.nodesThatMatch.push(new SolutionNode(theMatchingTransaction.namesToMatch[j]));
-                            }
-                        }
-
-                        theSolution.RemoveTransaction(theMatchingTransaction);
+                    // rediscover the current node in theSolution - again because we might be cloned
+                    const theNode = theSolution.GetRootNode().FindAnyNodeMatchingGivenOutputRecursively(this.id);
+                    assert(theNode && "if node is null then we are cloning wrong");
+                    if (theNode) {
+                        theNode.inputs[k].inputNode = theMatchingTransaction;
+                        // all transactions are incomplete when they come from the transaction map
+                        theSolution.SetNodeIncomplete(theMatchingTransaction);
                     }
 
-                    const hasACloneJustBeenCreated = matchingTransactions.length > 1;
-                    if (hasACloneJustBeenCreated)
-                        return true;// yes is incomplete
-
+                    theSolution.RemoveTransaction(theMatchingTransaction);
                 }
-            }
 
+                const hasACloneJustBeenCreated = matchingTransactions.length > 1;
+                if (hasACloneJustBeenCreated)
+                    return true;// yes is incomplete
+
+            }
         }
 
-        // now to process each of those nodes that have been pushed
-        for (let i = 0; i < this.nodesThatMatch.length; i++) {
-            let transaction = this.nodesThatMatch[i];
-            if (transaction.output === SpecialNodes.VerifiedLeaf)
-                return false;// this means its already been searhed for in the map, without success.
-            const hasACloneJustBeenCreated = transaction.Process(solution, solutions, path);
-            if (hasACloneJustBeenCreated)
-                return true;
+        // this is the point we set it as completed
+        solution.SetNodeCompleteGenuine(this);
+
+        // now to process each of those nodes that have been filled out
+        for (let k = 0; k < this.inputs.length; k++) {
+            const inputNode = this.inputs[k].inputNode;
+            assert(inputNode && "If this fails there is something wrong with the loop in first half of this method");
+            if (inputNode) {
+                if (inputNode.output === SpecialNodes.VerifiedLeaf)
+                    continue;// this means its already been searhed for in the map, without success.
+                const hasACloneJustBeenCreated = inputNode.Process(solution, solutions, path);
+                if (hasACloneJustBeenCreated)
+                    return true;
+            }
         }
 
         return false;

@@ -2,6 +2,7 @@
 import assert = require('assert');
 import { GetMapFromJSonGlossy } from './GetMapFromJSonGlossy';
 import { SolutionCollection } from './SolutionCollection';
+import { SolutionNodeInput } from './SolutionNodeInput';
 import { SolutionNode } from './SolutionNode';
 import { Solution } from './Solution';
 
@@ -11,7 +12,7 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode(objective), map));
+        collection.push(new Solution(new SolutionNode("", "", objective), map));
         const isBreakEarly = collection.Process();
 
         assert.strictEqual(false, isBreakEarly);
@@ -23,11 +24,65 @@ describe("Solution", () => {
         assert.strictEqual(1, leafNodes.size);
     });
 
+    it("Test prop_death_by_guitar", () => {
+        const map = GetMapFromJSonGlossy();
+        const objective = "prop_death_by_guitar";
+        const collection = new SolutionCollection();
+        collection.push(new Solution(new SolutionNode("", "", objective), map));
+        // process the rest of the transactions
+        do {
+            collection.Process();
+        } while (collection.IsNodesRemaining());
+        
+        const solution0 = collection[0];;
+        assert.strictEqual(0, solution0.GetLeafNodes().size);
+        assert.strictEqual(1, solution0.GetIncompleteNodes().size);
+
+        {
+            const leafNodeMap = solution0.GetLeafNodes();
+            assert.strictEqual(5, leafNodeMap.size);
+            // commenting out the things below, because they will change
+            //assert.ok(leafNodeMap.has("inv_deflated_ball"));
+            //assert.ok(leafNodeMap.has("inv_pump_with_bike_adapter"));
+            //assert.ok(leafNodeMap.has("inv_needle"));
+            //assert.ok(leafNodeMap.has("prop_raised_backboard"));
+            //assert.ok(leafNodeMap.has("inv_pole_hook"));
+        }
+    });
+
+    it("Test prop_death_by_slamdunk", () => {
+        const map = GetMapFromJSonGlossy();
+        const objective = "prop_death_by_slamdunk";
+        const collection = new SolutionCollection();
+        collection.push(new Solution(new SolutionNode("", "", objective), map));
+        // process the rest of the transactions
+        do {
+            collection.Process();
+        } while (collection.IsNodesRemaining());
+
+
+        const solution0 = collection[0];;
+        assert.strictEqual(0, solution0.GetLeafNodes().size);
+        assert.strictEqual(1, solution0.GetIncompleteNodes().size);
+
+        {
+            const leafNodeMap = solution0.GetLeafNodes();
+            assert.strictEqual(5, leafNodeMap.size);
+            // commenting out the things below, because they will change
+            //assert.ok(leafNodeMap.has("inv_deflated_ball"));
+            //assert.ok(leafNodeMap.has("inv_pump_with_bike_adapter"));
+            //assert.ok(leafNodeMap.has("inv_needle"));
+            //assert.ok(leafNodeMap.has("prop_raised_backboard"));
+            //assert.ok(leafNodeMap.has("inv_pole_hook"));
+        }
+    });
+
+
     it("Test the cloning at numerous ways to kill demon", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode(objective), map));
+        collection.push(new Solution(new SolutionNode("","",objective), map));
         const isBreakEarly = collection.Process();
         assert.ok(isBreakEarly);
 
@@ -64,7 +119,7 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode(objective), map));
+        collection.push(new Solution(new SolutionNode("","",objective), map));
         const isBreakEarly = collection.Process();
         assert.strictEqual(false, isBreakEarly);
 
