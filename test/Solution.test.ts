@@ -107,9 +107,9 @@ describe("Solution", () => {
 
   
 
-    it("Test cloning with turn on/turn off", () => {
+    it("prop_moderately_accelerated_vacuum_tube", () => {
         const map = GetMapFromJSonGlossy();
-        const objective = "prop_death_by_physics";
+        const objective = "prop_moderately_accelerated_vacuum_tube";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName,"",objective), map));
         const isBreakEarly = collection.Process();

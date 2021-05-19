@@ -143,11 +143,6 @@
             "prop2": "prop_switched_on_electromagnet3"
         },
         {
-            "type": "TURN_OFF_PROP1_BECOMES_PROP2",
-            "prop1": "prop_switched_on_electromagnet3",
-            "prop2": "prop_plugged_in_electromagnet3"
-        },
-        {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
             "prop1": "prop_exposed_vacuum_tube4",
             "prop2": "prop_attached_electromagnet4",

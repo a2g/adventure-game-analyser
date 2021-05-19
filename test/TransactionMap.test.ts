@@ -1,6 +1,5 @@
 import assert = require('assert');
 import { TransactionMap } from '../TransactionMap';
-import { Verb } from '../Verb';
 import { isUndefined } from 'util';
 import { SolutionNode } from '../SolutionNode';
 

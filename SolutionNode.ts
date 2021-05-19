@@ -2,7 +2,6 @@ import { SolutionCollection } from './SolutionCollection';
 import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
 import { assert } from 'console';
-import { Verb } from './Verb';
 import { SolutionNodeInput } from './SolutionNodeInput';
 
 let globalId = 1;
