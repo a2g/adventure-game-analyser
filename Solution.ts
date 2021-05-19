@@ -56,6 +56,7 @@ export class Solution {
 
     Clone(): Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.output);
+        clonedRootNode.id = this.rootNode.id;
         const clonedSolution = new Solution(clonedRootNode, this.transactionMap);
         let isAnyIncomplete = false;
         for (let i = 0; i < this.rootNode.inputs.length; i++) {
