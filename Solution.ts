@@ -77,12 +77,12 @@ export class Solution {
         return this.incompleteNodes.size > 0;
     }
 
-    AddVerifiedLeaf(leafName:string, path:string): void {
-        this.absoluteLeafNodes.set(leafName, path);
+    AddVerifiedLeaf(path:string, leafName:string): void {
+        this.absoluteLeafNodes.set(path, leafName);
     }
 
     Process( solutions: SolutionCollection): boolean {
-        let isBreakingDueToSolutionCloning = this.rootNode.Process(this, solutions, this.rootNode.output);
+        const isBreakingDueToSolutionCloning = this.rootNode.Process(this, solutions,"");
         if (!isBreakingDueToSolutionCloning) {
             // then this means the root node has rolled to completion
             this.SetNodeComplete(this.rootNode);

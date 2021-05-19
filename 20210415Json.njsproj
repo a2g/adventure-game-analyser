@@ -91,10 +91,6 @@
     <TypeScriptCompile Include="SolutionNodeInput.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="UnitTest1.ts">
-      <SubType>Code</SubType>
-      <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="test/SolveCyclicEtc.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
@@ -106,11 +102,6 @@
     <TypeScriptCompile Include="TruthTable.ts" />
     <TypeScriptCompile Include="SolveCyclicEtc.ts" />
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="UnitTest2.ts">
-      <SubType>Code</SubType>
-      <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Verb.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="schema\" />

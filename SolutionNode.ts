@@ -82,7 +82,7 @@ export class SolutionNode {
             const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
             if (!matchingTransactions || matchingTransactions.length === 0) {
                 this.inputs[k].inputNode = new SolutionNode(SpecialNodes.VerifiedLeaf);
-                solution.AddVerifiedLeaf(this.inputs[k].inputName, path + "/" + this.inputs[k].inputName);
+                solution.AddVerifiedLeaf(path + "/" + this.inputs[k].inputName, this.inputs[k].inputName );
             }
             else if (matchingTransactions) {
                 // we have the convention that zero is the currentSolution

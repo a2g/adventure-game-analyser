@@ -5,14 +5,14 @@ import { SolutionCollection } from '../SolutionCollection';
 import { SolutionNodeInput } from '../SolutionNodeInput';
 import { SolutionNode } from '../SolutionNode';
 import { Solution } from '../Solution';
-
+const testName = "root via test";
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("", "", objective), map));
+        collection.push(new Solution(new SolutionNode(testName, "", objective), map));
         const isBreakEarly = collection.Process();
 
         assert.strictEqual(false, isBreakEarly);
@@ -28,7 +28,7 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("", "", objective), map));
+        collection.push(new Solution(new SolutionNode(testName, "", objective), map));
         // process the rest of the transactions
         do {
             collection.Process();
@@ -50,7 +50,7 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("", "", objective), map));
+        collection.push(new Solution(new SolutionNode(testName, "", objective), map));
         // process the rest of the transactions
         do {
             collection.Process();
@@ -74,7 +74,7 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("","",objective), map));
+        collection.push(new Solution(new SolutionNode(testName,"",objective), map));
         const isBreakEarly = collection.Process();
         assert.ok(isBreakEarly);
 
@@ -111,7 +111,7 @@ describe("Solution", () => {
         const map = GetMapFromJSonGlossy();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("","",objective), map));
+        collection.push(new Solution(new SolutionNode(testName,"",objective), map));
         const isBreakEarly = collection.Process();
         assert.strictEqual(true, isBreakEarly);
 
