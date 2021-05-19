@@ -77,7 +77,8 @@ export class Solution {
         return this.incompleteNodes.size > 0;
     }
 
-    AddVerifiedLeaf(path:string, leafName:string): void {
+    AddVerifiedLeaf(path: string, leafName: string): void {
+        assert(leafName);
         this.absoluteLeafNodes.set(path, leafName);
     }
 

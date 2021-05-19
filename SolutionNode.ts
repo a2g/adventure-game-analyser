@@ -9,34 +9,34 @@ let globalId = 1;
 
 export class SolutionNode {
     id: number;
-    type: string;
+    type: string 
     output: string;
-    inputs : Array<SolutionNodeInput>;
+    inputs: Array<SolutionNodeInput>;
 
     constructor(output: string,
-        type = "Null",
-        inputA = "Null",
-        inputB = "Null",
-        inputC = "Null",
-        inputD = "Null",
-        inputE = "Null",
-        inputF = "Null",// no statics in typescript, so this seemed preferable than global let Null = "Null";
+        type  = "undefined",
+        inputA = "undefined",
+        inputB = "undefined",
+        inputC = "undefined",
+        inputD = "undefined",
+        inputE = "undefined",
+        inputF = "undefined",// no statics in typescript, so this seemed preferable than global let Null = "Null";
     ) {
         this.id = globalId++;
         this.output = output;
         this.type = type;
         this.inputs = new Array<SolutionNodeInput>();
-        if (inputA !== "Null")
+        if (inputA != "undefined" && inputA !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputA));
-        if (inputB !== "Null")
+        if (inputB != "undefined" && inputB !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputB));
-        if (inputC !== "Null")
+        if (inputC != "undefined" && inputC !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputC));
-        if (inputD !== "Null")
+        if (inputD != "undefined" && inputD !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputD));
-        if (inputE !== "Null")
+        if (inputE != "undefined" && inputE !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputE));
-        if (inputF !== "Null")
+        if (inputF != "undefined" && inputF !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputF));
     }
 
@@ -75,6 +75,11 @@ export class SolutionNode {
         path += "/" + this.output;
         if (this.output === SpecialNodes.VerifiedLeaf)
             return false;// false just means keep processing.
+
+        // validate
+        for (let k = 0; k < this.inputs.length; k++) {
+            assert(this.inputs[k].inputName && "validate that the inputNames are non null")
+        }
 
         // we do need to use a for-loop because, we clone this array then index it with k
         for (let k = 0; k < this.inputs.length; k++) {

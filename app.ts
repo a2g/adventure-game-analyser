@@ -19,7 +19,6 @@ const prompt = require('prompt-sync')({ sigint: true });
 while (true) {
     // Get user input
     console.log(" ");
-    console.log("Choose an option");
     const array = new Array<string>();
     array.push("inv_demon_death");
     array.push("prop_death_by_guitar");
@@ -27,13 +26,17 @@ while (true) {
     array.push("prop_death_by_physics");
     array.push("prop_switched_on_electromagnet2");
     array.push("prop_slightly_accelerated_vacuum_tube");
+    array.push("prop_mildly_accelerated_vacuum_tube");
+    array.push("prop_moderately_accelerated_vacuum_tube");
+    array.push("prop_partly_accelerated_vacuum_tube");
+    array.push("prop_fully_accelerated_vacuum_tube");
     for (let i = 0; i < array.length; i++) {
-        console.log(" " + (i+1) + ". " + array[i]);
+        console.log(" " + (i) + ". " + array[i]);
     };
 
-    const choice = prompt('Choose an option, or enter verbatim: ');
+    const choice = prompt('Choose the goal you want a solution for (or enter verbatim): ');
     // use either index or 
-    const  objective = (Number(choice)>0 && Number(choice) <= array.length )? array[Number(choice) - 1] : choice;
+    const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
     console.log("\"" + objective + "\" was entered");
     const mapOfTransactionsByInput = GetMapFromJSonGlossy();
 
@@ -44,45 +47,43 @@ while (true) {
         collection.Process();
     } while (collection.IsNodesRemaining());
 
-
-
-
     let input = "";
     do {
 
         let i = 0;
         // display list
         collection.forEach(function (solution: Solution) {
-            console.log("---SEPARATE-SOLUTION---");
+            console.log("------------------------------------------------------------(solution separator)");
             const needs = solution.absoluteLeafNodes;
             needs.forEach((value: string, key: string, map: Map<string, string>) => {
                 i++;
-                console.log("    " + i + "." + key);
+                console.log("    " + i + "." + map.get(key));
             });
         });
 
         // allow user to choose item
-        input = prompt('Choose a solution: ');
+        input = prompt('Choose an ingredient of one of the solutions: ');
 
         // show map entry for chosen item
         const number = Number(input);
         if (number > 0 && number <= array.length) {
             let i = 0;
             collection.forEach(function (solution: Solution) {
-                console.log("---PATH---");
                 const needs = solution.absoluteLeafNodes;
                 needs.forEach((value: string, key: string, map: Map<string, string>) => {
                     i++;
                     if (i === number) {
-                        const items :Array<string> = key.split("/");
-                        items.forEach( function (value: string ){
-                            console.log("    " + i + "." + value);
-
-                        });
+                        console.log("This is the life of the selected ingredient: " );
+                        const items: Array<string> = key.split("/");
+                        const length = items.length;
+                        for (let j = length-1; j >1; j--) {
+                            console.log("    " + (length-j)  + "." + items[j]);
+                        };
+                        prompt("Hit a key to continue...");
                     }
                 });
             });
         }
 
-    } while (input != "");
+    } while (input !== "");
 }

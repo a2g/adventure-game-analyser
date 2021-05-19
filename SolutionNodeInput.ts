@@ -1,7 +1,9 @@
 import {SolutionNode} from './SolutionNode';
+import { assert } from 'console';
 
 export class SolutionNodeInput {
-    constructor(inputName: string, inputNode: SolutionNode|null = null) {
+    constructor(inputName: string, inputNode: SolutionNode | null = null) {
+        assert(inputName && "we cannot allow inputName to be undefined");
         this.inputName = inputName;
         this.inputNode = inputNode;
     }
