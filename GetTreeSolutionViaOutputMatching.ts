@@ -11,7 +11,7 @@ export function GetTreeSolutionViaOutputMatching(map: TransactionMap, solutionGo
     collection.push(new Solution(new SolutionNode("theRootNode","",solutionGoal), map));
 
     do {
-        collection.Process();
+        collection.ProcessUntilCloning();
     } while (collection.IsNodesRemaining());
 
     return collection;

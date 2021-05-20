@@ -13,9 +13,9 @@ describe("Solution", () => {
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
-        const isBreakEarly = collection.Process();
+        const wasCloneEncountered = collection.ProcessUntilCloning();
 
-        assert.strictEqual(false, isBreakEarly);
+        assert.strictEqual(false, wasCloneEncountered);
         assert.strictEqual(1, collection.length);
         const solution0 = collection[0];
         assert.strictEqual(0, solution0.GetIncompleteNodes().size);
@@ -31,7 +31,7 @@ describe("Solution", () => {
         collection.push(new Solution(new SolutionNode("", "", objective), map));
         // process the rest of the transactions
         do {
-            collection.Process();
+            collection.ProcessUntilCloning();
         } while (collection.IsNodesRemaining());
         
         const solution0 = collection[0];;
@@ -57,7 +57,7 @@ describe("Solution", () => {
         collection.push(new Solution(new SolutionNode("", "", objective), map));
         // process the rest of the transactions
         do {
-            collection.Process();
+            collection.ProcessUntilCloning();
         } while (collection.IsNodesRemaining());
 
 
@@ -83,8 +83,8 @@ describe("Solution", () => {
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));
-        const isBreakEarly = collection.Process();
-        assert.ok(isBreakEarly);
+        const wasCloneEncountered = collection.ProcessUntilCloning();
+        assert.ok(wasCloneEncountered);
 
         assert.strictEqual(2, collection.length);
         const solution0 = collection[0];;
@@ -97,7 +97,7 @@ describe("Solution", () => {
 
         // process the rest of the transactions
         do {
-            collection.Process();
+            collection.ProcessUntilCloning();
         } while (collection.IsNodesRemaining());
 
 
@@ -120,8 +120,8 @@ describe("Solution", () => {
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));
-        const isBreakEarly = collection.Process();
-        assert.strictEqual(false, isBreakEarly);
+        const wasCloneEncountered = collection.ProcessUntilCloning();
+        assert.strictEqual(false, wasCloneEncountered);
 
         assert.strictEqual(1, collection.length);
         const solution0 = collection[0];;
@@ -134,7 +134,7 @@ describe("Solution", () => {
 
         // process the rest of the transactions
         do {
-            collection.Process();
+            collection.ProcessUntilCloning();
         } while (collection.IsNodesRemaining());
 
 

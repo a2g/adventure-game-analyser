@@ -1,5 +1,4 @@
 import { Solution } from './Solution';
-import { assert } from 'console';
 
 
 export class SolutionCollection extends Array<Solution>{
@@ -16,14 +15,20 @@ export class SolutionCollection extends Array<Solution>{
         return isNodesRemaining;
     }
 
-    Process(): boolean {
+    ProcessUntilCloning(): boolean {
         let hasACloneJustBeenCreated = false
         this.forEach((solution: Solution) => {
             if (solution.IsNodesRemaining()) {
-                if (solution.Process(this))
+                if (solution.ProcessUntilCloning(this))
                     hasACloneJustBeenCreated = true;
             }
         });
         return hasACloneJustBeenCreated;
+    }
+
+    ProcessUntilCompletion() {
+        do {
+            this.ProcessUntilCloning();
+        } while (this.IsNodesRemaining());
     }
 }

@@ -44,7 +44,7 @@ while (true) {
     collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfTransactionsByInput));
 
     do {
-        collection.Process();
+        collection.ProcessUntilCloning();
     } while (collection.IsNodesRemaining());
 
     let input = "";

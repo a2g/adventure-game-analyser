@@ -83,11 +83,11 @@ export class Solution {
         this.absoluteLeafNodes.set(path, leafName);
     }
 
-    Process( solutions: SolutionCollection): boolean {
-        const isBreakingDueToSolutionCloning = this.rootNode.Process(this, solutions,"");
+    ProcessUntilCloning( solutions: SolutionCollection): boolean {
+        const isBreakingDueToSolutionCloning = this.rootNode.ProcessUntilCloning(this, solutions,"");
         if (!isBreakingDueToSolutionCloning) {
             // then this means the root node has rolled to completion
-            this.SetNodeComplete(this.rootNode);
+            this.incompleteNodes.clear();
         }
         return isBreakingDueToSolutionCloning;
     }

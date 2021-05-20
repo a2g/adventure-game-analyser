@@ -12,7 +12,7 @@ describe("TransactionMap", () => {
         assert.ok(isUndefined(arrayBefore));
 
         // do it!
-        blah.AddToMap(new SolutionNode("ramble", "outputA", "A", "B"));
+        blah.AddToMap(new SolutionNode("outputA", "type", "A", "B"));
 
         // test that it adds an array if the array is not yet null.
         const arrayAfter = blah.Get("outputA");
@@ -25,9 +25,9 @@ describe("TransactionMap", () => {
     it("test RemoveTransaction works", () => {
         const blah = new TransactionMap(null);
         for (let i = 0; i < 3; i++) {
-            blah.AddToMap(new SolutionNode("piffle", "outputA", "A", "B"));
+            blah.AddToMap(new SolutionNode("outputA", "piffle","A", "B"));
         }
-        const theOneToRemove = new SolutionNode("piffle", "outputA", "A", "B");
+        const theOneToRemove = new SolutionNode("outputA", "piffle",  "A", "B");
         blah.AddToMap(theOneToRemove);
         {
             const arrayBefore = blah.Get("outputA");

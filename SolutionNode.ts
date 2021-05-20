@@ -70,18 +70,18 @@ export class SolutionNode {
         return null;
     }
 
-    Process(solution: Solution, solutions: SolutionCollection, path: string): boolean {
+    ProcessUntilCloning(solution: Solution, solutions: SolutionCollection, path: string): boolean {
         path += "/" + this.output;
         if (this.output === SpecialNodes.VerifiedLeaf)
             return false;// false just means keep processing.
 
-        // validate
+         // we do need to use a for-loop because, we clone this array then index it with k
         for (let k = 0; k < this.inputs.length; k++) {
-            assert(this.inputs[k].inputName && "validate that the inputNames are non null")
-        }
 
-        // we do need to use a for-loop because, we clone this array then index it with k
-        for (let k = 0; k < this.inputs.length; k++) {
+            // without this following line, any clones will attempt to reclone themselves 
+            // and Solution.ProcessUntilCompletion will continue forever
+            if (this.inputs[k].inputNode)
+                continue;
             const objectToObtain = this.inputs[k].inputName;
             const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
             if (!matchingTransactions || matchingTransactions.length === 0) {
@@ -132,7 +132,7 @@ export class SolutionNode {
             if (inputNode) {
                 if (inputNode.output === SpecialNodes.VerifiedLeaf)
                     continue;// this means its already been searhed for in the map, without success.
-                const hasACloneJustBeenCreated = inputNode.Process(solution, solutions, path);
+                const hasACloneJustBeenCreated = inputNode.ProcessUntilCloning(solution, solutions, path);
                 if (hasACloneJustBeenCreated)
                     return true;
             }

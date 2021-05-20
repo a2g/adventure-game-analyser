@@ -2,6 +2,16 @@
     "objectivePropName": "inv_demon_death",
     "transactions": [
         {
+            "type": "PROP1_GOES_WHEN_GRAB_INV1",
+            "prop1": "prop_death_by_guitar",
+            "inv1": "inv_demon_death"
+        },
+        {
+            "type": "PROP1_GOES_WHEN_GRAB_INV1",
+            "prop1": "prop_death_by_slamdunk",
+            "inv1": "inv_demon_death"
+        },
+        {
             "type": "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
             "inv1": "inv_deflated_ball",
             "inv2": "inv_inflated_ball",
@@ -54,16 +64,7 @@
             "prop2": "prop_opened_radio_with_radio_tube",
             "inv1": "inv_screwdriver"
         },
-        {
-            "type": "PROP1_GOES_WHEN_GRAB_INV1",
-            "prop1": "prop_death_by_guitar",
-            "inv1": "inv_demon_death"
-        },
-        {
-            "type": "PROP1_GOES_WHEN_GRAB_INV1",
-            "prop1": "prop_death_by_slamdunk",
-            "inv1": "inv_demon_death"
-        },
+
         {
             "type": "INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL",
             "inv1": "inv_inflated_ball",
