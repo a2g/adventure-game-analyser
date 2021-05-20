@@ -12,6 +12,11 @@
             "inv1": "inv_demon_death"
         },
         {
+            "type": "PROP1_GOES_WHEN_GRAB_INV1",
+            "prop1": "prop_death_by_physics",
+            "inv1": "inv_demon_death"
+        },
+        {
             "type": "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
             "inv1": "inv_deflated_ball",
             "inv2": "inv_inflated_ball",

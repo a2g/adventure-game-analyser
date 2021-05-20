@@ -3,7 +3,7 @@ import { TransactionMap } from './TransactionMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
 import transactionsFile from './schema/transactions.ghost.json';
-import _ from './schema/ghost.schema.json';
+import _ from './schema/gates.schema.json';
 
 export function GetObjectiveFromJsonGlossy(): string {
     return transactionsFile.objectivePropName;

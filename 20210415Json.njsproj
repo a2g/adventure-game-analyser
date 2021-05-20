@@ -34,7 +34,7 @@
   <ItemGroup>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="schema\ghost.schema.json">
+    <Content Include="schema\gates.schema.json">
       <Publish>True</Publish>
     </Content>
     <Content Include="schema\transactions.ghost.json">
