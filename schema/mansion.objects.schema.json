@@ -1,0 +1,27 @@
+{
+    "$id": "https://antcassidy.com/mansion.objects",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "description": "a list of specific objects that gets references from mansion.gates.schema.json",
+    "type": "object",
+    "definitions": {
+        "inv_type": {
+            "enum": [
+                "inv_win",
+                "inv_win_by_police",
+                "inv_win_by_launch",
+                "inv_win_by_talkshow",
+                "inv_manuscript",
+                "inv_manuscript_edited"
+            ]
+        },
+        "prop_type": {
+            "enum": [
+                "prop_screwdriver",
+                "prop_mailbox_open",
+                "prop_mailbox_closed",
+                "prop_mailbox_closed_w_edited_manuscript",
+                "prop_typewriter"
+            ]
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "objectivePropName": "win",
+    "transactions": [
+        {
+            "type": "AUTO_INV1_TRIGGERS_INV2",
+            "inv": "inv_win_by_talkshow",
+            "inv1": "inv_win"
+        },
+        {
+            "type": "AUTO_INV1_TRIGGERS_INV2",
+            "prop1": "win_by_launch",
+            "inv1": "inv_win"
+        },
+        {
+            "type": "AUTO_INV1_TRIGGERS_INV2",
+            "prop1": "win_by_police",
+            "inv1": "inv_win"
+        }
+        
+    ]
+}
