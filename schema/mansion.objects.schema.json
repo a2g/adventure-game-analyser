@@ -8,7 +8,9 @@
             "enum": [
                 "inv_",
                 "inv_manuscript",
-                "inv_manuscript_edited"
+                "inv_manuscript_edited",
+                "inv_car_key",
+                "inv_meteor"
             ]
         },
         "prop_type": {
@@ -18,7 +20,21 @@
                 "prop_mailbox_open",
                 "prop_mailbox_closed",
                 "prop_mailbox_closed_w_edited_manuscript",
-                "prop_typewriter"
+                "prop_typewriter",
+                "prop_mailflag_up",
+                "prop_mailflag_down",
+                "prop_car",
+                "prop_car_with_locked_trunk",
+                "prop_car_with_opened_trunk",
+                "prop_car_with_opened_trunk_and_meteor_inside",
+                "prop_car_with_closed_trunk_and_meter_inside",
+                "prop_car_started_with_closed_trunk_and_meter_inside",
+                "prop_trunk_closed",
+                "prop_trunk_opened",
+                "prop_meteor",
+                "prop_radiation_suit",
+                "prop_meteor_in_trunk"
+
             ]
         },
         "reg_type": {
@@ -28,6 +44,7 @@
                 "reg_win_by_police",
                 "reg_win_by_launch",
                 "reg_win_by_talkshow"
+
         ] 
         }
     }

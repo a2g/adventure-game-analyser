@@ -16,20 +16,20 @@ import { SolutionNode } from './SolutionNode';
 
 const prompt = require('prompt-sync')({ sigint: true });
 
+class Data {
+    static array: Array<string> = [
+        "reg_win",
+        "reg_win_by_police",
+        "reg_win_by_launch",
+        "reg_win_by_talkshow"
+    ];
+}
+
 while (true) {
     // Get user input
     console.log(" ");
-    const array = new Array<string>();
-    array.push("inv_demon_death");
-    array.push("prop_death_by_guitar");
-    array.push("prop_death_by_slamdunk");
-    array.push("prop_death_by_physics");
-    array.push("prop_switched_on_electromagnet2");
-    array.push("prop_slightly_accelerated_vacuum_tube");
-    array.push("prop_mildly_accelerated_vacuum_tube");
-    array.push("prop_moderately_accelerated_vacuum_tube");
-    array.push("prop_partly_accelerated_vacuum_tube");
-    array.push("prop_fully_accelerated_vacuum_tube");
+    const array = Data.array;
+
     for (let i = 0; i < array.length; i++) {
         console.log(" " + (i) + ". " + array[i]);
     };
@@ -49,7 +49,7 @@ while (true) {
 
     let input = "";
     do {
-
+        console.log("Number of solutions = " + collection.length);
         let i = 0;
         // display list
         collection.forEach(function (solution: Solution) {

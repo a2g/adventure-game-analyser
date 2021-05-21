@@ -2,7 +2,6 @@
 import assert = require('assert');
 import { GetMapFromJSonGlossy } from '../GetMapFromJSonGlossy';
 import { SolutionCollection } from '../SolutionCollection';
-import { SolutionNodeInput } from '../SolutionNodeInput';
 import { SolutionNode } from '../SolutionNode';
 import { Solution } from '../Solution';
 const testName = "root via test";

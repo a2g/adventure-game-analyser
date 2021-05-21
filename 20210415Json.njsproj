@@ -62,9 +62,6 @@
     <TypeScriptCompile Include="SolveBruteForce.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SolveLeaves.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="SpecialNodes.ts" />
     <TypeScriptCompile Include="test/GetDisplayName.test.ts">
       <TestFramework>Mocha</TestFramework>

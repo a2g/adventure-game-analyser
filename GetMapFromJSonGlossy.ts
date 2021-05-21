@@ -5,9 +5,6 @@ import { assert } from 'console';
 import transactionsFile from './schema/mansion.json';
 import _ from './schema/mansion.puzzles.schema.json';
 
-export function GetObjectiveFromJsonGlossy(): string {
-    return transactionsFile.objectivePropName;
-}
 export function GetMapFromJSonGlossy(): TransactionMap {
     const mapOfTransactionsByInput = new TransactionMap(null);
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
@@ -49,15 +46,16 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
+
             case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
                 {
-                    // losing inv
+                    // keeping prop1
                     const inputA = "" + transactionsFile.transactions[i].inv1;
                     const output = "" + transactionsFile.transactions[i].inv2;
                     const inputB = "" + transactionsFile.transactions[i].prop1;
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
-
                 }
+                break;
             case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
             case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
                 {
@@ -84,8 +82,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA));
                 }
                 break;
-            case _.TURN_OFF_PROP1_BECOMES_PROP2:
-            case _.TURN_ON_PROP1_BECOMES_PROP2:
+            case _.TOGGLE_PROP1_BECOMES_PROP2:
                 {
                     const input = "" + transactionsFile.transactions[i].prop1;
                     const output = "" + transactionsFile.transactions[i].prop2;
@@ -101,24 +98,38 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
-            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP:
-            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS:
-            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS:
-            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS:
-            case _.AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS:
+            case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
                 {
-                    const input = "" + transactionsFile.transactions[i].prop1;
-                    const output = "" + transactionsFile.transactions[i].prop2;
-                    const prop1 = "" + transactionsFile.transactions[i].prop3;
-                    const prop2 = "" + transactionsFile.transactions[i].prop4;
-                    const prop3 = "" + transactionsFile.transactions[i].prop5;
-                    const prop4 = "" + transactionsFile.transactions[i].prop6;
-                    const prop5 = "" + transactionsFile.transactions[i].prop7;
-                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input, prop1, prop2, prop3, prop4, prop5));
+                    const output = "" + transactionsFile.transactions[i].inv1;
+                    const input1 = "" + transactionsFile.transactions[i].prop1;
+                    const input2 = "" + transactionsFile.transactions[i].prop2;
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input1, input2));
                 }
                 break;
+ 
+            case _.AUTO_REG1_TRIGGERS_REG2:
+                {
+                    const input = "" + transactionsFile.transactions[i].reg1;
+                    const output = "" + transactionsFile.transactions[i].reg2;
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input));
+                }
+                break;
+            case _.AUTO_REG1_TRIGGERED_BY_PROPS:
+                {
+                    const output = "" + transactionsFile.transactions[i].reg1;
+                    const prop1 = "" + transactionsFile.transactions[i].prop1;
+                    const prop2 = "" + transactionsFile.transactions[i].prop2;
+                    const prop3 = "" + transactionsFile.transactions[i].prop3;
+                    const prop4 = "" + transactionsFile.transactions[i].prop4;
+                    const prop5 = "" + transactionsFile.transactions[i].prop5;
+                    const prop6 = "" + transactionsFile.transactions[i].prop6;
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, prop1, prop2, prop3, prop4, prop5, prop6));
+                }
+                break;
+            case _.HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE:
+                break;
             default:
-                assert(false && "We didn't handle a type that we're supposed to. Check to see if constant names are the same as their values in the schema.");
+                assert(false && type && "We didn't handle a type that we're supposed to. Check to see if constant names are the same as their values in the schema.");
         }// end switch
     }// end loop
 

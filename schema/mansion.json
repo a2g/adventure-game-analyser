@@ -1,6 +1,5 @@
 {
     "transactions": [
-
         {
             "type": "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE",
             "inv1": "inv_",
@@ -12,7 +11,9 @@
             "prop4": "prop_",
             "prop5": "prop_",
             "prop6": "prop_",
-            "prop7": "prop_"
+            "prop7": "prop_",
+            "reg1":  "reg_",
+            "reg2":  "reg_"
         },
         {
             "type": "AUTO_REG1_TRIGGERS_REG2",
@@ -32,18 +33,65 @@
         {
             "type": "INV1_BECOMES_INV2_VIA_KEEPING_PROP1",
             "inv1": "inv_manuscript",
-            "inv2": "inv_manuscript_edited"
+            "inv2": "inv_manuscript_edited",
+            "prop1" : "prop_typewriter"
         },
         {
             "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
             "prop1": "prop_mailbox_open",
             "prop2": "prop_mailbox_closed_w_edited_manuscript",
-            "inv1" : "inv_manuscript_edited"
+            "inv1": "inv_manuscript_edited"
+        },
+
+        {
+            "type": "TOGGLE_PROP1_BECOMES_PROP2",
+            "prop1": "prop_mailbox_closed",
+            "prop2": "prop_mailbox_open"
         },
         {
-            "type": "AUTO_PROPS_TRIGGER_REG",
+            "type": "TOGGLE_PROP1_BECOMES_PROP2",
+            "prop1": "prop_mailflag_down",
+            "prop2": "prop_mailflag_up"
+        },
+        {
+            "type": "AUTO_REG1_TRIGGERED_BY_PROPS",
             "reg1": "reg_win_by_talkshow",
-            "prop1": "prop_mailbox_closed_w_edited_manuscript"
+            "prop1": "prop_mailbox_closed_w_edited_manuscript",
+            "prop2": "prop_mailflag_up"
+        },
+        {
+            "type": "OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS",
+            "inv1": "inv_meteor",
+            "prop1": "prop_radiation_suit",
+            "prop2": "prop_meteor"
+        },
+        {
+            "type": "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1",
+            "prop1": "prop_car_with_locked_trunk",
+            "prop2": "prop_car_with_opened_trunk",
+            "inv1": "inv_car_key"
+        },
+        {
+            "type": "PROP1_BECOMES_PROP2_VIA_LOSING_INV1",
+            "prop1": "prop_car_with_opened_trunk",
+            "prop2": "prop_car_with_opened_trunk_and_meteor_inside",
+            "inv1": "inv_meteor"
+        },
+        {
+            "type": "TOGGLE_PROP1_BECOMES_PROP2",
+            "prop1": "prop_car_with_opened_trunk_and_meteor_inside",
+            "prop2": "prop_car_with_closed_trunk_and_meter_inside"
+        },
+        {
+            "type": "PROP1_BECOMES_PROP2_VIA_KEEPING_INV1",
+            "prop1": "prop_car_with_closed_trunk_and_meter_inside",
+            "prop2": "prop_car_started_with_closed_trunk_and_meter_inside",
+            "inv1": "inv_car_key"
+        },
+        {
+            "type": "AUTO_REG1_TRIGGERED_BY_PROPS",
+            "reg1": "reg_win_by_launch",
+            "prop1": "prop_car_started_with_closed_trunk_and_meter_inside"
         }
     ]
 }
