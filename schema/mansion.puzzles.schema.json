@@ -4,9 +4,6 @@
     "description": "a list of specific objects, and the transactions you can use on them",
     "type": "object",
     "properties": {
-        "objectivePropName": {
-            "$ref": "mansion.objects.schema.json#/definitions/inv_type"
-        },
         "transactions": {
             "type": "array",
             "minItems": 1,
@@ -22,6 +19,12 @@
             "properties": {
                 "type": {
                     "$ref": "#/definitions/type_type"
+                },
+                "reg1": {
+                    "$ref": "mansion.objects.schema.json#/definitions/reg_type"
+                },
+                "reg2": {
+                    "$ref": "mansion.objects.schema.json#/definitions/reg_type"
                 },
                 "inv1": {
                     "$ref": "mansion.objects.schema.json#/definitions/inv_type"
@@ -250,132 +253,15 @@
                     "if": {
                         "properties": {
                             "type": {
-                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP",
+                                "const": "AUTO_PROPS_TRIGGER_REG",
                                 "description": "updated the vacuum tube"
                             }
                         }
                     },
                     "then": {
                         "required": [
-                            "prop1",
-                            "prop2",
-                            "prop3"
-                        ],
-                        "not": {
-                            "required": [
-                                "inv1",
-                                "inv2",
-                                "inv3",
-                                "prop7",
-                                "prop6",
-                                "prop5",
-                                "prop4"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": {
-                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS",
-                                "description": "updated the vacuum tube"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "prop1",
-                            "prop2",
-                            "prop3",
-                            "prop4"
-                        ],
-                        "not": {
-                            "required": [
-                                "inv1",
-                                "inv2",
-                                "inv3",
-                                "prop7",
-                                "prop6",
-                                "prop5"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": {
-                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS",
-                                "description": "updated the vacuum tube"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "prop1",
-                            "prop2",
-                            "prop3",
-                            "prop4",
-                            "prop5"
-                        ],
-                        "not": {
-                            "required": [
-                                "inv1",
-                                "inv2",
-                                "inv3",
-                                "prop7",
-                                "prop6"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": {
-                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS",
-                                "description": "updated the vacuum tube"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "prop1",
-                            "prop2",
-                            "prop3",
-                            "prop4",
-                            "prop5",
-                            "prop6"
-                        ],
-                        "not": {
-                            "required": [
-                                "inv1",
-                                "inv2",
-                                "inv3",
-                                "prop7"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "type": {
-                                "const": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS",
-                                "description": "updated the vacuum tube"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "prop1",
-                            "prop2",
-                            "prop3",
-                            "prop4",
-                            "prop5",
-                            "prop6",
-                            "prop7"
+                            "reg1"
+
                         ],
                         "not": {
                             "required": [
@@ -386,36 +272,7 @@
                         }
                     }
                 },
-                {
-                    "if": {
-                        "properties": {
-                            "type": {
-                                "const": "AUTO_INV1_TRIGGERS_INV2",
-                                "description": "one win triggers another"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "inv1",
-                            "inv2"
-                        ],
-                        "not": {
-                            "required": [
-                                "inv3",
-                                "prop1",
-                                "prop2",
-                                "prop3",
-                                "prop4",
-                                "prop5",
-                                "prop6",
-                                "prop7"
-                            ]
-                        }
-                    }
-                }
-
-                ,
+                
                 {
                     "if": {
                         "properties": {
@@ -448,6 +305,7 @@
         },
         "type_type": {
             "enum": [
+                "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE",
                 "INV1_AND_INV2_FORM_AN_INV",
                 "INV1_AND_INV2_GENERATE_INV",
                 "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
@@ -462,16 +320,13 @@
                 "PROP1_GOES_WHEN_GRAB_INV1",
                 "TURN_OFF_PROP1_BECOMES_PROP2",
                 "TURN_ON_PROP1_BECOMES_PROP2",
-                "AUTO_PROP_GENERATED_BY_MANY_PROPS",
-                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP",
-                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS",
-                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS",
-                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS",
-                "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS",
-                "AUTO_INV1_TRIGGERS_INV2"
+                "AUTO_PROPS_TRIGGER_REG",
+                "AUTO_REG1_TRIGGERS_REG2"
             ]
         }
     },
+    
+    "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE": "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE",
     "INV1_AND_INV2_FORM_AN_INV": "INV1_AND_INV2_FORM_AN_INV",
     "INV1_AND_INV2_GENERATE_INV": "INV1_AND_INV2_GENERATE_INV",
     "INV1_BECOMES_INV2_VIA_KEEPING_INV3": "INV1_BECOMES_INV2_VIA_KEEPING_INV3",
@@ -486,10 +341,6 @@
     "PROP1_GOES_WHEN_GRAB_INV1": "PROP1_GOES_WHEN_GRAB_INV1",
     "TURN_OFF_PROP1_BECOMES_PROP2": "TURN_OFF_PROP1_BECOMES_PROP2",
     "TURN_ON_PROP1_BECOMES_PROP2": "TURN_ON_PROP1_BECOMES_PROP2",
-    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_1_PROP",
-    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_2_PROPS",
-    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_3_PROPS",
-    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_4_PROPS",
-    "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS": "AUTO_PROP1_BECOMES_PROP2_VIA_KEEPING_5_PROPS",
-    "AUTO_INV1_TRIGGERS_INV2": "AUTO_INV1_TRIGGERS_INV2"
+    "AUTO_PROPS_TRIGGER_REG": "AUTO_PROPS_TRIGGER_REG",
+    "AUTO_REG1_TRIGGERS_REG2": "AUTO_REG1_TRIGGERS_REG2"
 }

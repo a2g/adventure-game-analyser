@@ -6,22 +6,29 @@
     "definitions": {
         "inv_type": {
             "enum": [
-                "inv_win",
-                "inv_win_by_police",
-                "inv_win_by_launch",
-                "inv_win_by_talkshow",
+                "inv_",
                 "inv_manuscript",
                 "inv_manuscript_edited"
             ]
         },
         "prop_type": {
             "enum": [
+                "prop_",
                 "prop_screwdriver",
                 "prop_mailbox_open",
                 "prop_mailbox_closed",
                 "prop_mailbox_closed_w_edited_manuscript",
                 "prop_typewriter"
             ]
+        },
+        "reg_type": {
+            "enum": [
+                "reg_",
+                "reg_win",
+                "reg_win_by_police",
+                "reg_win_by_launch",
+                "reg_win_by_talkshow"
+        ] 
         }
     }
 }
