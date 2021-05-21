@@ -2,8 +2,8 @@
 import { TransactionMap } from './TransactionMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import transactionsFile from './schema/transactions.ghost.json';
-import _ from './schema/gates.schema.json';
+import transactionsFile from './schema/mansion.json';
+import _ from './schema/mansion.puzzles.schema.json';
 
 export function GetObjectiveFromJsonGlossy(): string {
     return transactionsFile.objectivePropName;
@@ -49,6 +49,15 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
+            case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
+                {
+                    // losing inv
+                    const inputA = "" + transactionsFile.transactions[i].inv1;
+                    const output = "" + transactionsFile.transactions[i].inv2;
+                    const inputB = "" + transactionsFile.transactions[i].prop1;
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
+
+                }
             case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
             case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
                 {

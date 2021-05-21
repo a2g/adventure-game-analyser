@@ -34,12 +34,9 @@
   <ItemGroup>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="schema\gates.schema.json">
-      <Publish>True</Publish>
-    </Content>
-    <Content Include="schema\transactions.ghost.json">
-      <Publish>True</Publish>
-    </Content>
+    <Content Include="schema\mansion.json" />
+    <Content Include="schema\mansion.objects.schema.json" />
+    <Content Include="schema\mansion.puzzles.schema.json" />
     <Content Include="test\mocha.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>

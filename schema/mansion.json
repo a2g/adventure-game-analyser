@@ -1,10 +1,24 @@
 {
     "objectivePropName": "win",
     "transactions": [
+
+        {
+            "type": "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE",
+            "inv1": "inv1",
+            "inv2": "inv2",
+            "inv3": "inv3",
+            "prop1": "prop1",
+            "prop2": "prop2",
+            "prop3": "prop3",
+            "prop4": "prop4",
+            "prop5": "prop5",
+            "prop6": "prop6",
+            "prop7": "prop7"
+        },
         {
             "type": "AUTO_INV1_TRIGGERS_INV2",
-            "inv": "inv_win_by_talkshow",
-            "inv1": "inv_win"
+            "prop1": "inv_win_by_talkshow",
+            "inv2": "inv_win"
         },
         {
             "type": "AUTO_INV1_TRIGGERS_INV2",
@@ -16,6 +30,7 @@
             "prop1": "win_by_police",
             "inv1": "inv_win"
         }
-        
+
+
     ]
 }
