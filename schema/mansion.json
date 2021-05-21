@@ -41,10 +41,9 @@
             "inv1" : "inv_manuscript_edited"
         },
         {
-           "type": "AUTO_PROPS_TRIGGER_REG",
-           "reg1":"reg_win_by_talkshow",
-           "prop1": "prop_mailbox_closed_w_edited_manuscript"
-             
+            "type": "AUTO_PROPS_TRIGGER_REG",
+            "reg1": "reg_win_by_talkshow",
+            "prop1": "prop_mailbox_closed_w_edited_manuscript"
         }
     ]
 }

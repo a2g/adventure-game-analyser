@@ -259,10 +259,7 @@
                         }
                     },
                     "then": {
-                        "required": [
-                            "reg1"
-
-                        ],
+                        "required": [ "reg1" ],
                         "not": {
                             "required": [
                                 "inv1",
@@ -272,7 +269,6 @@
                         }
                     }
                 },
-                
                 {
                     "if": {
                         "properties": {
@@ -297,6 +293,28 @@
                                 "prop5",
                                 "prop6",
                                 "prop7"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "AUTO_REG1_TRIGGERS_REG2"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [ "reg1", "reg2" ],
+                        "not": {
+                            "required": [
+                                "prop1",
+                                "prop2",
+                                "prop3",
+                                "inv1",
+                                "inv2",
+                                "inv3"
                             ]
                         }
                     }
@@ -325,7 +343,6 @@
             ]
         }
     },
-    
     "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE": "HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE",
     "INV1_AND_INV2_FORM_AN_INV": "INV1_AND_INV2_FORM_AN_INV",
     "INV1_AND_INV2_GENERATE_INV": "INV1_AND_INV2_GENERATE_INV",
