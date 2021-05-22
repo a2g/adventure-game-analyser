@@ -32,9 +32,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="data\mansion.json" />
-    <Content Include="data\schema\mansion.puzzles.schema.json" />
-    <Content Include="data\schema\objects\mansion.objects.schema.json" />
+    <Content Include="data\Data.json" />
+    <Content Include="data\schema\InstructionSet.json" />
+    <Content Include="data\schema\objects\Objects.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.json" />
