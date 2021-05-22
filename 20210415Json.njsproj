@@ -32,11 +32,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="data\mansion.json" />
+    <Content Include="data\schema\mansion.puzzles.schema.json" />
+    <Content Include="data\schema\objects\mansion.objects.schema.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="schema\mansion.json" />
-    <Content Include="schema\mansion.objects.schema.json" />
-    <Content Include="schema\mansion.puzzles.schema.json" />
     <Content Include="test\mocha.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
@@ -98,7 +98,9 @@
     <TypeScriptCompile Include="app.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="schema\" />
+    <Folder Include="data\" />
+    <Folder Include="data\schema\" />
+    <Folder Include="data\schema\objects\" />
     <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

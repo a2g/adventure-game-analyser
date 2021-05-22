@@ -21,37 +21,37 @@
                     "$ref": "#/definitions/type_type"
                 },
                 "reg1": {
-                    "$ref": "mansion.objects.schema.json#/definitions/reg_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/reg_type"
                 },
                 "reg2": {
-                    "$ref": "mansion.objects.schema.json#/definitions/reg_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/reg_type"
                 },
                 "inv1": {
-                    "$ref": "mansion.objects.schema.json#/definitions/inv_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/inv_type"
                 },
                 "inv2": {
-                    "$ref": "mansion.objects.schema.json#/definitions/inv_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/inv_type"
                 },
                 "inv3": {
-                    "$ref": "mansion.objects.schema.json#/definitions/inv_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/inv_type"
                 },
                 "prop1": {
-                    "$ref": "mansion.objects.schema.json#/definitions/prop_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/prop_type"
                 },
                 "prop2": {
-                    "$ref": "mansion.objects.schema.json#/definitions/prop_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/prop_type"
                 },
                 "prop3": {
-                    "$ref": "mansion.objects.schema.json#/definitions/prop_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/prop_type"
                 },
                 "prop4": {
-                    "$ref": "mansion.objects.schema.json#/definitions/prop_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/prop_type"
                 },
                 "prop5": {
-                    "$ref": "mansion.objects.schema.json#/definitions/prop_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/prop_type"
                 },
                 "prop6": {
-                    "$ref": "mansion.objects.schema.json#/definitions/prop_type"
+                    "$ref": "objects/mansion.objects.schema.json#/definitions/prop_type"
                 }
             },
             "allOf": [

@@ -2,8 +2,8 @@
 import { TransactionMap } from './TransactionMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import transactionsFile from './schema/mansion.json';
-import _ from './schema/mansion.puzzles.schema.json';
+import transactionsFile from './data/mansion.json';
+import _ from './data/schema/mansion.puzzles.schema.json';
 
 export function GetMapFromJSonGlossy(): TransactionMap {
     const mapOfTransactionsByInput = new TransactionMap(null);
