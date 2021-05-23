@@ -32,9 +32,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="data\Data.json" />
-    <Content Include="data\schema\InstructionSet.json" />
-    <Content Include="data\schema\objects\Objects.json" />
+    <Content Include="..\20210415JsonPrivate\data\Data.json" />
+    <Content Include="..\20210415JsonPrivate\data\schema\InstructionSet.json" />
+    <Content Include="..\20210415JsonPrivate\data\schema\objects\Objects.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.json" />
@@ -100,7 +100,6 @@
   <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="data\schema\" />
-    <Folder Include="data\schema\objects\" />
     <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

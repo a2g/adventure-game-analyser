@@ -7,12 +7,30 @@ import { Solution } from '../Solution';
 const testName = "root via test";
 
 describe("Solution", () => {
-
-    it("Test reg_win_by_talkshow", () => {
+    it("Testing just the grabbing of screwdriver", () => {
 
         // arrange
         const map = GetMapFromJSonGlossy();
-        const objective = "reg_win_by_talkshow";
+        const objective = "inv_screwdriver";
+        const collection = new SolutionCollection();
+        collection.push(new Solution(new SolutionNode("", "", objective), map));
+
+        // act 
+        const wasCloneEncountered = collection.ProcessUntilCloning();
+
+        // assert
+        assert.strictEqual(false, wasCloneEncountered);
+        assert.strictEqual(1, collection.length);
+        assert.strictEqual(0, collection[0].GetIncompleteNodes().size);
+        assert.ok(collection[0].GetLeafNodes().has("//inv_screwdriver/prop_screwdriver"));
+        assert.strictEqual(1, collection[0].GetLeafNodes().size);
+    });
+
+    it("Test prop_death_by_guitar", () => {
+
+        // arrange
+        const map = GetMapFromJSonGlossy();
+        const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
 
@@ -23,14 +41,14 @@ describe("Solution", () => {
         assert.strictEqual(false, wasCloneEncountered);
         assert.strictEqual(1, collection.length);
         assert.strictEqual(0, collection[0].GetIncompleteNodes().size);
-        assert.strictEqual(4, collection[0].GetLeafNodes().size);
+        assert.strictEqual(5, collection[0].GetLeafNodes().size);
     });
 
-    it("Test reg_win_by_launch", () => {
+    it("Test prop_death_by_slamdunk", () => {
 
         // arrange
         const map = GetMapFromJSonGlossy();
-        const objective = "reg_win_by_launch";
+        const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
 
@@ -45,11 +63,11 @@ describe("Solution", () => {
     });
 
 
-    it("Test the cloning using any winning ending", () => {
+    it("Test the cloning at numerous ways to kill demon", () => {
 
         // arrange
         const map = GetMapFromJSonGlossy();
-        const objective = "reg_win";
+        const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
 
@@ -69,11 +87,11 @@ describe("Solution", () => {
 
         // assert again
         const leafNodeMap = collection[0].GetLeafNodes();
-        assert.strictEqual(4, leafNodeMap.size);
+        assert.strictEqual(5, leafNodeMap.size);
     });
 
-  
-    /*
+
+
     it("prop_moderately_accelerated_vacuum_tube", () => {
 
         // arrange
@@ -97,24 +115,4 @@ describe("Solution", () => {
         assert.strictEqual(1, collection.length);
         assert.strictEqual(13, collection[0].GetLeafNodes().size);
     });
-
-        it("Testing just the grabbing of screwdriver", () => {
-
-        // arrange
-        const map = GetMapFromJSonGlossy();
-        const objective = "inv_screwdriver";
-        const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("", "", objective), map));
-
-        // act
-        const wasCloneEncountered = collection.ProcessUntilCloning();
-
-        // assert
-        assert.strictEqual(false, wasCloneEncountered);
-        assert.strictEqual(1, collection.length);
-        assert.strictEqual(0, collection[0].GetIncompleteNodes().size);
-        assert.ok(collection[0].GetLeafNodes().has("//inv_screwdriver/prop_screwdriver"));
-        assert.strictEqual(1, collection[0].GetLeafNodes().size);
-    });
-    */
 })

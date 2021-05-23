@@ -1,16 +1,18 @@
-
 import { TransactionMap } from './TransactionMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import transactionsFile from './data/mansion.json';
-import _ from './data/schema/mansion.puzzles.schema.json';
+import transactionsFile from '../20210415JsonPrivate/data/Data.json';
+import _ from '../20210415JsonPrivate/data/schema/InstructionSet.json';
 
+export function GetObjectiveFromJsonGlossy(): string {
+    return transactionsFile.objectivePropName;
+}
 export function GetMapFromJSonGlossy(): TransactionMap {
     const mapOfTransactionsByInput = new TransactionMap(null);
     for (let i = 0; i < transactionsFile.transactions.length; i++) {
         const type = transactionsFile.transactions[i].type;
         switch (type) {
-            case _.INV1_AND_INV2_FORM_AN_INV:
+            case _.INV1_AND_INV2_FORM_INV3:
                 {
                     // losing all
                     const inputA = "" + transactionsFile.transactions[i].inv1;
@@ -19,7 +21,7 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
-            case _.INV1_AND_INV2_GENERATE_INV:
+            case _.INV1_AND_INV2_GENERATE_INV3:
                 {
                     // losing none
                     const inputA = "" + transactionsFile.transactions[i].inv1;
@@ -98,7 +100,19 @@ export function GetMapFromJSonGlossy(): TransactionMap {
                     mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                 }
                 break;
-            case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
+            case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
+                {
+                    const input = "" + transactionsFile.transactions[i].prop1;
+                    const output = "" + transactionsFile.transactions[i].prop2;
+                    const prop1 = "" + transactionsFile.transactions[i].prop3;
+                    const prop2 = "" + transactionsFile.transactions[i].prop4;
+                    const prop3 = "" + transactionsFile.transactions[i].prop5;
+                    const prop4 = "" + transactionsFile.transactions[i].prop6;
+                    const prop5 = "" + transactionsFile.transactions[i].prop7;
+                    mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, input, prop1, prop2, prop3, prop4, prop5));
+                }
+                break;
+           case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
                 {
                     const output = "" + transactionsFile.transactions[i].inv1;
                     const input1 = "" + transactionsFile.transactions[i].prop1;
