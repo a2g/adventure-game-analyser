@@ -2,6 +2,23 @@ import { PlayerAI } from "./PlayerAI";
 import { RowOfSheet } from "./RowOfSheet";
 import { GetThreeStringsFromCommand } from "./GetThreeStringsFromCommand";
 import { GameRuleEnforcerCallbacksInterface } from "./GameRuleEnforcerCallbacksInterface";
+import { TransactionMap } from "./TransactionMap";
+import { SolutionNode } from "./SolutionNode";
+
+
+// April 2021
+// The blind / location - agnostic way to find solutions is to have an inv vs props table, and inv vs inv table, and a verb vs props table, and a verb vs invs table, then
+// 1. Check the invs vs invs ? this is the lowest hanging fruit
+// 2. Check the verbs vs invs ? this is the second lowest hanging fruit - if find something then go to 1.
+// 3. Check the invs vs props ? this is the third lowest hanging fruit - if find a new inv, then go to 1.
+// 3. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
+// 4. Ensure there is no PROPS VS PROPS because:
+//     A.unless we  give the AI knowledge of locations, then a blind  brute force would take forever.
+//     B.even if we did have knowledge of locations, it would mean creating a truth table per location...which is easy - and doable.hmmn. 
+//
+// May 2021, regarding point number 4... Some puzzles are just like that, eg use hanging cable in powerpoint.
+// // even in maniac mansion it was like use radtion suit with meteot etc.
+//
 
 export class GameRuleEnforcer {
     public readonly Examine = 0;
@@ -10,13 +27,14 @@ export class GameRuleEnforcer {
         this.listOfActions = new Array<string>();
         this.listOfItemVisibilities = new Array<boolean>();
         this.listOfActionVisibilities = new Array<boolean>();
-        this.itemVsItemHandlers = new Array<Array<Array<string>>>();
-        this.actionVsItemHandlers = new Array<Array<Array<string>>>();
+        this.itemVsItemHandlers = new Array<Array<Array<SolutionNode>>>();
+        this.actionVsItemHandlers = new Array<Array<Array<SolutionNode>>>();
         this.callbacks = new PlayerAI(this);
     }
 
-    Initialize(rows: Array<RowOfSheet>, arrayOfActions: Array<string>) {
+    Initialize(props: Array<string>, invs: Array<string>, regs: Array<string>, transactions: TransactionMap, arrayOfVerbs:Array<string>) {
 
+        let rows = new Array<RowOfSheet>();
         // 1. item visibilities based on rows passed in
         this.listOfItems = new Array<string>();
         this.listOfItemVisibilities = new Array<boolean>();
@@ -31,8 +49,8 @@ export class GameRuleEnforcer {
 
         // 2. actions - 
         this.listOfActions = new Array<string>();
-        for (let i = 0; i < arrayOfActions.length; i++) {
-            this.listOfActions.push(arrayOfActions[i].toLowerCase());
+        for (let i = 0; i < arrayOfVerbs.length; i++) {
+            this.listOfActions.push(arrayOfVerbs[i].toLowerCase());
         }
 
         // 3. create each handler map - which is a big 2d array, with a vector of methods at each cell
@@ -208,8 +226,8 @@ export class GameRuleEnforcer {
     private listOfActions: Array<string>;//array of string boolean tuples
     private listOfItemVisibilities: Array<boolean>;//array of string boolean tuples
     private listOfActionVisibilities: Array<boolean>;//array of string boolean tuples
-    private itemVsItemHandlers: Array<Array<Array<string>>>;// a 2d array where each cell contains a list of strings.
-    private actionVsItemHandlers: Array<Array<Array<string>>>;// a 2d array where each cell contains a list of strings.
+    private itemVsItemHandlers: Array<Array<Array<SolutionNode>>>;// a 2d array where each cell contains a list of strings.
+    private actionVsItemHandlers: Array<Array<Array<SolutionNode>>>;// a 2d array where each cell contains a list of strings.
 
 }
 

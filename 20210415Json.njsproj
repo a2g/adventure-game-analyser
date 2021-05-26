@@ -41,13 +41,17 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ChooseBruteForceLocationless.ts" />
+    <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Colors.ts" />
     <TypeScriptCompile Include="Game.ts" />
     <TypeScriptCompile Include="GameReporter.ts" />
     <TypeScriptCompile Include="GameRuleEnforcer.ts" />
     <TypeScriptCompile Include="GameRuleEnforcerCallbacksInterface.ts" />
     <TypeScriptCompile Include="GetDisplayName.ts" />
-    <TypeScriptCompile Include="GetMapFromJSonGlossy.ts" />
+    <TypeScriptCompile Include="Data.ts" />
     <TypeScriptCompile Include="GetThreeStringsFromCommand.ts" />
     <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.ts" />
     <TypeScriptCompile Include="IsOk.ts" />
@@ -96,6 +100,9 @@
     <TypeScriptCompile Include="TruthTable.ts" />
     <TypeScriptCompile Include="SolveCyclicEtc.ts" />
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Sleep.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
