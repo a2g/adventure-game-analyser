@@ -9,7 +9,7 @@ import { Solution } from './Solution';
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
-        const map = Data.GetTransactions();
+        const map = Data.GetSolutionNodeMap();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -25,7 +25,7 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_guitar", () => {
-        const map = Data.GetTransactions();
+        const map = Data.GetSolutionNodeMap();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -51,7 +51,7 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_slamdunk", () => {
-        const map = Data.GetTransactions();
+        const map = Data.GetSolutionNodeMap();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -79,7 +79,7 @@ describe("Solution", () => {
 
 
     it("Test the cloning at numerous ways to kill demon", () => {
-        const map = Data.GetTransactions();
+        const map = Data.GetSolutionNodeMap();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));
@@ -116,7 +116,7 @@ describe("Solution", () => {
   
 
     it("Test cloning with turn on/turn off", () => {
-        const map = Data.GetTransactions();
+        const map = Data.GetSolutionNodeMap();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));

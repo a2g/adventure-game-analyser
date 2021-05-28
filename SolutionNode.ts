@@ -108,7 +108,7 @@ export class SolutionNode {
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
                         theNode.inputs[k].inputNode = theMatchingTransaction;
-                        // all transactions are incomplete when they come from the transaction map
+                        // all reactions are incomplete when they come from the transaction map
                         theSolution.SetNodeIncomplete(theMatchingTransaction);
                     }
 

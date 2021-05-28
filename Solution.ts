@@ -3,7 +3,7 @@ import { SolutionCollection } from './SolutionCollection';
 import { SolutionNode } from './SolutionNode';
 import { SpecialNodes } from './SpecialNodes';
 import { assert } from 'console';
-import { TransactionMap } from './TransactionMap';
+import { SolutionNodeMap } from './SolutionNodeMap';
 
 export class Solution {
 
@@ -11,15 +11,15 @@ export class Solution {
     incompleteNodes: Set<SolutionNode>;
     absoluteLeafNodes: Map<string, string>;
     usedVerbNounCombos: Set<string>;
-    transactionMap: TransactionMap;
+    transactionMap: SolutionNodeMap;
 
-    constructor(root: SolutionNode, map : TransactionMap) {
+    constructor(root: SolutionNode, map : SolutionNodeMap) {
         this.rootNode = root;
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
         this.absoluteLeafNodes = new Map<string, string>();
         this.usedVerbNounCombos = new Set<string>();
-        this.transactionMap = new TransactionMap(map);
+        this.transactionMap = new SolutionNodeMap(map);
         
     }
 

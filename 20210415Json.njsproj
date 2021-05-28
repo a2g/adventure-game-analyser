@@ -57,7 +57,16 @@
     <TypeScriptCompile Include="IsOk.ts" />
     <TypeScriptCompile Include="LogAndReturnError.ts" />
     <TypeScriptCompile Include="ParseRowsFromSheet.ts" />
+    <TypeScriptCompile Include="Play.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="PlayAction.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="PlayerAI.ts" />
+    <TypeScriptCompile Include="ReactionDetails.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="RowOfSheet.ts" />
     <TypeScriptCompile Include="SingleFileData.ts" />
     <TypeScriptCompile Include="Solution.ts" />
@@ -75,7 +84,7 @@
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="test/TransactionMap.test.ts">
+    <TypeScriptCompile Include="test\SolutionNodeMap.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
@@ -83,7 +92,7 @@
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="TransactionMap.ts">
+    <TypeScriptCompile Include="SolutionNodeMap.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SolutionNodeInput.ts">
@@ -103,10 +112,14 @@
     <TypeScriptCompile Include="Sleep.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="TwoObjects.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="VerbClass.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="data\" />
-    <Folder Include="data\schema\" />
     <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

@@ -24,16 +24,13 @@ import { Data } from "./Data";
 
 function ChooseBruteForceLocationless() {
 
-    const t = "\t";
-
-    const verbs: Array<string> = ["examine", "grab"];
 
     {
-        GameRuleEnforcer.GetInstance().Initialize(Data.GetProps(), Data.GetInvs(), Data.GetRegs(), Data.GetTransactions(), verbs);
+        GameRuleEnforcer.GetInstance().Initialize(new Data());
         const ai: PlayerAI = new PlayerAI(GameRuleEnforcer.GetInstance());
         for (let command: string[] = ai.GetNextCommand(); ; command = ai.GetNextCommand()) {
 
-            if (command.length == 0) {
+            if (command.length === 0) {
                 // null command means ai can't find another guess.
                 // so lets just see what's going on here
                 command = ai.GetNextCommand();

@@ -1,11 +1,11 @@
 import assert = require('assert');
-import { TransactionMap } from '../TransactionMap';
+import { SolutionNodeMap } from '../SolutionNodeMap';
 import { isUndefined } from 'util';
 import { SolutionNode } from '../SolutionNode';
 
-describe("TransactionMap", () => {
+describe("ReactionMap", () => {
     it("test AddToMap works", () => {
-        const blah = new TransactionMap(null);
+        const blah = new SolutionNodeMap(null);
 
         // test that it is indeed null before
         const arrayBefore = blah.Get("outputA");
@@ -23,7 +23,7 @@ describe("TransactionMap", () => {
     });
 
     it("test RemoveTransaction works", () => {
-        const blah = new TransactionMap(null);
+        const blah = new SolutionNodeMap(null);
         for (let i = 0; i < 3; i++) {
             blah.AddToMap(new SolutionNode("outputA", "piffle","A", "B"));
         }
@@ -53,14 +53,14 @@ describe("TransactionMap", () => {
         array.push(new SolutionNode("blah", "outputA", "c", "c"));
 
         // put them in a map
-        const tmap = new TransactionMap(null);
+        const tmap = new SolutionNodeMap(null);
         array.forEach((t: SolutionNode) => {
             tmap.AddToMap(t);
         });
 
         // cloned the map, and modify it.
         {
-            const cloned = new TransactionMap(tmap);
+            const cloned = new SolutionNodeMap(tmap);
             const clonedOutputA = cloned.Get("outputA");
             assert.ok(!isUndefined(array));
             assert.notEqual(null, array);

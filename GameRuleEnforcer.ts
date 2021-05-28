@@ -2,8 +2,11 @@ import { PlayerAI } from "./PlayerAI";
 import { RowOfSheet } from "./RowOfSheet";
 import { GetThreeStringsFromCommand } from "./GetThreeStringsFromCommand";
 import { GameRuleEnforcerCallbacksInterface } from "./GameRuleEnforcerCallbacksInterface";
-import { TransactionMap } from "./TransactionMap";
+import { SolutionNodeMap } from "./SolutionNodeMap";
 import { SolutionNode } from "./SolutionNode";
+import { Data } from "./Data";
+import { VerbClass } from "./VerbClass";
+import { TwoObjects } from "./TwoObjects";
 
 
 // April 2021
@@ -32,105 +35,16 @@ export class GameRuleEnforcer {
         this.callbacks = new PlayerAI(this);
     }
 
-    Initialize(props: Array<string>, invs: Array<string>, regs: Array<string>, transactions: TransactionMap, arrayOfVerbs:Array<string>) {
+    Initialize(data: Data){
 
-        let rows = new Array<RowOfSheet>();
-        // 1. item visibilities based on rows passed in
-        this.listOfItems = new Array<string>();
-        this.listOfItemVisibilities = new Array<boolean>();
-        rows.forEach((row: RowOfSheet) => {
-            this.listOfItems.push(row.name);
-
-            // set the visibility too
-            const command: string = row.commandToMakeVisible;
-            const isInitiallyVisible: boolean = command === "init" || command === "";
-            this.listOfItemVisibilities.push(isInitiallyVisible);
-        });
-
-        // 2. actions - 
-        this.listOfActions = new Array<string>();
-        for (let i = 0; i < arrayOfVerbs.length; i++) {
-            this.listOfActions.push(arrayOfVerbs[i].toLowerCase());
-        }
-
-        // 3. create each handler map - which is a big 2d array, with a vector of methods at each cell
-        {
-            this.itemVsItemHandlers = new Array<Array<Array<string>>>();
-            this.actionVsItemHandlers = new Array<Array<Array<string>>>();
-
-            for (let i = 0; i < this.listOfActions.length; i++) {
-                this.actionVsItemHandlers[i] = new Array<Array<string>>();
-                for (let j = 0; j < this.listOfItems.length; j++) {
-                    this.actionVsItemHandlers[i][j] = new Array<string>();
-                }
-            }
-
-            for (let i = 0; i < this.listOfItems.length; i++) {
-                this.itemVsItemHandlers[i] = new Array<Array<string>>();
-                for (let j = 0; j < this.listOfItems.length; j++) {
-                    this.itemVsItemHandlers[i][j] = new Array<string>();
-                }
-            }
-        }
-
-        // 4. populate each script handler map - which is a big 2d array, with a vector of methods at each cell
-        for (let i = 0; i < rows.length; i++) {
-            const row: RowOfSheet = rows[i];
-
-            // first we add handlers for examining - which just say stuff.
-            const speech: string = rows[i].scriptToRunWhenExamine;
-            this.actionVsItemHandlers[this.Examine][i].push("Say(\"" + speech + ");");
-
-            if (row.commandToMakeVisible !== "init") {
-                const parts: string[] = GetThreeStringsFromCommand(row.commandToMakeVisible);
-                const len = parts.length;
-                if (len < 2 && parts[0])
-                    throw new Error("Command should have atleast two parts");
-                const indexOfAction: number = this.GetIndexOfAction(parts[0]);
-                const indexOfItem1: number = this.GetIndexOfItem(parts[1]);
-                const indexOfItem2: number = this.GetIndexOfItem(parts[2]);
-
-                // now we've validated the command then we need to break up the scriptToRunWhenMadeVisible
-                // in to individual methods, and then add them to the correct handler
-                const individualMethods: string[] = row.scriptToRunWhenMadeVisible.split(";");
-                if (indexOfAction < 0 && indexOfItem1 > -1 && indexOfItem2 > -1) {
-
-                    // if its the object V object, we add the lists twice.
-                    // if we maintained two different lists, and added some stuff here
-                    // then some stuff there - and then combined them - some of the 
-                    // things would be out of order.
-                    individualMethods.forEach((method) => {
-                        this.itemVsItemHandlers[indexOfItem1][indexOfItem2].push(method);
-                        this.itemVsItemHandlers[indexOfItem2][indexOfItem1].push(method);
-                    });
-
-                    this.itemVsItemHandlers[indexOfItem1][indexOfItem2].push("Show('" + row.name + "');");
-                    this.itemVsItemHandlers[indexOfItem2][indexOfItem1].push("Show('" + row.name + "');");
-                }
-                else if (indexOfAction > -1 && indexOfItem1 > -1) {
-                    individualMethods.forEach((method) => {
-                        this.actionVsItemHandlers[indexOfAction][indexOfItem1].push(method);
-                    });
-
-                    this.actionVsItemHandlers[indexOfAction][indexOfItem1].push("Show('" + row.name + "');");
-                }
-            }
-        }
     }
 
-    ExecuteCommand(command: string[]): void {
-        const indexOfAction: number = this.GetIndexOfAction(command[0]);
-        const indexOfItem1: number = this.GetIndexOfItem(command[1]);
-        const indexOfItem2: number = this.GetIndexOfItem(command[2]);
+    ExecuteCommand(verb:VerbClass, twoObjects:TwoObjects): void {
 
-        let scriptsToRun: string[] = new Array<string>();
-        if (indexOfAction > -1 && indexOfItem1 > -1) {
-            scriptsToRun = this.actionVsItemHandlers[indexOfAction][indexOfItem1];
-        } else if (indexOfItem1 > -1 && indexOfItem2 > -1 && indexOfAction < 0) {
-            scriptsToRun = this.itemVsItemHandlers[indexOfItem1][indexOfItem2];
-        }
+        const reaction = Data.GetReactionDetailsIfAny(verb, twoObjects);
 
-        if (scriptsToRun.length > 0) {
+        if (reaction) {
+            reaction.
             for (let i = 0; i < scriptsToRun.length; i++) {
                 const script = scriptsToRun[i];
                 if (script !== "none" && script !== "") {

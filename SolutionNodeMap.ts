@@ -2,10 +2,10 @@ import { SolutionNode } from "./SolutionNode";
 /**
  * need to test
  */
-export class TransactionMap {
+export class SolutionNodeMap {
     private transactionMap: Map<string, SolutionNode[]>;
 
-    constructor(cloneFromMe: TransactionMap | null) {
+    constructor(cloneFromMe: SolutionNodeMap | null) {
         this.transactionMap = new Map<string, SolutionNode[]>();
 
         if (cloneFromMe) {
