@@ -24,7 +24,6 @@ import { Data } from "./Data";
 
 function ChooseBruteForceLocationless() {
 
-
     {
         GameRuleEnforcer.GetInstance().Initialize(new Data());
         const ai: PlayerAI = new PlayerAI(GameRuleEnforcer.GetInstance());
@@ -37,12 +36,17 @@ function ChooseBruteForceLocationless() {
                 break;
             }
             GameReporter.GetInstance().ReportCommand(command);
-            GameRuleEnforcer.GetInstance().ExecuteCommand(command);
+            const mixed = Data.GetMixedObjectsAndVerbFromThreeStrings(command);
+            if (mixed.type.toString().startsWith("Error")) {
+                console.log(mixed.type.toString() + " blah");
+                break;
+            }
+            GameRuleEnforcer.GetInstance().ExecuteCommand(mixed);
 
-            const inventory = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
-            GameReporter.GetInstance().ReportInventory(inventory);
-            const viewables = GameRuleEnforcer.GetInstance().GetCurrentVisibleScene();
-            GameReporter.GetInstance().ReportScene(viewables);
+            const invs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
+            GameReporter.GetInstance().ReportInventory(invs);
+            const props = GameRuleEnforcer.GetInstance().GetCurrentVisibleProps();
+            GameReporter.GetInstance().ReportScene(props);
 
             Sleep(500);
         }

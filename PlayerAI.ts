@@ -3,40 +3,54 @@ import { GameRuleEnforcer } from './GameRuleEnforcer';
 import {
     GameRuleEnforcerCallbacksInterface
 } from './GameRuleEnforcerCallbacksInterface';
-import { VerbClass } from './VerbClass';
+import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
+
+// April 2021
+// The blind / location - agnostic way to find solutions is to have an inv vs props table, and inv vs inv table, and a verb vs props table, and a verb vs invs table, then
+// 1. Check the invs vs invs ? this is the lowest hanging fruit
+// 2. Check the verbs vs invs ? this is the second lowest hanging fruit - if find something then go to 1.
+// 3. Check the invs vs props ? this is the third lowest hanging fruit - if find a new inv, then go to 1.
+// 4. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
+// 5. Ensure there is no PROPS VS PROPS because:
+//     A.unless we  give the AI knowledge of locations, then a blind  brute force would take forever.
+//     B.even if we did have knowledge of locations, it would mean creating a truth table per location...which is easy - and doable.hmmn. 
+//
+// May 2021, regarding point number 4... Some puzzles are just like that, eg use hanging cable in powerpoint.
+// // even in maniac mansion it was like use radtion suit with meteot etc.
+//
 
 export class PlayerAI implements GameRuleEnforcerCallbacksInterface {
 
-    itemActionCommmandsTried: TruthTable;
-    useCommmandsTried: TruthTable;
+    invVsInv: TruthTable;
+    invVsVerb: TruthTable;
+    invVsProp: TruthTable;
+    propVsVerb: TruthTable;
+    propVsProp: TruthTable;
+
     game: GameRuleEnforcer;
     autoCount: number;
 
     constructor(game: GameRuleEnforcer) {
         this.game = game;
         this.autoCount = 0;
-        const actions = game.GetActionsExcludingUse();
-        const items = game.GetEntireItemSuite();
-        this.itemActionCommmandsTried = new TruthTable(actions, items);
-        this.useCommmandsTried = new TruthTable(items, items);
+        const verbs = game.GetVerbsExcludingUse();
+        const invs = game.GetEntireInvSuite();
+        const props = game.GetEntireInvSuite();
+
+        this.invVsInv = new TruthTable(invs, invs);
+        this.invVsVerb = new TruthTable(invs, verbs);
+        this.invVsProp = new TruthTable(invs, props);
+        this.propVsVerb = new TruthTable(verbs, props);
+        this.propVsProp = new TruthTable(props, props);
         this.game.SubscribeToCallbacks(this);
 
         // since use iSpanner with iSpanner is illegal move, we block these out
-        for (let i = 0; i < items.length; i++) {
-            this.useCommmandsTried.SetColumnRow(i, i);
+        for (let i = 0; i < invs.length; i++) {
+            this.invVsInv.SetColumnRow(i, i);
         }
-
-        // Examine should never be a crucial part of the solution
-        // So we can black out all the Examine
-        for (let i = 0; i < items.length; i++) {
-            this.itemActionCommmandsTried.SetColumnRow(0, i);//0 = examine
-        }
-
-        // Examine should never be a crucial part of the solution
-        // So we can black out all the Examine
-        for (let i = 0; i < items.length; i++) {
-            if (items[i][0].startsWith("i"))
-                this.itemActionCommmandsTried.SetColumnRow(1, i);//1 = grab
+        // since use iSpanner with iSpanner is illegal move, we block these out
+        for (let i = 0; i < props.length; i++) {
+            this.propVsProp.SetColumnRow(i, i);
         }
 
     }
@@ -45,17 +59,41 @@ export class PlayerAI implements GameRuleEnforcerCallbacksInterface {
         for (; ;){
             if (this.autoCount > 0) {
                 this.autoCount--;
-                const use = this.useCommmandsTried.GetNextGuess();
-                if (use[0] !== -1) {
-                    this.useCommmandsTried.SetColumnRow(use[0], use[1]);
-                    this.useCommmandsTried.SetColumnRow(use[1], use[0]);
-                    return ["use", this.game.GetItem(use[0]), this.game.GetItem(use[1])];
+
+                // 1. Check the invs vs invs ? this is the lowest hanging fruit
+                const useInvOnInv = this.invVsInv.GetNextGuess();
+                if (useInvOnInv[0] !== -1) {
+                    this.invVsInv.SetColumnRow(useInvOnInv[0], useInvOnInv[1]);
+                    this.invVsInv.SetColumnRow(useInvOnInv[1], useInvOnInv[0]);
+                    return ["use", this.game.GetInv(useInvOnInv[0]), this.game.GetInv(useInvOnInv[1])];
                 }
-                const allOtherActions = this.itemActionCommmandsTried.GetNextGuess();
-                if (allOtherActions[0] !== -1) {
-                    this.itemActionCommmandsTried.SetColumnRow(allOtherActions[0], allOtherActions[1]);
-                    return [this.game.GetAction(allOtherActions[0]), this.game.GetItem(allOtherActions[1]), ""];
+                // 2. Check the verbs vs invs ? this is the second lowest hanging fruit - if find something then go to 1.
+                const invVsVerb = this.invVsVerb.GetNextGuess();
+                if (invVsVerb[0] !== -1) {
+                    this.invVsVerb.SetColumnRow(invVsVerb[0], invVsVerb[1]);
+                    return [this.game.GetVerb(invVsVerb[1]), this.game.GetInv(invVsVerb[0]), ""];
                 }
+                // 3. Check the invs vs props ? this is the third lowest hanging fruit - if find a new inv, then go to 1.
+                const useInvOnProp = this.invVsInv.GetNextGuess();
+                if (useInvOnProp[0] !== -1) {
+                    this.invVsInv.SetColumnRow(useInvOnProp[0], useInvOnProp[1]);
+                    this.invVsInv.SetColumnRow(useInvOnProp[1], useInvOnProp[0]);
+                    return ["use", this.game.GetInv(useInvOnProp[0]), this.game.GetProp(useInvOnProp[1])];
+                }
+                // 4. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
+                const propVsVerb = this.propVsVerb.GetNextGuess();
+                if (propVsVerb[0] !== -1) {
+                    this.propVsVerb.SetColumnRow(propVsVerb[0], propVsVerb[1]);
+                    return [this.game.GetVerb(propVsVerb[1]), this.game.GetProp(propVsVerb[0]), ""];
+                }
+                // 5. Ensure there is no PROPS VS PROPS because:
+                const usePropOnProp = this.propVsProp.GetNextGuess();
+                if (usePropOnProp[0] !== -1) {
+                    this.propVsProp.SetColumnRow(usePropOnProp[0], usePropOnProp[1]);
+                    this.propVsProp.SetColumnRow(usePropOnProp[1], usePropOnProp[0]);
+                    return ["use", this.game.GetProp(usePropOnProp[0]), this.game.GetProp(usePropOnProp[1])];
+                }
+
                 continue;
             }
         
@@ -64,7 +102,7 @@ export class PlayerAI implements GameRuleEnforcerCallbacksInterface {
                 console.log("At least enter something");
                 continue;
             }
-            const items: Array<string> = input.split('/');
+            const items: Array<string> = GetThreeStringsFromInput(input);
             if (items.length === 1) {
                 if (items[0].toUpperCase() === "Q")
                     break;
@@ -87,10 +125,22 @@ export class PlayerAI implements GameRuleEnforcerCallbacksInterface {
         return [];;
     }
 
-    OnItemVisbilityChange(number: number, newValue: boolean, nameForDebugging: string): void {
-        this.itemActionCommmandsTried.SetVisibilityOfRow(number, newValue, nameForDebugging);
-        this.useCommmandsTried.SetVisibilityOfRow(number, newValue, nameForDebugging);
-        this.useCommmandsTried.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+    OnInvVisbilityChange(number: number, newValue: boolean, nameForDebugging: string): void {
+        // the convention for the array is x then y, or column then row.
+        // so Set..Column sets the first t
+        this.invVsVerb.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+        this.invVsProp.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+        this.invVsInv.SetVisibilityOfRow(number, newValue, nameForDebugging);
+        this.invVsInv.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+    }
+
+    OnPropVisbilityChange(number: number, newValue: boolean, nameForDebugging: string): void {
+        // the convention for the array is x then y, or column then row.
+        // so Set..Column sets the first t
+        this.propVsVerb.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+        this.invVsProp.SetVisibilityOfRow(number, newValue, nameForDebugging);
+        this.propVsProp.SetVisibilityOfRow(number, newValue, nameForDebugging);
+        this.propVsProp.SetVisibilityOfColumn(number, newValue, nameForDebugging);
     }
 
 }

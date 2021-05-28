@@ -2,7 +2,7 @@ import { GameRuleEnforcer } from "./GameRuleEnforcer";
 import { GameReporter } from "./GameReporter";
 
 export class Game {
-
+    /*
     public Show(itemName: string) {
         GameRuleEnforcer.GetInstance().ShowOrHide(itemName, true);
         GameReporter.GetInstance().Show(itemName);
@@ -12,7 +12,7 @@ export class Game {
     public Hide(itemName: string) {
         GameRuleEnforcer.GetInstance().ShowOrHide(itemName, false);
         // could be just an object transformation, so don't say anything.
-    }
+    }*/
 
     public Say(speech: string) {
         // enforcer's don't care about saying stuff som much.

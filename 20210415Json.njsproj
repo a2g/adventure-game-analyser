@@ -52,10 +52,13 @@
     <TypeScriptCompile Include="GameRuleEnforcerCallbacksInterface.ts" />
     <TypeScriptCompile Include="GetDisplayName.ts" />
     <TypeScriptCompile Include="Data.ts" />
-    <TypeScriptCompile Include="GetThreeStringsFromCommand.ts" />
+    <TypeScriptCompile Include="GetThreeStringsFromInput.ts" />
     <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.ts" />
     <TypeScriptCompile Include="IsOk.ts" />
     <TypeScriptCompile Include="LogAndReturnError.ts" />
+    <TypeScriptCompile Include="Mix.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ParseRowsFromSheet.ts" />
     <TypeScriptCompile Include="Play.ts">
       <SubType>Code</SubType>
@@ -112,10 +115,7 @@
     <TypeScriptCompile Include="Sleep.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="TwoObjects.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="VerbClass.ts">
+    <TypeScriptCompile Include="MixedObjectsAndVerb.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

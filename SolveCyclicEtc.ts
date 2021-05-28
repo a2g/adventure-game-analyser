@@ -1,5 +1,5 @@
 import { RowOfSheet } from "./RowOfSheet";
-import { GetThreeStringsFromCommand } from "./GetThreeStringsFromCommand";
+import { GetThreeStringsFromInput } from "./GetThreeStringsFromInput";
 import { IsOk } from './IsOk';
 import { LogAndReturnError } from './LogAndReturnError'
 
@@ -25,7 +25,7 @@ export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string
         const command: string = row.commandToMakeVisible.trim();
         if (command.toLowerCase() !== "init") {
 
-            const parts: string[] = GetThreeStringsFromCommand(command);
+            const parts: string[] = GetThreeStringsFromInput(command);
             const len = parts.length;
             if (len < 2)
                 return LogAndReturnError(false, "'" + command + "' not having atleast two parts", isVerbose);

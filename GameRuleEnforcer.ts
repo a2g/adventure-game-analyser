@@ -1,12 +1,11 @@
 import { PlayerAI } from "./PlayerAI";
 import { RowOfSheet } from "./RowOfSheet";
-import { GetThreeStringsFromCommand } from "./GetThreeStringsFromCommand";
+import { GetThreeStringsFromInput } from "./GetThreeStringsFromInput";
 import { GameRuleEnforcerCallbacksInterface } from "./GameRuleEnforcerCallbacksInterface";
-import { SolutionNodeMap } from "./SolutionNodeMap";
 import { SolutionNode } from "./SolutionNode";
 import { Data } from "./Data";
-import { VerbClass } from "./VerbClass";
-import { TwoObjects } from "./TwoObjects";
+import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
+import { Mix } from "./Mix";
 
 
 // April 2021
@@ -25,57 +24,71 @@ import { TwoObjects } from "./TwoObjects";
 
 export class GameRuleEnforcer {
     public readonly Examine = 0;
+
+    private callbacks: GameRuleEnforcerCallbacksInterface;
+    private listOfInvs: Array<string>;//array of string boolean tuples
+    private listOfProps: Array<string>;//array of string boolean tuples
+    private listOfVerbs: Array<string>;//array of string boolean tuples
+    private listOfInvVisibilities: Array<boolean>;//array of string boolean tuples
+    private listOfPropVisibilities: Array<boolean>;//array of string boolean tuples
+    private listOfVerbVisibilities: Array<boolean>;//array of string boolean tuples
+
+
     constructor() {
-        this.listOfItems = new Array<string>();
-        this.listOfActions = new Array<string>();
-        this.listOfItemVisibilities = new Array<boolean>();
-        this.listOfActionVisibilities = new Array<boolean>();
-        this.itemVsItemHandlers = new Array<Array<Array<SolutionNode>>>();
-        this.actionVsItemHandlers = new Array<Array<Array<SolutionNode>>>();
+        this.listOfInvs = new Array<string>();
+        this.listOfProps = new Array<string>();
+        this.listOfVerbs = new Array<string>();
+        
+        this.listOfInvVisibilities = new Array<boolean>();
+        this.listOfPropVisibilities = new Array<boolean>();
+        this.listOfVerbVisibilities = new Array<boolean>(); 
         this.callbacks = new PlayerAI(this);
     }
 
     Initialize(data: Data){
-
+        this.listOfInvs = Data.GetArrayOfInvs();
+        this.listOfProps = Data.GetArrayOfProps();
+        this.listOfVerbs = Data.GetArrayOfSingleObjectVerbs();
+        this.listOfVerbVisibilities = Data.GetArrayOfVisibilitiesOfSingleObjectVerbs();
     }
 
-    ExecuteCommand(verb:VerbClass, twoObjects:TwoObjects): void {
-
-        const reaction = Data.GetReactionDetailsIfAny(verb, twoObjects);
+    ExecuteCommand(objects: MixedObjectsAndVerb): void {
+        switch (objects.type) {
+            case Mix.InvVsInv:
+                if (this.listOfInvVisibilities[this.listOfInvs.indexOf(objects.objectA)
+        const reaction = Data.GetReactionDetailsIfAny(objects);
 
         if (reaction) {
-            reaction.
-            for (let i = 0; i < scriptsToRun.length; i++) {
-                const script = scriptsToRun[i];
-                if (script !== "none" && script !== "") {
-                    const header = "game.";
-                    eval(header + script);
-                }
-            }
+            
         } else {
             const header = "game.";
             const script = "Say(\"That doesn't work\")";
-            eval(header + script);
+            //eval(header + script);
         }
     }
 
-    GetIndexOfAction(Action: string): number {
-        const indexOfAction: number = this.listOfActions.indexOf(Action);
-        return indexOfAction;
+    GetIndexOfVerb(verb: string): number {
+        const indexOfVerb: number = this.listOfVerbs.indexOf(verb);
+        return indexOfVerb;
     }
 
-    GetIndexOfItem(item: string): number {
-        const indexOfItem: number = this.listOfItems.indexOf(item);
-        return indexOfItem;
+    GetIndexOfInv(item: string): number {
+        const indexOfInv: number = this.listOfInvs.indexOf(item);
+        return indexOfInv;
     }
 
-    GetAction(i: number): string {
-        const name: string = i >= 0 ? this.GetActionsExcludingUse()[i][0] : "use";
+    GetVerb(i: number): string {
+        const name: string = i >= 0 ? this.GetVerbsExcludingUse()[i][0] : "use";
         return name;
     }
 
-    GetItem(i: number): string {
-        const name: string = i >= 0 ? this.GetEntireItemSuite()[i][0] : "-1 lookup in GetItem";
+    GetInv(i: number): string {
+        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup in GetItem";
+        return name;
+    }
+
+    GetProp(i: number): string {
+        const name: string = i >= 0 ? this.GetEntirePropSuite()[i][0] : "-1 lookup in GetItem";
         return name;
     }
 
@@ -83,48 +96,57 @@ export class GameRuleEnforcer {
         this.callbacks = callbacks;
     }
 
-    GetActionsExcludingUse(): Array<[string, boolean]> {
+    GetVerbsExcludingUse(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        this.listOfActions.forEach(function (Action) {
-            toReturn.push([Action, true]);
+        this.listOfVerbs.forEach(function (Verb) {
+            toReturn.push([Verb, true]);
         });
         return toReturn;
     }
 
-    GetEntireItemSuite(): Array<[string, boolean]> {
+    GetEntirePropSuite(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfItems.length; i++) {
-            toReturn.push([this.listOfItems[i], this.listOfItemVisibilities[i]]);
+        for (let i = 0; i < this.listOfProps.length; i++) {
+            toReturn.push([this.listOfProps[i], this.listOfPropVisibilities[i]]);
+        }
+        return toReturn;
+    }
+
+    GetEntireInvSuite(): Array<[string, boolean]> {
+        const toReturn = new Array<[string, boolean]>();
+        for (let i = 0; i < this.listOfInvs.length; i++) {
+            toReturn.push([this.listOfInvs[i], this.listOfInvVisibilities[i]]);
         }
         return toReturn;
     }
 
     GetCurrentVisibleInventory(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfItems.length; i++) {
-            if (this.listOfItems[i].toLowerCase().startsWith("i") && this.listOfItemVisibilities[i] === true)
-                toReturn.push(this.listOfItems[i]);
+        for (let i = 0; i < this.listOfInvs.length; i++) {
+            if (this.listOfInvVisibilities[i] === true)
+                toReturn.push(this.listOfInvs[i]);
         }
         return toReturn;
     }
 
-    GetCurrentVisibleScene(): Array<string> {
+    GetCurrentVisibleProps(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfItems.length; i++) {
-            if (this.listOfItems[i].toLowerCase().startsWith("o") && this.listOfItemVisibilities[i] === true)
-                toReturn.push(this.listOfItems[i]);
+        for (let i = 0; i < this.listOfProps.length; i++) {
+            if ( this.listOfPropVisibilities[i] === true)
+                toReturn.push(this.listOfProps[i]);
         }
         return toReturn;
     }
 
+    /*
     ShowOrHide(name: string, newVisibility: boolean) {
         const index: number = this.GetIndexOfItem(name);
         if (index !== -1) {
             // call callback
-            this.listOfItemVisibilities[index] = newVisibility;
+            this.listOfPropVisibilities[index] = newVisibility;
             this.callbacks.OnItemVisbilityChange(index, newVisibility, name);
         }
-    }
+    }*/
 
     public static GetInstance(): GameRuleEnforcer {
         if (!GameRuleEnforcer.instance) {
@@ -135,13 +157,6 @@ export class GameRuleEnforcer {
     private static instance: GameRuleEnforcer;
 
 
-    private callbacks: GameRuleEnforcerCallbacksInterface;
-    private listOfItems: Array<string>;//array of string boolean tuples
-    private listOfActions: Array<string>;//array of string boolean tuples
-    private listOfItemVisibilities: Array<boolean>;//array of string boolean tuples
-    private listOfActionVisibilities: Array<boolean>;//array of string boolean tuples
-    private itemVsItemHandlers: Array<Array<Array<SolutionNode>>>;// a 2d array where each cell contains a list of strings.
-    private actionVsItemHandlers: Array<Array<Array<SolutionNode>>>;// a 2d array where each cell contains a list of strings.
 
 }
 

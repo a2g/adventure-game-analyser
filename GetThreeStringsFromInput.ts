@@ -1,5 +1,5 @@
-export function GetThreeStringsFromCommand(command: string) {
-    const parts: string[] = command.split(" ");
+export function GetThreeStringsFromInput(input: string) {
+    const parts: string[] = input.split(" ");
     const len = parts.length;
     if (len < 2)
         return [];

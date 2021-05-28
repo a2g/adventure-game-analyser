@@ -1,4 +1,5 @@
 
 export interface GameRuleEnforcerCallbacksInterface {
-    OnItemVisbilityChange(numberOfObjectWhoseVisibilityChanged: number, newValue: boolean, nameForDebugging: string): void;
+    OnPropVisbilityChange(numberOfObjectWhoseVisibilityChanged: number, newValue: boolean, nameForDebugging: string): void;
+    OnInvVisbilityChange(numberOfObjectWhoseVisibilityChanged: number, newValue: boolean, nameForDebugging: string): void;
 };

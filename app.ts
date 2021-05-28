@@ -5,7 +5,7 @@ import { ParseRowsFromSheet } from "./ParseRowsFromSheet";
 import { SolveCyclicEtc } from "./SolveCyclicEtc";
 import { PlayerAI } from './PlayerAI';
 import { RowOfSheet } from './RowOfSheet';
-import { GetThreeStringsFromCommand } from './GetThreeStringsFromCommand';
+import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
 import { GameRuleEnforcerCallbacksInterface } from './GameRuleEnforcerCallbacksInterface';
 import { GameRuleEnforcer } from './GameRuleEnforcer';
 import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
