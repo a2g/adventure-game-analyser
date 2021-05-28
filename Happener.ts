@@ -1,11 +1,7 @@
 import { PlayerAI } from "./PlayerAI";
-import { RowOfSheet } from "./RowOfSheet";
-import { GetThreeStringsFromInput } from "./GetThreeStringsFromInput";
-import { GameRuleEnforcerCallbacksInterface } from "./GameRuleEnforcerCallbacksInterface";
-import { SolutionNode } from "./SolutionNode";
+import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
 import { Data } from "./Data";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
-import { Mix } from "./Mix";
 import { Happen } from "./Happen";
 
 
@@ -26,7 +22,7 @@ import { Happen } from "./Happen";
 export class GameRuleEnforcer {
     public readonly Examine = 0;
 
-    private callbacks: GameRuleEnforcerCallbacksInterface;
+    private callbacks: HappenerCallbacksInterface;
     private listOfInvs: Array<string>;//array of string boolean tuples
     private listOfProps: Array<string>;//array of string boolean tuples
     private listOfVerbs: Array<string>;//array of string boolean tuples
@@ -55,18 +51,27 @@ export class GameRuleEnforcer {
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
        
-        const reaction = Data.GetHappeningsIfAny(objects);
-        if (reaction) {
-            console.log(reaction.text);
-            reaction.array.forEach((value) => {
-                switch (value.happen) {
-                    case Happen.
+        const happenings = Data.GetHappeningsIfAny(objects);
+        if (happenings) {
+            console.log(happenings.text);
+            happenings.array.forEach((happening) => {
+                switch (happening.happen) {
+                    case Happen.InvAppears:
+                        this.callbacks.OnInvVisbilityChange(this.GetIndexOfInv(happening.item), true, happening.item)
+                        break;
+                    case Happen.InvGoes:
+                        this.callbacks.OnInvVisbilityChange(this.GetIndexOfInv(happening.item), false, happening.item)
+                        break;
+                    case Happen.PropAppears:
+                        this.callbacks.OnPropVisbilityChange(this.GetIndexOfProp(happening.item), true, happening.item)
+                        break;
+                    case Happen.PropGoes:
+                        this.callbacks.OnPropVisbilityChange(this.GetIndexOfProp(happening.item), false, happening.item)
+                        break;
                 }
             });
         } else {
-            const header = "game.";
-            const script = "Say(\"That doesn't work\")";
-            //eval(header + script);
+            console.log("Nothing happened");
         }
     }
 
@@ -78,6 +83,11 @@ export class GameRuleEnforcer {
     GetIndexOfInv(item: string): number {
         const indexOfInv: number = this.listOfInvs.indexOf(item);
         return indexOfInv;
+    }
+
+    GetIndexOfProp(item: string): number {
+        const indexOfProp: number = this.listOfProps.indexOf(item);
+        return indexOfProp;
     }
 
     GetVerb(i: number): string {
@@ -95,7 +105,7 @@ export class GameRuleEnforcer {
         return name;
     }
 
-    SubscribeToCallbacks(callbacks: GameRuleEnforcerCallbacksInterface) {
+    SubscribeToCallbacks(callbacks: HappenerCallbacksInterface) {
         this.callbacks = callbacks;
     }
 

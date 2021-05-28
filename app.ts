@@ -6,13 +6,14 @@ import { SolveCyclicEtc } from "./SolveCyclicEtc";
 import { PlayerAI } from './PlayerAI';
 import { RowOfSheet } from './RowOfSheet';
 import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
-import { GameRuleEnforcerCallbacksInterface } from './GameRuleEnforcerCallbacksInterface';
-import { GameRuleEnforcer } from './GameRuleEnforcer';
+import { HappenerCallbacksInterface } from './HappenerCallbacksInterface';
+import { GameRuleEnforcer } from './Happener';
 import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
 import { SolutionCollection } from './SolutionCollection';
 import { SolutionNode } from './SolutionNode';
 import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
+import { ChooseBruteForceLocationless } from './ChooseBruteForceLocationless';
 const prompt = promptSync();
 
 function main(): void {
@@ -21,7 +22,6 @@ function main(): void {
         console.log("1. Quit");
         console.log("2. Solve to Leaf Nodes");
         console.log("3. Manual Play Through");
-        console.log("4. Brute Force Play Through");
         console.log("5. Quit");
 
         const choice = Number(prompt('Choose the goal you want to find leaves for (or enter verbatim) (Q to quit): '));
@@ -32,6 +32,8 @@ function main(): void {
                 ChooseTheGoalToFindLeavesFor.prototype.DoStuff();
                 break;
             case 3:
+                ChooseBruteForceLocationless();
+                break;
 
         }
     }

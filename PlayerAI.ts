@@ -1,9 +1,9 @@
 import { TruthTable } from './TruthTable';
-import { GameRuleEnforcer } from './GameRuleEnforcer';
-import {
-    GameRuleEnforcerCallbacksInterface
-} from './GameRuleEnforcerCallbacksInterface';
+import { GameRuleEnforcer } from './Happener';
+import { HappenerCallbacksInterface } from './HappenerCallbacksInterface';
 import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
+import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
+const prompt = promptSync();
 
 // April 2021
 // The blind / location - agnostic way to find solutions is to have an inv vs props table, and inv vs inv table, and a verb vs props table, and a verb vs invs table, then
@@ -19,7 +19,7 @@ import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
 // // even in maniac mansion it was like use radtion suit with meteot etc.
 //
 
-export class PlayerAI implements GameRuleEnforcerCallbacksInterface {
+export class PlayerAI implements HappenerCallbacksInterface {
 
     invVsInv: TruthTable;
     invVsVerb: TruthTable;

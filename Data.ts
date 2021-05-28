@@ -4,20 +4,15 @@ import { assert } from 'console';
 import data from '../20210415JsonPrivate/data/Data.json';
 import objects from '../20210415JsonPrivate/data/schema/objects/Objects.json'
 import _ from '../20210415JsonPrivate/data/schema/InstructionSet.json';
-import { MixedObjectsAndVerb, Mix } from './MixedObjectsAndVerb';
+import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
 import { Happen } from './Happen';
+import { Mix } from './Mix';
 
-/*
- *     ErrorVerbNotIdentified,
-        Single,
-        InvVsInv,
-        InvVsProp,
-        VerbvsProp,
-        VerbvsInv,
-        PropVsProp,
-        */
+function Stringify(name: string | undefined):string{
+    return name ? name : "";
+}
 export class Data {
     static GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
         const verb = strings[0].toLowerCase();
@@ -43,6 +38,8 @@ export class Data {
         return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
     }
 
+    
+
     static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
         const play = new Happenings();
         for (let i = 0; i < data.reactions.length; i++) {
@@ -51,54 +48,54 @@ export class Data {
                 case _.INV1_AND_INV2_FORM_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
                         play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " form an" + reaction.inv3 + ".";
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv2));
-                        play.array.push(new Happening(Happen.InvAppears, reaction.inv3));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv2)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
                         return play;
                     }
                     break;
                 case _.INV1_AND_INV2_GENERATE_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
                         play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " generate an" + reaction.inv3 + ".";
-                        play.array.push(new Happening(Happen.InvStays, reaction.inv1));
-                        play.array.push(new Happening(Happen.InvStays, reaction.inv2));
-                        play.array.push(new Happening(Happen.InvAppears, reaction.inv3));
+                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
                         return play;
                     }
                     break;
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                         play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " generate an" + reaction.inv3 + ".";
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
-                        play.array.push(new Happening(Happen.InvAppears, reaction.inv2));
-                        play.array.push(new Happening(Happen.InvStays, reaction.inv3));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
+                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv3)));
                         return play;
                     }
                     break;
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
                     if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                         play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
-                        play.array.push(new Happening(Happen.InvAppears, reaction.inv2));
-                        play.array.push(new Happening(Happen.PropStays, reaction.prop1));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
+                        play.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
                         return play;
                     }
                     break;
                 case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                         play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
-                        play.array.push(new Happening(Happen.InvAppears, reaction.inv2));
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv3));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv3)));
                         return play;
                     }
                     break;
                 case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
                     if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                         play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
-                        play.array.push(new Happening(Happen.PropStays, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                         return play;
                     }
@@ -106,9 +103,9 @@ export class Data {
                 case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
                     if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
                         play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
-                        play.array.push(new Happening(Happen.InvAppears, reaction.inv1));
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop2));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop2)));
                         //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                         return play;
                     }
@@ -116,62 +113,62 @@ export class Data {
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
-                        play.array.push(new Happening(Happen.InvStays, reaction.inv1));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
                         //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         play.text = "The " + reaction.prop1 + " has become a  " + reaction.prop2 + ".";
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         play.text = "The " + reaction.prop1 + " has become a  " + reaction.prop2 + ".";
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         play.text = "The " + reaction.prop1 + " has become a  " + reaction.prop2 + ".";
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop3));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop3)));
                         //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
-                    if (objects.Match("Grab", reaction.prop1)) {
+                    if (objects.Match("Grab", reaction.prop1,"")) {
                         play.text = "You now have a " + reaction.inv1 +
                             "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         return play;
                     }
                     break;
                 case _.PROP1_GOES_WHEN_GRAB_INV1:
-                    if (objects.Match("Grab", reaction.prop1)) {
+                    if (objects.Match("Grab", reaction.prop1,"")) {
                         play.text = "You now have a " + reaction.inv1;
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.InvGoes, reaction.inv1));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         return play;
                     }
                     break;
                 case _.TOGGLE_PROP1_BECOMES_PROP2:
-                    if (objects.Match("Toggle", reaction.prop1)) {
+                    if (objects.Match("Toggle", reaction.prop1,"")) {
                         play.text = "There is now a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.PropGoes, reaction.prop1));
-                        play.array.push(new Happening(Happen.PropAppears, reaction.prop2));
+                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                     }
                     break;
             }

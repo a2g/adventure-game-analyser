@@ -13,8 +13,7 @@
 // // even in maniac mansion it was like use radtion suit with meteot etc.
 //
 
-import { ParseRowsFromSheet } from "./ParseRowsFromSheet";
-import { GameRuleEnforcer } from "./GameRuleEnforcer";
+import { GameRuleEnforcer } from "./Happener";
 import { PlayerAI } from "./PlayerAI";
 import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
@@ -23,26 +22,25 @@ import { Mix } from "./Mix";
 
 
 
-function ChooseBruteForceLocationless() : void{
+export function ChooseBruteForceLocationless(): void {
 
     {
         GameRuleEnforcer.GetInstance().Initialize(new Data());
         const ai: PlayerAI = new PlayerAI(GameRuleEnforcer.GetInstance());
 
-     
+        for (; ;) {
+            let input: string[] = ai.GetNextCommand();
 
-
-        for (let command: string[] = ai.GetNextCommand(); ; command = ai.GetNextCommand()) {
-
-            if (command.length === 0) {
+            if (input.length === 0) {
                 // null command means ai can't find another guess.
                 // so lets just see what's going on here
-                command = ai.GetNextCommand();
+                input = ai.GetNextCommand();
                 break;
             }
-            GameReporter.GetInstance().ReportCommand(command);
-            
-            const objects = Data.GetMixedObjectsAndVerbFromThreeStrings(command);
+            GameReporter.GetInstance().ReportCommand(input);
+
+            // 
+            const objects = Data.GetMixedObjectsAndVerbFromThreeStrings(input);
 
             // handle errors
             if (objects.type.toString().startsWith("Error")) {
@@ -81,6 +79,7 @@ function ChooseBruteForceLocationless() : void{
                     break;
             }
 
+            // execute command - it will handle callbacks itself
             GameRuleEnforcer.GetInstance().ExecuteCommand(objects);
 
             const invs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
@@ -91,5 +90,5 @@ function ChooseBruteForceLocationless() : void{
             Sleep(500);
         }
         console.log("Success");
-    } 
+    }
 }

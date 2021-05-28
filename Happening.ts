@@ -2,7 +2,7 @@ import { Happen } from "./Happen";
 import { assert } from "console";
 
 export class Happening {
-    constructor(play: Happen, item: string | undefined) {
+    constructor(play: Happen, item: string) {
         this.happen = play;
         this.item = item;
         switch (play) {
@@ -18,6 +18,6 @@ export class Happening {
                 break;
         }
     }
-    item: string | undefined;
+    item: string;
     happen: Happen;
 }
