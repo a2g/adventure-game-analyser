@@ -6,6 +6,7 @@ import { SolutionNode } from "./SolutionNode";
 import { Data } from "./Data";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { Mix } from "./Mix";
+import { Happen } from "./Happen";
 
 
 // April 2021
@@ -53,13 +54,15 @@ export class GameRuleEnforcer {
     }
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
-        switch (objects.type) {
-            case Mix.InvVsInv:
-                if (this.listOfInvVisibilities[this.listOfInvs.indexOf(objects.objectA)
-        const reaction = Data.GetReactionDetailsIfAny(objects);
-
+       
+        const reaction = Data.GetHappeningsIfAny(objects);
         if (reaction) {
-            
+            console.log(reaction.text);
+            reaction.array.forEach((value) => {
+                switch (value.happen) {
+                    case Happen.
+                }
+            });
         } else {
             const header = "game.";
             const script = "Say(\"That doesn't work\")";

@@ -1,6 +1,5 @@
 import { Mix } from "./Mix";
 
-
 export class MixedObjectsAndVerb {
 
     constructor(type: Mix, verb: string, objectA: string, objectB: string) {
@@ -20,6 +19,6 @@ export class MixedObjectsAndVerb {
     }
     type: Mix;
     verb: string;
-    objectA: string | undefined;
-    objectB: string | undefined;
+    objectA: string;
+    objectB: string;
 }

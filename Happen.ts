@@ -1,4 +1,4 @@
-export enum Play {
+export enum Happen {
     InvGoes,
     InvStays,
     InvAppears,

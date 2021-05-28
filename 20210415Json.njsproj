@@ -60,14 +60,14 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ParseRowsFromSheet.ts" />
-    <TypeScriptCompile Include="Play.ts">
+    <TypeScriptCompile Include="Happen.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="PlayAction.ts">
+    <TypeScriptCompile Include="Happening.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="PlayerAI.ts" />
-    <TypeScriptCompile Include="ReactionDetails.ts">
+    <TypeScriptCompile Include="Happenings.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="RowOfSheet.ts" />

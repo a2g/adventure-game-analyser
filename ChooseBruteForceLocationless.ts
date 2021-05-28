@@ -19,14 +19,19 @@ import { PlayerAI } from "./PlayerAI";
 import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
 import { Data } from "./Data";
+import { Mix } from "./Mix";
 
 
 
-function ChooseBruteForceLocationless() {
+function ChooseBruteForceLocationless() : void{
 
     {
         GameRuleEnforcer.GetInstance().Initialize(new Data());
         const ai: PlayerAI = new PlayerAI(GameRuleEnforcer.GetInstance());
+
+     
+
+
         for (let command: string[] = ai.GetNextCommand(); ; command = ai.GetNextCommand()) {
 
             if (command.length === 0) {
@@ -36,12 +41,47 @@ function ChooseBruteForceLocationless() {
                 break;
             }
             GameReporter.GetInstance().ReportCommand(command);
-            const mixed = Data.GetMixedObjectsAndVerbFromThreeStrings(command);
-            if (mixed.type.toString().startsWith("Error")) {
-                console.log(mixed.type.toString() + " blah");
+            
+            const objects = Data.GetMixedObjectsAndVerbFromThreeStrings(command);
+
+            // handle errors
+            if (objects.type.toString().startsWith("Error")) {
+                console.log(objects.type.toString() + " blah");
                 break;
             }
-            GameRuleEnforcer.GetInstance().ExecuteCommand(mixed);
+
+            // handle more errors
+            const visibleInvs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
+            const visibleProps = GameRuleEnforcer.GetInstance().GetCurrentVisibleProps();
+            const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
+            const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
+            const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
+            const isObjectBInVisibleProps = visibleProps.includes(objects.objectB);
+
+            switch (objects.type) {
+                case Mix.InvVsInv:
+                    if (!isObjectAInVisibleInvs || !isObjectBInVisibleInvs)
+                        continue;
+                    break;
+                case Mix.InvVsProp:
+                    if (!isObjectAInVisibleInvs || !isObjectBInVisibleProps)
+                        continue;
+                    break;
+                case Mix.PropVsProp:
+                    if (!isObjectAInVisibleProps || !isObjectBInVisibleProps)
+                        continue;
+                    break;
+                case Mix.SingleVsInv:
+                    if (!isObjectAInVisibleInvs)
+                        continue;
+                    break;
+                case Mix.SingleVsProp:
+                    if (!isObjectAInVisibleProps)
+                        continue;
+                    break;
+            }
+
+            GameRuleEnforcer.GetInstance().ExecuteCommand(objects);
 
             const invs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
             GameReporter.GetInstance().ReportInventory(invs);
