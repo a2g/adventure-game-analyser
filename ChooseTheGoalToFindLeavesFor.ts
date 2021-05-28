@@ -30,8 +30,9 @@ export class ChooseTheGoalToFindLeavesFor {
             console.log(" " + (i) + ". " + array[i]);
         };
 
-        const choice = prompt('Choose the goal you want to find leaves for (or enter verbatim) (Q to quit): ');
-
+        const choice = prompt('Choose the goal you want to find leaves for (or enter verbatim) (b)ack ): ').toLowerCase();
+        if (choice === "b")
+            return;
 
         // use either index or 
         const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
@@ -61,8 +62,8 @@ export class ChooseTheGoalToFindLeavesFor {
                 });
 
                 // allow user to choose item
-                const input = prompt('Choose an ingredient of one of the solutions: ');
-                if (input === null) {
+                const input = prompt('Choose an ingredient of one of the solutions (b) back').toLowerCase();
+                if (input === null || input==="b") {
                     break;
                 } else {
                     // show map entry for chosen item

@@ -29,6 +29,14 @@ export function ChooseBruteForceLocationless(): void {
         const ai: PlayerAI = new PlayerAI(GameRuleEnforcer.GetInstance());
 
         for (; ;) {
+
+            const invs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
+            GameReporter.GetInstance().ReportInventory(invs);
+            const props = GameRuleEnforcer.GetInstance().GetCurrentVisibleProps();
+            GameReporter.GetInstance().ReportScene(props);
+
+            Sleep(500);
+
             let input: string[] = ai.GetNextCommand();
 
             if (input.length === 0) {
@@ -82,12 +90,6 @@ export function ChooseBruteForceLocationless(): void {
             // execute command - it will handle callbacks itself
             GameRuleEnforcer.GetInstance().ExecuteCommand(objects);
 
-            const invs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
-            GameReporter.GetInstance().ReportInventory(invs);
-            const props = GameRuleEnforcer.GetInstance().GetCurrentVisibleProps();
-            GameReporter.GetInstance().ReportScene(props);
-
-            Sleep(500);
         }
         console.log("Success");
     }

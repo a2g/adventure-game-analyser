@@ -212,14 +212,14 @@ export class Data {
 
         // preen starting set from JSON
         const startingSet = new Set<string>();
-        data.startingInvs.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
-            startingSet.add(value.prop);
+        data.startingInvs.forEach(function (value: { inv: string; }, index: number, array: { inv: string; }[]): void {
+            startingSet.add(value.inv);
         });
 
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const visibilities = new Array<boolean>();
-        objects.definitions.inv_type.enum.forEach((prop: string) => {
-            const isVisible = startingSet.has(prop);
+        objects.definitions.inv_type.enum.forEach((inv: string) => {
+            const isVisible = startingSet.has(inv);
             visibilities.push(isVisible);
         });
 

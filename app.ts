@@ -19,21 +19,20 @@ const prompt = promptSync();
 function main(): void {
     for (; ;) {
         console.log(" ");
-        console.log("1. Quit");
-        console.log("2. Solve to Leaf Nodes");
-        console.log("3. Manual Play Through");
-        console.log("5. Quit");
+        console.log("1. Solve to Leaf Nodes");
+        console.log("2. Manual Play Through");
+        console.log("B. Back");
 
-        const choice = Number(prompt('Choose the goal you want to find leaves for (or enter verbatim) (Q to quit): '));
+        const choice = prompt('Choose the goal you want to find leaves for (or enter verbatim) (b)ack): ').toLowerCase();
         switch (choice) {
-            case 1:
-                return;
-            case 2:
+            case '1':
                 ChooseTheGoalToFindLeavesFor.prototype.DoStuff();
                 break;
-            case 3:
+            case '2':
                 ChooseBruteForceLocationless();
                 break;
+            case 'b':
+                return;
 
         }
     }

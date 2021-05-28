@@ -46,6 +46,8 @@ export class GameRuleEnforcer {
         this.listOfInvs = Data.GetArrayOfInvs();
         this.listOfProps = Data.GetArrayOfProps();
         this.listOfVerbs = Data.GetArrayOfSingleObjectVerbs();
+        this.listOfInvVisibilities = Data.GetArrayOfInvVisibilities();
+        this.listOfPropVisibilities = Data.GetArrayOfPropVisibilities();
         this.listOfVerbVisibilities = Data.GetArrayOfVisibilitiesOfSingleObjectVerbs();
     }
 
