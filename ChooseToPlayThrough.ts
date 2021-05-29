@@ -13,7 +13,7 @@
 // // even in maniac mansion it was like use radtion suit with meteot etc.
 //
 
-import { GameRuleEnforcer } from "./Happener";
+import { Happener } from "./Happener";
 import { PlayerAI } from "./PlayerAI";
 import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
@@ -22,17 +22,17 @@ import { Mix } from "./Mix";
 
 
 
-export function ChooseBruteForceLocationless(): void {
+export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
 
     {
-        GameRuleEnforcer.GetInstance().Initialize(new Data());
-        const ai: PlayerAI = new PlayerAI(GameRuleEnforcer.GetInstance());
+        Happener.GetInstance().Initialize(new Data());
+        const ai: PlayerAI = new PlayerAI(Happener.GetInstance(), numberOfAutopilotTurns);
 
         for (; ;) {
 
-            const invs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
+            const invs = Happener.GetInstance().GetCurrentVisibleInventory();
             GameReporter.GetInstance().ReportInventory(invs);
-            const props = GameRuleEnforcer.GetInstance().GetCurrentVisibleProps();
+            const props = Happener.GetInstance().GetCurrentVisibleProps();
             GameReporter.GetInstance().ReportScene(props);
 
             Sleep(500);
@@ -45,7 +45,7 @@ export function ChooseBruteForceLocationless(): void {
                 input = ai.GetNextCommand();
                 break;
             }
-            GameReporter.GetInstance().ReportCommand(input);
+     
 
             // 
             const objects = Data.GetMixedObjectsAndVerbFromThreeStrings(input);
@@ -57,8 +57,8 @@ export function ChooseBruteForceLocationless(): void {
             }
 
             // handle more errors
-            const visibleInvs = GameRuleEnforcer.GetInstance().GetCurrentVisibleInventory();
-            const visibleProps = GameRuleEnforcer.GetInstance().GetCurrentVisibleProps();
+            const visibleInvs = Happener.GetInstance().GetCurrentVisibleInventory();
+            const visibleProps = Happener.GetInstance().GetCurrentVisibleProps();
             const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
             const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
             const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
@@ -66,29 +66,41 @@ export function ChooseBruteForceLocationless(): void {
 
             switch (objects.type) {
                 case Mix.InvVsInv:
-                    if (!isObjectAInVisibleInvs || !isObjectBInVisibleInvs)
+                    if (!isObjectAInVisibleInvs || !isObjectBInVisibleInvs) {
+                        console.log("One of those inventory items is not visible!");
                         continue;
+                    }
                     break;
                 case Mix.InvVsProp:
-                    if (!isObjectAInVisibleInvs || !isObjectBInVisibleProps)
+                    if (!isObjectAInVisibleInvs || !isObjectBInVisibleProps) {
+                        console.log("One of those items is not visible!");
                         continue;
+                    }
                     break;
                 case Mix.PropVsProp:
-                    if (!isObjectAInVisibleProps || !isObjectBInVisibleProps)
+                    if (!isObjectAInVisibleProps || !isObjectBInVisibleProps) {
+                        console.log("One of those props is not visible!");
                         continue;
+                    }
                     break;
                 case Mix.SingleVsInv:
-                    if (!isObjectAInVisibleInvs)
+                    if (!isObjectAInVisibleInvs) {
+                        console.log("That inv is not visible!");
                         continue;
+                    }
                     break;
                 case Mix.SingleVsProp:
-                    if (!isObjectAInVisibleProps)
+                    if (!isObjectAInVisibleProps) {
+                        console.log("That prop is not visible!");
                         continue;
+                    }
                     break;
             }
 
+            GameReporter.GetInstance().ReportCommand(input);
+
             // execute command - it will handle callbacks itself
-            GameRuleEnforcer.GetInstance().ExecuteCommand(objects);
+            Happener.GetInstance().ExecuteCommand(objects);
 
         }
         console.log("Success");

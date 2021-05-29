@@ -1,5 +1,5 @@
 import { TruthTable } from './TruthTable';
-import { GameRuleEnforcer } from './Happener';
+import { Happener } from './Happener';
 import { HappenerCallbacksInterface } from './HappenerCallbacksInterface';
 import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
@@ -27,20 +27,20 @@ export class PlayerAI implements HappenerCallbacksInterface {
     propVsVerb: TruthTable;
     propVsProp: TruthTable;
 
-    game: GameRuleEnforcer;
+    game: Happener;
     autoCount: number;
 
-    constructor(game: GameRuleEnforcer) {
+    constructor(game: Happener, numberOfAutopilotTurns: number) {
         this.game = game;
-        this.autoCount = 0;
+        this.autoCount = numberOfAutopilotTurns;
         const verbs = game.GetVerbsExcludingUse();
         const invs = game.GetEntireInvSuite();
-        const props = game.GetEntireInvSuite();
+        const props = game.GetEntirePropSuite();
 
         this.invVsInv = new TruthTable(invs, invs);
         this.invVsVerb = new TruthTable(invs, verbs);
         this.invVsProp = new TruthTable(invs, props);
-        this.propVsVerb = new TruthTable(verbs, props);
+        this.propVsVerb = new TruthTable(props, verbs);
         this.propVsProp = new TruthTable(props, props);
         this.game.SubscribeToCallbacks(this);
 
@@ -97,14 +97,15 @@ export class PlayerAI implements HappenerCallbacksInterface {
                 continue;
             }
         
-            const input = prompt('Enter a command with two or three terms (Q to quit): ');
+            const input = prompt('Enter a command with two or three terms (b)ack: ');
             if (!input) {
                 console.log("At least enter something");
                 continue;
             }
+
             const items: Array<string> = GetThreeStringsFromInput(input);
             if (items.length === 1) {
-                if (items[0].toUpperCase() === "Q")
+                if (items[0].toUpperCase() === "b")
                     break;
             }
 

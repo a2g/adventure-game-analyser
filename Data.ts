@@ -10,7 +10,7 @@ import { Happening } from './Happening';
 import { Happen } from './Happen';
 import { Mix } from './Mix';
 
-function Stringify(name: string | undefined):string{
+function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
 export class Data {
@@ -20,25 +20,35 @@ export class Data {
         if (verb === "grab") {
             if (objects.definitions.prop_type.enum.includes(strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
+            else if (objects.definitions.prop_type.enum.includes("prop_" + strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
             return new MixedObjectsAndVerb(Mix.ErrorGrabButNoProp, "", "", "");
         } else if (verb === "toggle") {
-            if (objects.definitions.inv_type.enum.includes(strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, strings[1], "");
             if (objects.definitions.prop_type.enum.includes(strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
+            else if (objects.definitions.prop_type.enum.includes("prop_" + strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
+            else if (objects.definitions.inv_type.enum.includes(strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, strings[1], "");
+            else if (objects.definitions.inv_type.enum.includes("inv_" + strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, "inv_" + strings[1], "");
             return new MixedObjectsAndVerb(Mix.ErrorToggleButNoInvOrProp, "", "", "");
         } else if (verb === "use") {
             if (objects.definitions.inv_type.enum.includes(strings[1]) && objects.definitions.inv_type.enum.includes(strings[2]))
                 return new MixedObjectsAndVerb(Mix.InvVsInv, verb, strings[1], strings[2]);
-            if (objects.definitions.inv_type.enum.includes(strings[1]) && objects.definitions.prop_type.enum.includes(strings[2]))
+            else if (objects.definitions.inv_type.enum.includes("inv_" + strings[1]) && objects.definitions.inv_type.enum.includes("inv_" + strings[2]))
+                return new MixedObjectsAndVerb(Mix.InvVsInv, verb, "inv_" + strings[1], "inv_" + strings[2]);
+            else if (objects.definitions.inv_type.enum.includes(strings[1]) && objects.definitions.prop_type.enum.includes(strings[2]))
                 return new MixedObjectsAndVerb(Mix.InvVsProp, verb, strings[1], strings[2]);
-            if (objects.definitions.prop_type.enum.includes(strings[1]) && objects.definitions.prop_type.enum.includes(strings[2]))
-                return new MixedObjectsAndVerb(Mix.PropVsProp, verb, strings[1], strings[2]);
+            else if (objects.definitions.inv_type.enum.includes("inv_" + strings[1]) && objects.definitions.prop_type.enum.includes("prop_" + strings[2]))
+                return new MixedObjectsAndVerb(Mix.InvVsProp, verb, "inv_" + strings[1], "prop_" + strings[2]);
+            else if (objects.definitions.prop_type.enum.includes("prop_" + strings[1]) && objects.definitions.prop_type.enum.includes("prop_" + strings[2]))
+                return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop_" + strings[1], "prop_" + strings[2]);
         }
         return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
     }
 
-    
+
 
     static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
         const play = new Happenings();
@@ -47,7 +57,7 @@ export class Data {
             switch (reaction.type) {
                 case _.INV1_AND_INV2_FORM_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
-                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " form an" + reaction.inv3 + ".";
+                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has formed an" + reaction.inv3;
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv2)));
                         play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
@@ -56,7 +66,7 @@ export class Data {
                     break;
                 case _.INV1_AND_INV2_GENERATE_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
-                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " generate an" + reaction.inv3 + ".";
+                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has generated an" + reaction.inv3;
                         play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
                         play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
@@ -65,7 +75,7 @@ export class Data {
                     break;
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
-                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " generate an" + reaction.inv3 + ".";
+                        play.text = "Your " + reaction.inv1 + " has become a " + reaction.inv2
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
                         play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv3)));
@@ -74,7 +84,7 @@ export class Data {
                     break;
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
                     if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
-                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
+                        play.text = "Your " + reaction.inv1 + " has become a  " + reaction.inv2;
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
                         play.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
@@ -83,7 +93,7 @@ export class Data {
                     break;
                 case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
                     if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
-                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
+                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2;
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv3)));
@@ -92,83 +102,85 @@ export class Data {
                     break;
                 case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
                     if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
-                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
+                        play.text = "Using the " + reaction.inv1 + " with the  " + reaction.prop1 + " has revealed a " + reaction.prop2;
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                         return play;
                     }
                     break;
                 case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
+                    // eg obtain inv_meteor via radiation suit with the meteor.
+                    // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
                     if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
-                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
+                        play.text = "You use the " + reaction.prop1 + " with the " + reaction.prop2 + " and obtain the " + reaction.inv1;
                         play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop2)));
-                        //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
                         return play;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2 + ".";
+                        play.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
-                        //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
+                        return play;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "The " + reaction.prop1 + " has become a  " + reaction.prop2 + ".";
+                        play.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
+                        return play;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "The " + reaction.prop1 + " has become a  " + reaction.prop2 + ".";
+                        play.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
+                        return play;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
                     if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "The " + reaction.prop1 + " has become a  " + reaction.prop2 + ".";
+                        play.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.prop2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop3)));
-                        //play.checks.push(new CheckableItem(Check.VerbVsProp, "Grab", reaction.prop1));
+                        return play;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
-                    if (objects.Match("Grab", reaction.prop1,"")) {
-                        play.text = "You now have a " + reaction.inv1 +
-                            "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
+                    if (objects.Match("Grab", reaction.prop1, "")) {
+                        play.text = "You now have a " + reaction.inv1;
+                        // deliberately don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
                         return play;
                     }
                     break;
                 case _.PROP1_GOES_WHEN_GRAB_INV1:
-                    if (objects.Match("Grab", reaction.prop1,"")) {
+                    if (objects.Match("Grab", reaction.prop1, "")) {
                         play.text = "You now have a " + reaction.inv1;
+                        // deliberately don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
                         return play;
                     }
                     break;
                 case _.TOGGLE_PROP1_BECOMES_PROP2:
-                    if (objects.Match("Toggle", reaction.prop1,"")) {
-                        play.text = "There is now a " + reaction.prop2;
+                    if (objects.Match("Toggle", reaction.prop1, "")) {
+                        play.text = "The " + reaction.prop1 + " has become a " + reaction.prop2;
                         play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        return play;
                     }
                     break;
             }
@@ -179,7 +191,7 @@ export class Data {
         return ["grab", "toggle"];
     }
     static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
-        return [true,true];
+        return [true, true];
     }
     static GetArrayOfProps(): Array<string> {
         return objects.definitions.prop_type.enum;
@@ -194,9 +206,9 @@ export class Data {
 
         // preen starting set from JSON
         const startingSet = new Set<string>();
-            data.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
-                startingSet.add(value.prop);
-            });
+        data.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
+            startingSet.add(value.prop);
+        });
 
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const visibilities = new Array<boolean>();

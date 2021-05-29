@@ -19,7 +19,7 @@ import { Happen } from "./Happen";
 // // even in maniac mansion it was like use radtion suit with meteot etc.
 //
 
-export class GameRuleEnforcer {
+export class Happener {
     public readonly Examine = 0;
 
     private callbacks: HappenerCallbacksInterface;
@@ -39,7 +39,7 @@ export class GameRuleEnforcer {
         this.listOfInvVisibilities = new Array<boolean>();
         this.listOfPropVisibilities = new Array<boolean>();
         this.listOfVerbVisibilities = new Array<boolean>(); 
-        this.callbacks = new PlayerAI(this);
+        this.callbacks = new PlayerAI(this, 0);
     }
 
     Initialize(data: Data){
@@ -57,18 +57,26 @@ export class GameRuleEnforcer {
         if (happenings) {
             console.log(happenings.text);
             happenings.array.forEach((happening) => {
+                // one of these will be wrong - but we won't use the wrong one :)
+                const prop = this.GetIndexOfProp(happening.item);
+                const inv = this.GetIndexOfInv(happening.item);
+
                 switch (happening.happen) {
                     case Happen.InvAppears:
-                        this.callbacks.OnInvVisbilityChange(this.GetIndexOfInv(happening.item), true, happening.item)
+                        this.listOfInvVisibilities[inv] = true;
+                        this.callbacks.OnInvVisbilityChange(inv, true, happening.item)
                         break;
                     case Happen.InvGoes:
-                        this.callbacks.OnInvVisbilityChange(this.GetIndexOfInv(happening.item), false, happening.item)
+                        this.listOfInvVisibilities[inv] = false;
+                        this.callbacks.OnInvVisbilityChange(inv, false, happening.item)
                         break;
                     case Happen.PropAppears:
-                        this.callbacks.OnPropVisbilityChange(this.GetIndexOfProp(happening.item), true, happening.item)
+                        this.listOfPropVisibilities[prop] = true;
+                        this.callbacks.OnPropVisbilityChange(prop, true, happening.item)
                         break;
                     case Happen.PropGoes:
-                        this.callbacks.OnPropVisbilityChange(this.GetIndexOfProp(happening.item), false, happening.item)
+                        this.listOfPropVisibilities[prop] = false;
+                        this.callbacks.OnPropVisbilityChange(prop, false, happening.item)
                         break;
                 }
             });
@@ -163,13 +171,13 @@ export class GameRuleEnforcer {
         }
     }*/
 
-    public static GetInstance(): GameRuleEnforcer {
-        if (!GameRuleEnforcer.instance) {
-            GameRuleEnforcer.instance = new GameRuleEnforcer();
+    public static GetInstance(): Happener {
+        if (!Happener.instance) {
+            Happener.instance = new Happener();
         }
-        return GameRuleEnforcer.instance;
+        return Happener.instance;
     }
-    private static instance: GameRuleEnforcer;
+    private static instance: Happener;
 
 
 

@@ -1,9 +1,7 @@
 export function GetDisplayName(name: string) {
-    const parts = name.slice(1).split(/(?=[A-Z])/);
-    let result = parts[0].toLowerCase();
-    for (let i = 1; i < parts.length; i++) {
-        result += " " + parts[i].toLowerCase();
-    }
-
-    return result;
+    if (name.startsWith("inv_"))
+        return name.slice(4);
+    if (name.startsWith("prop_"))
+        return name.slice(5);
+    return name;
 }

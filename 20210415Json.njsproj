@@ -41,7 +41,7 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ChooseBruteForceLocationless.ts" />
+    <TypeScriptCompile Include="ChooseToPlayThrough.ts" />
     <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
