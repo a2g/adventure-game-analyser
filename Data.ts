@@ -9,11 +9,43 @@ import { Happenings } from './Happenings';
 import { Happening } from './Happening';
 import { Happen } from './Happen';
 import { Mix } from './Mix';
+import { DataInterface } from './DataInterface';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
-export class Data {
+export class Data implements DataInterface {
+    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
+        return Data.GetMixedObjectsAndVerbFromThreeStrings(strings);
+    }
+    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
+        return Data.GetHappeningsIfAny(objects);
+    }
+    GetArrayOfSingleObjectVerbs(): string[] {
+        return Data.GetArrayOfSingleObjectVerbs();
+    }
+    GetArrayOfVisibilitiesOfSingleObjectVerbs(): boolean[] {
+        return Data.GetArrayOfVisibilitiesOfSingleObjectVerbs();
+    }
+    GetArrayOfProps(): string[] {
+        return Data.GetArrayOfProps();
+    }
+    GetArrayOfInvs(): string[] {
+        return Data.GetArrayOfProps();
+    }
+    GetArrayOfRegs(): string[] {
+        return Data.GetArrayOfRegs();
+    }
+    GetArrayOfPropVisibilities(): boolean[] {
+        return Data.GetArrayOfPropVisibilities();
+    }
+    GetArrayOfInvVisibilities(): boolean[] {
+        return Data.GetArrayOfInvVisibilities();
+    }
+    GetSolutionNodeMap(): SolutionNodeMap {
+        return Data.GetSolutionNodeMap();
+    }
+
     static GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
         const verb = strings[0].toLowerCase();
 
@@ -279,7 +311,6 @@ export class Data {
                         mapOfTransactionsByInput.AddToMap(new SolutionNode(output, type, inputA, inputB));
                     }
                     break;
-
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
                     {
                         // keeping prop1

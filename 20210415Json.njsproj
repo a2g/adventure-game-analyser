@@ -118,6 +118,9 @@
     <TypeScriptCompile Include="MixedObjectsAndVerb.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="DataInterface.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="test\" />
