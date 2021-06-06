@@ -14,6 +14,7 @@ import { SolutionNode } from './SolutionNode';
 import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { ChooseToPlayThrough } from './ChooseToPlayThrough';
+import { ChooseToFindUnused } from './ChooseToFindUnused';
 const prompt = promptSync();
 
 function main(): void {
@@ -21,6 +22,7 @@ function main(): void {
         console.log(" ");
         console.log("1. Play Through");
         console.log("2. Solve to Leaf Nodes");
+        console.log("3. Check for unused props and invs ");
         console.log("B. Back");
 
         const choice = prompt('Choose the goal you want to find leaves for (or enter verbatim) (b)ack): ').toLowerCase();
@@ -30,6 +32,9 @@ function main(): void {
                 break;
             case '2':
                 ChooseTheGoalToFindLeavesFor.prototype.DoStuff();
+                break;
+            case '3':
+                ChooseToFindUnused.prototype.DoStuff();
                 break;
             case 'b':
                 return;

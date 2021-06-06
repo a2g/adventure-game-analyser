@@ -1,6 +1,6 @@
 //Typescript Unit test
 import assert = require('assert');
-import { Data } from '../Data';
+import { Scenario } from '../Scenario';
 import { SolutionCollection } from '../SolutionCollection';
 import { SolutionNode } from '../SolutionNode';
 import { Solution } from '../Solution';
@@ -10,7 +10,7 @@ describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
 
         // arrange
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -29,7 +29,7 @@ describe("Solution", () => {
     it("Test prop_death_by_guitar", () => {
 
         // arrange
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
@@ -47,7 +47,7 @@ describe("Solution", () => {
     it("Test prop_death_by_slamdunk", () => {
 
         // arrange
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
@@ -66,7 +66,7 @@ describe("Solution", () => {
     it("Test the cloning at numerous ways to kill demon", () => {
 
         // arrange
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
@@ -95,7 +95,7 @@ describe("Solution", () => {
     it("prop_moderately_accelerated_vacuum_tube", () => {
 
         // arrange
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_moderately_accelerated_vacuum_tube";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));

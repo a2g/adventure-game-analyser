@@ -1,4 +1,4 @@
-import { Data } from "./Data";
+import { Scenario } from "./Scenario";
 import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
@@ -37,7 +37,7 @@ export class ChooseTheGoalToFindLeavesFor {
         // use either index or 
         const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
         console.log("\"" + objective + "\" was entered");
-        const mapOfReactionsByInput = Data.GetSolutionNodeMap();
+        const mapOfReactionsByInput = Scenario.GetSolutionNodeMap();
 
         const collection = new SolutionCollection();
         if (objective !== null) {

@@ -17,7 +17,7 @@ import { Happener } from "./Happener";
 import { PlayerAI } from "./PlayerAI";
 import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
-import { Data } from "./Data";
+import { Scenario } from "./Scenario";
 import { Mix } from "./Mix";
 
 
@@ -25,7 +25,7 @@ import { Mix } from "./Mix";
 export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
 
     {
-        Happener.GetInstance().Initialize(new Data());
+        Happener.GetInstance().Initialize(new Scenario());
         const ai: PlayerAI = new PlayerAI(Happener.GetInstance(), numberOfAutopilotTurns);
 
         for (; ;) {
@@ -48,7 +48,7 @@ export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
      
 
             // 
-            const objects = Data.GetMixedObjectsAndVerbFromThreeStrings(input);
+            const objects = Scenario.GetMixedObjectsAndVerbFromThreeStrings(input);
 
             // handle errors
             if (objects.type.toString().startsWith("Error")) {

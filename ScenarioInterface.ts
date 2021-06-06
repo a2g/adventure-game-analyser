@@ -1,19 +1,9 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
-import { SolutionNode } from './SolutionNode';
-import { assert } from 'console';
-import data from '../20210415JsonPrivate/data/Data.json';
-import objects from '../20210415JsonPrivate/data/schema/objects/Objects.json'
-import _ from '../20210415JsonPrivate/data/schema/InstructionSet.json';
+import _ from '../20210415JsonPrivate/scenario/schema/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
-import { Happening } from './Happening';
-import { Happen } from './Happen';
-import { Mix } from './Mix';
 
-function Stringify(name: string | undefined): string {
-    return name ? name : "";
-}
-export interface DataInterface {
+export interface ScenarioInterface {
     GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb;
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
     GetArrayOfSingleObjectVerbs(): Array<string>;

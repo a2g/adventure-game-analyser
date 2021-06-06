@@ -1,6 +1,6 @@
 import { PlayerAI } from "./PlayerAI";
 import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
-import { Data } from "./Data";
+import { Scenario } from "./Scenario";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { Happen } from "./Happen";
 
@@ -42,18 +42,18 @@ export class Happener {
         this.callbacks = new PlayerAI(this, 0);
     }
 
-    Initialize(data: Data){
-        this.listOfInvs = Data.GetArrayOfInvs();
-        this.listOfProps = Data.GetArrayOfProps();
-        this.listOfVerbs = Data.GetArrayOfSingleObjectVerbs();
-        this.listOfInvVisibilities = Data.GetArrayOfInvVisibilities();
-        this.listOfPropVisibilities = Data.GetArrayOfPropVisibilities();
-        this.listOfVerbVisibilities = Data.GetArrayOfVisibilitiesOfSingleObjectVerbs();
+    Initialize(data: Scenario){
+        this.listOfInvs = Scenario.GetArrayOfInvs();
+        this.listOfProps = Scenario.GetArrayOfProps();
+        this.listOfVerbs = Scenario.GetArrayOfSingleObjectVerbs();
+        this.listOfInvVisibilities = Scenario.GetArrayOfInvVisibilities();
+        this.listOfPropVisibilities = Scenario.GetArrayOfPropVisibilities();
+        this.listOfVerbVisibilities = Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
     }
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
        
-        const happenings = Data.GetHappeningsIfAny(objects);
+        const happenings = Scenario.GetHappeningsIfAny(objects);
         if (happenings) {
             console.log(happenings.text);
             happenings.array.forEach((happening) => {

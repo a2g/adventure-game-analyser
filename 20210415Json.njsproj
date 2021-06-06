@@ -32,15 +32,17 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\20210415JsonPrivate\data\Data.json" />
-    <Content Include="..\20210415JsonPrivate\data\schema\InstructionSet.json" />
-    <Content Include="..\20210415JsonPrivate\data\schema\objects\Objects.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\Scenario.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\schema\Schema.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\schema\objects\Objects.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\schema\script\Script.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ChooseToFindUnused.ts" />
     <TypeScriptCompile Include="ChooseToPlayThrough.ts" />
     <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">
       <SubType>Code</SubType>
@@ -51,7 +53,7 @@
     <TypeScriptCompile Include="Happener.ts" />
     <TypeScriptCompile Include="HappenerCallbacksInterface.ts" />
     <TypeScriptCompile Include="GetDisplayName.ts" />
-    <TypeScriptCompile Include="Data.ts" />
+    <TypeScriptCompile Include="Scenario.ts" />
     <TypeScriptCompile Include="GetThreeStringsFromInput.ts" />
     <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.ts" />
     <TypeScriptCompile Include="IsOk.ts" />
@@ -71,7 +73,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="RowOfSheet.ts" />
-    <TypeScriptCompile Include="SingleFileData.ts" />
     <TypeScriptCompile Include="Solution.ts" />
     <TypeScriptCompile Include="SolutionCollection.ts" />
     <TypeScriptCompile Include="SolutionNode.ts" />
@@ -118,7 +119,7 @@
     <TypeScriptCompile Include="MixedObjectsAndVerb.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="DataInterface.ts">
+    <TypeScriptCompile Include="ScenarioInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

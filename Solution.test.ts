@@ -1,15 +1,14 @@
 //Typescript Unit test
 import assert = require('assert');
-import { Data } from './Data';
-import { SolutionCollection } from './SolutionCollection';
-import { SolutionNodeInput } from './SolutionNodeInput';
+import { SolutionCollection } from './SolutionCollection'; 
 import { SolutionNode } from './SolutionNode';
 import { Solution } from './Solution';
+import { Scenario } from './Scenario';
 
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -25,7 +24,7 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_guitar", () => {
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -51,7 +50,7 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_slamdunk", () => {
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -79,7 +78,7 @@ describe("Solution", () => {
 
 
     it("Test the cloning at numerous ways to kill demon", () => {
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));
@@ -116,7 +115,7 @@ describe("Solution", () => {
   
 
     it("Test cloning with turn on/turn off", () => {
-        const map = Data.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("","",objective), map));
