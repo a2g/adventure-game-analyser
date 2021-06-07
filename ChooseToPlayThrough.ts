@@ -19,6 +19,8 @@ import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
 import { Scenario } from "./Scenario";
 import { Mix } from "./Mix";
+import { SolutionNode } from "./SolutionNode";
+import { SolutionNodeInput } from "./SolutionNodeInput";
 
 
 
@@ -27,13 +29,47 @@ export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
     {
         Happener.GetInstance().Initialize(new Scenario());
         const ai: PlayerAI = new PlayerAI(Happener.GetInstance(), numberOfAutopilotTurns);
-
+        const autos = Scenario.GetSolutionNodeMap().GetAutos();
+        
         for (; ;) {
-
             const invs = Happener.GetInstance().GetCurrentVisibleInventory();
             GameReporter.GetInstance().ReportInventory(invs);
             const props = Happener.GetInstance().GetCurrentVisibleProps();
             GameReporter.GetInstance().ReportScene(props);
+            const regs = Happener.GetInstance().GetCurrentlyTrueRegs();
+            GameReporter.GetInstance().ReportScene(props);
+
+            autos.forEach((node: SolutionNode) => {
+                let numberSatisified = 0;
+                node.inputs.forEach((input: SolutionNodeInput) => {
+                    if (input.inputName.startsWith("prop_")) {
+                        if (props.includes(input.inputName)) {
+                            numberSatisified = numberSatisified + 1;
+                        }
+                    }
+                    else if (input.inputName.startsWith("inv_")) {
+                        if (invs.includes(input.inputName)) {
+                            numberSatisified++;
+                        }
+                    } else if (input.inputName.startsWith("reg_")) {
+                        if (regs.includes(input.inputName)) {
+                            numberSatisified++;
+                        }
+                    }
+                });
+                if (numberSatisified === node.inputs.length) {
+                    if (node.output.startsWith("prop_")) {
+                        console.log("Auto: prop set visiable " + node.output);
+                        Happener.GetInstance().SetPropVisible(node.output, true);
+                    } else if (node.output.startsWith("reg_")) {
+                        console.log("Auto: reg set to true " + node.output);
+                        Happener.GetInstance().SetRegValue(node.output, true);
+                    } else if (node.output.startsWith("inv_")) {
+                        console.log("Auto: inv set to true " + node.output);
+                        Happener.GetInstance().SetInvVisible(node.output, true);
+                    }
+                }
+            });
 
             Sleep(500);
 

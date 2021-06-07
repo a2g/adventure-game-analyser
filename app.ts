@@ -23,9 +23,9 @@ function main(): void {
         console.log("1. Play Through");
         console.log("2. Solve to Leaf Nodes");
         console.log("3. Check for unused props and invs ");
-        console.log("B. Back");
+        console.log("b. bail");
 
-        const choice = prompt('Choose the goal you want to find leaves for (or enter verbatim) (b)ack): ').toLowerCase();
+        const choice = prompt('Choose an option (b)ail): ').toLowerCase();
         switch (choice) {
             case '1':
                 ChooseToPlayThrough(0);

@@ -23,32 +23,54 @@ export class Happener {
     public readonly Examine = 0;
 
     private callbacks: HappenerCallbacksInterface;
-    private listOfInvs: Array<string>;//array of string boolean tuples
-    private listOfProps: Array<string>;//array of string boolean tuples
-    private listOfVerbs: Array<string>;//array of string boolean tuples
-    private listOfInvVisibilities: Array<boolean>;//array of string boolean tuples
-    private listOfPropVisibilities: Array<boolean>;//array of string boolean tuples
-    private listOfVerbVisibilities: Array<boolean>;//array of string boolean tuples
+    private listOfInvs: Array<string>;
+    private listOfProps: Array<string>;
+    private listOfVerbs: Array<string>;
+    private listOfRegs: Array<string>;
+    private listOfInvVisibilities: Array<boolean>;
+    private listOfPropVisibilities: Array<boolean>;
+    private listOfVerbVisibilities: Array<boolean>;
+    private listOfRegsThatAreTrue: Array<boolean>;
 
 
     constructor() {
         this.listOfInvs = new Array<string>();
+        this.listOfRegs = new Array<string>();
         this.listOfProps = new Array<string>();
         this.listOfVerbs = new Array<string>();
+        
         
         this.listOfInvVisibilities = new Array<boolean>();
         this.listOfPropVisibilities = new Array<boolean>();
         this.listOfVerbVisibilities = new Array<boolean>(); 
+        this.listOfRegsThatAreTrue = new Array<boolean>();
         this.callbacks = new PlayerAI(this, 0);
     }
 
     Initialize(data: Scenario){
         this.listOfInvs = Scenario.GetArrayOfInvs();
+        this.listOfRegs = Scenario.GetArrayOfRegs();
         this.listOfProps = Scenario.GetArrayOfProps();
         this.listOfVerbs = Scenario.GetArrayOfSingleObjectVerbs();
         this.listOfInvVisibilities = Scenario.GetArrayOfInvVisibilities();
         this.listOfPropVisibilities = Scenario.GetArrayOfPropVisibilities();
         this.listOfVerbVisibilities = Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
+        this.listOfRegsThatAreTrue = Scenario.GetArrayOfRegStartingValues();
+    }
+
+    SetRegValue(reg: string, value: boolean): void {
+        const index = this.GetIndexOfReg(reg);
+        this.listOfRegsThatAreTrue[index] = value;
+    }
+
+    SetInvVisible(inv: string, value: boolean): void {
+        const index = this.GetIndexOfInv(inv);
+        this.listOfInvVisibilities[index] = value;
+    }
+
+    SetPropVisible(prop: string, value: boolean): void {
+        const index = this.GetIndexOfProp(prop);
+        this.listOfPropVisibilities[index] = value;
     }
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
@@ -95,6 +117,12 @@ export class Happener {
         return indexOfInv;
     }
 
+
+    GetIndexOfReg(item: string): number {
+        const indexOfReg: number = this.listOfRegs.indexOf(item);
+        return indexOfReg;
+    }
+
     GetIndexOfProp(item: string): number {
         const indexOfProp: number = this.listOfProps.indexOf(item);
         return indexOfProp;
@@ -106,12 +134,17 @@ export class Happener {
     }
 
     GetInv(i: number): string {
-        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup in GetItem";
+        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup in GetInv";
         return name;
     }
 
     GetProp(i: number): string {
-        const name: string = i >= 0 ? this.GetEntirePropSuite()[i][0] : "-1 lookup in GetItem";
+        const name: string = i >= 0 ? this.GetEntirePropSuite()[i][0] : "-1 lookup in GetProp";
+        return name;
+    }
+
+    GetReg(i: number): string {
+        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup for GetReg";
         return name;
     }
 
@@ -124,6 +157,14 @@ export class Happener {
         this.listOfVerbs.forEach(function (Verb) {
             toReturn.push([Verb, true]);
         });
+        return toReturn;
+    }
+
+    GetEntireRegSuit(): Array<[string, boolean]> {
+        const toReturn = new Array<[string, boolean]>();
+        for (let i = 0; i < this.listOfProps.length; i++) {
+            toReturn.push([this.listOfRegs[i], this.listOfRegsThatAreTrue[i]]);
+        }
         return toReturn;
     }
 
@@ -161,15 +202,14 @@ export class Happener {
         return toReturn;
     }
 
-    /*
-    ShowOrHide(name: string, newVisibility: boolean) {
-        const index: number = this.GetIndexOfItem(name);
-        if (index !== -1) {
-            // call callback
-            this.listOfPropVisibilities[index] = newVisibility;
-            this.callbacks.OnItemVisbilityChange(index, newVisibility, name);
+    GetCurrentlyTrueRegs(): Array<string>{
+        const toReturn = new Array<string>();
+        for (let i = 0; i < this.listOfRegs.length; i++) {
+            if (this.listOfRegsThatAreTrue[i] === true)
+                toReturn.push(this.listOfRegs[i]);
         }
-    }*/
+        return toReturn;
+    }
 
     public static GetInstance(): Happener {
         if (!Happener.instance) {

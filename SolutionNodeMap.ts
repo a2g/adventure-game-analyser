@@ -21,6 +21,18 @@ export class SolutionNodeMap {
         }
     }
 
+    GetAutos(): Array<SolutionNode> {
+        const toReturn = new Array<SolutionNode>();
+        this.solutionNodeMap.forEach((value: SolutionNode[]) => {
+            value.forEach((node: SolutionNode) => {
+                if (node.type.startsWith("AUTO")){
+                    toReturn.push(node);
+                }
+            });
+        });
+        return toReturn;
+    }
+
     HasAnyTransactionsThatOutputObject(objectToObtain: string): boolean {
         return this.solutionNodeMap.has(objectToObtain);
     }

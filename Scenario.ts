@@ -95,159 +95,310 @@ export class Scenario implements ScenarioInterface {
         return "undefined";
     }
 
+    static GetSolutionNodeMap(): SolutionNodeMap {
+        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
+        const result = Scenario.SingleGiantSwtich(true, notUsed) as SolutionNodeMap;
+        return result;
+    }
+
     static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        const play = new Happenings();
+        const result = Scenario.SingleGiantSwtich(false, objects) as Happenings | null;
+        return result;
+    }
+
+    static SingleGiantSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
+        const happs = new Happenings();
+        const solutionNodesMappedByInput = new SolutionNodeMap(null);
+
         for (let i = 0; i < scenario.reactions.length; i++) {
             const reaction = scenario.reactions[i];
-            switch (reaction.script) {
+            const scriptType = reaction.script;
+            switch (scriptType) {
+                case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
+                    {
+                        const input = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        const prop1 = "" + scenario.reactions[i].prop3;
+                        const prop2 = "" + scenario.reactions[i].prop4;
+                        const prop3 = "" + scenario.reactions[i].prop5;
+                        const prop4 = "" + scenario.reactions[i].prop6;
+                        const prop5 = "" + scenario.reactions[i].prop7;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, prop1, prop2, prop3, prop4, prop5));
+                    }
+                    break;
+                case _.AUTO_REG1_TRIGGERS_REG2:
+                    {
+                        const input = "" + scenario.reactions[i].reg1;
+                        const output = "" + scenario.reactions[i].reg2;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+                    }
+                    break;
+                case _.AUTO_REG1_TRIGGERED_BY_PROPS:
+                    {
+                        const output = "" + scenario.reactions[i].reg1;
+                        const prop1 = "" + scenario.reactions[i].prop1;
+                        const prop2 = "" + scenario.reactions[i].prop2;
+                        const prop3 = "" + scenario.reactions[i].prop3;
+                        const prop4 = "" + scenario.reactions[i].prop4;
+                        const prop5 = "" + scenario.reactions[i].prop5;
+                        const prop6 = "" + scenario.reactions[i].prop6;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, prop2, prop3, prop4, prop5, prop6));
+                    }
+                    break;
+
                 case _.INV1_AND_INV2_FORM_INV3:
-                    if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
-                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has formed an" + reaction.inv3;
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv2)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        // losing all
+                        const inputA = "" + scenario.reactions[i].inv1;
+                        const inputB = "" + scenario.reactions[i].inv2;
+                        const output = "" + scenario.reactions[i].inv3;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+                    }
+                    else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
+                        happs.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has formed an" + reaction.inv3;
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv2)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
+                        return happs;
                     }
                     break;
                 case _.INV1_AND_INV2_GENERATE_INV3:
-                    if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
-                        play.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has generated an" + reaction.inv3;
-                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        // losing none
+                        const inputA = "" + scenario.reactions[i].inv1;
+                        const inputB = "" + scenario.reactions[i].inv2;
+                        const output = "" + scenario.reactions[i].inv3;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+                    }
+                    else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
+                        happs.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has generated an" + reaction.inv3;
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv3)));
+                        return happs;
                     }
                     break;
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
-                    if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
-                        play.text = "Your " + reaction.inv1 + " has become a " + reaction.inv2
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
-                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv3)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        // losing inv
+                        const inputA = "" + scenario.reactions[i].inv1;
+                        const output = "" + scenario.reactions[i].inv2;
+                        const inputB = "" + scenario.reactions[i].inv3;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
+                        happs.text = "Your " + reaction.inv1 + " has become a " + reaction.inv2
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv3)));
+                        return happs;
                     }
                     break;
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
-                    if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
-                        play.text = "Your " + reaction.inv1 + " has become a  " + reaction.inv2;
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
-                        play.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        // keeping prop1
+                        const inputA = "" + scenario.reactions[i].inv1;
+                        const output = "" + scenario.reactions[i].inv2;
+                        const inputB = "" + scenario.reactions[i].prop1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
+                        happs.text = "Your " + reaction.inv1 + " has become a  " + reaction.inv2;
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
+                        happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                        return happs;
                     }
                     break;
                 case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
-                    if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
-                        play.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2;
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv3)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        // losing inv
+                        const inputA = "" + scenario.reactions[i].inv1;
+                        const output = "" + scenario.reactions[i].inv2;
+                        const inputB = "" + scenario.reactions[i].inv3;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
+                        happs.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2;
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv2)));
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv3)));
+                        return happs;
                     }
                     break;
                 case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
-                    if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
-                        play.text = "Using the " + reaction.inv1 + " with the  " + reaction.prop1 + " has revealed a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + scenario.reactions[i].inv1;
+                        const inputB = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
+                        happs.text = "Using the " + reaction.inv1 + " with the  " + reaction.prop1 + " has revealed a " + reaction.prop2;
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        return happs;
                     }
                     break;
                 case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
                     // eg obtain inv_meteor via radiation suit with the meteor.
                     // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
-                    if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
-                        play.text = "You use the " + reaction.prop1 + " with the " + reaction.prop2 + " and obtain the " + reaction.inv1;
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop2)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const output = "" + scenario.reactions[i].inv1;
+                        const input1 = "" + scenario.reactions[i].prop1;
+                        const input2 = "" + scenario.reactions[i].prop2;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input1, input2));
+
+                    } else if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
+                        happs.text = "You use the " + reaction.prop1 + " with the " + reaction.prop2 + " and obtain the " + reaction.inv1;
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop2)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
-                    if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        const inputB = "" + scenario.reactions[i].inv1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
+                        happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
-                    if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        const inputB = "" + scenario.reactions[i].prop3;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
+                        happs.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
-                    if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        const inputB = "" + scenario.reactions[i].inv1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
+                        happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
-                    if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop3)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        const inputB = "" + scenario.reactions[i].prop3;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
+                        happs.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.prop2;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop3)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
-                    if (objects.Match("Grab", reaction.prop1, "")) {
-                        play.text = "You now have a " + reaction.inv1;
+                    if (isCollectingSolutionNodes) {
+                        // This is a weird one, because there are two real-life outputs
+                        // but only one puzzle output. I forget how I was going to deal with this.
+                        const inputA = "" + scenario.reactions[i].prop1;
+                        //const inputB = "" + reactionsFile.reactions[i].prop2;
+                        const output = "" + scenario.reactions[i].inv1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA));
+
+                    } else if (objects.Match("Grab", reaction.prop1, "")) {
+                        happs.text = "You now have a " + reaction.inv1;
                         // deliberately don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
-                        return play;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_CHANGES_STATE_TO_PROP2_VIA_KEEPING_INV1:
-                    if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                        play.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " is now " + Scenario.GetState(reaction.prop2);
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        play.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        const inputB = "" + scenario.reactions[i].inv1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
+
+                    } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
+                        happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " is now " + Scenario.GetState(reaction.prop2);
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                        return happs;
                     }
                     break;
                 case _.PROP1_GOES_WHEN_GRAB_INV1:
-                    if (objects.Match("Grab", reaction.prop1, "")) {
-                        play.text = "You now have a " + reaction.inv1;
+                    if (isCollectingSolutionNodes) {
+                        const input = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].inv1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+
+                    } else if (objects.Match("Grab", reaction.prop1, "")) {
+                        happs.text = "You now have a " + reaction.inv1;
                         // deliberately don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
-                        return play;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
+                        return happs;
                     }
                     break;
                 case _.TOGGLE_PROP1_BECOMES_PROP2:
-                    if (objects.Match("Toggle", reaction.prop1, "")) {
-                        play.text = "The " + reaction.prop1 + " has is now " + Scenario.GetState(reaction.prop2);
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const input = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+
+                    } else if (objects.Match("Toggle", reaction.prop1, "")) {
+                        happs.text = "The " + reaction.prop1 + " has is now " + Scenario.GetState(reaction.prop2);
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        return happs;
                     }
                     break;
                 case _.TOGGLE_PROP1_CHANGES_STATE_TO_PROP2:
-                    if (objects.Match("Toggle", reaction.prop1, "")) {
-                        play.text = "The " + reaction.prop1 + " has become a " + reaction.prop2;
-                        play.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
-                        play.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                        return play;
+                    if (isCollectingSolutionNodes) {
+                        const input = "" + scenario.reactions[i].prop1;
+                        const output = "" + scenario.reactions[i].prop2;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+
+                    } else if (objects.Match("Toggle", reaction.prop1, "")) {
+                        happs.text = "The " + reaction.prop1 + " has become a " + reaction.prop2;
+                        happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
+                        return happs;
                     }
                     break;
+                case _.HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE:
+                    break;
+                default:
+                    assert(false && scriptType && "We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema.");
+
             }
         }
-        return null;
+        return isCollectingSolutionNodes ? solutionNodesMappedByInput : null;
     }
     static GetArrayOfSingleObjectVerbs(): Array<string> {
         return ["grab", "toggle"];
@@ -255,6 +406,7 @@ export class Scenario implements ScenarioInterface {
     static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
         return [true, true];
     }
+
     static GetArrayOfProps(): Array<string> {
         return objects.definitions.prop_type.enum;
     }
@@ -263,6 +415,14 @@ export class Scenario implements ScenarioInterface {
     }
     static GetArrayOfRegs(): Array<string> {
         return objects.definitions.reg_type.enum;
+    }
+
+    static GetArrayOfRegStartingValues(): Array<boolean> {
+        const array = new Array<boolean>();
+        objects.definitions.reg_type.enum.forEach((value: string) => {
+            array.push(value.length>0);// I used value.length>0 to get rid of the unused variable warnin
+        });
+        return array;
     }
     static GetArrayOfPropVisibilities(): Array<boolean> {
 
@@ -300,156 +460,6 @@ export class Scenario implements ScenarioInterface {
         return visibilities;
     }
 
-    static GetSolutionNodeMap(): SolutionNodeMap {
-        const mapOfTransactionsByInput = new SolutionNodeMap(null);
-        for (let i = 0; i < scenario.reactions.length; i++) {
-            const scriptType = scenario.reactions[i].script;
-            switch (scriptType) {
-                case _.INV1_AND_INV2_FORM_INV3:
-                    {
-                        // losing all
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const inputB = "" + scenario.reactions[i].inv2;
-                        const output = "" + scenario.reactions[i].inv3;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.INV1_AND_INV2_GENERATE_INV3:
-                    {
-                        // losing none
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const inputB = "" + scenario.reactions[i].inv2;
-                        const output = "" + scenario.reactions[i].inv3;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
-                    {
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const inputB = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
-                case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
-                    {
-                        // losing inv
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const output = "" + scenario.reactions[i].inv2;
-                        const inputB = "" + scenario.reactions[i].inv3;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
-                    {
-                        // keeping prop1
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const output = "" + scenario.reactions[i].inv2;
-                        const inputB = "" + scenario.reactions[i].prop1;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
-                case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
-                    {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].inv1;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.PROP1_GOES_WHEN_GRAB_INV1:
-                    {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].inv1;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, input));
-                    }
-                    break;
-                case _.PROP1_BECOMES_PROP2_WHEN_GRAB_INV1:
-                    {
-                        // This is a weird one, because there are two real-life outputs
-                        // but only one puzzle output. I forget how I was going to deal with this.
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        //const inputB = "" + reactionsFile.reactions[i].prop2;
-                        const output = "" + scenario.reactions[i].inv1;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA));
-                    }
-                    break;
-                case _.TOGGLE_PROP1_CHANGES_STATE_TO_PROP2:
-                case _.TOGGLE_PROP1_BECOMES_PROP2:
-                    {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, input));
-                    }
-                    break;
-                case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
-                case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
-                    {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].prop3;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.PROP1_CHANGES_STATE_TO_PROP2_VIA_KEEPING_INV1:
-                    {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].inv1;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
-                    }
-                    break;
-                case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
-                    {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const prop1 = "" + scenario.reactions[i].prop3;
-                        const prop2 = "" + scenario.reactions[i].prop4;
-                        const prop3 = "" + scenario.reactions[i].prop5;
-                        const prop4 = "" + scenario.reactions[i].prop6;
-                        const prop5 = "" + scenario.reactions[i].prop7;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, input, prop1, prop2, prop3, prop4, prop5));
-                    }
-                    break;
-
-                case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
-                    {
-                        const output = "" + scenario.reactions[i].inv1;
-                        const input1 = "" + scenario.reactions[i].prop1;
-                        const input2 = "" + scenario.reactions[i].prop2;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, input1, input2));
-                    }
-                    break;
-
-                case _.AUTO_REG1_TRIGGERS_REG2:
-                    {
-                        const input = "" + scenario.reactions[i].reg1;
-                        const output = "" + scenario.reactions[i].reg2;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, input));
-                    }
-                    break;
-                case _.AUTO_REG1_TRIGGERED_BY_PROPS:
-                    {
-                        const output = "" + scenario.reactions[i].reg1;
-                        const prop1 = "" + scenario.reactions[i].prop1;
-                        const prop2 = "" + scenario.reactions[i].prop2;
-                        const prop3 = "" + scenario.reactions[i].prop3;
-                        const prop4 = "" + scenario.reactions[i].prop4;
-                        const prop5 = "" + scenario.reactions[i].prop5;
-                        const prop6 = "" + scenario.reactions[i].prop6;
-                        mapOfTransactionsByInput.AddToMap(new SolutionNode(output, scriptType, prop1, prop2, prop3, prop4, prop5, prop6));
-                    }
-                    break;
-                case _.HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE:
-                    break;
-                default:
-                    assert(false && scriptType && "We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema.");
-            }// end switch
-        }// end loop
-        return mapOfTransactionsByInput;
-    }
 
 
 }
