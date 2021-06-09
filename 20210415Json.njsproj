@@ -42,6 +42,7 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ChooseTheGoalToConcoctSolutionFor.ts" />
     <TypeScriptCompile Include="ChooseToFindUnused.ts" />
     <TypeScriptCompile Include="ChooseToPlayThrough.ts" />
     <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">

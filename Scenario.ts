@@ -97,16 +97,16 @@ export class Scenario implements ScenarioInterface {
 
     static GetSolutionNodeMap(): SolutionNodeMap {
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-        const result = Scenario.SingleGiantSwtich(true, notUsed) as SolutionNodeMap;
+        const result = Scenario.SingleBigSwtich(true, notUsed) as SolutionNodeMap;
         return result;
     }
 
     static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        const result = Scenario.SingleGiantSwtich(false, objects) as Happenings | null;
+        const result = Scenario.SingleBigSwtich(false, objects) as Happenings | null;
         return result;
     }
 
-    static SingleGiantSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
+    static SingleBigSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 

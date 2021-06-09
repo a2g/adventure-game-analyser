@@ -15,6 +15,7 @@ import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { ChooseToPlayThrough } from './ChooseToPlayThrough';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
+import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 const prompt = promptSync();
 
 function main(): void {
@@ -23,6 +24,7 @@ function main(): void {
         console.log("1. Play Through");
         console.log("2. Solve to Leaf Nodes");
         console.log("3. Check for unused props and invs ");
+        console.log("4. Try Concocting solutions ");
         console.log("b. bail");
 
         const choice = prompt('Choose an option (b)ail): ').toLowerCase();
@@ -35,6 +37,9 @@ function main(): void {
                 break;
             case '3':
                 ChooseToFindUnused.prototype.DoStuff();
+                break;
+            case '4':
+                ChooseTheGoalToConcoctSolutionFor.prototype.DoStuff();
                 break;
             case 'b':
                 return;

@@ -8,6 +8,5 @@ export class Happenings {
     }
     verb: string;
     text: string;
-    array: Array<Happening>;
-   // checks: Array<CheckableItem>;
+    array: Array<Happening>; 
 }

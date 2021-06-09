@@ -5,7 +5,7 @@ import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
 
- 
+
 
 export class ChooseTheGoalToFindLeavesFor {
     static array: Array<string> = [
@@ -22,69 +22,72 @@ export class ChooseTheGoalToFindLeavesFor {
     ];
     public DoStuff(): void {
 
-        console.log(" ");
 
-        const array = ChooseTheGoalToFindLeavesFor.array;
+        for (; ;) {
+            console.log(" ");
 
-        for (let i = 0; i < array.length; i++) {
-            console.log(" " + (i) + ". " + array[i]);
-        };
+            const array = ChooseTheGoalToFindLeavesFor.array;
 
-        const choice = prompt('Choose the goal you want to find leaves for (or enter verbatim) (b)ack ): ').toLowerCase();
-        if (choice === "b")
-            return;
+            for (let i = 0; i < array.length; i++) {
+                console.log(" " + (i) + ". " + array[i]);
+            };
 
-        // use either index or 
-        const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
-        console.log("\"" + objective + "\" was entered");
-        const mapOfReactionsByInput = Scenario.GetSolutionNodeMap();
+            const choice = prompt('Choose the goal you want to concoct solution for (or enter verbatim) (b)ack ): ').toLowerCase();
+            if (choice === "b")
+                break;
 
-        const collection = new SolutionCollection();
-        if (objective !== null) {
-            collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfReactionsByInput));
+            // use either index or 
+            const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
+            console.log("\"" + objective + "\" was entered");
+            const mapOfReactionsByInput = Scenario.GetSolutionNodeMap();
 
-            do {
-                collection.ProcessUntilCloning();
-            } while (collection.IsNodesRemaining());
+            const collection = new SolutionCollection();
+            if (objective !== null) {
+                collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfReactionsByInput));
+
+                do {
+                    collection.ProcessUntilCloning();
+                } while (collection.IsNodesRemaining());
 
 
-            for (; ;) {
-                console.log("Number of solutions = " + collection.length);
-                let i = 0;
-                // display list
-                collection.forEach(function (solution: Solution) {
-                    console.log("------------------------------------------------------------(solution separator)");
-                    const needs = solution.absoluteLeafNodes;
-                    needs.forEach((value: string, key: string, map: Map<string, string>) => {
-                        i++;
-                        console.log("    " + i + "." + map.get(key));
-                    });
-                });
-
-                // allow user to choose item
-                const input = prompt('Choose an ingredient of one of the solutions (b) back').toLowerCase();
-                if (input === null || input==="b") {
-                    break;
-                } else {
-                    // show map entry for chosen item
-                    const number = Number(input);
-                    if (number > 0 && number <= array.length) {
-                        let i = 0;
-                        collection.forEach(function (solution: Solution) {
-                            const needs = solution.absoluteLeafNodes;
-                            needs.forEach((value: string, key: string) => {
-                                i++;
-                                if (i === number) {
-                                    console.log("This is the life of the selected ingredient: ");
-                                    const items: Array<string> = key.split("/");
-                                    const length = items.length;
-                                    for (let j = length - 1; j > 1; j--) {
-                                        console.log("    " + (length - j) + "." + items[j]);
-                                    };
-                                    prompt("Hit a key to continue...");
-                                }
-                            });
+                for (; ;) {
+                    console.log("Number of solutions = " + collection.length);
+                    let numberOfLeaves = 0;
+                    // display list
+                    collection.forEach(function (solution: Solution) {
+                        console.log("------------------------------------------------------------(solution separator)");
+                        const needs = solution.absoluteLeafNodes;
+                        needs.forEach((value: string, key: string, map: Map<string, string>) => {
+                            numberOfLeaves++;
+                            console.log("    " + numberOfLeaves + "." + map.get(key));
                         });
+                    });
+
+                    // allow user to choose item
+                    const input = prompt('Choose an ingredient of one of the solutions (b) back').toLowerCase();
+                    if (input === null || input === "b") {
+                        break;
+                    } else {
+                        // show map entry for chosen item
+                        const number = Number(input);
+                        if (number > 0 && number <= numberOfLeaves) {
+                            let i = 0;
+                            collection.forEach(function (solution: Solution) {
+                                const needs = solution.absoluteLeafNodes;
+                                needs.forEach((value: string, key: string) => {
+                                    i++;
+                                    if (i === number) {
+                                        console.log("This is the life of the selected ingredient: ");
+                                        const items: Array<string> = key.split("/");
+                                        const length = items.length;
+                                        for (let j = length - 1; j > 1; j--) {
+                                            console.log("    " + (length - j) + "." + items[j]);
+                                        };
+                                        prompt("Hit a key to continue...");
+                                    }
+                                });
+                            });
+                        }
                     }
                 }
             }

@@ -59,13 +59,13 @@ export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
                 });
                 if (numberSatisified === node.inputs.length) {
                     if (node.output.startsWith("prop_")) {
-                        console.log("Auto: prop set visiable " + node.output);
+                        console.log("Auto: prop set visible " + node.output);
                         Happener.GetInstance().SetPropVisible(node.output, true);
                     } else if (node.output.startsWith("reg_")) {
                         console.log("Auto: reg set to true " + node.output);
                         Happener.GetInstance().SetRegValue(node.output, true);
                     } else if (node.output.startsWith("inv_")) {
-                        console.log("Auto: inv set to true " + node.output);
+                        console.log("Auto: inv set to visible " + node.output);
                         Happener.GetInstance().SetInvVisible(node.output, true);
                     }
                 }
