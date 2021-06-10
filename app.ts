@@ -19,7 +19,7 @@ import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolut
 const prompt = promptSync();
 
 function main(): void {
-    for (; ;) {
+    while(true) {
         console.log(" ");
         console.log("1. Play Through");
         console.log("2. Solve to Leaf Nodes");

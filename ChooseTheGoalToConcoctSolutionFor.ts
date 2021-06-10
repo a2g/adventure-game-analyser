@@ -4,6 +4,9 @@ import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { GetDisplayName } from "./GetDisplayName";
+import { SolutionNodeInput } from "./SolutionNodeInput";
+import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
+import { Raw } from "./Raw";
 const prompt = promptSync();
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
@@ -69,13 +72,13 @@ export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(): void {
 
 
-        for (; ;) {
+        while(true) {
             console.log(" ");
 
             const array = ChooseTheGoalToConcoctSolutionFor.array;
 
             for (let i = 0; i < array.length; i++) {
-                console.log(" " + (i) + ". " + array[i]);
+                console.log(" " + i + ". " + array[i]);
             };
 
             const choice = prompt('Choose the goal you want to concoct solution for (or enter verbatim) (b)ack ): ').toLowerCase();
@@ -95,17 +98,16 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     collection.ProcessUntilCloning();
                 } while (collection.IsNodesRemaining());
 
-                const startingProps = Scenario.GetArrayOfProps();
-                const startingInvs = Scenario.GetArrayOfInvs();
-                const startingPropsAndInvs = UnionSetFromArrays(startingProps, startingInvs);
+                const startingProps = Scenario.GetSetOfStartingProps();
+                const startingInvs = Scenario.GetSetOfStartingInvs();
+                const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
 
                 console.log("Number of solutions = " + collection.length);
                 
-                for (let j = 0; j < collection.length; j++) {
-                    const solution = collection[j];
+                for (const solution of collection) {
                     const setFromTheSolution = new Set<string>();
-                    solution.absoluteLeafNodes.forEach((value: string,key:string) => {
-                            setFromTheSolution.add(value);
+                    solution.absoluteLeafNodes.forEach((value: SolutionNode) => {
+                        setFromTheSolution.add(value.output);
                     });
                     setFromTheSolution.forEach((entry: string) => {
                         console.log(GetDisplayName(entry));
@@ -122,12 +124,15 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     console.log("===============================================");
                     const choice = prompt('').toLowerCase();
                     if (choice==='y') {
-                        do {
-                            const node: SolutionNode | null = solution.GetNextSolvedSolutionNode();
-                            if (node) {
-
+                        while(true) {
+                            let command: RawObjectsAndVerb | null = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
+                            if (!command) {
+                                command = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
+                                break;
                             }
-                        }while(node!=null)
+                            if (command.type !== Raw.None)
+                                command.Dump();
+                        }
                     }
                 }
                 

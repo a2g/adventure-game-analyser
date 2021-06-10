@@ -18,8 +18,7 @@ export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string
     actions.add("init");// this means they are like that from the start
 
     // use jar blah
-    for (let j = 0; j < rows.length; j++) {
-        const row = rows[j];
+    for (let row of rows) { 
         // 1. test ** howToMakeVisible **
         const rowObject: string = row.name.trim();
         const command: string = row.commandToMakeVisible.trim();
@@ -57,8 +56,8 @@ export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string
         const scriptToRunWhenMadeVisible: string = row.scriptToRunWhenMadeVisible;
         if (command !== "none") {
             const parts: string[] = command.split(";");
-            for (let i = 0; i < parts.length; i++) {
-                const trimmed: string = parts[i].trim();
+            for (const part in parts) {
+                const trimmed: string = part.trim();
             }
         }
     };

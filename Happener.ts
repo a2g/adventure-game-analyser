@@ -52,8 +52,8 @@ export class Happener {
         this.listOfRegs = Scenario.GetArrayOfRegs();
         this.listOfProps = Scenario.GetArrayOfProps();
         this.listOfVerbs = Scenario.GetArrayOfSingleObjectVerbs();
-        this.listOfInvVisibilities = Scenario.GetArrayOfInvVisibilities();
-        this.listOfPropVisibilities = Scenario.GetArrayOfPropVisibilities();
+        this.listOfInvVisibilities = Scenario.GetArrayOInvVisibilities()
+        this.listOfPropVisibilities = Scenario.GetArrayOPropVisibilities();
         this.listOfVerbVisibilities = Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
         this.listOfRegsThatAreTrue = Scenario.GetArrayOfRegStartingValues();
     }
@@ -162,7 +162,7 @@ export class Happener {
 
     GetEntireRegSuit(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfProps.length; i++) {
+        for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
             toReturn.push([this.listOfRegs[i], this.listOfRegsThatAreTrue[i]]);
         }
         return toReturn;
@@ -170,7 +170,7 @@ export class Happener {
 
     GetEntirePropSuite(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfProps.length; i++) {
+        for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
             toReturn.push([this.listOfProps[i], this.listOfPropVisibilities[i]]);
         }
         return toReturn;
@@ -178,7 +178,7 @@ export class Happener {
 
     GetEntireInvSuite(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfInvs.length; i++) {
+        for (let i = 0; i < this.listOfInvs.length; i++) {// classic forloop useful because shared index
             toReturn.push([this.listOfInvs[i], this.listOfInvVisibilities[i]]);
         }
         return toReturn;
@@ -186,7 +186,7 @@ export class Happener {
 
     GetCurrentVisibleInventory(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfInvs.length; i++) {
+        for (let i = 0; i < this.listOfInvs.length; i++) {// classic forloop useful because shared index
             if (this.listOfInvVisibilities[i] === true)
                 toReturn.push(this.listOfInvs[i]);
         }
@@ -195,7 +195,7 @@ export class Happener {
 
     GetCurrentVisibleProps(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfProps.length; i++) {
+        for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
             if ( this.listOfPropVisibilities[i] === true)
                 toReturn.push(this.listOfProps[i]);
         }
@@ -204,7 +204,7 @@ export class Happener {
 
     GetCurrentlyTrueRegs(): Array<string>{
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfRegs.length; i++) {
+        for (let i = 0; i < this.listOfRegs.length; i++) {// classic forloop useful because shared index
             if (this.listOfRegsThatAreTrue[i] === true)
                 toReturn.push(this.listOfRegs[i]);
         }

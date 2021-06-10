@@ -6,9 +6,9 @@ export class TruthTable {
         const numberOfColumns = colNamesAndInitialVisibilities.length;
         const numberOfRows = rowNamesAndInitialVisibilities.length;
         this.theActualTicks = new Array<Array<boolean>>();
-        for (let x = 0; x < numberOfColumns; x++) {
+        for (let x = 0; x < numberOfColumns; x++) { // classic forloop because shared
             this.theActualTicks[x] = new Array<boolean>();
-            for (let y = 0; y < numberOfRows; y++) {
+            for (let y = 0; y < numberOfRows; y++) {// classic forloop because shared
                 this.theActualTicks[x][y] = false;
             }
         }
@@ -78,7 +78,7 @@ export class TruthTable {
         const array = new Array<boolean>();
         if (file >= this.ColumnsStartHere) {
 
-            for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {
+            for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {// classic for because shared
                 const rowObject = this.rowAndColumnDetailsCombined.get(row);
                 if (!rowObject)
                     throw RangeError("" + row);
@@ -86,7 +86,7 @@ export class TruthTable {
             }
         } else {
             // its actually a row
-            for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {
+            for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {// classic forloop
                 const columnObject = this.rowAndColumnDetailsCombined.get(col + this.ColumnsStartHere);
                 if (!columnObject)
                     throw RangeError("" + col);
@@ -101,7 +101,7 @@ export class TruthTable {
         if (file >= this.ColumnsStartHere) {
 
             const col = file - this.ColumnsStartHere;
-            for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {
+            for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {// classic forloop
 
                 array.push(this.theActualTicks[col][row]);
             }
@@ -109,7 +109,7 @@ export class TruthTable {
 
             // its actually a row
             const row = file;
-            for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {
+            for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {// classic forloop
                 array.push(this.theActualTicks[col][row]);
             }
         }
@@ -131,7 +131,7 @@ export class TruthTable {
         if (file >= this.ColumnsStartHere) {
 
             const column = file - this.ColumnsStartHere;
-            for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {
+            for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {// classic forloop
                 const rowObject = this.rowAndColumnDetailsCombined.get(row);
                 if (!rowObject)
                     throw RangeError("" + row);
@@ -145,7 +145,7 @@ export class TruthTable {
 
             // its actually a row
             const row = file;
-            for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {
+            for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {// classic forloop
                 const columnObject = this.rowAndColumnDetailsCombined.get(col + this.ColumnsStartHere);
                 if (!columnObject)
                     throw RangeError("" + col);
@@ -170,14 +170,14 @@ export class TruthTable {
 
     FindMostNearlyCompleteRowOrColumnCombined(): number {
         const listOfPairs = Array.from(this.rowAndColumnDetailsCombined.entries());
-        for (let i = 0; i < listOfPairs.length; i++) {
+        for (let i = 0; i < listOfPairs.length; i++) {// classic forloop (shared)
             const pair = listOfPairs[i];
             let ticks = 0;
             //count the ticks
 
             if (this.IsColumn(pair[0])) {
                 const actualColumn = pair[0] - this.ColumnsStartHere;
-                for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {
+                for (let row = 0; row < this.GetNumberOfCellsInARow(); row++) {// classic forloop because shared
                     const rowObject = this.rowAndColumnDetailsCombined.get(row);
                     if (!rowObject)
                         throw RangeError("" + row);
@@ -187,7 +187,7 @@ export class TruthTable {
                 }
             } else {
                 const actualRow = pair[0];
-                for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {
+                for (let col = 0; col < this.GetNumberOfCellsInAColumn(); col++) {// classic forloop because shared
                     const columnObject = this.rowAndColumnDetailsCombined.get(col + this.ColumnsStartHere);
                     if (!columnObject)
                         throw RangeError("" + col);
@@ -205,9 +205,9 @@ export class TruthTable {
 
         ///...but we don't want files with zero ticks remaining, so 
         ///  return the first one whose tick count hasn't reached the upper limit.
-        for (let i = 0; i < listOfPairs.length; i++) {
-            const key = listOfPairs[i][0];
-            const value = listOfPairs[i][1];
+        for (const pair of listOfPairs) {
+            const key = pair[0];
+            const value = pair[1];
 
             if (value.isVisible) {
                 if (this.IsColumn(key)) {

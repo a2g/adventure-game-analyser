@@ -23,7 +23,7 @@ export class ChooseTheGoalToFindLeavesFor {
     public DoStuff(): void {
 
 
-        for (; ;) {
+        while(true) {
             console.log(" ");
 
             const array = ChooseTheGoalToFindLeavesFor.array;
@@ -57,9 +57,9 @@ export class ChooseTheGoalToFindLeavesFor {
                     collection.forEach(function (solution: Solution) {
                         console.log("------------------------------------------------------------(solution separator)");
                         const needs = solution.absoluteLeafNodes;
-                        needs.forEach((value: string, key: string, map: Map<string, string>) => {
+                        needs.forEach((value: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
                             numberOfLeaves++;
-                            console.log("    " + numberOfLeaves + "." + map.get(key));
+                            console.log("    " + numberOfLeaves + "." + value.output);
                         });
                     });
 
@@ -74,7 +74,7 @@ export class ChooseTheGoalToFindLeavesFor {
                             let i = 0;
                             collection.forEach(function (solution: Solution) {
                                 const needs = solution.absoluteLeafNodes;
-                                needs.forEach((value: string, key: string) => {
+                                needs.forEach((value: SolutionNode, key: string) => {
                                     i++;
                                     if (i === number) {
                                         console.log("This is the life of the selected ingredient: ");

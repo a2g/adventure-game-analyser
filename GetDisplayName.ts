@@ -7,5 +7,7 @@ export function GetDisplayName(name: string) {
         return Colors.Cyan + name.slice(5) + Colors.Reset;
     if (name.startsWith("reg_"))
         return Colors.Green + name.slice(5) + Colors.Reset;
+    else if (name.startsWith("use") || name.startsWith("toggle") || name.startsWith("grab"))
+        return Colors.Yellow + name + Colors.Reset;
     return name;
 }

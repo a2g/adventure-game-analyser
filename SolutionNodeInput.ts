@@ -9,8 +9,19 @@ export class SolutionNodeInput {
     }
 
     CreateClone(uncompleted: Set<SolutionNode>) {
-        return new SolutionNodeInput(this.inputName, this.inputNode? this.inputNode.CreateClone(uncompleted) : null);
+        return new SolutionNodeInput(this.inputName, this.inputNode ? this.inputNode.CreateClone(uncompleted) : null);
     }
+
+    SetInputNode(node: SolutionNode, parent :SolutionNode) {
+        this.inputNode = node;
+        node.SetParent(parent);
+    }
+
+    GetInputNode(): SolutionNode | null {
+        return this.inputNode;
+    }
+    // it is important for input node to be private - because whenever it is set, we should
+    // also set the parent
     inputName: string;
-    inputNode: SolutionNode|null;
+    private inputNode: SolutionNode | null;
 };

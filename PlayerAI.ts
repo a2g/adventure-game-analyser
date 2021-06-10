@@ -44,12 +44,12 @@ export class PlayerAI implements HappenerCallbacksInterface {
         this.propVsProp = new TruthTable(props, props);
         this.game.SubscribeToCallbacks(this);
 
-        // since use iSpanner with iSpanner is illegal move, we block these out
-        for (let i = 0; i < invs.length; i++) {
+        // since use same with same is illegal move, we block these out
+        for (let i = 0; i < invs.length; i++) {// classic forloop useful because shared index
             this.invVsInv.SetColumnRow(i, i);
         }
-        // since use iSpanner with iSpanner is illegal move, we block these out
-        for (let i = 0; i < props.length; i++) {
+        // since use same with same is illegal move, we block these out
+        for (let i = 0; i < props.length; i++) {// classic forloop useful because shared index
             this.propVsProp.SetColumnRow(i, i);
         }
 

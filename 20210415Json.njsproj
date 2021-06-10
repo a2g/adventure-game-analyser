@@ -54,6 +54,8 @@
     <TypeScriptCompile Include="Happener.ts" />
     <TypeScriptCompile Include="HappenerCallbacksInterface.ts" />
     <TypeScriptCompile Include="GetDisplayName.ts" />
+    <TypeScriptCompile Include="Raw.ts" />
+    <TypeScriptCompile Include="RawObjectsAndVerb.ts" />
     <TypeScriptCompile Include="Scenario.ts" />
     <TypeScriptCompile Include="GetThreeStringsFromInput.ts" />
     <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.ts" />

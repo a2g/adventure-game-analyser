@@ -19,15 +19,9 @@ export class GameReporter {
     }
 
     private Prettify(itemName: string): string {
-        if (itemName === itemName.toLowerCase()) {
-            return this.Verb(itemName);
-        }
         return GetDisplayName(itemName);
     }
 
-    private Verb(itemName: string): string {
-        return "" + Colors.Green + itemName + Colors.Reset;
-    }
     private Speech(speech: string): string {
         return "" + Colors.Blue + "\"" + speech + "\"" + Colors.Reset;
     }
@@ -36,7 +30,7 @@ export class GameReporter {
 
         let prettifiedComand = "";
         if (command.length !== 3)
-            prettifiedComand = this.Verb("Command length is not 3");
+            prettifiedComand = Colors.Red  + "Command length is not 3!" + Colors.Reset;
         else if (command[2] !== "")
             prettifiedComand = this.Prettify(command[0]) + " " + this.Prettify(command[1]) + " with " + this.Prettify(command[2]);
         else if (command[1] !== "")
@@ -54,7 +48,7 @@ export class GameReporter {
             return console.log("You aren't carrying anything");
 
         let inventoryString: string = "You are carrying: " + GetDisplayName(inventoryItems[0]);
-        for (let i = 1; i < inventoryItems.length; i++) {
+        for (let i = 1; i < inventoryItems.length; i++) {// classic forloop useful because starting at 1
             inventoryString += ", " + GetDisplayName(inventoryItems[i]);
         };
 
@@ -66,7 +60,7 @@ export class GameReporter {
             return console.log("There's nothing around you");
 
         let sceneString: string = "You can see: " + GetDisplayName(sceneItems[0]);
-        for (let i = 1; i < sceneItems.length; i++) {
+        for (let i = 1; i < sceneItems.length; i++) {// classic forloop useful because starting at 1
             sceneString += ", " + GetDisplayName(sceneItems[i]);
         };
 

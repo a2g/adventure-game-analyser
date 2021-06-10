@@ -14,7 +14,7 @@ export class ChooseToFindUnused {
         const invs = Scenario.GetArrayOfInvs();
         const props = Scenario.GetArrayOfProps();
         const it = Scenario.GetSolutionNodeMap().GetValues();
-        for (; ;) {
+        while(true){
             const c = it.next();
             if (c.done)
                 break;

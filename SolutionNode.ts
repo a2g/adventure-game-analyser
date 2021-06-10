@@ -11,6 +11,7 @@ export class SolutionNode {
     type: string 
     output: string;
     inputs: Array<SolutionNodeInput>;
+    parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
 
     constructor(output: string,
         type  = "undefined",
@@ -21,21 +22,22 @@ export class SolutionNode {
         inputE = "undefined",
         inputF = "undefined",// no statics in typescript, so this seemed preferable than global let Null = "Null";
     ) {
+        this.parent = null;
         this.id = globalId++;
         this.output = output;
         this.type = type;
         this.inputs = new Array<SolutionNodeInput>();
-        if (inputA != "undefined" && inputA !== "undefined")
+        if (inputA !== "undefined" && inputA !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputA));
-        if (inputB != "undefined" && inputB !== "undefined")
+        if (inputB !== "undefined" && inputB !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputB));
-        if (inputC != "undefined" && inputC !== "undefined")
+        if (inputC !== "undefined" && inputC !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputC));
-        if (inputD != "undefined" && inputD !== "undefined")
+        if (inputD !== "undefined" && inputD !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputD));
-        if (inputE != "undefined" && inputE !== "undefined")
+        if (inputE !== "undefined" && inputE !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputE));
-        if (inputF != "undefined" && inputF !== "undefined")
+        if (inputF !== "undefined" && inputF !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputF));
     }
 
@@ -59,11 +61,11 @@ export class SolutionNode {
     }
 
     FindAnyNodeMatchingGivenOutputRecursively(id: number): SolutionNode | null {
-        if (this.id == id)
+        if (this.id === id)
             return this;
-        for (let i = 0; i < this.inputs.length; i++) {
-            const input = this.inputs[i];
-            const result = input.inputNode ? input.inputNode.FindAnyNodeMatchingGivenOutputRecursively(id) : null;
+        for (const input of this.inputs) {
+            const inputNode = input.GetInputNode();
+            const result = inputNode ? inputNode.FindAnyNodeMatchingGivenOutputRecursively(id) : null;
             if (result)
                 return result;
         };
@@ -71,28 +73,28 @@ export class SolutionNode {
     }
 
     ProcessUntilCloning(solution: Solution, solutions: SolutionCollection, path: string): boolean {
-        path += "/" + this.output;
-        if (this.output === SpecialNodes.VerifiedLeaf)
+        path +=  this.output + "/";
+        if (this.type === SpecialNodes.VerifiedLeaf)
             return false;// false just means keep processing.
 
-         // we do need to use a for-loop because, we clone this array then index it with k
-        for (let k = 0; k < this.inputs.length; k++) {
+        for (let k = 0; k < this.inputs.length; k++) {// classic forloop useful because shared index on cloned node
 
             // without this following line, any clones will attempt to reclone themselves 
             // and Solution.ProcessUntilCompletion will continue forever
-            if (this.inputs[k].inputNode)
+            if (this.inputs[k].GetInputNode())
                 continue;
             const objectToObtain = this.inputs[k].inputName;
             const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
             if (!matchingTransactions || matchingTransactions.length === 0) {
-                this.inputs[k].inputNode = new SolutionNode(SpecialNodes.VerifiedLeaf);
-                solution.AddVerifiedLeaf(path + "/" + this.inputs[k].inputName, this.inputs[k].inputName );
+                const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
+                this.inputs[k].SetInputNode(verifiedLeaf, this);
+                solution.AddVerifiedLeaf(path + this.inputs[k].inputName+"/", verifiedLeaf );
             }
             else if (matchingTransactions) {
                 // we have the convention that zero is the currentSolution
                 // so we start at the highest index in the list
                 // we when we finish the loop, we are with
-                for (let i = matchingTransactions.length - 1; i >= 0; i--) {
+                for (let i = matchingTransactions.length - 1; i >= 0; i--) {// // classic forloop useful because reverse iterator, and check for last iteration
 
                     const theMatchingTransaction = matchingTransactions[i];
                     // 1. get solution - because we might be cloning one;
@@ -107,7 +109,7 @@ export class SolutionNode {
                     const theNode = theSolution.GetRootNode().FindAnyNodeMatchingGivenOutputRecursively(this.id);
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
-                        theNode.inputs[k].inputNode = theMatchingTransaction;
+                        theNode.inputs[k].SetInputNode(theMatchingTransaction, theNode);
                         // all reactions are incomplete when they come from the transaction map
                         theSolution.SetNodeIncomplete(theMatchingTransaction);
                     }
@@ -118,7 +120,6 @@ export class SolutionNode {
                 const hasACloneJustBeenCreated = matchingTransactions.length > 1;
                 if (hasACloneJustBeenCreated)
                     return true;// yes is incomplete
-
             }
         }
 
@@ -126,11 +127,11 @@ export class SolutionNode {
         solution.SetNodeCompleteGenuine(this);
 
         // now to process each of those nodes that have been filled out
-        for (let k = 0; k < this.inputs.length; k++) {
-            const inputNode = this.inputs[k].inputNode;
+        for (const input of  this.inputs) {
+            const inputNode = input.GetInputNode();
             assert(inputNode && "If this fails there is something wrong with the loop in first half of this method");
             if (inputNode) {
-                if (inputNode.output === SpecialNodes.VerifiedLeaf)
+                if (inputNode.type === SpecialNodes.VerifiedLeaf)
                     continue;// this means its already been searhed for in the map, without success.
                 const hasACloneJustBeenCreated = inputNode.ProcessUntilCloning(solution, solutions, path);
                 if (hasACloneJustBeenCreated)
@@ -139,6 +140,14 @@ export class SolutionNode {
         }
 
         return false;
+    }
+
+    SetParent(parent: SolutionNode|null) {
+        this.parent = parent;
+    }
+
+    GetParent(): SolutionNode | null {
+        return this.parent;
     }
 
 }

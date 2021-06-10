@@ -36,11 +36,11 @@ export class Scenario implements ScenarioInterface {
     GetArrayOfRegs(): string[] {
         return Scenario.GetArrayOfRegs();
     }
-    GetArrayOfPropVisibilities(): boolean[] {
-        return Scenario.GetArrayOfPropVisibilities();
+    GetSetOfStartingProps(): Set<string> {
+        return Scenario.GetSetOfStartingProps();
     }
-    GetArrayOfInvVisibilities(): boolean[] {
-        return Scenario.GetArrayOfInvVisibilities();
+    GetArrayOfStartingInvs(): Set<string> {
+        return Scenario.GetSetOfStartingInvs();
     }
     GetSolutionNodeMap(): SolutionNodeMap {
         return Scenario.GetSolutionNodeMap();
@@ -110,38 +110,37 @@ export class Scenario implements ScenarioInterface {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 
-        for (let i = 0; i < scenario.reactions.length; i++) {
-            const reaction = scenario.reactions[i];
+        for (const reaction of scenario.reactions) {
             const scriptType = reaction.script;
             switch (scriptType) {
                 case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
                     {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const prop1 = "" + scenario.reactions[i].prop3;
-                        const prop2 = "" + scenario.reactions[i].prop4;
-                        const prop3 = "" + scenario.reactions[i].prop5;
-                        const prop4 = "" + scenario.reactions[i].prop6;
-                        const prop5 = "" + scenario.reactions[i].prop7;
+                        const input = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
+                        const prop1 = "" + reaction.prop3;
+                        const prop2 = "" + reaction.prop4;
+                        const prop3 = "" + reaction.prop5;
+                        const prop4 = "" + reaction.prop6;
+                        const prop5 = "" + reaction.prop7;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, prop1, prop2, prop3, prop4, prop5));
                     }
                     break;
                 case _.AUTO_REG1_TRIGGERS_REG2:
                     {
-                        const input = "" + scenario.reactions[i].reg1;
-                        const output = "" + scenario.reactions[i].reg2;
+                        const input = "" + reaction.reg1;
+                        const output = "" + reaction.reg2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
                     }
                     break;
                 case _.AUTO_REG1_TRIGGERED_BY_PROPS:
                     {
-                        const output = "" + scenario.reactions[i].reg1;
-                        const prop1 = "" + scenario.reactions[i].prop1;
-                        const prop2 = "" + scenario.reactions[i].prop2;
-                        const prop3 = "" + scenario.reactions[i].prop3;
-                        const prop4 = "" + scenario.reactions[i].prop4;
-                        const prop5 = "" + scenario.reactions[i].prop5;
-                        const prop6 = "" + scenario.reactions[i].prop6;
+                        const output = "" + reaction.reg1;
+                        const prop1 = "" + reaction.prop1;
+                        const prop2 = "" + reaction.prop2;
+                        const prop3 = "" + reaction.prop3;
+                        const prop4 = "" + reaction.prop4;
+                        const prop5 = "" + reaction.prop5;
+                        const prop6 = "" + reaction.prop6;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, prop2, prop3, prop4, prop5, prop6));
                     }
                     break;
@@ -149,9 +148,9 @@ export class Scenario implements ScenarioInterface {
                 case _.INV1_AND_INV2_FORM_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing all
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const inputB = "" + scenario.reactions[i].inv2;
-                        const output = "" + scenario.reactions[i].inv3;
+                        const inputA = "" + reaction.inv1;
+                        const inputB = "" + reaction.inv2;
+                        const output = "" + reaction.inv3;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
                     }
                     else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
@@ -165,9 +164,9 @@ export class Scenario implements ScenarioInterface {
                 case _.INV1_AND_INV2_GENERATE_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing none
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const inputB = "" + scenario.reactions[i].inv2;
-                        const output = "" + scenario.reactions[i].inv3;
+                        const inputA = "" + reaction.inv1;
+                        const inputB = "" + reaction.inv2;
+                        const output = "" + reaction.inv3;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
                     }
                     else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
@@ -181,9 +180,9 @@ export class Scenario implements ScenarioInterface {
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing inv
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const output = "" + scenario.reactions[i].inv2;
-                        const inputB = "" + scenario.reactions[i].inv3;
+                        const inputA = "" + reaction.inv1;
+                        const output = "" + reaction.inv2;
+                        const inputB = "" + reaction.inv3;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
@@ -197,9 +196,9 @@ export class Scenario implements ScenarioInterface {
                 case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
                     if (isCollectingSolutionNodes) {
                         // keeping prop1
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const output = "" + scenario.reactions[i].inv2;
-                        const inputB = "" + scenario.reactions[i].prop1;
+                        const inputA = "" + reaction.inv1;
+                        const output = "" + reaction.inv2;
+                        const inputB = "" + reaction.prop1;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
@@ -213,9 +212,9 @@ export class Scenario implements ScenarioInterface {
                 case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing inv
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const output = "" + scenario.reactions[i].inv2;
-                        const inputB = "" + scenario.reactions[i].inv3;
+                        const inputA = "" + reaction.inv1;
+                        const output = "" + reaction.inv2;
+                        const inputB = "" + reaction.inv3;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
@@ -228,9 +227,9 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
                     if (isCollectingSolutionNodes) {
-                        const inputA = "" + scenario.reactions[i].inv1;
-                        const inputB = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
+                        const inputA = "" + reaction.inv1;
+                        const inputB = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
@@ -245,9 +244,9 @@ export class Scenario implements ScenarioInterface {
                     // eg obtain inv_meteor via radiation suit with the meteor.
                     // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
                     if (isCollectingSolutionNodes) {
-                        const output = "" + scenario.reactions[i].inv1;
-                        const input1 = "" + scenario.reactions[i].prop1;
-                        const input2 = "" + scenario.reactions[i].prop2;
+                        const output = "" + reaction.inv1;
+                        const input1 = "" + reaction.prop1;
+                        const input2 = "" + reaction.prop2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input1, input2));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
@@ -260,9 +259,9 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
                     if (isCollectingSolutionNodes) {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].inv1;
+                        const inputA = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
+                        const inputB = "" + reaction.inv1;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
@@ -275,9 +274,9 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
                     if (isCollectingSolutionNodes) {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].prop3;
+                        const inputA = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
+                        const inputB = "" + reaction.prop3;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
@@ -290,9 +289,9 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
                     if (isCollectingSolutionNodes) {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].inv1;
+                        const inputA = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
+                        const inputB = "" + reaction.inv1;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
@@ -305,9 +304,9 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
                     if (isCollectingSolutionNodes) {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].prop3;
+                        const inputA = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
+                        const inputB = "" + reaction.prop3;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
@@ -322,14 +321,14 @@ export class Scenario implements ScenarioInterface {
                     if (isCollectingSolutionNodes) {
                         // This is a weird one, because there are two real-life outputs
                         // but only one puzzle output. I forget how I was going to deal with this.
-                        const inputA = "" + scenario.reactions[i].prop1;
+                        const inputA = "" + reaction.prop1;
                         //const inputB = "" + reactionsFile.reactions[i].prop2;
-                        const output = "" + scenario.reactions[i].inv1;
+                        const output = "" + reaction.inv1;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA));
 
                     } else if (objects.Match("Grab", reaction.prop1, "")) {
                         happs.text = "You now have a " + reaction.inv1;
-                        // deliberately don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
+                        //ly don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
                         happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
@@ -338,9 +337,9 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.PROP1_CHANGES_STATE_TO_PROP2_VIA_KEEPING_INV1:
                     if (isCollectingSolutionNodes) {
-                        const inputA = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
-                        const inputB = "" + scenario.reactions[i].inv1;
+                        const inputA = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
+                        const inputB = "" + reaction.inv1;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
@@ -353,13 +352,13 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.PROP1_GOES_WHEN_GRAB_INV1:
                     if (isCollectingSolutionNodes) {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].inv1;
+                        const input = "" + reaction.prop1;
+                        const output = "" + reaction.inv1;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
 
                     } else if (objects.Match("Grab", reaction.prop1, "")) {
                         happs.text = "You now have a " + reaction.inv1;
-                        // deliberately don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
+                        //ly don't mention what happen to the prop you clicked on.  "\n You notice the " + reaction.prop1 + " has now become a " + reaction.prop2;
                         happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         happs.array.push(new Happening(Happen.InvAppears, Stringify(reaction.inv1)));
                         return happs;
@@ -367,8 +366,8 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.TOGGLE_PROP1_BECOMES_PROP2:
                     if (isCollectingSolutionNodes) {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
+                        const input = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
 
                     } else if (objects.Match("Toggle", reaction.prop1, "")) {
@@ -380,8 +379,8 @@ export class Scenario implements ScenarioInterface {
                     break;
                 case _.TOGGLE_PROP1_CHANGES_STATE_TO_PROP2:
                     if (isCollectingSolutionNodes) {
-                        const input = "" + scenario.reactions[i].prop1;
-                        const output = "" + scenario.reactions[i].prop2;
+                        const input = "" + reaction.prop1;
+                        const output = "" + reaction.prop2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
 
                     } else if (objects.Match("Toggle", reaction.prop1, "")) {
@@ -424,15 +423,28 @@ export class Scenario implements ScenarioInterface {
         });
         return array;
     }
-    static GetArrayOfPropVisibilities(): Array<boolean> {
 
+    static GetSetOfStartingProps(): Set<string> {
         // preen starting set from JSON
         const startingSet = new Set<string>();
         scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
             startingSet.add(value.prop);
         });
+        return startingSet;
+    }
 
+    static GetSetOfStartingInvs(): Set<string> {
+        // preen starting set from JSON
+        const startingSet = new Set<string>();
+        scenario.startingInvs.forEach(function (value: { inv: string; }, index: number, array: { inv: string; }[]): void {
+            startingSet.add(value.inv);
+        });
+        return startingSet;
+    }
+
+    static GetArrayOPropVisibilities(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingProps();
         const visibilities = new Array<boolean>();
         objects.definitions.prop_type.enum.forEach((prop: string) => {
             const isVisible = startingSet.has(prop);
@@ -442,15 +454,9 @@ export class Scenario implements ScenarioInterface {
         return visibilities;
     }
 
-    static GetArrayOfInvVisibilities(): Array<boolean> {
-
-        // preen starting set from JSON
-        const startingSet = new Set<string>();
-        scenario.startingInvs.forEach(function (value: { inv: string; }, index: number, array: { inv: string; }[]): void {
-            startingSet.add(value.inv);
-        });
-
+    static GetArrayOInvVisibilities(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingInvs();
         const visibilities = new Array<boolean>();
         objects.definitions.inv_type.enum.forEach((inv: string) => {
             const isVisible = startingSet.has(inv);
@@ -459,7 +465,4 @@ export class Scenario implements ScenarioInterface {
 
         return visibilities;
     }
-
-
-
 }
