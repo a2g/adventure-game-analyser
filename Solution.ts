@@ -163,6 +163,8 @@ export class Solution {
                     return new RawObjectsAndVerb(Raw.None, "", "");
                 } else if (node.type.toLowerCase().includes("grab")) {
                     return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "");
+                } else if (node.type.toLowerCase().includes("toggle")) {
+                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, "");
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
                     node.inputs.forEach((node: SolutionNodeInput) => {

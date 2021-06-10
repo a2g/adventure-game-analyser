@@ -102,12 +102,10 @@ export class PlayerAI implements HappenerCallbacksInterface {
                 console.log("At least enter something");
                 continue;
             }
+            if (input === "b")
+                break;
 
             const items: Array<string> = GetThreeStringsFromInput(input);
-            if (items.length === 1) {
-                if (items[0].toUpperCase() === "b")
-                    break;
-            }
 
             if (items.length === 2 && items[0].toUpperCase() === "DO" && Number(items[1]) > 0) {
                 this.autoCount = Number(items[1]);

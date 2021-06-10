@@ -109,22 +109,11 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     solution.absoluteLeafNodes.forEach((value: SolutionNode) => {
                         setFromTheSolution.add(value.output);
                     });
-                    setFromTheSolution.forEach((entry: string) => {
-                        console.log(GetDisplayName(entry));
-                    })
+
                     const setAfterReduction = IntersectionSet(setFromTheSolution, startingPropsAndInvs);
                     const isSolvable = IsASupersetOfB(startingPropsAndInvs, setFromTheSolution);
-                    console.log("Solvable = " + isSolvable ? "TRUE" : "FALSE");
-                    console.log("-------will this reduced set below suffice the solution above (Y/N)?--------------------------");
-                 
-                    setAfterReduction.forEach((entry: string) => {
-                        console.log(GetDisplayName(entry));
-                    })
-                    
-                    console.log("===============================================");
-                    const choice = prompt('').toLowerCase();
-                    if (choice==='y') {
-                        while(true) {
+                    if (true) {
+                        while (true) {
                             let command: RawObjectsAndVerb | null = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
                             if (!command) {
                                 command = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
@@ -133,6 +122,20 @@ export class ChooseTheGoalToConcoctSolutionFor {
                             if (command.type !== Raw.None)
                                 command.Dump();
                         }
+                    } else {
+
+                        setFromTheSolution.forEach((entry: string) => {
+                            console.log(GetDisplayName(entry));
+                        })
+                        console.log("-------^^ Above is solution Set");
+                        console.log("Below is intersection of starting and solution set");
+
+                        setAfterReduction.forEach((entry: string) => {
+                            console.log(GetDisplayName(entry));
+                        })
+
+                        console.log("Spot what needs to be in the starting set - and fix it!");
+                         prompt('Hit a key to continue').toLowerCase();
                     }
                 }
                 
