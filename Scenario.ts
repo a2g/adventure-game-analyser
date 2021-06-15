@@ -106,6 +106,96 @@ export class Scenario implements ScenarioInterface {
         return result;
     }
 
+    static GetArrayOfSingleObjectVerbs(): Array<string> {
+        return ["grab", "toggle"];
+    }
+    static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
+        return [true, true];
+    }
+
+    static GetArrayOfProps(): Array<string> {
+        return objects.definitions.prop_type.enum;
+    }
+    static GetArrayOfInvs(): Array<string> {
+        return objects.definitions.inv_type.enum;
+    }
+    static GetArrayOfRegs(): Array<string> {
+        return objects.definitions.reg_type.enum;
+    }
+
+    static GetArrayOfRegStartingValues(): Array<boolean> {
+        const array = new Array<boolean>();
+        objects.definitions.reg_type.enum.forEach((value: string) => {
+            array.push(value.length > 0);// I used value.length>0 to get rid of the unused variable warnin
+        });
+        return array;
+    }
+
+    static GetSetOfStartingProps(): Set<string> {
+        // preen starting set from JSON
+        const startingSet = new Set<string>();
+        scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
+            startingSet.add(value.prop);
+        });
+        return startingSet;
+    }
+
+    static GetSetOfStartingInvs(): Set<string> {
+        // preen starting set from JSON
+        const startingSet = new Set<string>();
+        scenario.startingInvs.forEach(function (value: { inv: string; }, index: number, array: { inv: string; }[]): void {
+            startingSet.add(value.inv);
+        });
+        return startingSet;
+    }
+
+    static GetArrayOPropVisibilities(): Array<boolean> {
+        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingProps();
+        const visibilities = new Array<boolean>();
+        objects.definitions.prop_type.enum.forEach((prop: string) => {
+            const isVisible = startingSet.has(prop);
+            visibilities.push(isVisible);
+        });
+
+        return visibilities;
+    }
+
+    static GetArrayOInvVisibilities(): Array<boolean> {
+        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingInvs();
+        const visibilities = new Array<boolean>();
+        objects.definitions.inv_type.enum.forEach((inv: string) => {
+            const isVisible = startingSet.has(inv);
+            visibilities.push(isVisible);
+        });
+
+        return visibilities;
+    }
+
+    static GetArrayOfCharacters(): Array<string> {
+        const characters = new Array<string>();
+        for (let i = 0; i < scenario.characters.length; i++) {
+            const character = scenario.characters[i];
+            characters.push(character.alias);
+        };
+        return characters;
+    }
+
+    static GetArrayOfCharactersSets(): Array<Set<string>> {
+        const array = new Array<Set<string>>();
+        for (let i = 0; i < scenario.characters.length; i++) {
+            const character = scenario.characters[i];
+            const set = new Set<string>()
+            if (character.inv1.length>0)
+                set.add(character.inv1);
+            if (character.reg1.length > 0)
+                set.add(character.reg1);
+            array.push(set);
+        }
+
+        return array;
+    }
     static SingleBigSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
@@ -399,70 +489,5 @@ export class Scenario implements ScenarioInterface {
         }
         return isCollectingSolutionNodes ? solutionNodesMappedByInput : null;
     }
-    static GetArrayOfSingleObjectVerbs(): Array<string> {
-        return ["grab", "toggle"];
-    }
-    static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
-        return [true, true];
-    }
-
-    static GetArrayOfProps(): Array<string> {
-        return objects.definitions.prop_type.enum;
-    }
-    static GetArrayOfInvs(): Array<string> {
-        return objects.definitions.inv_type.enum;
-    }
-    static GetArrayOfRegs(): Array<string> {
-        return objects.definitions.reg_type.enum;
-    }
-
-    static GetArrayOfRegStartingValues(): Array<boolean> {
-        const array = new Array<boolean>();
-        objects.definitions.reg_type.enum.forEach((value: string) => {
-            array.push(value.length>0);// I used value.length>0 to get rid of the unused variable warnin
-        });
-        return array;
-    }
-
-    static GetSetOfStartingProps(): Set<string> {
-        // preen starting set from JSON
-        const startingSet = new Set<string>();
-        scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
-            startingSet.add(value.prop);
-        });
-        return startingSet;
-    }
-
-    static GetSetOfStartingInvs(): Set<string> {
-        // preen starting set from JSON
-        const startingSet = new Set<string>();
-        scenario.startingInvs.forEach(function (value: { inv: string; }, index: number, array: { inv: string; }[]): void {
-            startingSet.add(value.inv);
-        });
-        return startingSet;
-    }
-
-    static GetArrayOPropVisibilities(): Array<boolean> {
-        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
-        const startingSet = this.GetSetOfStartingProps();
-        const visibilities = new Array<boolean>();
-        objects.definitions.prop_type.enum.forEach((prop: string) => {
-            const isVisible = startingSet.has(prop);
-            visibilities.push(isVisible);
-        });
-
-        return visibilities;
-    }
-
-    static GetArrayOInvVisibilities(): Array<boolean> {
-        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
-        const startingSet = this.GetSetOfStartingInvs();
-        const visibilities = new Array<boolean>();
-        objects.definitions.inv_type.enum.forEach((inv: string) => {
-            const isVisible = startingSet.has(inv);
-            visibilities.push(isVisible);
-        });
-
-        return visibilities;
-    }
+ 
 }

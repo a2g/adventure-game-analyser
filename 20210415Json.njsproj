@@ -48,6 +48,7 @@
     <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ChooseTwoCharacters.ts" />
     <TypeScriptCompile Include="Colors.ts" />
     <TypeScriptCompile Include="Game.ts" />
     <TypeScriptCompile Include="GameReporter.ts" />
