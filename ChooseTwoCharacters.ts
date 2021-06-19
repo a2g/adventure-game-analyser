@@ -121,7 +121,9 @@ export class ChooseTwoCharacters {
 
                 const characterAsProps = Scenario.GetArrayOfCharactersSets()[Number(choice[0])];
                 const characterBsProps = Scenario.GetArrayOfCharactersSets()[Number(choice[1])];
-                const startingPropsAndInvs = UnionSet(characterAsProps, characterBsProps);
+                const bothCharacterProps = UnionSet(characterAsProps, characterBsProps);
+                const startingProps = Scenario.GetSetOfStartingProps();
+                const startingPropsAndInvs = UnionSet(bothCharacterProps, startingProps);
 
                 console.log("Number of solutions = " + collection.length);
                 
