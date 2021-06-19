@@ -25,9 +25,9 @@ describe("ReactionMap", () => {
     it("test RemoveTransaction works", () => {
         const blah = new SolutionNodeMap(null);
         for (let i = 0; i < 3; i++) {
-            blah.AddToMap(new SolutionNode("outputA", "piffle","A", "B"));
+            blah.AddToMap(new SolutionNode("outputA", "piffle", "A", "B"));
         }
-        const theOneToRemove = new SolutionNode("outputA", "piffle",  "A", "B");
+        const theOneToRemove = new SolutionNode("outputA", "piffle", "A", "B");
         blah.AddToMap(theOneToRemove);
         {
             const arrayBefore = blah.Get("outputA");

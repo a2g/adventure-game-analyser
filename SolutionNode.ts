@@ -8,15 +8,16 @@ let globalId = 1;
 
 export class SolutionNode {
     id: number;
-    type: string 
+    type: string;
     output: string;
     inputs: Array<SolutionNodeInput>;
     parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
-
+    count: number;
     constructor(output: string,
-        type  = "undefined",
+        type = "undefined",
         inputA = "undefined",
         inputB = "undefined",
+        count = 1, // put it here so all the tests don't need to specify it.
         inputC = "undefined",
         inputD = "undefined",
         inputE = "undefined",
@@ -24,6 +25,7 @@ export class SolutionNode {
     ) {
         this.parent = null;
         this.id = globalId++;
+        this.count = count;
         this.output = output;
         this.type = type;
         this.inputs = new Array<SolutionNodeInput>();
@@ -45,7 +47,9 @@ export class SolutionNode {
         const clone = new SolutionNode(this.output);
         clone.id = this.id;
         clone.type = this.type;
+        clone.count = this.count;
         clone.output = this.output;
+        
 
         let isIncomplete = false;
         this.inputs.forEach((input: SolutionNodeInput) => {

@@ -8,7 +8,7 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 export function GetTreeSolutionViaOutputMatching(map: SolutionNodeMap, solutionGoal: string): SolutionCollection {
 
     const collection = new SolutionCollection();
-    collection.push(new Solution(new SolutionNode("theRootNode","",solutionGoal), map));
+    collection.push(new Solution(new SolutionNode("theRootNode", "", solutionGoal), map));
 
     do {
         collection.ProcessUntilCloning();

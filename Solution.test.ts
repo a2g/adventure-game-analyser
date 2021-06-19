@@ -81,7 +81,7 @@ describe("Solution", () => {
         const map = Scenario.GetSolutionNodeMap();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("","",objective), map));
+        collection.push(new Solution(new SolutionNode("", "",  objective), map));
         const wasCloneEncountered = collection.ProcessUntilCloning();
         assert.ok(wasCloneEncountered);
 
@@ -118,7 +118,7 @@ describe("Solution", () => {
         const map = Scenario.GetSolutionNodeMap();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("","",objective), map));
+        collection.push(new Solution(new SolutionNode("", "",  objective), map));
         const wasCloneEncountered = collection.ProcessUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 
