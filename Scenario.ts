@@ -1,8 +1,8 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import scenario from '../20210415JsonPrivate/scenario/Scenario.json';
-import objects from '../20210415JsonPrivate/scenario/schema/objects/Objects.json'
+import scenario from '../20210415JsonPrivate/scenario/schema/HighScene.json';
+import objects from '../20210415JsonPrivate/scenario/schema/HighObjects.json';
 import _ from '../20210415JsonPrivate/scenario/schema/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
@@ -143,9 +143,13 @@ export class Scenario implements ScenarioInterface {
     static GetSetOfStartingInvs(): Set<string> {
         // preen starting set from JSON
         const startingSet = new Set<string>();
-        scenario.startingInvs.forEach(function (value: { inv: string; }, index: number, array: { inv: string; }[]): void {
-            startingSet.add(value.inv);
-        });
+        for (let i = 0; i < scenario.characters.length; i++) {
+            const character = scenario.characters[i];
+            if (character.inv1&&character.inv1!=undefined)
+                startingSet.add(character.inv1);
+            if (character.inv2 && character.inv2 != undefined)
+                startingSet.add(character.inv2);
+        };
         return startingSet;
     }
 
@@ -187,8 +191,10 @@ export class Scenario implements ScenarioInterface {
         for (let i = 0; i < scenario.characters.length; i++) {
             const character = scenario.characters[i];
             const set = new Set<string>()
-            if (character.inv1.length>0)
+            if (character.inv1!=undefined && character.inv1.length>0)
                 set.add(character.inv1);
+            if (character.inv2 != undefined && character.inv2.length > 0)
+                set.add(character.inv2);
             if (character.reg1.length > 0)
                 set.add(character.reg1);
             array.push(set);

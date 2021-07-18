@@ -32,9 +32,12 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\20210415JsonPrivate\scenario\Scenario.json" />
-    <Content Include="..\20210415JsonPrivate\scenario\schema\Schema.json" />
-    <Content Include="..\20210415JsonPrivate\scenario\schema\objects\Objects.json" />
+      <Content Include="..\20210415JsonPrivate\scenario\schema\HighScene.json" />
+      <Content Include="..\20210415JsonPrivate\scenario\schema\HighSchema.json" />
+      <Content Include="..\20210415JsonPrivate\scenario\schema\HighObjects.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\schema\HospScene.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\schema\HospSchema.json" />
+    <Content Include="..\20210415JsonPrivate\scenario\schema\HospObjects.json" />
     <Content Include="..\20210415JsonPrivate\scenario\schema\script\Script.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
