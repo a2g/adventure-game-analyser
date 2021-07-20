@@ -119,9 +119,10 @@ export class ChooseTwoCharacters {
                     collection.ProcessUntilCloning();
                 } while (collection.IsNodesRemaining());
 
-                const characterAsProps = Scenario.GetArrayOfCharactersSets()[Number(choice[0])];
-                const characterBsProps = Scenario.GetArrayOfCharactersSets()[Number(choice[1])];
-                const bothCharacterProps = UnionSet(characterAsProps, characterBsProps);
+                const startingThingsForCharacterA = Scenario.GetStartingThingsForCharacter(array[Number(choice[0])]);
+                const startingThingsForCharacterB = Scenario.GetStartingThingsForCharacter(array[Number(choice[1])]);
+                
+                const bothCharacterProps = UnionSet(startingThingsForCharacterA, startingThingsForCharacterB);
                 const startingProps = Scenario.GetSetOfStartingProps();
                 const startingPropsAndInvs = UnionSet(bothCharacterProps, startingProps);
 

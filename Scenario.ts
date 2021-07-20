@@ -142,15 +142,24 @@ export class Scenario implements ScenarioInterface {
 
     static GetSetOfStartingInvs(): Set<string> {
         // preen starting set from JSON
-        const startingSet = new Set<string>();
-        for (let i = 0; i < scenario.characters.length; i++) {
-            const character = scenario.characters[i];
-            if (character.inv1&&character.inv1!=undefined)
-                startingSet.add(character.inv1);
-            if (character.inv2 && character.inv2 != undefined)
-                startingSet.add(character.inv2);
+        const startingInvSet = new Set<string>();
+        for (let i = 0; i < scenario.startingThings.length; i++) {
+            const thing = scenario.startingThings[i];
+            if (thing.thing.startsWith("inv"))
+                startingInvSet.add(thing.thing)
         };
-        return startingSet;
+        return startingInvSet;
+    }
+
+    static GetStartingThingsForCharacter(name: string): Set<string> {
+        const startingThingSet = new Set<string>();
+        for (let i = 0; i < scenario.startingThings.length; i++) {
+            const thing = scenario.startingThings[i];
+            if (thing.char === name) {
+                startingThingSet.add(thing.thing)
+            }
+        }
+        return startingThingSet;
     }
 
     static GetArrayOPropVisibilities(): Array<boolean> {
@@ -178,30 +187,10 @@ export class Scenario implements ScenarioInterface {
     }
 
     static GetArrayOfCharacters(): Array<string> {
-        const characters = new Array<string>();
-        for (let i = 0; i < scenario.characters.length; i++) {
-            const character = scenario.characters[i];
-            characters.push(character.alias);
-        };
-        return characters;
+        return objects.definitions.char_type.enum;
     }
+    
 
-    static GetArrayOfCharactersSets(): Array<Set<string>> {
-        const array = new Array<Set<string>>();
-        for (let i = 0; i < scenario.characters.length; i++) {
-            const character = scenario.characters[i];
-            const set = new Set<string>()
-            if (character.inv1!=undefined && character.inv1.length>0)
-                set.add(character.inv1);
-            if (character.inv2 != undefined && character.inv2.length > 0)
-                set.add(character.inv2);
-            if (character.reg1.length > 0)
-                set.add(character.reg1);
-            array.push(set);
-        }
-
-        return array;
-    }
     static SingleBigSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
