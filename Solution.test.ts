@@ -8,11 +8,11 @@ import { Scenario } from './Scenario';
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
-        const map = Scenario.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
-        const wasCloneEncountered = collection.ProcessUntilCloning();
+        const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
 
         assert.strictEqual(false, wasCloneEncountered);
         assert.strictEqual(1, collection.length);
@@ -24,13 +24,13 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_guitar", () => {
-        const map = Scenario.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
         // process the rest of the transactions
         do {
-            collection.ProcessUntilCloning();
+            collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
         
         const solution0 = collection[0];;
@@ -50,13 +50,13 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_slamdunk", () => {
-        const map = Scenario.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
         // process the rest of the transactions
         do {
-            collection.ProcessUntilCloning();
+            collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
 
 
@@ -78,11 +78,11 @@ describe("Solution", () => {
 
 
     it("Test the cloning at numerous ways to kill demon", () => {
-        const map = Scenario.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodesMappedByInput();
         const objective = "inv_demon_death";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "",  objective), map));
-        const wasCloneEncountered = collection.ProcessUntilCloning();
+        const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.ok(wasCloneEncountered);
 
         assert.strictEqual(2, collection.length);
@@ -96,7 +96,7 @@ describe("Solution", () => {
 
         // process the rest of the transactions
         do {
-            collection.ProcessUntilCloning();
+            collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
 
 
@@ -115,11 +115,11 @@ describe("Solution", () => {
   
 
     it("Test cloning with turn on/turn off", () => {
-        const map = Scenario.GetSolutionNodeMap();
+        const map = Scenario.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "",  objective), map));
-        const wasCloneEncountered = collection.ProcessUntilCloning();
+        const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 
         assert.strictEqual(1, collection.length);
@@ -133,7 +133,7 @@ describe("Solution", () => {
 
         // process the rest of the transactions
         do {
-            collection.ProcessUntilCloning();
+            collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
 
 

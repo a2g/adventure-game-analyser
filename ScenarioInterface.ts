@@ -13,5 +13,5 @@ export interface ScenarioInterface {
     GetArrayOfRegs(): Array<string>;
     GetSetOfStartingProps(): Set<string>;
     GetArrayOfStartingInvs(): Set<string>;
-    GetSolutionNodeMap(): SolutionNodeMap;
+    GetSolutionNodesMappedByInput(): SolutionNodeMap;
 }

@@ -39,26 +39,29 @@ export class ChooseTheGoalToFindLeavesFor {
             // use either index or 
             const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
             console.log("\"" + objective + "\" was entered");
-            const mapOfReactionsByInput = Scenario.GetSolutionNodeMap();
+            const mapOfReactionsByInput = Scenario.GetSolutionNodesMappedByInput();
 
             const collection = new SolutionCollection();
             if (objective !== null) {
                 collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfReactionsByInput));
 
                 do {
-                    collection.ProcessUntilCloning();
+                    collection.SolvePartiallyUntilCloning();
                 } while (collection.IsNodesRemaining());
 
 
                 for (; ;) {
                     console.log("Number of solutions = " + collection.length);
                     let numberOfLeaves = 0;
+
                     // display list
                     collection.forEach(function (solution: Solution) {
                         console.log("------------------------------------------------------------(solution separator)");
                         const needs = solution.absoluteLeafNodes;
                         needs.forEach((value: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
                             numberOfLeaves++;
+
+                            // display list item
                             console.log("    " + numberOfLeaves + "." + value.output);
                         });
                     });

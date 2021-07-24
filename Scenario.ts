@@ -42,8 +42,8 @@ export class Scenario implements ScenarioInterface {
     GetArrayOfStartingInvs(): Set<string> {
         return Scenario.GetSetOfStartingInvs();
     }
-    GetSolutionNodeMap(): SolutionNodeMap {
-        return Scenario.GetSolutionNodeMap();
+    GetSolutionNodesMappedByInput(): SolutionNodeMap {
+        return Scenario.GetSolutionNodesMappedByInput();
     }
 
     static GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
@@ -95,7 +95,7 @@ export class Scenario implements ScenarioInterface {
         return "undefined";
     }
 
-    static GetSolutionNodeMap(): SolutionNodeMap {
+    static GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
         const result = Scenario.SingleBigSwtich(true, notUsed) as SolutionNodeMap;
         return result;

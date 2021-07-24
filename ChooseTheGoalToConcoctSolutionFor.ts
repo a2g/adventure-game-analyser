@@ -7,6 +7,11 @@ import { GetDisplayName } from "./GetDisplayName";
 import { SolutionNodeInput } from "./SolutionNodeInput";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
+function assert(condition: any, msg?: string): asserts condition {
+    if (!condition) {
+        throw new Error("assert failure");
+    }
+}
 const prompt = promptSync();
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
@@ -88,23 +93,24 @@ export class ChooseTheGoalToConcoctSolutionFor {
             // use either index or 
             const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
             console.log("\"" + objective + "\" was entered");
-            const mapOfReactionsByInput = Scenario.GetSolutionNodeMap();
-
-            const collection = new SolutionCollection();
             if (objective !== null) {
-                collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfReactionsByInput));
-
-                do {
-                    collection.ProcessUntilCloning();
-                } while (collection.IsNodesRemaining());
 
                 const startingProps = Scenario.GetSetOfStartingProps();
                 const startingInvs = Scenario.GetSetOfStartingInvs();
                 const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
 
+                const solutionNodesMappedByInput = Scenario.GetSolutionNodesMappedByInput();
+                const collection = new SolutionCollection();
+
+                // Solve solution nodes
+                collection.push(new Solution(new SolutionNode("root via app", "", objective), solutionNodesMappedByInput));
+                collection.SolveUntilZeroNodesRemaining();
                 console.log("Number of solutions = " + collection.length);
-                
+
+                // go through each one 
                 for (const solution of collection) {
+                    console.log("");
+                    console.log("Solution called " + GetDisplayName(solution.GetName()));
                     const setFromTheSolution = new Set<string>();
                     solution.absoluteLeafNodes.forEach((value: SolutionNode) => {
                         setFromTheSolution.add(value.output);
@@ -112,7 +118,8 @@ export class ChooseTheGoalToConcoctSolutionFor {
 
                     const setAfterReduction = IntersectionSet(setFromTheSolution, startingPropsAndInvs);
                     const isSolvable = IsASupersetOfB(startingPropsAndInvs, setFromTheSolution);
-                    if (true) {
+                    assert(isSolvable);
+                    if (isSolvable) {
                         while (true) {
                             let command: RawObjectsAndVerb | null = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
                             if (!command) {
@@ -123,7 +130,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
                                 command.Dump();
                         }
                     } else {
-
+                        console.log("Starting set needs to have more stuff(props probably):");
                         setFromTheSolution.forEach((entry: string) => {
                             console.log(GetDisplayName(entry));
                         })

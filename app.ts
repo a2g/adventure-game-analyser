@@ -23,10 +23,10 @@ function main(): void {
     while(true) {
         console.log(" ");
         console.log("1. Play Through");
-        console.log("2. Solve to Leaf Nodes");
-        console.log("3. Check for unused props and invs ");
-        console.log("4. Try Concocting solutions ");
-        console.log("5. Choose a character ");
+        console.log("2. Solve to Leaf Nodes <--leafs unresolved? add reactions and validate schema");
+        console.log("3. Check for unused props and invs <-- delete these");
+        console.log("4. Try Concocting solutions <-- solutions missing? add props to starting props, or things");
+        console.log("5. Choose a character <-- this will give you which characters each solution is restricted to");
         console.log("b. bail");
 
         const choice = prompt('Choose an option (b)ail): ').toLowerCase();

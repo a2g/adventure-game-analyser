@@ -109,14 +109,14 @@ export class ChooseTwoCharacters {
             //const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
             const objective = "inv_demon_death";
             console.log("\"" + objective + "\" was entered");
-            const mapOfReactionsByInput = Scenario.GetSolutionNodeMap();
+            const mapOfReactionsByInput = Scenario.GetSolutionNodesMappedByInput();
 
             const collection = new SolutionCollection();
             if (objective !== null) {
                 collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfReactionsByInput));
 
                 do {
-                    collection.ProcessUntilCloning();
+                    collection.SolvePartiallyUntilCloning();
                 } while (collection.IsNodesRemaining());
 
                 const startingThingsForCharacterA = Scenario.GetStartingThingsForCharacter(array[Number(choice[0])]);
@@ -129,6 +129,7 @@ export class ChooseTwoCharacters {
                 console.log("Number of solutions = " + collection.length);
                 
                 for (const solution of collection) {
+                    console.log("Solution called " + GetDisplayName(solution.GetName()));
                     const setFromTheSolution = new Set<string>();
                     solution.absoluteLeafNodes.forEach((value: SolutionNode) => {
                         setFromTheSolution.add(value.output);

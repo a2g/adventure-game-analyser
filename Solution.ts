@@ -10,7 +10,8 @@ import { Raw  } from './Raw';
 
 export class Solution {
 
-    constructor(root: SolutionNode, map : SolutionNodeMap) {
+    constructor(root: SolutionNode, map: SolutionNodeMap) {
+        this.solutionName = "uninitialized";
         this.rootNode = root;
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
@@ -104,7 +105,6 @@ export class Solution {
         return this.transactionMap.Has(objectToObtain);
     }
 
-
     GetTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
         return this.transactionMap.Get(objectToObtain);
     }
@@ -113,9 +113,16 @@ export class Solution {
         this.transactionMap.RemoveTransaction(transaction);
     }
 
+    SetName(solutionName: string) {
+        this.solutionName = solutionName;
+    }
 
+    GetName(): string {
+        return this.solutionName;
+    }
 
     rootNode: SolutionNode;
+    solutionName: string;
     incompleteNodes: Set<SolutionNode>;
     absoluteLeafNodes: Map<string, SolutionNode>;
     usedVerbNounCombos: Set<string>;
