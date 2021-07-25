@@ -9,7 +9,7 @@ const prompt = promptSync();
 
 export class ChooseTheGoalToFindLeavesFor {
     static array: Array<string> = [
-        "inv_demon_death",
+        "inv_solution",
         "prop_death_by_guitar",
         "prop_death_by_slamdunk",
         "prop_death_by_physics",

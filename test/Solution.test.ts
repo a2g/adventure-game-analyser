@@ -67,7 +67,7 @@ describe("Solution", () => {
 
         // arrange
         const map = Scenario.GetSolutionNodesMappedByInput();
-        const objective = "inv_demon_death";
+        const objective = "inv_solution";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode(testName, "", objective), map));
 

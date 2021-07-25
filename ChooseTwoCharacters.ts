@@ -56,7 +56,7 @@ function IsASupersetOfB(set:Set<string>, subset:Set<string>) {
 
 export class ChooseTwoCharacters {
     static array: Array<string> = [
-        "inv_demon_death",
+        "inv_completed",
         "prop_death_by_guitar",
         "prop_death_by_slamdunk",
         "prop_death_by_physics",
@@ -107,7 +107,7 @@ export class ChooseTwoCharacters {
             }
             // use either index or 
             //const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
-            const objective = "inv_demon_death";
+            const objective = "inv_completed";
             console.log("\"" + objective + "\" was entered");
             const mapOfReactionsByInput = Scenario.GetSolutionNodesMappedByInput();
 
