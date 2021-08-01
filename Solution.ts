@@ -165,21 +165,21 @@ export class Solution {
                     this.absoluteLeafNodes.set(pathOfParent, node.parent);
 
                 if (!node.parent) {
-                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "");
+                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.characters);
                 }else if (node.inputs.length === 0) {
-                    return new RawObjectsAndVerb(Raw.None, "", "");
+                    return new RawObjectsAndVerb(Raw.None, "", "", node.characters);
                 } else if (node.type.toLowerCase().includes("grab")) {
-                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "");
+                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.characters);
                 } else if (node.type.toLowerCase().includes("toggle")) {
-                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, "");
+                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, "", node.characters);
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
                     node.inputs.forEach((node: SolutionNodeInput) => {
                         text += node.inputName + " ";
                     });
-                    return new RawObjectsAndVerb(Raw.Auto, "", ""); 
+                    return new RawObjectsAndVerb(Raw.Auto, "", "", node.characters); 
                 } else if (node.inputs.length === 2) {
-                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName);
+                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.characters);
                 } else {
                     assert(false && "unknown!");
                 }

@@ -145,7 +145,7 @@ export class ChooseTwoCharacters {
                                 break;
                             }
                             if (command.type !== Raw.None)
-                                command.Dump();
+                                command.WriteToConsole();
                         }
                     } else {
 

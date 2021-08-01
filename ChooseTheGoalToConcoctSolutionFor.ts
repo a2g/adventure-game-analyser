@@ -105,17 +105,28 @@ export class ChooseTheGoalToConcoctSolutionFor {
                 const isSolvable = IsASupersetOfB(startingPropsAndInvs, setFromTheSolution);
                 assert(isSolvable);
                 if (isSolvable) {
-                    while (true) {
+                    for (; ;) {
                         let command: RawObjectsAndVerb | null = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
                         if (!command) {
                             // this is just here for debugging!
                             command = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
                             break;
                         }
+                        const chars = Scenario.GetArrayOfCharacters();
+                        for (let i = 0; i < chars.length; i++) {
+                            const char = chars[i];
+                            const startingSet = Scenario.GetStartingThingsForCharacter(char);
+                            if (startingSet.has(command.objectA))
+                                command.appendStartingCharacterForA(char);
+                            if (startingSet.has(command.objectB))
+                                command.appendStartingCharacterForB(char);
+                        }
+
                         if (command.type !== Raw.None)
-                            command.Dump();
+                            command.WriteToConsole();
                     }
                 } else {
+                    // error handling
                     console.log("Starting set needs to have more stuff(props probably):");
                     setFromTheSolution.forEach((entry: string) => {
                         console.log(GetDisplayName(entry));

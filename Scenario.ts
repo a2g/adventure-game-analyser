@@ -197,7 +197,7 @@ export class Scenario implements ScenarioInterface {
 
         for (const reaction of scenario.reactions) {
             const scriptType = reaction.script;
-            const count = reaction.count;
+            const count = reaction.count;   
             switch (scriptType) {
                 case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
                     {

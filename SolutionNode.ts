@@ -13,6 +13,7 @@ export class SolutionNode {
     inputs: Array<SolutionNodeInput>;
     parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
     count: number;
+    characters: Array<string>;
     constructor(output: string,
         type = "undefined",
         inputA = "undefined",
@@ -22,12 +23,14 @@ export class SolutionNode {
         inputD = "undefined",
         inputE = "undefined",
         inputF = "undefined",// no statics in typescript, so this seemed preferable than global let Null = "Null";
+        characters = new Array<string>()
     ) {
         this.parent = null;
         this.id = globalId++;
         this.count = count;
         this.output = output;
         this.type = type;
+        this.characters = characters;
         this.inputs = new Array<SolutionNodeInput>();
         if (inputA !== "undefined" && inputA !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputA));
