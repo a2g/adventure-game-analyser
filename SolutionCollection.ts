@@ -36,8 +36,7 @@ export class SolutionCollection extends Array<Solution>{
     }
 
     GenerateSolutionNames(set: Set<[string, string]> | null) {
-        for (let i = 0; i < this.length; i++) {
-            let restrictions = "";
+        for (let i = 0; i < this.length; i++) { 
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
             for (let j = 0; j < this.length; j++) {
@@ -58,7 +57,7 @@ export class SolutionCollection extends Array<Solution>{
             // find least popular leaf in solution i
             let minLeafNodeNameCount = 1000; //something high
             let minLeafNodeName = "not found";
-
+            let thisRestrictions = this[i].getCharacterRestrictions();
             const thisLeaves = this[i].GetLeafNodes();
             thisLeaves.forEach((value: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
                 const result = mapForCounting.get(value.output)
@@ -75,13 +74,17 @@ export class SolutionCollection extends Array<Solution>{
                 if (set) {
                     for (const blah of set) {
                         if (blah[1] === value.output) {
-                            restrictions += blah[0] + " ";
+                            thisRestrictions.add(blah[0]);
                         }
                     }
                 }
 
-
             });
+
+            let restrictions = "";
+            for (const restriction of thisRestrictions) {
+                restrictions += restriction + " ";
+            }
 
             this[i].SetName("sol_" + minLeafNodeName + (restrictions.length>0? "(" + restrictions + ")" : ""));
          }

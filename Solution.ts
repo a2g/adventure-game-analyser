@@ -18,7 +18,7 @@ export class Solution {
         this.absoluteLeafNodes = new Map<string, SolutionNode>();
         this.usedVerbNounCombos = new Set<string>();
         this.transactionMap = new SolutionNodeMap(map);
-        
+        this.characterRestrictions = new Set<string>();
     }
 
     AddVerbNounCombo(verb: string, noun: string): void {
@@ -121,13 +121,6 @@ export class Solution {
         return this.solutionName;
     }
 
-    rootNode: SolutionNode;
-    solutionName: string;
-    incompleteNodes: Set<SolutionNode>;
-    absoluteLeafNodes: Map<string, SolutionNode>;
-    usedVerbNounCombos: Set<string>;
-    transactionMap: SolutionNodeMap;
-
     GeneratePath(node: SolutionNode | null) {
         let path = "";
         while (node) {
@@ -188,4 +181,22 @@ export class Solution {
 
         return null;
     }
+
+    addCharacterRestrictions(characters: Array<string>) {
+        for (const char of characters) {
+            this.characterRestrictions.add(char);
+        }
+    }
+
+    getCharacterRestrictions(): Set<string>{
+        return this.characterRestrictions;
+    }
+
+    rootNode: SolutionNode;
+    solutionName: string;
+    incompleteNodes: Set<SolutionNode>;
+    absoluteLeafNodes: Map<string, SolutionNode>;
+    usedVerbNounCombos: Set<string>;
+    transactionMap: SolutionNodeMap;
+    characterRestrictions: Set<string>;
 }
