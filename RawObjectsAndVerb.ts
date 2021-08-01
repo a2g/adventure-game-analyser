@@ -15,8 +15,8 @@ export class RawObjectsAndVerb {
         const enumAsInt = parseInt(this.type.toString(), 10);
         if (enumAsInt >= 0) {
             const verb = GetDisplayName(Raw[enumAsInt]);
-            const objectA = GetDisplayName(this.objectA) +  GetDisplayName(this.startingCharacterForA);
-            const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB);
+            const objectA = GetDisplayName(this.objectA) +  GetDisplayName(this.startingCharacterForA, true);
+            const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB, true);
             const restriction =  this.restriction.length ? "(" + GetDisplayName(this.restriction) + ")" : "";
             console.log(verb + " " + objectA + " " + objectB + " " + restriction);
         } else {

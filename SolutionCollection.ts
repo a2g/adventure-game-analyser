@@ -32,12 +32,12 @@ export class SolutionCollection extends Array<Solution>{
             this.SolvePartiallyUntilCloning();
         } while (this.IsNodesRemaining());
 
-        this.SetSolutionNames();
+        this.GenerateSolutionNames(null);
     }
 
-    SetSolutionNames() {
+    GenerateSolutionNames(set: Set<[string, string]> | null) {
         for (let i = 0; i < this.length; i++) {
-  
+            let restrictions = "";
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
             for (let j = 0; j < this.length; j++) {
@@ -70,8 +70,20 @@ export class SolutionCollection extends Array<Solution>{
                     minLeafNodeNameCount = 0;
                     minLeafNodeName = value.output;
                 }
+
+
+                if (set) {
+                    for (const blah of set) {
+                        if (blah[1] === value.output) {
+                            restrictions += blah[0] + " ";
+                        }
+                    }
+                }
+
+
             });
-            this[i].SetName("sol_" + minLeafNodeName);
+
+            this[i].SetName("sol_" + minLeafNodeName + (restrictions.length>0? "(" + restrictions + ")" : ""));
          }
     }
 }

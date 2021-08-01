@@ -75,6 +75,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
             // Solve solution nodes
             collection.push(new Solution(new SolutionNode("root via app", "", "inv_solution"), solutionNodesMappedByInput));
             collection.SolveUntilZeroNodesRemaining();
+            collection.GenerateSolutionNames(Scenario.GetSetOfStartingThings());
 
             console.log(" -1. All")
             for (let i = 0; i < collection.length; i++) {

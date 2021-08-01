@@ -162,6 +162,15 @@ export class Scenario implements ScenarioInterface {
         return startingThingSet;
     }
 
+    static GetSetOfStartingThings(): Set<[string, string]> {
+        const startingThingSet = new Set<[string, string]>();
+        for (let i = 0; i < scenario.startingThings.length; i++) {
+            const thing = scenario.startingThings[i];
+            startingThingSet.add([thing.char, thing.thing]);
+        }
+        return startingThingSet;
+    }
+
     static GetArrayOPropVisibilities(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const startingSet = this.GetSetOfStartingProps();
