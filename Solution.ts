@@ -7,6 +7,7 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNodeInput } from './SolutionNodeInput';
 import { RawObjectsAndVerb } from './RawObjectsAndVerb';
 import { Raw  } from './Raw';
+import { isNullOrUndefined } from 'util';
 
 export class Solution {
 
@@ -182,15 +183,19 @@ export class Solution {
         return null;
     }
 
-    addCharacterRestrictions(characters: Array<string>) {
-        for (const char of characters) {
-            this.characterRestrictions.add(char);
+    addRestrictions(restrictions: Array<{ char: string }> | undefined | null) {
+        if (!isNullOrUndefined(restrictions)) {
+            for (const restriction of restrictions) {
+                this.characterRestrictions.add(restriction.char);
+            }
         }
     }
 
     getCharacterRestrictions(): Set<string>{
         return this.characterRestrictions;
     }
+
+
 
     rootNode: SolutionNode;
     solutionName: string;

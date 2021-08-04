@@ -124,7 +124,10 @@ export class SolutionNode {
                         // all reactions are incomplete when they come from the transaction map
                         theSolution.SetNodeIncomplete(theMatchingTransaction);
                         theSolution.addCharacterRestrictions(theMatchingTransaction.characters);
+                        theSolution.addRestrictions(theMatchingTransaction.restrictions);
                     }
+
+                    
 
                     theSolution.RemoveTransaction(theMatchingTransaction);
                 }
