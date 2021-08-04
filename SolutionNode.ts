@@ -14,11 +14,13 @@ export class SolutionNode {
     parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
     count: number;
     characters: Array<string>;
+    restrictions: { char: string }[] | null | undefined;
     constructor(output: string,
         type = "undefined",
         inputA = "undefined",
         inputB = "undefined",
         count = 1, // put it here so all the tests don't need to specify it.
+        restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
         inputC = "undefined",
         inputD = "undefined",
         inputE = "undefined",
@@ -26,6 +28,7 @@ export class SolutionNode {
         characters = new Array<string>()
     ) {
         this.parent = null;
+        this.restrictions = restrictions;
         this.id = globalId++;
         this.count = count;
         this.output = output;
@@ -47,7 +50,7 @@ export class SolutionNode {
     }
 
     CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
-        const clone = new SolutionNode(this.output);
+        const clone = new SolutionNode(this.output, "");
         clone.id = this.id;
         clone.type = this.type;
         clone.count = this.count;
@@ -107,6 +110,7 @@ export class SolutionNode {
                     // 1. get solution - because we might be cloning one;
                     const isCloneBeingUsed = i > 0;
                     const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
+
                     // this is only here to make the unit tests make sense
                     solution.SetNodeComplete(solution.rootNode);
                     if (isCloneBeingUsed)
@@ -119,6 +123,7 @@ export class SolutionNode {
                         theNode.inputs[k].SetInputNode(theMatchingTransaction, theNode);
                         // all reactions are incomplete when they come from the transaction map
                         theSolution.SetNodeIncomplete(theMatchingTransaction);
+                        theSolution.addCharacterRestrictions(theMatchingTransaction.characters);
                     }
 
                     theSolution.RemoveTransaction(theMatchingTransaction);

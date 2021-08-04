@@ -206,7 +206,8 @@ export class Scenario implements ScenarioInterface {
 
         for (const reaction of scenario.reactions) {
             const scriptType = reaction.script;
-            const count = reaction.count;   
+            const count = reaction.count;
+            const restrictions = reaction.restrictions;
             switch (scriptType) {
                 case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
                     {
@@ -217,7 +218,7 @@ export class Scenario implements ScenarioInterface {
                         const prop3 = "" + reaction.prop5;
                         const prop4 = "" + reaction.prop6;
                         const prop5 = "" + reaction.prop7;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, prop1, count, prop2, prop3, prop4, prop5));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, prop1, count, restrictions, prop2, prop3, prop4, prop5));
                     }
                     break;
                 case _.AUTO_REG1_TRIGGERS_REG2:
@@ -236,7 +237,7 @@ export class Scenario implements ScenarioInterface {
                         const prop4 = "" + reaction.prop4;
                         const prop5 = "" + reaction.prop5;
                         const prop6 = "" + reaction.prop6;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, prop2, count, prop3, prop4, prop5, prop6));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, prop2, count, restrictions, prop3, prop4, prop5, prop6));
                     }
                     break;
 
