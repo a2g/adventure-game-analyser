@@ -1,5 +1,7 @@
 import { Solution } from './Solution';
 import { SolutionNode } from './SolutionNode';
+import { GetDisplayName } from './GetDisplayName';
+import { Colors } from './Colors';
 
 
 export class SolutionCollection extends Array<Solution>{
@@ -35,7 +37,7 @@ export class SolutionCollection extends Array<Solution>{
         this.GenerateSolutionNames(null);
     }
 
-    GenerateSolutionNames(set: Set<[string, string]> | null) {
+    GenerateSolutionNames(startingSetOfThings: Set<[string, string]> | null) {
         for (let i = 0; i < this.length; i++) { 
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
@@ -55,38 +57,44 @@ export class SolutionCollection extends Array<Solution>{
             }
 
             // find least popular leaf in solution i
+            const currSolution = this[i];
             let minLeafNodeNameCount = 1000; //something high
             let minLeafNodeName = "not found";
-            let thisRestrictions = this[i].getCharacterRestrictions();
-            const thisLeaves = this[i].GetLeafNodes();
-            thisLeaves.forEach((value: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
-                const result = mapForCounting.get(value.output)
+
+            // get all the restrictions from solution nodes
+            const currRestrictions = currSolution.getRestrictions();
+
+            const currLeaves = currSolution.GetLeafNodes();
+            currLeaves.forEach((solutionLeafNode: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
+                const result = mapForCounting.get(solutionLeafNode.output)
                 if (result !== undefined && result < minLeafNodeNameCount) {
                     minLeafNodeNameCount = result;
-                    minLeafNodeName = value.output;
-                } else if (!mapForCounting.has(value.output)) {
+                    minLeafNodeName = solutionLeafNode.output;
+                } else if (!mapForCounting.has(solutionLeafNode.output)) {
                     // our leaf is no where in the leafs of other solutions - we can use it!
                     minLeafNodeNameCount = 0;
-                    minLeafNodeName = value.output;
+                    minLeafNodeName = solutionLeafNode.output;
                 }
 
-
-                if (set) {
-                    for (const blah of set) {
-                        if (blah[1] === value.output) {
-                            thisRestrictions.add(blah[0]);
+                // now we potentially add startingSet items to restrictions
+                if (startingSetOfThings) {
+                    for (const startingThing of startingSetOfThings) {
+                        if (startingThing[1] === solutionLeafNode.output) {
+                            currRestrictions.add(startingThing[0]);
                         }
                     }
                 }
 
             });
 
+            // format it in to a lovely comma-separated list
             let restrictions = "";
-            for (const restriction of thisRestrictions) {
-                restrictions += restriction + " ";
+            for (const restriction of currRestrictions) {
+                const nameToAdd = GetDisplayName(restriction);
+                restrictions += restrictions.length > 0 ? (", " + nameToAdd) : nameToAdd;
             }
 
-            this[i].SetName("sol_" + minLeafNodeName + (restrictions.length>0? "(" + restrictions + ")" : ""));
+            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (restrictions.length>0? "(" + restrictions + ")" : ""));
          }
     }
 }

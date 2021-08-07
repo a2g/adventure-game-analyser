@@ -218,7 +218,7 @@ export class Scenario implements ScenarioInterface {
                         const prop3 = "" + reaction.prop5;
                         const prop4 = "" + reaction.prop6;
                         const prop5 = "" + reaction.prop7;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, prop1, count, restrictions, prop2, prop3, prop4, prop5));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, restrictions, prop1, count, prop2, prop3, prop4, prop5));
                     }
                     break;
                 case _.AUTO_REG1_TRIGGERS_REG2:
@@ -237,7 +237,7 @@ export class Scenario implements ScenarioInterface {
                         const prop4 = "" + reaction.prop4;
                         const prop5 = "" + reaction.prop5;
                         const prop6 = "" + reaction.prop6;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, prop2, count, restrictions, prop3, prop4, prop5, prop6));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, restrictions, prop2, count, prop3, prop4, prop5, prop6));
                     }
                     break;
 
@@ -247,7 +247,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.inv1;
                         const inputB = "" + reaction.inv2;
                         const output = "" + reaction.inv3;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
                     }
                     else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
                         happs.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has formed an" + reaction.inv3;
@@ -263,7 +263,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.inv1;
                         const inputB = "" + reaction.inv2;
                         const output = "" + reaction.inv3;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
                     }
                     else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
                         happs.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has generated an" + reaction.inv3;
@@ -279,7 +279,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.inv1;
                         const output = "" + reaction.inv2;
                         const inputB = "" + reaction.inv3;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                         happs.text = "Your " + reaction.inv1 + " has become a " + reaction.inv2
@@ -295,7 +295,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.inv1;
                         const output = "" + reaction.inv2;
                         const inputB = "" + reaction.prop1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                         happs.text = "Your " + reaction.inv1 + " has become a  " + reaction.inv2;
@@ -311,7 +311,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.inv1;
                         const output = "" + reaction.inv2;
                         const inputB = "" + reaction.inv3;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                         happs.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2;
@@ -326,7 +326,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.inv1;
                         const inputB = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                         happs.text = "Using the " + reaction.inv1 + " with the  " + reaction.prop1 + " has revealed a " + reaction.prop2;
@@ -343,7 +343,7 @@ export class Scenario implements ScenarioInterface {
                         const output = "" + reaction.inv1;
                         const input1 = "" + reaction.prop1;
                         const input2 = "" + reaction.prop2;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input1, input2, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input1, restrictions, input2, count));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
                         happs.text = "You use the " + reaction.prop1 + " with the " + reaction.prop2 + " and obtain the " + reaction.inv1;
@@ -358,7 +358,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
                         const inputB = "" + reaction.inv1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
@@ -373,7 +373,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
                         const inputB = "" + reaction.prop3;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         happs.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
@@ -388,7 +388,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
                         const inputB = "" + reaction.inv1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
@@ -403,7 +403,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
                         const inputB = "" + reaction.prop3;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         happs.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.prop2;
@@ -420,7 +420,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.prop1;
                         //const inputB, count = "" + reactionsFile.reactions[i].prop2;
                         const output = "" + reaction.inv1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, "undefined", count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, "undefined", count));
 
                     } else if (objects.Match("Grab", reaction.prop1, "")) {
                         happs.text = "You now have a " + reaction.inv1;
@@ -436,7 +436,7 @@ export class Scenario implements ScenarioInterface {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
                         const inputB = "" + reaction.inv1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, inputB, count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
 
                     } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                         happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " is now " + Scenario.GetState(reaction.prop2);
@@ -450,7 +450,7 @@ export class Scenario implements ScenarioInterface {
                     if (isCollectingSolutionNodes) {
                         const input = "" + reaction.prop1;
                         const output = "" + reaction.inv1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, "undefined", count));
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, restrictions, "undefined", count));
 
                     } else if (objects.Match("Grab", reaction.prop1, "")) {
                         happs.text = "You now have a " + reaction.inv1;

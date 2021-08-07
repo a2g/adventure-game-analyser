@@ -77,22 +77,21 @@ export class ChooseTheGoalToConcoctSolutionFor {
             collection.SolveUntilZeroNodesRemaining();
             collection.GenerateSolutionNames(Scenario.GetSetOfStartingThings());
 
-            console.log(" -1. All")
+            console.log("Choose a solution,  -1 for All, (b)ack ):")
             for (let i = 0; i < collection.length; i++) {
-                console.log(" " + i + ". " + collection[i].GetName());
+                console.log(" " + i + ". " + GetDisplayName(collection[i].GetName()));
             };
 
-            const choice = prompt('Choose the solution you want to concoct (or enter verbatim) (b)ack ): ').toLowerCase();
+            const choice = prompt('').toLowerCase();
             if (choice === "b")
                 break;
 
             // use either index or 
-            const objective = (Number(choice) >= 0 && Number(choice) <= collection.length) ? collection[Number(choice)].GetName() : choice;
-            console.log("\"" + objective + "\" was entered");
+            //const objective = (Number(choice) >= 0 && Number(choice) < collection.length) ? collection[Number(choice)].GetName() : choice;
+            //console.log("\"" + GetDisplayName(objective) + "\" was entered");
 
             // go through each one 
             for (let i = 0; i < collection.length; i++) {
-                console.log("");
                 if (choice !== "-1" && i !== Number(choice))
                     continue;
                 const solution = collection[i];
@@ -142,6 +141,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     console.log("Spot what needs to be in the starting set - and fix it!");
                     prompt('Hit a key to continue').toLowerCase();
                 }
+                console.log("");
             }
         }
     }

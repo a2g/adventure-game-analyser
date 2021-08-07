@@ -3,6 +3,7 @@ import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
 import { assert } from 'console';
 import { SolutionNodeInput } from './SolutionNodeInput';
+import { isNullOrUndefined } from 'util';
 
 let globalId = 1;
 
@@ -13,27 +14,29 @@ export class SolutionNode {
     inputs: Array<SolutionNodeInput>;
     parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
     count: number;
-    characters: Array<string>;
-    restrictions: { char: string }[] | null | undefined;
+    characterRestrictions: Array<string>;
     constructor(output: string,
         type = "undefined",
         inputA = "undefined",
+        restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
         inputB = "undefined",
         count = 1, // put it here so all the tests don't need to specify it.
-        restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
         inputC = "undefined",
         inputD = "undefined",
         inputE = "undefined",
         inputF = "undefined",// no statics in typescript, so this seemed preferable than global let Null = "Null";
-        characters = new Array<string>()
     ) {
         this.parent = null;
-        this.restrictions = restrictions;
         this.id = globalId++;
         this.count = count;
         this.output = output;
         this.type = type;
-        this.characters = characters;
+        this.characterRestrictions = new Array<string>();
+        if (!isNullOrUndefined(restrictions)) {
+            for (const restriction of restrictions) {
+                this.characterRestrictions.push(restriction.char);
+            }
+        }
         this.inputs = new Array<SolutionNodeInput>();
         if (inputA !== "undefined" && inputA !== "undefined")
             this.inputs.push(new SolutionNodeInput(inputA));
@@ -55,7 +58,7 @@ export class SolutionNode {
         clone.type = this.type;
         clone.count = this.count;
         clone.output = this.output;
-        
+
 
         let isIncomplete = false;
         this.inputs.forEach((input: SolutionNodeInput) => {
@@ -64,6 +67,11 @@ export class SolutionNode {
             const child = input.CreateClone(uncompleted);
             clone.inputs.push(child);
         });
+
+        for (const restriction of this.characterRestrictions) {
+            clone.characterRestrictions.push(restriction);
+        }
+
         if (isIncomplete)
             uncompleted.add(this);
 
@@ -123,13 +131,11 @@ export class SolutionNode {
                         theNode.inputs[k].SetInputNode(theMatchingTransaction, theNode);
                         // all reactions are incomplete when they come from the transaction map
                         theSolution.SetNodeIncomplete(theMatchingTransaction);
-                        theSolution.addCharacterRestrictions(theMatchingTransaction.characters);
-                        theSolution.addRestrictions(theMatchingTransaction.restrictions);
+                        theSolution.addRestrictions(theMatchingTransaction.getRestrictions());
                     }
 
-                    
-
                     theSolution.RemoveTransaction(theMatchingTransaction);
+                    theSolution.addRestrictions(theMatchingTransaction.getRestrictions());
                 }
 
                 const hasACloneJustBeenCreated = matchingTransactions.length > 1;
@@ -163,6 +169,10 @@ export class SolutionNode {
 
     GetParent(): SolutionNode | null {
         return this.parent;
+    }
+
+    getRestrictions(): Array<string> {
+        return this.characterRestrictions;
     }
 
 }

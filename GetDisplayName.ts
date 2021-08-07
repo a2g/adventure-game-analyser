@@ -8,7 +8,7 @@ function Parenthesize(input: string, isParenthesisNeeded: boolean): string {
 
 export function GetDisplayName(input: string | Array<string>, isParenthesisNeeded=false): string {
     if (Array.isArray(input)) {
-        let toReturn = "Colors.Yellow";
+        let toReturn = "" + Colors.Yellow;
         for (let i = 0; i < input.length; i++) {
             toReturn += input[i];
         }

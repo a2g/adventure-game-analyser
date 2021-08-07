@@ -1,14 +1,15 @@
 import { Raw } from "./Raw";
 import { GetDisplayName } from "./GetDisplayName";
+import { Colors } from "./Colors";
 
 export class RawObjectsAndVerb {
-    constructor(type: Raw, objectA: string, objectB: string, restriction: Array<string>) {
+    constructor(type: Raw, objectA: string, objectB: string, restrictions: Array<string>) {
         this.type = type;
         this.objectA = objectA;
         this.objectB = objectB;
         this.startingCharacterForA = "";
         this.startingCharacterForB = "";
-        this.restriction = restriction;
+        this.restrictions = restrictions;
     }
 
     WriteToConsole() {
@@ -17,7 +18,7 @@ export class RawObjectsAndVerb {
             const verb = GetDisplayName(Raw[enumAsInt]);
             const objectA = GetDisplayName(this.objectA) +  GetDisplayName(this.startingCharacterForA, true);
             const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB, true);
-            const restriction =  this.restriction.length ? "(" + GetDisplayName(this.restriction) + ")" : "";
+            const restriction = this.restrictions.length ? "( " + GetDisplayName(this.restrictions) + " )" : "";
             console.log(verb + " " + objectA + " " + objectB + " " + restriction);
         } else {
             console.log("Raw type was invalid");
@@ -25,7 +26,7 @@ export class RawObjectsAndVerb {
     }
 
     private getDisplayName(object: string, char: string) {
-        GetDisplayName(object) + char.length ? "(" + GetDisplayName(char) + ")" : "";
+        GetDisplayName(object) + Colors.Reset + char.length ? "(" + GetDisplayName(char) + ")" : "";
     }
 
     public appendStartingCharacterForA(startingCharacterForA: string) {
@@ -47,5 +48,5 @@ export class RawObjectsAndVerb {
     objectB: string;
     startingCharacterForA: string;
     startingCharacterForB: string;
-    restriction: Array<string>;
+    restrictions: Array<string>;
 }

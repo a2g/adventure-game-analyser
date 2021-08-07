@@ -159,21 +159,21 @@ export class Solution {
                     this.absoluteLeafNodes.set(pathOfParent, node.parent);
 
                 if (!node.parent) {
-                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.characters);
-                }else if (node.inputs.length === 0) {
-                    return new RawObjectsAndVerb(Raw.None, "", "", node.characters);
+                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.getRestrictions());
+                } else if (node.inputs.length === 0) {
+                    return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions());
                 } else if (node.type.toLowerCase().includes("grab")) {
-                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.characters);
+                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.getRestrictions());
                 } else if (node.type.toLowerCase().includes("toggle")) {
-                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, "", node.characters);
+                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, "", node.getRestrictions());
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
                     node.inputs.forEach((node: SolutionNodeInput) => {
                         text += node.inputName + " ";
                     });
-                    return new RawObjectsAndVerb(Raw.Auto, "", "", node.characters); 
+                    return new RawObjectsAndVerb(Raw.Auto, "", "", node.getRestrictions()); 
                 } else if (node.inputs.length === 2) {
-                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.characters);
+                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions());
                 } else {
                     assert(false && "unknown!");
                 }
@@ -183,19 +183,17 @@ export class Solution {
         return null;
     }
 
-    addRestrictions(restrictions: Array<{ char: string }> | undefined | null) {
-        if (!isNullOrUndefined(restrictions)) {
+    addRestrictions(restrictions: Array<string>) {
+        
             for (const restriction of restrictions) {
-                this.characterRestrictions.add(restriction.char);
+                this.characterRestrictions.add(restriction);
             }
-        }
+        
     }
 
-    getCharacterRestrictions(): Set<string>{
+    getRestrictions(): Set<string>{
         return this.characterRestrictions;
     }
-
-
 
     rootNode: SolutionNode;
     solutionName: string;
