@@ -1,9 +1,9 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import scenario from '../20210415JsonPrivate/scenario/schema/HighScene.json';
-import objects from '../20210415JsonPrivate/scenario/schema/HighObjects.json';
-import _ from '../20210415JsonPrivate/scenario/schema/Script/Script.json';
+import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json';
+import objects from './20210415JsonPrivate/scenario/schema/HighObjects.json';
+import _ from './20210415JsonPrivate/scenario/schema/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
