@@ -2,7 +2,3 @@
 [submodule "20210415JsonPrivate"]
 	path = 20210415JsonPrivate
 	url = https://github.com/a2g/20210415JsonPrivate.git
-
-[submodule "scenario/schema/Script"]
-	path = 20210415JsonPrivate/scenario/schema/Script
-	url = https://github.com/a2g/Script.git
