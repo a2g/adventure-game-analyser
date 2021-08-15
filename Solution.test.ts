@@ -8,7 +8,8 @@ import { Scenario } from './Scenario';
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
-        const map = Scenario.GetSolutionNodesMappedByInput();
+        const scene = new Scenario();
+        const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -24,7 +25,8 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_guitar", () => {
-        const map = Scenario.GetSolutionNodesMappedByInput();
+        const scene = new Scenario();
+        const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -50,7 +52,8 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_slamdunk", () => {
-        const map = Scenario.GetSolutionNodesMappedByInput();
+        const scene = new Scenario();
+        const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -78,7 +81,8 @@ describe("Solution", () => {
 
 
     it("Test the cloning at numerous ways to kill demon", () => {
-        const map = Scenario.GetSolutionNodesMappedByInput();
+        const scene = new Scenario();
+        const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_solution";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "",  objective), map));
@@ -115,7 +119,8 @@ describe("Solution", () => {
   
 
     it("Test cloning with turn on/turn off", () => {
-        const map = Scenario.GetSolutionNodesMappedByInput();
+        const scene = new Scenario();
+        const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "",  objective), map));

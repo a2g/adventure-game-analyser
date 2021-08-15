@@ -17,6 +17,8 @@ import { ChooseToPlayThrough } from './ChooseToPlayThrough';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { ChooseTwoCharacters } from './ChooseTwoCharacters';
+import { ScenarioInterface } from './ScenarioInterface';
+import { Scenario } from './Scenario';
 const prompt = promptSync();
 
 function main(): void {
@@ -30,21 +32,22 @@ function main(): void {
         console.log("b. bail");
 
         const choice = prompt('Choose an option (b)ail): ').toLowerCase();
+        const scene: ScenarioInterface = new Scenario();
         switch (choice) {
             case '1':
-                ChooseToPlayThrough(0);
+                ChooseToPlayThrough(scene, 0);
                 break;
             case '2':
-                ChooseTheGoalToFindLeavesFor.prototype.DoStuff();
+                ChooseTheGoalToFindLeavesFor.prototype.DoStuff(scene);
                 break;
             case '3':
-                ChooseToFindUnused.prototype.DoStuff();
+                ChooseToFindUnused.prototype.DoStuff(scene);
                 break;
             case '4':
-                ChooseTheGoalToConcoctSolutionFor.prototype.DoStuff();
+                ChooseTheGoalToConcoctSolutionFor.prototype.DoStuff(scene);
                 break;
             case '5':
-                ChooseTwoCharacters.prototype.DoStuff();
+                //ChooseTwoCharacters.prototype.DoStuff();
                 break;
             case 'b':
                 return;

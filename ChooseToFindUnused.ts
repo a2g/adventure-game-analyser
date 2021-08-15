@@ -1,19 +1,18 @@
 import promptSync from 'prompt-sync'; //const prompt = require('prompt-sync')({ sigint: true });
 import { Scenario } from "./Scenario";
-import { Solution } from "./Solution";
-import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode"; 
 import { SolutionNodeInput } from './SolutionNodeInput';
+import { ScenarioInterfaceFindUnused } from './ScenarioInterfaceFindUnused';
 const prompt = promptSync();
 
  
 
 export class ChooseToFindUnused {
-    public DoStuff(): void {
+    public DoStuff(scene: ScenarioInterfaceFindUnused): void {
+        const invs = scene.GetArrayOfInvs();
+        const props =  scene.GetArrayOfProps();
+        const it =  scene.GetSolutionNodesMappedByInput().GetValues();
 
-        const invs = Scenario.GetArrayOfInvs();
-        const props = Scenario.GetArrayOfProps();
-        const it = Scenario.GetSolutionNodesMappedByInput().GetValues();
         while(true){
             const c = it.next();
             if (c.done)

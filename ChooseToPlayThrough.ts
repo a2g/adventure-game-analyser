@@ -16,20 +16,22 @@
 import { Happener } from "./Happener";
 import { PlayerAI } from "./PlayerAI";
 import { GameReporter } from "./GameReporter";
-import { Sleep } from "./Sleep";
-import { Scenario } from "./Scenario";
+import { Sleep } from "./Sleep"; 
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
 import { SolutionNodeInput } from "./SolutionNodeInput";
+import { ScenarioInterfacePlayThru } from "./ScenarioInterfacePlayThru";
+import { ScenarioInterfaceHappener } from "./ScenarioInterfaceHappener";
+import { ScenarioInterface } from "./ScenarioInterface";
 
 
 
-export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
+export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTurns: number): void {
 
     {
-        Happener.GetInstance().Initialize(new Scenario());
+        Happener.GetInstance().Initialize(scene);
         const ai: PlayerAI = new PlayerAI(Happener.GetInstance(), numberOfAutopilotTurns);
-        const autos = Scenario.GetSolutionNodesMappedByInput().GetAutos();
+        const autos = scene.GetSolutionNodesMappedByInput().GetAutos();
         
         while(true) {
             const invs = Happener.GetInstance().GetCurrentVisibleInventory();
@@ -84,7 +86,7 @@ export function ChooseToPlayThrough(numberOfAutopilotTurns: number): void {
      
 
             // 
-            const objects = Scenario.GetMixedObjectsAndVerbFromThreeStrings(input);
+            const objects = scene.GetMixedObjectsAndVerbFromThreeStrings(input);
 
             // handle errors
             if (objects.type.toString().startsWith("Error")) {

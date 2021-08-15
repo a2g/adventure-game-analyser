@@ -15,38 +15,66 @@ function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
 export class Scenario implements ScenarioInterface {
-    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
-        return Scenario.GetMixedObjectsAndVerbFromThreeStrings(strings);
-    }
-    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        return Scenario.GetHappeningsIfAny(objects);
-    }
-    GetArrayOfSingleObjectVerbs(): string[] {
-        return Scenario.GetArrayOfSingleObjectVerbs();
-    }
-    GetArrayOfVisibilitiesOfSingleObjectVerbs(): boolean[] {
-        return Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
-    }
-    GetArrayOfProps(): string[] {
-        return Scenario.GetArrayOfProps();
-    }
-    GetArrayOfInvs(): string[] {
-        return Scenario.GetArrayOfProps();
-    }
-    GetArrayOfRegs(): string[] {
-        return Scenario.GetArrayOfRegs();
-    }
     GetSetOfStartingProps(): Set<string> {
         return Scenario.GetSetOfStartingProps();
-    }
-    GetArrayOfStartingInvs(): Set<string> {
-        return Scenario.GetSetOfStartingInvs();
     }
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
         return Scenario.GetSolutionNodesMappedByInput();
     }
+    GetStartingThingsForCharacter(name: string): Set<string> {
+        return Scenario.GetStartingThingsForCharacter(name);
+    }
+    GetSetOfStartingInvs(): Set<string> {
+        return Scenario.GetSetOfStartingInvs();
+    }
+    GetSetOfStartingThings(): Set<[string, string]> {
+        return Scenario.GetSetOfStartingThings();
+    }
+    GetArrayOfCharacters(): Array<string> {
+        return Scenario.GetArrayOfCharacters();
+    }
 
-    static GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
+    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
+        return Scenario.GetMixedObjectsAndVerbFromThreeStrings(strings);
+    }
+
+    GetArrayOfProps(): Array<string> {
+        return objects.definitions.prop_type.enum;
+    }
+
+    GetArrayOfInvs(): Array<string> {
+        return objects.definitions.inv_type.enum;
+    }
+
+    GetArrayOfPropVisibilities() {
+        return Scenario.GetArrayOPropVisibilities();
+    }
+     
+    GetArrayOfRegs(): Array<string> {
+        return Scenario.GetArrayOfRegs();
+    }
+    GetArrayOfSingleObjectVerbs(): Array<string> {
+        return Scenario.GetArrayOfSingleObjectVerbs()
+    }
+    GetArrayOInvVisibilities(): Array<boolean> {
+        return Scenario.GetArrayOInvVisibilities();
+    }
+    GetArrayOPropVisibilities(): Array<boolean> {
+        return Scenario.GetArrayOPropVisibilities();
+    }
+    GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
+        return Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
+    }
+    GetArrayOfRegStartingValues(): Array<boolean> {
+        return Scenario.GetArrayOfRegStartingValues();
+    }
+    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
+        return Scenario.GetHappeningsIfAny(objects);
+    }
+
+   
+
+    private static GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
         const verb = strings[0].toLowerCase();
 
         if (verb === "grab") {
@@ -80,7 +108,7 @@ export class Scenario implements ScenarioInterface {
         return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
     }
 
-    static GetState(name: string | undefined): string {
+    private static GetState(name: string | undefined): string {
         if (name) {
             const firstOpenBracket: number = name.indexOf("(");
 
@@ -95,35 +123,35 @@ export class Scenario implements ScenarioInterface {
         return "undefined";
     }
 
-    static GetSolutionNodesMappedByInput(): SolutionNodeMap {
+    private static GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
         const result = Scenario.SingleBigSwtich(true, notUsed) as SolutionNodeMap;
         return result;
     }
 
-    static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
+    private static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
         const result = Scenario.SingleBigSwtich(false, objects) as Happenings | null;
         return result;
     }
 
-    static GetArrayOfSingleObjectVerbs(): Array<string> {
+    private static GetArrayOfSingleObjectVerbs(): Array<string> {
         return ["grab", "toggle"];
     }
-    static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
+    private static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
         return [true, true];
     }
 
-    static GetArrayOfProps(): Array<string> {
+    private static GetArrayOfProps(): Array<string> {
         return objects.definitions.prop_type.enum;
     }
-    static GetArrayOfInvs(): Array<string> {
+    private static GetArrayOfInvs(): Array<string> {
         return objects.definitions.inv_type.enum;
     }
-    static GetArrayOfRegs(): Array<string> {
+    private static GetArrayOfRegs(): Array<string> {
         return objects.definitions.reg_type.enum;
     }
 
-    static GetArrayOfRegStartingValues(): Array<boolean> {
+    private static GetArrayOfRegStartingValues(): Array<boolean> {
         const array = new Array<boolean>();
         objects.definitions.reg_type.enum.forEach((value: string) => {
             array.push(value.length > 0);// I used value.length>0 to get rid of the unused variable warnin
@@ -131,7 +159,7 @@ export class Scenario implements ScenarioInterface {
         return array;
     }
 
-    static GetSetOfStartingProps(): Set<string> {
+    private static GetSetOfStartingProps(): Set<string> {
         // preen starting set from JSON
         const startingSet = new Set<string>();
         scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
@@ -140,7 +168,7 @@ export class Scenario implements ScenarioInterface {
         return startingSet;
     }
 
-    static GetSetOfStartingInvs(): Set<string> {
+    private static GetSetOfStartingInvs(): Set<string> {
         // preen starting set from JSON
         const startingInvSet = new Set<string>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
@@ -151,7 +179,7 @@ export class Scenario implements ScenarioInterface {
         return startingInvSet;
     }
 
-    static GetStartingThingsForCharacter(name: string): Set<string> {
+    private static GetStartingThingsForCharacter(name: string): Set<string> {
         const startingThingSet = new Set<string>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
@@ -162,7 +190,7 @@ export class Scenario implements ScenarioInterface {
         return startingThingSet;
     }
 
-    static GetSetOfStartingThings(): Set<[string, string]> {
+    private static GetSetOfStartingThings(): Set<[string, string]> {
         const startingThingSet = new Set<[string, string]>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
@@ -171,7 +199,7 @@ export class Scenario implements ScenarioInterface {
         return startingThingSet;
     }
 
-    static GetArrayOPropVisibilities(): Array<boolean> {
+    private static GetArrayOPropVisibilities(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const startingSet = this.GetSetOfStartingProps();
         const visibilities = new Array<boolean>();
@@ -183,7 +211,7 @@ export class Scenario implements ScenarioInterface {
         return visibilities;
     }
 
-    static GetArrayOInvVisibilities(): Array<boolean> {
+    private static GetArrayOInvVisibilities(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const startingSet = this.GetSetOfStartingInvs();
         const visibilities = new Array<boolean>();
@@ -195,12 +223,12 @@ export class Scenario implements ScenarioInterface {
         return visibilities;
     }
 
-    static GetArrayOfCharacters(): Array<string> {
+    private static GetArrayOfCharacters(): Array<string> {
         return objects.definitions.char_type.enum;
     }
     
 
-    static SingleBigSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
+    private static SingleBigSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 

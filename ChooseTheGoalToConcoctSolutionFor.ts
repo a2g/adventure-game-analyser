@@ -1,4 +1,4 @@
-import { Scenario } from "./Scenario";
+
 import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
@@ -7,6 +7,8 @@ import { GetDisplayName } from "./GetDisplayName";
 import { SolutionNodeInput } from "./SolutionNodeInput";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
+import { ScenarioInterface } from "./ScenarioInterface";
+import { ScenarioInterfaceConcoct } from "./ScenarioInterfaceConcoct";
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
         throw new Error("assert failure");
@@ -60,22 +62,21 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 }
 
 export class ChooseTheGoalToConcoctSolutionFor {
-
-    public DoStuff(): void {
+    public DoStuff(scene: ScenarioInterfaceConcoct): void {
         while (true) {
             console.log(" ");
 
-            const startingProps = Scenario.GetSetOfStartingProps();
-            const startingInvs = Scenario.GetSetOfStartingInvs();
+            const startingProps = scene.GetSetOfStartingProps();
+            const startingInvs = scene.GetSetOfStartingInvs();
             const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
 
-            const solutionNodesMappedByInput = Scenario.GetSolutionNodesMappedByInput();
+            const solutionNodesMappedByInput = scene.GetSolutionNodesMappedByInput();
             const collection = new SolutionCollection();
 
             // Solve solution nodes
             collection.push(new Solution(new SolutionNode("root via app", "", "inv_solution"), solutionNodesMappedByInput));
             collection.SolveUntilZeroNodesRemaining();
-            collection.GenerateSolutionNames(Scenario.GetSetOfStartingThings());
+            collection.GenerateSolutionNames(scene.GetSetOfStartingThings());
 
             console.log("Choose a solution,  -1 for All, (b)ack ):")
             for (let i = 0; i < collection.length; i++) {
@@ -112,10 +113,10 @@ export class ChooseTheGoalToConcoctSolutionFor {
                             command = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
                             break;
                         }
-                        const chars = Scenario.GetArrayOfCharacters();
+                        const chars = scene.GetArrayOfCharacters();
                         for (let i = 0; i < chars.length; i++) {
                             const char = chars[i];
-                            const startingSet = Scenario.GetStartingThingsForCharacter(char);
+                            const startingSet = scene.GetStartingThingsForCharacter(char);
                             if (startingSet.has(command.objectA))
                                 command.appendStartingCharacterForA(char);
                             if (startingSet.has(command.objectB))
@@ -145,4 +146,5 @@ export class ChooseTheGoalToConcoctSolutionFor {
             }
         }
     }
+
 }

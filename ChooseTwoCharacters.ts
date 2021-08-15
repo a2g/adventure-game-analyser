@@ -55,6 +55,7 @@ function IsASupersetOfB(set:Set<string>, subset:Set<string>) {
 }
 
 export class ChooseTwoCharacters {
+    /*
     static array: Array<string> = [
         "inv_completed",
         "prop_death_by_guitar",
@@ -68,12 +69,6 @@ export class ChooseTwoCharacters {
         "prop_fully_accelerated_vacuum_tube"
     ];
 
-    /*
-     *        const it = map.keys();
-            let c = it.next();
-            for (let i = 0; !(c.done); i++, c = it.next()) {
-                console.log(String.fromCharCode(65 + i) + ". " + c.value);
-            }*/
 
     public DoStuff(): void {
 
@@ -171,4 +166,5 @@ export class ChooseTwoCharacters {
             }
         }
     }
+    */
 }

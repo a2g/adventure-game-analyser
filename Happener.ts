@@ -2,7 +2,8 @@ import { PlayerAI } from "./PlayerAI";
 import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
 import { Scenario } from "./Scenario";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
-import { Happen } from "./Happen";
+import { Happen } from "./Happen"; 
+import { ScenarioInterfaceHappener } from "./ScenarioInterfaceHappener";
 
 
 // April 2021
@@ -31,9 +32,10 @@ export class Happener {
     private listOfPropVisibilities: Array<boolean>;
     private listOfVerbVisibilities: Array<boolean>;
     private listOfRegsThatAreTrue: Array<boolean>;
-
+    private scene: ScenarioInterfaceHappener;
 
     constructor() {
+        this.scene = new Scenario();
         this.listOfInvs = new Array<string>();
         this.listOfRegs = new Array<string>();
         this.listOfProps = new Array<string>();
@@ -47,15 +49,15 @@ export class Happener {
         this.callbacks = new PlayerAI(this, 0);
     }
 
-    Initialize(data: Scenario){
-        this.listOfInvs = Scenario.GetArrayOfInvs();
-        this.listOfRegs = Scenario.GetArrayOfRegs();
-        this.listOfProps = Scenario.GetArrayOfProps();
-        this.listOfVerbs = Scenario.GetArrayOfSingleObjectVerbs();
-        this.listOfInvVisibilities = Scenario.GetArrayOInvVisibilities()
-        this.listOfPropVisibilities = Scenario.GetArrayOPropVisibilities();
-        this.listOfVerbVisibilities = Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
-        this.listOfRegsThatAreTrue = Scenario.GetArrayOfRegStartingValues();
+    Initialize(scene: ScenarioInterfaceHappener){
+        this.listOfInvs = scene.GetArrayOfInvs();
+        this.listOfRegs = scene.GetArrayOfRegs();
+        this.listOfProps = scene.GetArrayOfProps();
+        this.listOfVerbs = scene.GetArrayOfSingleObjectVerbs();
+        this.listOfInvVisibilities = scene.GetArrayOInvVisibilities()
+        this.listOfPropVisibilities = scene.GetArrayOPropVisibilities();
+        this.listOfVerbVisibilities = scene.GetArrayOfVisibilitiesOfSingleObjectVerbs();
+        this.listOfRegsThatAreTrue = scene.GetArrayOfRegStartingValues();
     }
 
     SetRegValue(reg: string, value: boolean): void {
@@ -75,7 +77,7 @@ export class Happener {
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
        
-        const happenings = Scenario.GetHappeningsIfAny(objects);
+        const happenings = this.scene.GetHappeningsIfAny(objects);
         if (happenings) {
             console.log(happenings.text);
             happenings.array.forEach((happening) => {

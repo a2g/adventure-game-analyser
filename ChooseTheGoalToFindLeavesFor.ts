@@ -3,11 +3,13 @@ import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
+import { ScenarioInterfaceFindLeaves } from "./ScenarioInterfaceFindLeaves";
 const prompt = promptSync();
 
 
 
 export class ChooseTheGoalToFindLeavesFor {
+
     static array: Array<string> = [
         "inv_solution",
         "prop_death_by_guitar",
@@ -20,9 +22,7 @@ export class ChooseTheGoalToFindLeavesFor {
         "prop_partly_accelerated_vacuum_tube",
         "prop_fully_accelerated_vacuum_tube"
     ];
-    public DoStuff(): void {
-
-
+    public DoStuff(scene: ScenarioInterfaceFindLeaves): void {
         while(true) {
             console.log(" ");
 
@@ -39,7 +39,7 @@ export class ChooseTheGoalToFindLeavesFor {
             // use either index or 
             const objective = (Number(choice) >= 0 && Number(choice) <= array.length) ? array[Number(choice)] : choice;
             console.log("\"" + objective + "\" was entered");
-            const mapOfReactionsByInput = Scenario.GetSolutionNodesMappedByInput();
+            const mapOfReactionsByInput = scene.GetSolutionNodesMappedByInput();
 
             const collection = new SolutionCollection();
             if (objective !== null) {

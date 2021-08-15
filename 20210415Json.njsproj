@@ -80,6 +80,12 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="RowOfSheet.ts" />
+    <TypeScriptCompile Include="ScenarioFromFile.ts" />
+    <TypeScriptCompile Include="ScenarioInterfaceFindLeaves.ts" />
+    <TypeScriptCompile Include="ScenarioInterfaceFindUnused.ts" />
+    <TypeScriptCompile Include="ScenarioInterfaceConcoct.ts" />
+    <TypeScriptCompile Include="ScenarioInterfaceHappener.ts" />
+    <TypeScriptCompile Include="ScenarioInterfacePlayThru.ts" />
     <TypeScriptCompile Include="Solution.ts" />
     <TypeScriptCompile Include="SolutionCollection.ts" />
     <TypeScriptCompile Include="SolutionNode.ts" />
