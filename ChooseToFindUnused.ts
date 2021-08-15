@@ -1,5 +1,4 @@
 import promptSync from 'prompt-sync'; //const prompt = require('prompt-sync')({ sigint: true });
-import { Scenario } from "./Scenario";
 import { SolutionNode } from "./SolutionNode"; 
 import { SolutionNodeInput } from './SolutionNodeInput';
 import { ScenarioInterfaceFindUnused } from './ScenarioInterfaceFindUnused';

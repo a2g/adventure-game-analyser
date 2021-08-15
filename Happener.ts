@@ -1,9 +1,9 @@
 import { PlayerAI } from "./PlayerAI";
 import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
-import { Scenario } from "./Scenario";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { Happen } from "./Happen"; 
 import { ScenarioInterfaceHappener } from "./ScenarioInterfaceHappener";
+import { ScenarioFromFile } from "./ScenarioFromFile";
 
 
 // April 2021
@@ -34,22 +34,19 @@ export class Happener {
     private listOfFlagsThatAreTrue: Array<boolean>;
     private scene: ScenarioInterfaceHappener;
 
-    constructor() {
-        this.scene = new Scenario();
+    constructor(scene: ScenarioInterfaceHappener) {
+        this.scene = scene;
         this.listOfInvs = new Array<string>();
         this.listOfFlags = new Array<string>();
         this.listOfProps = new Array<string>();
         this.listOfVerbs = new Array<string>();
-        
         
         this.listOfInvVisibilities = new Array<boolean>();
         this.listOfPropVisibilities = new Array<boolean>();
         this.listOfVerbVisibilities = new Array<boolean>(); 
         this.listOfFlagsThatAreTrue = new Array<boolean>();
         this.callbacks = new PlayerAI(this, 0);
-    }
 
-    Initialize(scene: ScenarioInterfaceHappener){
         this.listOfInvs = scene.GetArrayOfInvs();
         this.listOfFlags = scene.GetArrayOfRegs();
         this.listOfProps = scene.GetArrayOfProps();
@@ -204,7 +201,7 @@ export class Happener {
         return toReturn;
     }
 
-    GetCurrentlyTrueFlags(): Array<string>{
+    GetCurrentlyTrueFlags(): Array<string> {
         const toReturn = new Array<string>();
         for (let i = 0; i < this.listOfFlags.length; i++) {// classic forloop useful because shared index
             if (this.listOfFlagsThatAreTrue[i] === true)
@@ -212,16 +209,4 @@ export class Happener {
         }
         return toReturn;
     }
-
-    public static GetInstance(): Happener {
-        if (!Happener.instance) {
-            Happener.instance = new Happener();
-        }
-        return Happener.instance;
-    }
-    private static instance: Happener;
-
-
-
 }
-

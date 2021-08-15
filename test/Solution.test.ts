@@ -1,16 +1,16 @@
 //Typescript Unit test
 import assert = require('assert');
-import { Scenario } from '../Scenario';
 import { SolutionCollection } from '../SolutionCollection';
 import { SolutionNode } from '../SolutionNode';
 import { Solution } from '../Solution';
+import { ScenarioFromFile } from '../ScenarioFromFile';
 const testName = "root via test";
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
 
         // arrange
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
@@ -30,7 +30,7 @@ describe("Solution", () => {
     it("Test prop_death_by_guitar", () => {
 
         // arrange
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
@@ -49,7 +49,7 @@ describe("Solution", () => {
     it("Test prop_death_by_slamdunk", () => {
 
         // arrange
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
@@ -69,7 +69,7 @@ describe("Solution", () => {
     it("Test the cloning at numerous ways to kill demon", () => {
 
         // arrange
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_solution";
         const collection = new SolutionCollection();
@@ -99,7 +99,7 @@ describe("Solution", () => {
     it("prop_moderately_accelerated_vacuum_tube", () => {
 
         // arrange
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_moderately_accelerated_vacuum_tube";
         const collection = new SolutionCollection();

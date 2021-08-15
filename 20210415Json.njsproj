@@ -32,13 +32,15 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="20210415JsonPrivate\scenario\schema\HighScene.json" />
-    <Content Include="20210415JsonPrivate\scenario\schema\HighSchema.json" />
-    <Content Include="20210415JsonPrivate\scenario\schema\HighObjects.json" />
-    <Content Include="20210415JsonPrivate\scenario\schema\HospScene.json" />
-    <Content Include="20210415JsonPrivate\scenario\schema\HospSchema.json" />
-    <Content Include="20210415JsonPrivate\scenario\schema\HospObjects.json" />
-    <Content Include="20210415JsonPrivate\scenario\schema\script\Script.json" />
+    <Content Include="20210415JsonPrivate\HighObjects.json" />
+    <Content Include="20210415JsonPrivate\HighScene.json" />
+    <Content Include="20210415JsonPrivate\HighSchema.json" />
+    <Content Include="20210415JsonPrivate\HospObjects.json" />
+    <Content Include="20210415JsonPrivate\HospScene.json" />
+    <Content Include="20210415JsonPrivate\HospSchema.json" />
+    <Content Include="20210415JsonPrivate\Script\LICENSE" />
+    <Content Include="20210415JsonPrivate\Script\README.md" />
+    <Content Include="20210415JsonPrivate\Script\Script.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.json" />
@@ -51,7 +53,6 @@
     <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ChooseTwoCharacters.ts" />
     <TypeScriptCompile Include="Colors.ts" />
     <TypeScriptCompile Include="Game.ts" />
     <TypeScriptCompile Include="GameReporter.ts" />
@@ -138,9 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="20210415JsonPrivate\" />
-    <Folder Include="20210415JsonPrivate\scenario\" />
-    <Folder Include="20210415JsonPrivate\scenario\schema\" />
-    <Folder Include="20210415JsonPrivate\scenario\schema\script\" />
+    <Folder Include="20210415JsonPrivate\Script\" />
     <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

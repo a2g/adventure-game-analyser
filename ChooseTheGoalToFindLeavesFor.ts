@@ -1,4 +1,3 @@
-import { Scenario } from "./Scenario";
 import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";

@@ -3,12 +3,12 @@ import assert = require('assert');
 import { SolutionCollection } from './SolutionCollection'; 
 import { SolutionNode } from './SolutionNode';
 import { Solution } from './Solution';
-import { Scenario } from './Scenario';
+import { ScenarioFromFile } from './ScenarioFromFile';
 
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
@@ -25,7 +25,7 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_guitar", () => {
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
@@ -52,7 +52,7 @@ describe("Solution", () => {
     });
 
     it("Test prop_death_by_slamdunk", () => {
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
@@ -81,7 +81,7 @@ describe("Solution", () => {
 
 
     it("Test the cloning at numerous ways to kill demon", () => {
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_solution";
         const collection = new SolutionCollection();
@@ -119,7 +119,7 @@ describe("Solution", () => {
   
 
     it("Test cloning with turn on/turn off", () => {
-        const scene = new Scenario();
+        const scene = new ScenarioFromFile();
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_physics";
         const collection = new SolutionCollection();

@@ -3,7 +3,9 @@ import { GetDisplayName } from '../GetDisplayName';
 
 describe("GetDisplayName", () => {
     it("TestAllNamesSoFar", () => {
-        assert.equal("broken_radio", GetDisplayName("prop_broken_radio"));
-        assert.equal("broken_radio", GetDisplayName("inv_broken_radio"));
+        // this test is here just because it looked easy to implement
+        //... which is why its not implemented yet
+        const displayName = GetDisplayName("prop_broken_radio");
+        assert.equal("[36mbroken_radio[0m", displayName);
     });
 });

@@ -20,25 +20,21 @@ import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
 import { SolutionNodeInput } from "./SolutionNodeInput";
-import { ScenarioInterfacePlayThru } from "./ScenarioInterfacePlayThru";
-import { ScenarioInterfaceHappener } from "./ScenarioInterfaceHappener";
 import { ScenarioInterface } from "./ScenarioInterface";
-
-
 
 export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTurns: number): void {
 
     {
-        Happener.GetInstance().Initialize(scene);
-        const ai: PlayerAI = new PlayerAI(Happener.GetInstance(), numberOfAutopilotTurns);
+        const happener = new Happener(scene);
+        const ai: PlayerAI = new PlayerAI(happener, numberOfAutopilotTurns);
         const autos = scene.GetSolutionNodesMappedByInput().GetAutos();
         
         while(true) {
-            const invs = Happener.GetInstance().GetCurrentVisibleInventory();
+            const invs = happener.GetCurrentVisibleInventory();
             GameReporter.GetInstance().ReportInventory(invs);
-            const props = Happener.GetInstance().GetCurrentVisibleProps();
+            const props = happener.GetCurrentVisibleProps();
             GameReporter.GetInstance().ReportScene(props);
-            const Regs = Happener.GetInstance().GetCurrentlyTrueFlags();
+            const Regs = happener.GetCurrentlyTrueFlags();
             GameReporter.GetInstance().ReportScene(props);
 
             autos.forEach((node: SolutionNode) => {
@@ -62,13 +58,13 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
                 if (numberSatisified === node.inputs.length) {
                     if (node.output.startsWith("prop_")) {
                         console.log("Auto: prop set visible " + node.output);
-                        Happener.GetInstance().SetPropVisible(node.output, true);
+                        happener.SetPropVisible(node.output, true);
                     } else if (node.output.startsWith("reg_")) {
                         console.log("Auto: reg set to true " + node.output);
-                        Happener.GetInstance().SetRegValue(node.output, true);
+                        happener.SetRegValue(node.output, true);
                     } else if (node.output.startsWith("inv_")) {
                         console.log("Auto: inv set to visible " + node.output);
-                        Happener.GetInstance().SetInvVisible(node.output, true);
+                        happener.SetInvVisible(node.output, true);
                     }
                 }
             });
@@ -95,8 +91,8 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
             }
 
             // handle more errors
-            const visibleInvs = Happener.GetInstance().GetCurrentVisibleInventory();
-            const visibleProps = Happener.GetInstance().GetCurrentVisibleProps();
+            const visibleInvs = happener.GetCurrentVisibleInventory();
+            const visibleProps = happener.GetCurrentVisibleProps();
             const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
             const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
             const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
@@ -138,7 +134,7 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
             GameReporter.GetInstance().ReportCommand(input);
 
             // execute command - it will handle callbacks itself
-            Happener.GetInstance().ExecuteCommand(objects);
+            happener.ExecuteCommand(objects);
 
         }
         console.log("Success");

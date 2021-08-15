@@ -1,7 +1,7 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json'; 
+import scenario from './20210415JsonPrivate/HighScene.json'; 
 import _ from './Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
@@ -13,8 +13,9 @@ import { ScenarioInterface } from './ScenarioInterface';
 function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
-
+/*
 export class Scenario implements ScenarioInterface {
+    
     allProps: Array<string>;
     allRegs: Array<string>;
     allInvs: Array<string>;
@@ -523,4 +524,4 @@ export class Scenario implements ScenarioInterface {
         return isCollectingSolutionNodes ? solutionNodesMappedByInput : null;
     }
  
-}
+}*/
