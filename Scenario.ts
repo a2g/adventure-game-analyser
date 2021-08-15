@@ -1,9 +1,8 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json';
-import objects from './20210415JsonPrivate/scenario/schema/HighObjects.json';
-import _ from './20210415JsonPrivate/scenario/schema/Script/Script.json';
+import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json'; 
+import _ from './Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
@@ -14,95 +13,98 @@ import { ScenarioInterface } from './ScenarioInterface';
 function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
-export class Scenario implements ScenarioInterface {
-    GetSetOfStartingProps(): Set<string> {
-        return Scenario.GetSetOfStartingProps();
-    }
-    GetSolutionNodesMappedByInput(): SolutionNodeMap {
-        return Scenario.GetSolutionNodesMappedByInput();
-    }
-    GetStartingThingsForCharacter(name: string): Set<string> {
-        return Scenario.GetStartingThingsForCharacter(name);
-    }
-    GetSetOfStartingInvs(): Set<string> {
-        return Scenario.GetSetOfStartingInvs();
-    }
-    GetSetOfStartingThings(): Set<[string, string]> {
-        return Scenario.GetSetOfStartingThings();
-    }
-    GetArrayOfCharacters(): Array<string> {
-        return Scenario.GetArrayOfCharacters();
-    }
 
-    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
-        return Scenario.GetMixedObjectsAndVerbFromThreeStrings(strings);
+export class Scenario implements ScenarioInterface {
+    allProps: Array<string>;
+    allRegs: Array<string>;
+    allInvs: Array<string>;
+    allChars: Array<string>;
+
+    constructor() {
+        const setProps = new Set<string>();
+        const setRegs = new Set<string>();
+        const setInvs = new Set<string>();
+        const setChars = new Set<string>();
+
+        for (const reaction of scenario.reactions) {
+            const scriptType = reaction.script;
+            const count = reaction.count;
+            const restrictions = reaction.restrictions;
+            setInvs.add("" +reaction.inv1);
+            setInvs.add("" +reaction.inv2);
+            setInvs.add("" +reaction.inv3);
+            setRegs.add("" +reaction.reg1);
+            setRegs.add("" +reaction.reg2);
+            setProps.add("" +reaction.prop1);
+            setProps.add("" +reaction.prop2);
+            setProps.add("" +reaction.prop3);
+            setProps.add("" +reaction.prop4);
+            setProps.add("" +reaction.prop5);
+            setProps.add("" +reaction.prop6);
+            setProps.add("" +reaction.prop7);
+        }
+
+        for (let i = 0; i < scenario.startingThings.length; i++) {
+            const thing = scenario.startingThings[i];
+            setChars.add(thing.char);
+        }
+
+        setChars.delete("");
+        setProps.delete("");
+        setRegs.delete("");
+        setInvs.delete("");
+
+        this.allProps = Array.from(setProps.values());
+        this.allRegs = Array.from(setRegs.values());
+        this.allInvs = Array.from(setInvs.values()); 
+        this.allChars = Array.from(setChars.values());
+
+       
+    
     }
+    
 
     GetArrayOfProps(): Array<string> {
-        return objects.definitions.prop_type.enum;
+        return this.allProps;
     }
 
     GetArrayOfInvs(): Array<string> {
-        return objects.definitions.inv_type.enum;
+        return this.allInvs;
     }
 
-    GetArrayOfPropVisibilities() {
-        return Scenario.GetArrayOPropVisibilities();
-    }
-     
     GetArrayOfRegs(): Array<string> {
-        return Scenario.GetArrayOfRegs();
-    }
-    GetArrayOfSingleObjectVerbs(): Array<string> {
-        return Scenario.GetArrayOfSingleObjectVerbs()
-    }
-    GetArrayOInvVisibilities(): Array<boolean> {
-        return Scenario.GetArrayOInvVisibilities();
-    }
-    GetArrayOPropVisibilities(): Array<boolean> {
-        return Scenario.GetArrayOPropVisibilities();
-    }
-    GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
-        return Scenario.GetArrayOfVisibilitiesOfSingleObjectVerbs();
-    }
-    GetArrayOfRegStartingValues(): Array<boolean> {
-        return Scenario.GetArrayOfRegStartingValues();
-    }
-    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        return Scenario.GetHappeningsIfAny(objects);
+        return this.allRegs;
     }
 
-   
-
-    private static GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
+    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
         const verb = strings[0].toLowerCase();
 
         if (verb === "grab") {
-            if (objects.definitions.prop_type.enum.includes(strings[1]))
+            if (this.allProps.includes(strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
-            else if (objects.definitions.prop_type.enum.includes("prop_" + strings[1]))
+            else if (this.allProps.includes("prop_" + strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
             return new MixedObjectsAndVerb(Mix.ErrorGrabButNoProp, "", "", "");
         } else if (verb === "toggle") {
-            if (objects.definitions.prop_type.enum.includes(strings[1]))
+            if (this.allProps.includes(strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
-            else if (objects.definitions.prop_type.enum.includes("prop_" + strings[1]))
+            else if (this.allProps.includes("prop_" + strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
-            else if (objects.definitions.inv_type.enum.includes(strings[1]))
+            else if (this.allInvs.includes(strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, strings[1], "");
-            else if (objects.definitions.inv_type.enum.includes("inv_" + strings[1]))
+            else if (this.allInvs.includes("inv_" + strings[1]))
                 return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, "inv_" + strings[1], "");
             return new MixedObjectsAndVerb(Mix.ErrorToggleButNoInvOrProp, "", "", "");
         } else if (verb === "use") {
-            if (objects.definitions.inv_type.enum.includes(strings[1]) && objects.definitions.inv_type.enum.includes(strings[2]))
+            if (this.allInvs.includes(strings[1]) && this.allInvs.includes(strings[2]))
                 return new MixedObjectsAndVerb(Mix.InvVsInv, verb, strings[1], strings[2]);
-            else if (objects.definitions.inv_type.enum.includes("inv_" + strings[1]) && objects.definitions.inv_type.enum.includes("inv_" + strings[2]))
+            else if (this.allInvs.includes("inv_" + strings[1]) && this.allInvs.includes("inv_" + strings[2]))
                 return new MixedObjectsAndVerb(Mix.InvVsInv, verb, "inv_" + strings[1], "inv_" + strings[2]);
-            else if (objects.definitions.inv_type.enum.includes(strings[1]) && objects.definitions.prop_type.enum.includes(strings[2]))
+            else if (this.allInvs.includes(strings[1]) && this.allProps.includes(strings[2]))
                 return new MixedObjectsAndVerb(Mix.InvVsProp, verb, strings[1], strings[2]);
-            else if (objects.definitions.inv_type.enum.includes("inv_" + strings[1]) && objects.definitions.prop_type.enum.includes("prop_" + strings[2]))
+            else if (this.allInvs.includes("inv_" + strings[1]) && this.allProps.includes("prop_" + strings[2]))
                 return new MixedObjectsAndVerb(Mix.InvVsProp, verb, "inv_" + strings[1], "prop_" + strings[2]);
-            else if (objects.definitions.prop_type.enum.includes("prop_" + strings[1]) && objects.definitions.prop_type.enum.includes("prop_" + strings[2]))
+            else if (this.allProps.includes("prop_" + strings[1]) && this.allProps.includes("prop_" + strings[2]))
                 return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop_" + strings[1], "prop_" + strings[2]);
         }
         return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
@@ -125,41 +127,32 @@ export class Scenario implements ScenarioInterface {
 
     private static GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-        const result = Scenario.SingleBigSwtich(true, notUsed) as SolutionNodeMap;
+        const result = Scenario.SingleBigSwitch(true, notUsed) as SolutionNodeMap;
         return result;
     }
 
     private static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        const result = Scenario.SingleBigSwtich(false, objects) as Happenings | null;
+        const result = Scenario.SingleBigSwitch(false, objects) as Happenings | null;
         return result;
     }
 
-    private static GetArrayOfSingleObjectVerbs(): Array<string> {
+     GetArrayOfSingleObjectVerbs(): Array<string> {
         return ["grab", "toggle"];
     }
-    private static GetArrayOfVisibilitiesOfSingleObjectVerbs(): Array<boolean> {
+
+    GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean> {
         return [true, true];
     }
 
-    private static GetArrayOfProps(): Array<string> {
-        return objects.definitions.prop_type.enum;
-    }
-    private static GetArrayOfInvs(): Array<string> {
-        return objects.definitions.inv_type.enum;
-    }
-    private static GetArrayOfRegs(): Array<string> {
-        return objects.definitions.reg_type.enum;
-    }
-
-    private static GetArrayOfRegStartingValues(): Array<boolean> {
+    GetArrayOfInitialStatesOfRegs(): Array<boolean> {
         const array = new Array<boolean>();
-        objects.definitions.reg_type.enum.forEach((value: string) => {
-            array.push(value.length > 0);// I used value.length>0 to get rid of the unused variable warnin
-        });
+        for(const reg of this.allRegs) {
+            array.push(reg.length > 0);// I used value.length>0 to get rid of the unused variable warnin
+        };
         return array;
     }
 
-    private static GetSetOfStartingProps(): Set<string> {
+    GetSetOfStartingProps(): Set<string> {
         // preen starting set from JSON
         const startingSet = new Set<string>();
         scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
@@ -168,7 +161,7 @@ export class Scenario implements ScenarioInterface {
         return startingSet;
     }
 
-    private static GetSetOfStartingInvs(): Set<string> {
+    GetSetOfStartingInvs(): Set<string> {
         // preen starting set from JSON
         const startingInvSet = new Set<string>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
@@ -179,7 +172,7 @@ export class Scenario implements ScenarioInterface {
         return startingInvSet;
     }
 
-    private static GetStartingThingsForCharacter(name: string): Set<string> {
+    GetStartingThingsForCharacter(name: string): Set<string> {
         const startingThingSet = new Set<string>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
@@ -190,7 +183,7 @@ export class Scenario implements ScenarioInterface {
         return startingThingSet;
     }
 
-    private static GetSetOfStartingThings(): Set<[string, string]> {
+    GetSetOfStartingThings(): Set<[string, string]> {
         const startingThingSet = new Set<[string, string]>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
@@ -199,36 +192,46 @@ export class Scenario implements ScenarioInterface {
         return startingThingSet;
     }
 
-    private static GetArrayOPropVisibilities(): Array<boolean> {
+    GetArrayOfInitialStatesOfProps(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const startingSet = this.GetSetOfStartingProps();
         const visibilities = new Array<boolean>();
-        objects.definitions.prop_type.enum.forEach((prop: string) => {
+        for (const prop of this.allProps) {
             const isVisible = startingSet.has(prop);
             visibilities.push(isVisible);
-        });
+        };
 
         return visibilities;
     }
 
-    private static GetArrayOInvVisibilities(): Array<boolean> {
+    GetArrayOfInitialStatesOfInvs(): Array<boolean> {
         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
         const startingSet = this.GetSetOfStartingInvs();
         const visibilities = new Array<boolean>();
-        objects.definitions.inv_type.enum.forEach((inv: string) => {
+        for (const inv of this.allInvs) {
             const isVisible = startingSet.has(inv);
             visibilities.push(isVisible);
-        });
+        };
 
         return visibilities;
     }
 
-    private static GetArrayOfCharacters(): Array<string> {
-        return objects.definitions.char_type.enum;
+    GetArrayOfCharacters(): Array<string> {
+        return this.allChars;
     }
-    
 
-    private static SingleBigSwtich(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
+    GetSolutionNodesMappedByInput(): SolutionNodeMap {
+        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
+        const result = Scenario.SingleBigSwitch(true, notUsed) as SolutionNodeMap;
+        return result;
+    }
+
+    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
+        const result = Scenario.SingleBigSwitch(false, objects) as Happenings | null;
+        return result;
+    }
+
+    private static SingleBigSwitch(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 

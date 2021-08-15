@@ -38,7 +38,7 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
             GameReporter.GetInstance().ReportInventory(invs);
             const props = Happener.GetInstance().GetCurrentVisibleProps();
             GameReporter.GetInstance().ReportScene(props);
-            const regs = Happener.GetInstance().GetCurrentlyTrueRegs();
+            const Regs = Happener.GetInstance().GetCurrentlyTrueFlags();
             GameReporter.GetInstance().ReportScene(props);
 
             autos.forEach((node: SolutionNode) => {
@@ -54,7 +54,7 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
                             numberSatisified++;
                         }
                     } else if (input.inputName.startsWith("reg_")) {
-                        if (regs.includes(input.inputName)) {
+                        if (Regs.includes(input.inputName)) {
                             numberSatisified++;
                         }
                     }

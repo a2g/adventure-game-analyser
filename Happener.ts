@@ -27,17 +27,17 @@ export class Happener {
     private listOfInvs: Array<string>;
     private listOfProps: Array<string>;
     private listOfVerbs: Array<string>;
-    private listOfRegs: Array<string>;
+    private listOfFlags: Array<string>;
     private listOfInvVisibilities: Array<boolean>;
     private listOfPropVisibilities: Array<boolean>;
     private listOfVerbVisibilities: Array<boolean>;
-    private listOfRegsThatAreTrue: Array<boolean>;
+    private listOfFlagsThatAreTrue: Array<boolean>;
     private scene: ScenarioInterfaceHappener;
 
     constructor() {
         this.scene = new Scenario();
         this.listOfInvs = new Array<string>();
-        this.listOfRegs = new Array<string>();
+        this.listOfFlags = new Array<string>();
         this.listOfProps = new Array<string>();
         this.listOfVerbs = new Array<string>();
         
@@ -45,24 +45,24 @@ export class Happener {
         this.listOfInvVisibilities = new Array<boolean>();
         this.listOfPropVisibilities = new Array<boolean>();
         this.listOfVerbVisibilities = new Array<boolean>(); 
-        this.listOfRegsThatAreTrue = new Array<boolean>();
+        this.listOfFlagsThatAreTrue = new Array<boolean>();
         this.callbacks = new PlayerAI(this, 0);
     }
 
     Initialize(scene: ScenarioInterfaceHappener){
         this.listOfInvs = scene.GetArrayOfInvs();
-        this.listOfRegs = scene.GetArrayOfRegs();
+        this.listOfFlags = scene.GetArrayOfRegs();
         this.listOfProps = scene.GetArrayOfProps();
         this.listOfVerbs = scene.GetArrayOfSingleObjectVerbs();
-        this.listOfInvVisibilities = scene.GetArrayOInvVisibilities()
-        this.listOfPropVisibilities = scene.GetArrayOPropVisibilities();
-        this.listOfVerbVisibilities = scene.GetArrayOfVisibilitiesOfSingleObjectVerbs();
-        this.listOfRegsThatAreTrue = scene.GetArrayOfRegStartingValues();
+        this.listOfInvVisibilities = scene.GetArrayOfInitialStatesOfInvs()
+        this.listOfPropVisibilities = scene.GetArrayOfInitialStatesOfProps();
+        this.listOfVerbVisibilities = scene.GetArrayOfInitialStatesOfSingleObjectVerbs();
+        this.listOfFlagsThatAreTrue = scene.GetArrayOfInitialStatesOfRegs();
     }
 
     SetRegValue(reg: string, value: boolean): void {
         const index = this.GetIndexOfReg(reg);
-        this.listOfRegsThatAreTrue[index] = value;
+        this.listOfFlagsThatAreTrue[index] = value;
     }
 
     SetInvVisible(inv: string, value: boolean): void {
@@ -121,7 +121,7 @@ export class Happener {
 
 
     GetIndexOfReg(item: string): number {
-        const indexOfReg: number = this.listOfRegs.indexOf(item);
+        const indexOfReg: number = this.listOfFlags.indexOf(item);
         return indexOfReg;
     }
 
@@ -162,10 +162,10 @@ export class Happener {
         return toReturn;
     }
 
-    GetEntireRegSuit(): Array<[string, boolean]> {
+    GetEntireFlagsuit(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
         for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
-            toReturn.push([this.listOfRegs[i], this.listOfRegsThatAreTrue[i]]);
+            toReturn.push([this.listOfFlags[i], this.listOfFlagsThatAreTrue[i]]);
         }
         return toReturn;
     }
@@ -204,11 +204,11 @@ export class Happener {
         return toReturn;
     }
 
-    GetCurrentlyTrueRegs(): Array<string>{
+    GetCurrentlyTrueFlags(): Array<string>{
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfRegs.length; i++) {// classic forloop useful because shared index
-            if (this.listOfRegsThatAreTrue[i] === true)
-                toReturn.push(this.listOfRegs[i]);
+        for (let i = 0; i < this.listOfFlags.length; i++) {// classic forloop useful because shared index
+            if (this.listOfFlagsThatAreTrue[i] === true)
+                toReturn.push(this.listOfFlags[i]);
         }
         return toReturn;
     }

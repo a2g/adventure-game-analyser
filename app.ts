@@ -19,9 +19,12 @@ import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolut
 import { ChooseTwoCharacters } from './ChooseTwoCharacters';
 import { ScenarioInterface } from './ScenarioInterface';
 import { Scenario } from './Scenario';
+import { ScenarioFromFile } from './ScenarioFromFile';
 const prompt = promptSync();
 
 function main(): void {
+    const scenario = new ScenarioFromFile();
+
     while(true) {
         console.log(" ");
         console.log("1. Play Through");
