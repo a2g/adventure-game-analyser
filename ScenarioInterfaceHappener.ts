@@ -5,7 +5,7 @@ import { Happenings } from './Happenings';
 export interface ScenarioInterfaceHappener {
     GetArrayOfProps(): Array<string>;
     GetArrayOfInvs(): Array<string>;
-    GetArrayOfRegs(): Array<string>;
+    GetArrayOfFlags(): Array<string>;
     GetArrayOfSingleObjectVerbs(): Array<string>;
   
     GetArrayOfInitialStatesOfInvs(): Array<boolean>;
@@ -13,6 +13,6 @@ export interface ScenarioInterfaceHappener {
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap;
-    GetArrayOfInitialStatesOfRegs(): Array<boolean>;
+    GetArrayOfInitialStatesOfFlags(): Array<boolean>;
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }

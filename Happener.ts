@@ -48,17 +48,17 @@ export class Happener {
         this.callbacks = new PlayerAI(this, 0);
 
         this.listOfInvs = scene.GetArrayOfInvs();
-        this.listOfFlags = scene.GetArrayOfRegs();
+        this.listOfFlags = scene.GetArrayOfFlags();
         this.listOfProps = scene.GetArrayOfProps();
         this.listOfVerbs = scene.GetArrayOfSingleObjectVerbs();
         this.listOfInvVisibilities = scene.GetArrayOfInitialStatesOfInvs()
         this.listOfPropVisibilities = scene.GetArrayOfInitialStatesOfProps();
         this.listOfVerbVisibilities = scene.GetArrayOfInitialStatesOfSingleObjectVerbs();
-        this.listOfFlagsThatAreTrue = scene.GetArrayOfInitialStatesOfRegs();
+        this.listOfFlagsThatAreTrue = scene.GetArrayOfInitialStatesOfFlags();
     }
 
-    SetRegValue(reg: string, value: boolean): void {
-        const index = this.GetIndexOfReg(reg);
+    SetFlagValue(flag: string, value: boolean): void {
+        const index = this.GetIndexOfFlag(flag);
         this.listOfFlagsThatAreTrue[index] = value;
     }
 
@@ -117,9 +117,9 @@ export class Happener {
     }
 
 
-    GetIndexOfReg(item: string): number {
-        const indexOfReg: number = this.listOfFlags.indexOf(item);
-        return indexOfReg;
+    GetIndexOfFlag(item: string): number {
+        const indexOfFlag: number = this.listOfFlags.indexOf(item);
+        return indexOfFlag;
     }
 
     GetIndexOfProp(item: string): number {
@@ -142,8 +142,8 @@ export class Happener {
         return name;
     }
 
-    GetReg(i: number): string {
-        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup for GetReg";
+    GetFlag(i: number): string {
+        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup for GetFlag";
         return name;
     }
 

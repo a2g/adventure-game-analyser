@@ -19,16 +19,16 @@ export function GetDisplayName(input: string | Array<string>, isParenthesisNeede
     const single = input.toString();
     if (single.startsWith("sol_prop_"))
         return Colors.Red + Parenthesize(single.slice(9), isParenthesisNeeded)  + Colors.Reset;
+    if (single.startsWith("sol_flag_"))
+        return Colors.Red + single.slice(9) + Colors.Reset;
     if (single.startsWith("sol_inv_"))
-        return Colors.Red + single.slice(8) + Colors.Reset;
-    if (single.startsWith("sol_reg_"))
         return Colors.Red + single.slice(8) + Colors.Reset;
     if (single.startsWith("inv_"))
         return Colors.Magenta + single.slice(4) + Colors.Reset;
     if (single.startsWith("prop_"))
         return Colors.Cyan + single.slice(5) + Colors.Reset;
-    if (single.startsWith("reg_"))
-        return Colors.Green + single.slice(4) + Colors.Reset;
+    if (single.startsWith("flag_"))
+        return Colors.Green + single.slice(5) + Colors.Reset;
     if (single.startsWith("char_"))
         return Colors.Yellow + Parenthesize(single.slice(5), isParenthesisNeeded) + Colors.Reset;
     else if (single.startsWith("use") || single.startsWith("toggle") || single.startsWith("grab"))

@@ -3,7 +3,7 @@ import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
 //import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json';
 //import objects from './20210415JsonPrivate/scenario/schema/HighObjects.json';
-import _ from './Script.json';
+import _ from './20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
@@ -34,7 +34,7 @@ function GetState(name: string | undefined): string {
     
 export class ScenarioFromFile implements ScenarioInterface {
     allProps: Array<string>;
-    allRegs: Array<string>;
+    allFlags: Array<string>;
     allInvs: Array<string>;
     allChars: Array<string>;
     startingThingSet: Set<[string, string]>;
@@ -46,7 +46,7 @@ export class ScenarioFromFile implements ScenarioInterface {
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();
-        const setRegs = new Set<string>();
+        const setFlags = new Set<string>();
         const setInvs = new Set<string>();
         const setChars = new Set<string>();
 
@@ -57,8 +57,8 @@ export class ScenarioFromFile implements ScenarioInterface {
             setInvs.add("" + reaction.inv1);
             setInvs.add("" + reaction.inv2);
             setInvs.add("" + reaction.inv3);
-            setRegs.add("" + reaction.reg1);
-            setRegs.add("" + reaction.reg2);
+            setFlags.add("" + reaction.flag1);
+            setFlags.add("" + reaction.flag2);
             setProps.add("" + reaction.prop1);
             setProps.add("" + reaction.prop2);
             setProps.add("" + reaction.prop3);
@@ -75,11 +75,11 @@ export class ScenarioFromFile implements ScenarioInterface {
 
         setChars.delete("");
         setProps.delete("");
-        setRegs.delete("");
+        setFlags.delete("");
         setInvs.delete("");
 
         this.allProps = Array.from(setProps.values());
-        this.allRegs = Array.from(setRegs.values());
+        this.allFlags = Array.from(setFlags.values());
         this.allInvs = Array.from(setInvs.values());
         this.allChars = Array.from(setChars.values());
 
@@ -113,8 +113,8 @@ export class ScenarioFromFile implements ScenarioInterface {
         return this.allInvs;
     }
 
-    GetArrayOfRegs(): Array<string> {
-        return this.allRegs;
+    GetArrayOfFlags(): Array<string> {
+        return this.allFlags;
     }
 
     GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
@@ -185,10 +185,10 @@ export class ScenarioFromFile implements ScenarioInterface {
         return [true, true];
     }
 
-    GetArrayOfInitialStatesOfRegs(): Array<boolean> {
+    GetArrayOfInitialStatesOfFlags(): Array<boolean> {
         const array = new Array<boolean>();
-        for (const reg of this.allRegs) {
-            array.push(reg.length > 0);// I used value.length>0 to get rid of the unused variable warnin
+        for (const flag of this.allFlags) {
+            array.push(flag.length > 0);// I used value.length>0 to get rid of the unused variable warnin
         };
         return array;
     }
@@ -280,16 +280,16 @@ export class ScenarioFromFile implements ScenarioInterface {
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, restrictions, prop1, count, prop2, prop3, prop4, prop5));
                     }
                     break;
-                case _.AUTO_REG1_TRIGGERS_REG2:
+                case _.AUTO_FLAG1_TRIGGERS_FLAG2:
                     {
-                        const input = "" + reaction.reg1;
-                        const output = "" + reaction.reg2;
+                        const input = "" + reaction.flag1;
+                        const output = "" + reaction.flag2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
                     }
                     break;
-                case _.AUTO_REG1_TRIGGERED_BY_PROPS:
+                case _.AUTO_FLAG1_TRIGGERED_BY_PROPS:
                     {
-                        const output = "" + reaction.reg1;
+                        const output = "" + reaction.flag1;
                         const prop1 = "" + reaction.prop1;
                         const prop2 = "" + reaction.prop2;
                         const prop3 = "" + reaction.prop3;

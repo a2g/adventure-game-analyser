@@ -34,7 +34,7 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
             GameReporter.GetInstance().ReportInventory(invs);
             const props = happener.GetCurrentVisibleProps();
             GameReporter.GetInstance().ReportScene(props);
-            const Regs = happener.GetCurrentlyTrueFlags();
+            const flags = happener.GetCurrentlyTrueFlags();
             GameReporter.GetInstance().ReportScene(props);
 
             autos.forEach((node: SolutionNode) => {
@@ -49,8 +49,8 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
                         if (invs.includes(input.inputName)) {
                             numberSatisified++;
                         }
-                    } else if (input.inputName.startsWith("reg_")) {
-                        if (Regs.includes(input.inputName)) {
+                    } else if (input.inputName.startsWith("flag_")) {
+                        if (flags.includes(input.inputName)) {
                             numberSatisified++;
                         }
                     }
@@ -59,9 +59,9 @@ export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTu
                     if (node.output.startsWith("prop_")) {
                         console.log("Auto: prop set visible " + node.output);
                         happener.SetPropVisible(node.output, true);
-                    } else if (node.output.startsWith("reg_")) {
-                        console.log("Auto: reg set to true " + node.output);
-                        happener.SetRegValue(node.output, true);
+                    } else if (node.output.startsWith("flag_")) {
+                        console.log("Auto: flag set to true " + node.output);
+                        happener.SetFlagValue(node.output, true);
                     } else if (node.output.startsWith("inv_")) {
                         console.log("Auto: inv set to visible " + node.output);
                         happener.SetInvVisible(node.output, true);
