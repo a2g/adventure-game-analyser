@@ -18,12 +18,11 @@ import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { ChooseTwoCharacters } from './ChooseTwoCharacters';
 import { ScenarioInterface } from './ScenarioInterface';
-import { Scenario } from './Scenario';
 import { ScenarioFromFile } from './ScenarioFromFile';
 const prompt = promptSync();
 
 function main(): void {
-    const scenario = new ScenarioFromFile();
+    const scene = new ScenarioFromFile();
 
     while(true) {
         console.log(" ");
@@ -35,7 +34,7 @@ function main(): void {
         console.log("b. bail");
 
         const choice = prompt('Choose an option (b)ail): ').toLowerCase();
-        const scene: ScenarioInterface = new Scenario();
+  
         switch (choice) {
             case '1':
                 ChooseToPlayThrough(scene, 0);

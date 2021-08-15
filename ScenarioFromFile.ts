@@ -1,9 +1,9 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json';
-import objects from './20210415JsonPrivate/scenario/schema/HighObjects.json';
-import _ from './20210415JsonPrivate/scenario/schema/Script/Script.json';
+//import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json';
+//import objects from './20210415JsonPrivate/scenario/schema/HighObjects.json';
+import _ from './Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
@@ -36,6 +36,10 @@ export class ScenarioFromFile implements ScenarioInterface {
     allProps: Array<string>;
     allRegs: Array<string>;
     allInvs: Array<string>;
+    allChars: Array<string>;
+    startingThingSet: Set<[string, string]>;
+    startingInvSet: Set<string>;
+    startingPropsSet: Set<string>
     
     constructor() {
         const text = fs.readFileSync("20210415JsonPrivate/scenario/schema/HighScene.json", { encoding: "UTF-8" });
@@ -78,66 +82,169 @@ export class ScenarioFromFile implements ScenarioInterface {
         this.allRegs = Array.from(setRegs.values());
         this.allInvs = Array.from(setInvs.values());
         this.allChars = Array.from(setChars.values());
+
+        // preen starting set from JSON
+        const startingPropsSet = new Set<string>();
+        scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
+            startingPropsSet.add("" + value.prop);
+        });
+        this.startingPropsSet = startingPropsSet;
+  
+        // preen starting invs from the startingThings
+        this.startingInvSet = new Set<string>();
+        for (let i = 0; i < scenario.startingThings.length; i++) {
+            const thing = scenario.startingThings[i];
+            if (thing.thing.startsWith("inv"))
+                this.startingInvSet.add(thing.thing)
+        }
+
+        this.startingThingSet = new Set<[string, string]>();
+        for (let i = 0; i < scenario.startingThings.length; i++) {
+            const thing = scenario.startingThings[i];
+            this.startingThingSet.add([thing.char, thing.thing]);
+        }
+    }
+
+    GetArrayOfProps(): Array<string> {
+        return this.allProps;
+    }
+
+    GetArrayOfInvs(): Array<string> {
+        return this.allInvs;
+    }
+
+    GetArrayOfRegs(): Array<string> {
+        return this.allRegs;
     }
 
     GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
-        throw new Error("Method not implemented.");
+        const verb = strings[0].toLowerCase();
+
+        if (verb === "grab") {
+            if (this.allProps.includes(strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
+            else if (this.allProps.includes("prop_" + strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
+            return new MixedObjectsAndVerb(Mix.ErrorGrabButNoProp, "", "", "");
+        } else if (verb === "toggle") {
+            if (this.allProps.includes(strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
+            else if (this.allProps.includes("prop_" + strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
+            else if (this.allInvs.includes(strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, strings[1], "");
+            else if (this.allInvs.includes("inv_" + strings[1]))
+                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, "inv_" + strings[1], "");
+            return new MixedObjectsAndVerb(Mix.ErrorToggleButNoInvOrProp, "", "", "");
+        } else if (verb === "use") {
+            if (this.allInvs.includes(strings[1]) && this.allInvs.includes(strings[2]))
+                return new MixedObjectsAndVerb(Mix.InvVsInv, verb, strings[1], strings[2]);
+            else if (this.allInvs.includes("inv_" + strings[1]) && this.allInvs.includes("inv_" + strings[2]))
+                return new MixedObjectsAndVerb(Mix.InvVsInv, verb, "inv_" + strings[1], "inv_" + strings[2]);
+            else if (this.allInvs.includes(strings[1]) && this.allProps.includes(strings[2]))
+                return new MixedObjectsAndVerb(Mix.InvVsProp, verb, strings[1], strings[2]);
+            else if (this.allInvs.includes("inv_" + strings[1]) && this.allProps.includes("prop_" + strings[2]))
+                return new MixedObjectsAndVerb(Mix.InvVsProp, verb, "inv_" + strings[1], "prop_" + strings[2]);
+            else if (this.allProps.includes("prop_" + strings[1]) && this.allProps.includes("prop_" + strings[2]))
+                return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop_" + strings[1], "prop_" + strings[2]);
+        }
+        return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
     }
 
-    GetArrayOfProps(): string[] {
-        throw new Error("Method not implemented.");
+    private static GetState(name: string | undefined): string {
+        if (name) {
+            const firstOpenBracket: number = name.indexOf("(");
+
+            if (firstOpenBracket >= 0) {
+                const lastIndexOf = name.lastIndexOf(")");
+
+                if (lastIndexOf > firstOpenBracket) {
+                    return name.slice(firstOpenBracket, lastIndexOf - 1);
+                }
+            }
+        }
+        return "undefined";
     }
-    GetArrayOfInvs(): string[] {
-        throw new Error("Method not implemented.");
+
+    private static GetSolutionNodesMappedByInput(): SolutionNodeMap {
+        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
+        const result = ScenarioFromFile.SingleBigSwitch(true, notUsed) as SolutionNodeMap;
+        return result;
     }
-    GetArrayOfRegs(): string[] {
-        throw new Error("Method not implemented.");
+
+    private static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
+        const result = ScenarioFromFile.SingleBigSwitch(false, objects) as Happenings | null;
+        return result;
     }
-    GetArrayOfSingleObjectVerbs(): string[] {
-        throw new Error("Method not implemented.");
+
+    GetArrayOfSingleObjectVerbs(): Array<string> {
+        return ["grab", "toggle"];
     }
-    GetArrayOfInitialStatesOfInvs(): boolean[] {
-        throw new Error("Method not implemented.");
+
+    GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean> {
+        return [true, true];
     }
-    GetArrayOfInitialStatesOfProps(): boolean[] {
-        throw new Error("Method not implemented.");
-    }
-    GetArrayOfInitialStatesOfSingleObjectVerbs(): boolean[] {
-        throw new Error("Method not implemented.");
-    }
-    GetArrayOfInitialStatesOfRegs(): boolean[] {
-        throw new Error("Method not implemented.");
+
+    GetArrayOfInitialStatesOfRegs(): Array<boolean> {
+        const array = new Array<boolean>();
+        for (const reg of this.allRegs) {
+            array.push(reg.length > 0);// I used value.length>0 to get rid of the unused variable warnin
+        };
+        return array;
     }
 
     GetSetOfStartingProps(): Set<string> {
-        throw new Error("Method not implemented.");
+        return this.startingPropsSet;
     }
+
     GetSetOfStartingInvs(): Set<string> {
-        throw new Error("Method not implemented.");
+        return this.startingInvSet;
     }
+
+
     GetSetOfStartingThings(): Set<[string, string]> {
-        throw new Error("Method not implemented.");
+        return this.startingThingSet;
     }
+
     GetStartingThingsForCharacter(name: string): Set<string> {
-        throw new Error("Method not implemented.");
-    }
-    GetArrayOfCharacters(): string[] {
-        throw new Error("Method not implemented.");
+        const startingThingSet = new Set<string>();
+        for (const thing of this.startingThingSet) {
+            if (thing[0] === name) {
+                startingThingSet.add(thing[1])
+            }
+        }
+        return startingThingSet;
     }
 
 
-    /*
-    GetSetOfStartingProps(): Set<string>;
-    GetArrayOfStartingInvs(): Set<string>;
-    GetSolutionNodesMappedByInput(): SolutionNodeMap;
-    GetStartingThingsForCharacter(name: string): Set<string>;
-    GetSetOfStartingInvs(): Set<string>;
-    GetSetOfStartingThings(): Set<[string, string]>;
-    GetArrayOfCharacters(): Array<string>;
-    
-    setOfStartingProps: Set<string>;
-    arrayOfStaringInvs: Set<string>;
-    */
+    GetArrayOfInitialStatesOfProps(): Array<boolean> {
+        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingProps();
+        const visibilities = new Array<boolean>();
+        for (const prop of this.allProps) {
+            const isVisible = startingSet.has(prop);
+            visibilities.push(isVisible);
+        };
+
+        return visibilities;
+    }
+
+    GetArrayOfInitialStatesOfInvs(): Array<boolean> {
+        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingInvs();
+        const visibilities = new Array<boolean>();
+        for (const inv of this.allInvs) {
+            const isVisible = startingSet.has(inv);
+            visibilities.push(isVisible);
+        };
+
+        return visibilities;
+    }
+
+    GetArrayOfCharacters(): Array<string> {
+        return this.allChars;
+    }
+
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
         const result = ScenarioFromFile.SingleBigSwitch(true, notUsed) as SolutionNodeMap;
@@ -448,4 +555,4 @@ export class ScenarioFromFile implements ScenarioInterface {
         return isCollectingSolutionNodes ? solutionNodesMappedByInput : null;
     }
 
-} 
+}

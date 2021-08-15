@@ -58,11 +58,7 @@ export class Scenario implements ScenarioInterface {
         this.allRegs = Array.from(setRegs.values());
         this.allInvs = Array.from(setInvs.values()); 
         this.allChars = Array.from(setChars.values());
-
-       
-    
     }
-    
 
     GetArrayOfProps(): Array<string> {
         return this.allProps;
