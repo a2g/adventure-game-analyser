@@ -1,8 +1,6 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-//import scenario from './20210415JsonPrivate/scenario/schema/HighScene.json';
-//import objects from './20210415JsonPrivate/scenario/schema/HighObjects.json';
 import _ from './20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
@@ -42,7 +40,7 @@ export class ScenarioFromFile implements ScenarioInterface {
     startingPropsSet: Set<string>
     
     constructor() {
-        const text = fs.readFileSync("20210415JsonPrivate/scenario/schema/HighScene.json", { encoding: "UTF-8" });
+        const text = fs.readFileSync("20210415JsonPrivate/HighScene.json", { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();
@@ -260,7 +258,7 @@ export class ScenarioFromFile implements ScenarioInterface {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 
-        const text = fs.readFileSync("20210415JsonPrivate/scenario/schema/HighScene.json", { encoding: "UTF-8" });
+        const text = fs.readFileSync("20210415JsonPrivate/HighScene.json", { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         for (const reaction of scenario.reactions) {

@@ -16,7 +16,6 @@ import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ s
 import { ChooseToPlayThrough } from './ChooseToPlayThrough';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
-import { ChooseTwoCharacters } from './ChooseTwoCharacters';
 import { ScenarioInterface } from './ScenarioInterface';
 import { ScenarioFromFile } from './ScenarioFromFile';
 const prompt = promptSync();
