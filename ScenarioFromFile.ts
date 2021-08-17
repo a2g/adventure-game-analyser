@@ -38,9 +38,11 @@ export class ScenarioFromFile implements ScenarioInterface {
     startingThingSet: Set<[string, string]>;
     startingInvSet: Set<string>;
     startingPropsSet: Set<string>
+    filename:string;
     
-    constructor() {
-        const text = fs.readFileSync("20210415JsonPrivate/HighScene.json", { encoding: "UTF-8" });
+    constructor(filename:string) {
+        this.filename = filename;
+        const text = fs.readFileSync(filename, { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();
@@ -250,15 +252,15 @@ export class ScenarioFromFile implements ScenarioInterface {
     }
 
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        const result = ScenarioFromFile.SingleBigSwitch(false, objects) as Happenings | null;
+        const result = ScenarioFromFile.SingleBigSwitch(this.filename, false, objects) as Happenings | null;
         return result;
     }
 
-    private static SingleBigSwitch(isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
+    private static SingleBigSwitch(filename:string, isCollectingSolutionNodes: boolean, objects: MixedObjectsAndVerb): Happenings | SolutionNodeMap | null {
         const happs = new Happenings();
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 
-        const text = fs.readFileSync("20210415JsonPrivate/HighScene.json", { encoding: "UTF-8" });
+        const text = fs.readFileSync(filename, { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         for (const reaction of scenario.reactions) {

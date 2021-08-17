@@ -1,26 +1,26 @@
 {
-  "name": "20210505Typescript",
-  "version": "0.0.0",
-  "description": "20210505Typescript",
-  "main": "app.js",
-  "author": {
-    "name": ""
+  "name" : "20210505Typescript",
+  "version" : "0.0.0",
+  "description" : "20210505Typescript",
+  "main" : "app.js",
+  "author" : {
+    "name" : ""
   },
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
-    "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+  "scripts" : {
+    "build" : "tsc --build",
+    "clean" : "tsc --build --clean",
+    "test" : "mocha -r ts-node/register tests/**/*.test.ts",
+    "coverage" : "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
-  "devDependencies": {
-    "@types/node": "^8.10.66",
-    "@types/prompt-sync": "^4.1.0",
-    "mocha": "^8.4.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^3.9.9"
+  "devDependencies" : {
+    "@types/node" : "^8.10.66",
+    "@types/prompt-sync" : "^4.1.0",
+    "mocha" : "^8.4.0",
+    "ts-node" : "^9.1.1",
+    "typescript" : "^3.9.9"
   },
-  "dependencies": {
-    "@types/mocha": "^8.2.2",
-    "prompt-sync": "^4.2.0"
+  "dependencies" : {
+    "@types/mocha" : "^8.2.2",
+    "prompt-sync" : "^4.2.0"
   }
 }

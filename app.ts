@@ -21,7 +21,7 @@ import { ScenarioFromFile } from './ScenarioFromFile';
 const prompt = promptSync();
 
 function main(): void {
-    const scene = new ScenarioFromFile();
+    const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
 
     while(true) {
         console.log(" ");
