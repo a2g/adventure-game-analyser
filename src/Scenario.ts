@@ -237,7 +237,7 @@ export class Scenario implements ScenarioInterface {
             const count = reaction.count;
             const restrictions = reaction.restrictions;
             switch (scriptType) {
-                case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
+                case _.AUTO_PROP1_BECOMES_PROP2_BY_PROPS:
                     {
                         const input = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -301,7 +301,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
+                case _.INV1_BECOMES_INV2_BY_KEEPING_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing inv
                         const inputA = "" + reaction.inv1;
@@ -317,7 +317,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
+                case _.INV1_BECOMES_INV2_BY_KEEPING_PROP1:
                     if (isCollectingSolutionNodes) {
                         // keeping prop1
                         const inputA = "" + reaction.inv1;
@@ -333,7 +333,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
+                case _.INV1_BECOMES_INV2_BY_LOSING_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing inv
                         const inputA = "" + reaction.inv1;
@@ -364,7 +364,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
+                case _.OBTAIN_INV1_BY_PROP1_WITH_PROP2_LOSE_PROPS:
                     // eg obtain inv_meteor via radiation suit with the meteor.
                     // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
                     if (isCollectingSolutionNodes) {
@@ -381,7 +381,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
+                case _.PROP1_BECOMES_PROP2_BY_KEEPING_INV1:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -396,7 +396,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
+                case _.PROP1_BECOMES_PROP2_BY_KEEPING_PROP3:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -411,7 +411,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
+                case _.PROP1_BECOMES_PROP2_BY_LOSING_INV1:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -426,7 +426,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
+                case _.PROP1_BECOMES_PROP2_BY_LOSING_PROP3:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -459,7 +459,7 @@ export class Scenario implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_CHANGES_STATE_TO_PROP2_VIA_KEEPING_INV1:
+                case _.PROP1_CHANGES_STATE_TO_PROP2_BY_KEEPING_INV1:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;

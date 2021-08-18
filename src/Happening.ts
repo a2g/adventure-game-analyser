@@ -16,6 +16,11 @@ export class Happening {
             case Happen.PropAppears:
                 assert(item?.startsWith("prop"));
                 break;
+            case Happen.FlagIsDecremented:
+            case Happen.FlagIsIncremented:
+            case Happen.FlagIsSet:
+                assert(item?.startsWith("flag"));
+                break;
         }
     }
     item: string;

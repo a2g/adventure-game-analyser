@@ -257,7 +257,7 @@ export class ScenarioFromFile implements ScenarioInterface {
             const count = reaction.count;
             const restrictions = reaction.restrictions;
             switch (scriptType) {
-                case _.AUTO_PROP1_BECOMES_PROP2_VIA_PROPS:
+                case _.AUTO_PROP1_BECOMES_PROP2_BY_PROPS:
                     {
                         const input = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -269,14 +269,14 @@ export class ScenarioFromFile implements ScenarioInterface {
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, restrictions, prop1, count, prop2, prop3, prop4, prop5));
                     }
                     break;
-                case _.AUTO_FLAG1_TRIGGERS_FLAG2:
+                case _.AUTO_FLAG1_SET_BY_FLAG2:
                     {
                         const input = "" + reaction.flag1;
                         const output = "" + reaction.flag2;
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
                     }
                     break;
-                case _.AUTO_FLAG1_TRIGGERED_BY_PROPS:
+                case _.AUTO_FLAG1_SET_BY_PROPS:
                     {
                         const output = "" + reaction.flag1;
                         const prop1 = "" + reaction.prop1;
@@ -321,7 +321,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.INV1_BECOMES_INV2_VIA_KEEPING_INV3:
+                case _.INV1_BECOMES_INV2_BY_KEEPING_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing inv
                         const inputA = "" + reaction.inv1;
@@ -337,7 +337,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.INV1_BECOMES_INV2_VIA_KEEPING_PROP1:
+                case _.INV1_BECOMES_INV2_BY_KEEPING_PROP1:
                     if (isCollectingSolutionNodes) {
                         // keeping prop1
                         const inputA = "" + reaction.inv1;
@@ -353,7 +353,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.INV1_BECOMES_INV2_VIA_LOSING_INV3:
+                case _.INV1_BECOMES_INV2_BY_LOSING_INV3:
                     if (isCollectingSolutionNodes) {
                         // losing inv
                         const inputA = "" + reaction.inv1;
@@ -369,6 +369,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
+                    
                 case _.INV1_WITH_PROP1_REVEALS_PROP2_KEPT_ALL:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.inv1;
@@ -384,7 +385,22 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.OBTAIN_INV1_VIA_PROP1_WITH_PROP2_LOSE_PROPS:
+                case _.INV1_WITH_PROP1_SETS_FLAG1_KEPT_ALL:
+                    if (isCollectingSolutionNodes) {
+                        const inputA = "" + reaction.inv1;
+                        const inputB = "" + reaction.prop1;
+                        const output = "" + reaction.flag1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+
+                    } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
+                        happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and a flag is set " + reaction.flag1;
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                        return happs;
+                    }
+                    break;
+                case _.OBTAIN_INV1_BY_PROP1_WITH_PROP2_LOSE_PROPS:
                     // eg obtain inv_meteor via radiation suit with the meteor.
                     // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
                     if (isCollectingSolutionNodes) {
@@ -401,7 +417,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_KEEPING_INV1:
+                case _.PROP1_BECOMES_PROP2_BY_KEEPING_INV1:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -416,7 +432,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_KEEPING_PROP3:
+                case _.PROP1_BECOMES_PROP2_BY_KEEPING_PROP3:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -431,7 +447,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_LOSING_INV1:
+                case _.PROP1_BECOMES_PROP2_BY_LOSING_INV1:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -446,7 +462,8 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_BECOMES_PROP2_VIA_LOSING_PROP3:
+                    
+                case _.PROP1_BECOMES_PROP2_BY_LOSING_PROP3:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -479,7 +496,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         return happs;
                     }
                     break;
-                case _.PROP1_CHANGES_STATE_TO_PROP2_VIA_KEEPING_INV1:
+                case _.PROP1_CHANGES_STATE_TO_PROP2_BY_KEEPING_INV1:
                     if (isCollectingSolutionNodes) {
                         const inputA = "" + reaction.prop1;
                         const output = "" + reaction.prop2;
@@ -515,7 +532,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
 
                     } else if (objects.Match("Toggle", reaction.prop1, "")) {
-                        happs.text = "The " + reaction.prop1 + " has is now " + GetState(reaction.prop2);
+                        happs.text = "The " + reaction.prop1 + " has become a " + reaction.prop2;
                         happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         return happs;
@@ -528,7 +545,7 @@ export class ScenarioFromFile implements ScenarioInterface {
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
 
                     } else if (objects.Match("Toggle", reaction.prop1, "")) {
-                        happs.text = "The " + reaction.prop1 + " has become a " + reaction.prop2;
+                        happs.text = "The " + reaction.prop1 + " is now " + GetState(reaction.prop2);
                         happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                         happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                         return happs;

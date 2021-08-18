@@ -5,5 +5,9 @@ export enum Happen {
 
     PropGoes,
     PropStays,
-    PropAppears
+    PropAppears,
+
+    FlagIsSet,
+    FlagIsIncremented,
+    FlagIsDecremented
 }
