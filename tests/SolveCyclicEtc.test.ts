@@ -1,7 +1,7 @@
 //Typescript Unit test
 import assert = require('assert');
-import { SolveCyclicEtc } from "../SolveCyclicEtc";
-import { RowOfSheet } from "../RowOfSheet";
+import { SolveCyclicEtc } from "../src/SolveCyclicEtc";
+import { RowOfSheet } from "../src/RowOfSheet";
 
 const actions: Array<string> = ["examine", "grab"];
 

@@ -1,8 +1,8 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import scenario from './20210415JsonPrivate/HighScene.json'; 
-import _ from './20210415JsonPrivate/Script/Script.json';
+import scenario from '../20210415JsonPrivate/HighScene.json'; 
+import _ from '../20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';

@@ -2,19 +2,20 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <Name>20210415Json</Name>
+    <Name>adventure-game-analyser</Name>
     <RootNamespace>20210415Json</RootNamespace>
     <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
-    <JavaScriptTestRoot>test/</JavaScriptTestRoot>
+    <JavaScriptTestRoot>tests/</JavaScriptTestRoot>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>04b3d37d-3cfa-447c-822a-a2d014080915</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>app.ts</StartupFile>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>src\app.ts</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -43,103 +44,123 @@
     <Content Include="20210415JsonPrivate\Script\Script.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="test\mocha.json" />
+    <Content Include="tests\mocha.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ChooseTheGoalToConcoctSolutionFor.ts" />
-    <TypeScriptCompile Include="ChooseToFindUnused.ts" />
-    <TypeScriptCompile Include="ChooseToPlayThrough.ts" />
-    <TypeScriptCompile Include="ChooseTheGoalToFindLeavesFor.ts">
+    <TypeScriptCompile Include="src\ChooseTheGoalToConcoctSolutionFor.ts" />
+    <TypeScriptCompile Include="src\ChooseToFindUnused.ts" />
+    <TypeScriptCompile Include="src\ChooseToPlayThrough.ts" />
+    <TypeScriptCompile Include="src\ChooseTheGoalToFindLeavesFor.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Colors.ts" />
-    <TypeScriptCompile Include="Game.ts" />
-    <TypeScriptCompile Include="GameReporter.ts" />
-    <TypeScriptCompile Include="Happener.ts" />
-    <TypeScriptCompile Include="HappenerCallbacksInterface.ts" />
-    <TypeScriptCompile Include="GetDisplayName.ts" />
-    <TypeScriptCompile Include="Raw.ts" />
-    <TypeScriptCompile Include="RawObjectsAndVerb.ts" />
-    <TypeScriptCompile Include="Scenario.ts" />
-    <TypeScriptCompile Include="GetThreeStringsFromInput.ts" />
-    <TypeScriptCompile Include="GetTreeSolutionViaOutputMatching.ts" />
-    <TypeScriptCompile Include="IsOk.ts" />
-    <TypeScriptCompile Include="LogAndReturnError.ts" />
-    <TypeScriptCompile Include="Mix.ts">
+    <TypeScriptCompile Include="src\Colors.ts" />
+    <TypeScriptCompile Include="src\Game.ts" />
+    <TypeScriptCompile Include="src\GameReporter.ts" />
+    <TypeScriptCompile Include="src\GetDisplayName2.test.ts" />
+    <TypeScriptCompile Include="src\Happener.ts" />
+    <TypeScriptCompile Include="src\HappenerCallbacksInterface.ts" />
+    <TypeScriptCompile Include="src\GetDisplayName.ts" />
+    <TypeScriptCompile Include="src\ParseRowsFromSheet2.test.ts" />
+    <TypeScriptCompile Include="src\Raw.ts" />
+    <TypeScriptCompile Include="src\RawObjectsAndVerb.ts" />
+    <TypeScriptCompile Include="src\Scenario.ts" />
+    <TypeScriptCompile Include="src\GetThreeStringsFromInput.ts" />
+    <TypeScriptCompile Include="src\GetTreeSolutionViaOutputMatching.ts" />
+    <TypeScriptCompile Include="src\IsOk.ts" />
+    <TypeScriptCompile Include="src\LogAndReturnError.ts" />
+    <TypeScriptCompile Include="src\Mix.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ParseRowsFromSheet.ts" />
-    <TypeScriptCompile Include="Happen.ts">
+    <TypeScriptCompile Include="src\ParseRowsFromSheet.ts" />
+    <TypeScriptCompile Include="src\Happen.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Happening.ts">
+    <TypeScriptCompile Include="src\Happening.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="PlayerAI.ts" />
-    <TypeScriptCompile Include="Happenings.ts">
+    <TypeScriptCompile Include="src\PlayerAI.ts" />
+    <TypeScriptCompile Include="src\Happenings.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="RowOfSheet.ts" />
-    <TypeScriptCompile Include="ScenarioFromFile.ts" />
-    <TypeScriptCompile Include="ScenarioInterfaceFindLeaves.ts" />
-    <TypeScriptCompile Include="ScenarioInterfaceFindUnused.ts" />
-    <TypeScriptCompile Include="ScenarioInterfaceConcoct.ts" />
-    <TypeScriptCompile Include="ScenarioInterfaceHappener.ts" />
-    <TypeScriptCompile Include="ScenarioInterfacePlayThru.ts" />
-    <TypeScriptCompile Include="Solution.ts" />
-    <TypeScriptCompile Include="SolutionCollection.ts" />
-    <TypeScriptCompile Include="SolutionNode.ts" />
-    <TypeScriptCompile Include="SolveBruteForce.ts">
+    <TypeScriptCompile Include="src\RowOfSheet.ts" />
+    <TypeScriptCompile Include="src\ScenarioFromFile.ts" />
+    <TypeScriptCompile Include="src\ScenarioInterfaceFindLeaves.ts" />
+    <TypeScriptCompile Include="src\ScenarioInterfaceFindUnused.ts" />
+    <TypeScriptCompile Include="src\ScenarioInterfaceConcoct.ts" />
+    <TypeScriptCompile Include="src\ScenarioInterfaceHappener.ts" />
+    <TypeScriptCompile Include="src\ScenarioInterfacePlayThru.ts" />
+    <TypeScriptCompile Include="src\SingleFileData.ts" />
+    <TypeScriptCompile Include="src\Solution.test.ts" />
+    <TypeScriptCompile Include="src\Solution.ts" />
+    <TypeScriptCompile Include="src\Solution2.test.ts" />
+    <TypeScriptCompile Include="src\SolutionCollection.ts" />
+    <TypeScriptCompile Include="src\SolutionNode.ts" />
+    <TypeScriptCompile Include="src\SolveBruteForce.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SpecialNodes.ts" />
-    <TypeScriptCompile Include="test/GetDisplayName.test.ts">
+    <TypeScriptCompile Include="src\SolveCyclicEtc.test.ts" />
+    <TypeScriptCompile Include="src\SolveCyclicEtc2.test.ts" />
+    <TypeScriptCompile Include="src\SpecialNodes.ts" />
+    <TypeScriptCompile Include="src\GetDisplayName.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="test/ParseRowsFromSheet.test.ts">
+    <TypeScriptCompile Include="src\ParseRowsFromSheet.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="test\SolutionNodeMap.test.ts">
+    <TypeScriptCompile Include="src\SolutionNodeMap.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="test/TruthTable.test.ts">
+    <TypeScriptCompile Include="src\TruthTable.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SolutionNodeMap.ts">
+    <TypeScriptCompile Include="src\SolutionNodeMap.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SolutionNodeInput.ts">
+    <TypeScriptCompile Include="src\SolutionNodeInput.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="test/SolveCyclicEtc.test.ts">
+    <TypeScriptCompile Include="src/SolveCyclicEtc.test.ts">
       <TestFramework>Mocha</TestFramework>
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="test/Solution.test.ts">
+    <TypeScriptCompile Include="src/Solution.test.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="TruthTable.ts" />
-    <TypeScriptCompile Include="SolveCyclicEtc.ts" />
-    <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="Sleep.ts">
+    <TypeScriptCompile Include="src\TruthTable.ts" />
+    <TypeScriptCompile Include="src\SolveCyclicEtc.ts" />
+    <TypeScriptCompile Include="src\app.ts" />
+    <TypeScriptCompile Include="src\Sleep.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="MixedObjectsAndVerb.ts">
+    <TypeScriptCompile Include="src\MixedObjectsAndVerb.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ScenarioInterface.ts">
+    <TypeScriptCompile Include="src\ScenarioInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\TruthTable2.test.ts" />
+    <TypeScriptCompile Include="tests\GetDisplayName.test.ts" />
+    <TypeScriptCompile Include="tests\GetDisplayName2.test.ts" />
+    <TypeScriptCompile Include="tests\ParseRowsFromSheet.test.ts" />
+    <TypeScriptCompile Include="tests\ParseRowsFromSheet2.test.ts" />
+    <TypeScriptCompile Include="tests\Solution.test.ts" />
+    <TypeScriptCompile Include="tests\Solution2.test.ts" />
+    <TypeScriptCompile Include="tests\SolutionNodeMap.test.ts" />
+    <TypeScriptCompile Include="tests\SolveCyclicEtc.test.ts" />
+    <TypeScriptCompile Include="tests\SolveCyclicEtc2.test.ts" />
+    <TypeScriptCompile Include="tests\TruthTable.test.ts" />
+    <TypeScriptCompile Include="tests\TruthTable2.test.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="20210415JsonPrivate\" />
     <Folder Include="20210415JsonPrivate\Script\" />
+    <Folder Include="src\" />
     <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

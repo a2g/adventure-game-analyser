@@ -1,7 +1,7 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import _ from './20210415JsonPrivate/Script/Script.json';
+import _ from '../20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
@@ -166,17 +166,6 @@ export class ScenarioFromFile implements ScenarioInterface {
         return "undefined";
     }
 
-    private static GetSolutionNodesMappedByInput(): SolutionNodeMap {
-        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-        const result = ScenarioFromFile.SingleBigSwitch(true, notUsed) as SolutionNodeMap;
-        return result;
-    }
-
-    private static GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        const result = ScenarioFromFile.SingleBigSwitch(false, objects) as Happenings | null;
-        return result;
-    }
-
     GetArrayOfSingleObjectVerbs(): Array<string> {
         return ["grab", "toggle"];
     }
@@ -247,7 +236,7 @@ export class ScenarioFromFile implements ScenarioInterface {
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-        const result = ScenarioFromFile.SingleBigSwitch(true, notUsed) as SolutionNodeMap;
+        const result = ScenarioFromFile.SingleBigSwitch(this.filename, true, notUsed) as SolutionNodeMap;
         return result;
     }
 

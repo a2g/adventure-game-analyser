@@ -1,7 +1,7 @@
 import assert = require('assert');
-import { SolutionNodeMap } from '../SolutionNodeMap';
+import { SolutionNodeMap } from '../src/SolutionNodeMap';
 import { isUndefined } from 'util';
-import { SolutionNode } from '../SolutionNode';
+import { SolutionNode } from '../src/SolutionNode';
 
 describe("ReactionMap", () => {
     it("test AddToMap works", () => {
