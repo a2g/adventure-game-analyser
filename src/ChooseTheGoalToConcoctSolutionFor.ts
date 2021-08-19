@@ -104,29 +104,35 @@ export class ChooseTheGoalToConcoctSolutionFor {
 
                 const setAfterReduction = IntersectionSet(setFromTheSolution, startingPropsAndInvs);
                 const isSolvable = IsASupersetOfB(startingPropsAndInvs, setFromTheSolution);
-                assert(isSolvable);
-                if (isSolvable) {
-                    for (; ;) {
-                        let command: RawObjectsAndVerb | null = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
-                        if (!command) {
-                            // this is just here for debugging!
-                            command = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
-                            break;
-                        }
-                        const chars = scene.GetArrayOfCharacters();
-                        for (let i = 0; i < chars.length; i++) {
-                            const char = chars[i];
-                            const startingSet = scene.GetStartingThingsForCharacter(char);
-                            if (startingSet.has(command.objectA))
-                                command.appendStartingCharacterForA(char);
-                            if (startingSet.has(command.objectB))
-                                command.appendStartingCharacterForB(char);
-                        }
 
-                        if (command.type !== Raw.None)
-                            command.WriteToConsole();
+                let command: RawObjectsAndVerb | null = null;
+                for (let j = 0; j < 200; j++) {
+                    command = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
+
+                    if (!command)// all out of moves!
+                        break;
+
+                    const chars = scene.GetArrayOfCharacters();
+                    for (let i = 0; i < chars.length; i++) {
+                        const char = chars[i];
+                        const startingSet = scene.GetStartingThingsForCharacter(char);
+                        if (startingSet.has(command.objectA))
+                            command.appendStartingCharacterForA(char);
+                        if (startingSet.has(command.objectB))
+                            command.appendStartingCharacterForB(char);
                     }
-                } else {
+
+                    if (command.type !== Raw.None)
+                        command.WriteToConsole();
+
+                    if (command.type == Raw.You_have_won_the_game) {
+                        // this is just here for debugging!
+                        let debugMe = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
+                        break;
+                    }
+                }
+
+                if (!command) {
                     // error handling
                     console.log("Starting set needs to have more stuff(props probably):");
                     setFromTheSolution.forEach((entry: string) => {
