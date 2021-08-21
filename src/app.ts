@@ -21,7 +21,7 @@ import { SceneSingle } from './SceneSingle';
 const prompt = promptSync();
 
 function main(): void {
-    const scene = new SceneSingle("src/TestHighPermutationSolutionScene.json");
+    const scene = new SceneSingle("src/20210415JsonPrivate/HospScene.json");
 
     while(true) {
         console.log(" ");

@@ -319,8 +319,6 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
-            case _.HACK_TO_STOP_ALLOW_TS_TO_IMPORT_THIS_FILE:
-                break;
             default:
                 assert(false && scriptType && "We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema.");
 
