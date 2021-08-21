@@ -1,0 +1,114 @@
+{
+    "$id": "https://raw.githubusercontent.com/a2g/adv/main/Objects.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "description": "a list of specific objects that gets references from mansion.gates.schema.json",
+    "type": "object",
+    "definitions": {
+        "char_type": {
+            "enum": [
+                "char_",
+                "char_sports_kid",
+                "char_music_kid",
+                "char_prefect",
+                "char_army_kid",
+                "char_science_kid"
+
+            ]
+        },
+        "inv_type": {
+            "enum": [
+                "inv_",
+                "inv_screwdriver",
+                "inv_radio_tube",
+                "inv_broken_amp",
+                "inv_fixed_amp",
+                "inv_guitar",
+                "inv_inflated_ball",
+                "inv_pole_hook",
+                "inv_deflated_ball",
+                "inv_pump_with_needle_adapter",
+                "inv_inflating_needle",
+                "inv_pump_with_bike_adapter",
+                "inv_jar_of_protons",
+                "inv_tube_carrier",
+                "inv_box_of_electromagnets",
+                "inv_demon_death",
+                "inv_ash_scraper",
+                "inv_urn_of_ashes"
+            ]
+        },
+        "prop_type": {
+            "enum": [
+                "prop_",
+                "prop_screwdriver",
+                "prop_closed_radio",
+                "prop_opened_radio",
+                "prop_opened_radio_with_radio_tube",
+                "prop_broken_amp",
+                "prop_plugged_in_amp",
+                "prop_gym_powerpoint",
+              
+                "prop_lowered_backboard",
+                "prop_raised_backboard",
+                "prop_accelerated_vacuum_tube",
+                "prop_star_topology-button(activated)",
+                "prop_star_topology-button(deactivated)",
+                "prop_ring_topology-button(activated)",
+                "prop_ring_topology-button(deactivated)",
+                "prop_destination_switch(test_run)",
+                "prop_destination_switch(maths_and_science)",
+                "prop_destination_switch(humanities)",
+                "prop_destination_switch(sportsfield)",
+                "prop_destination_switch(languages)",
+                "prop_powerpoint1",
+                "prop_exposed_vacuum_pipe1",
+                "prop_attached_electromagnet1",
+                "prop_plugged_in_electromagnet1",
+                "prop_switched_on_electromagnet1",
+                "prop_powerpoint2",
+                "prop_exposed_vacuum_pipe2",
+                "prop_attached_electromagnet2",
+                "prop_plugged_in_electromagnet2",
+                "prop_switched_on_electromagnet2",
+                "prop_powerpoint3",
+                "prop_exposed_vacuum_pipe3",
+                "prop_attached_electromagnet3",
+                "prop_plugged_in_electromagnet3",
+                "prop_switched_on_electromagnet3",
+                "prop_powerpoint4",
+                "prop_exposed_vacuum_pipe4",
+                "prop_attached_electromagnet4",
+                "prop_plugged_in_electromagnet4",
+                "prop_switched_on_electromagnet4",
+                "prop_powerpoint5",
+                "prop_exposed_vacuum_pipe5",
+                "prop_attached_electromagnet5",
+                "prop_plugged_in_electromagnet5",
+                "prop_switched_on_electromagnet5",
+                "prop_vacuum_tube",
+                "prop_slightly_accelerated_vacuum_tube",
+                "prop_mildly_accelerated_vacuum_tube",
+                "prop_moderately_accelerated_vacuum_tube",
+                "prop_partly_accelerated_vacuum_tube",
+                "prop_fully_accelerated_vacuum_tube",
+                "prop_deflated_ball",
+                "prop_pump_with_bike_adapter",
+                "prop_inflating_needle",
+                "prop_pole_hook"
+            ]
+        },
+        "flag_type": {
+            "enum": [
+                "flag_",
+                "flag_win",
+                "flag_win_by_police",
+                "flag_win_by_launch",
+                "flag_win_by_talkshow",
+                "flag_ability_to_play_guitar",
+                "flag_death_by_guitar",
+                "flag_death_by_slamdunk",
+                "flag_death_by_physics"
+            ]
+        }
+    }
+}
