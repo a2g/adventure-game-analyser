@@ -16,12 +16,12 @@ import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ s
 import { ChooseToPlayThrough } from './ChooseToPlayThrough';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
-import { ScenarioInterface } from './ScenarioInterface';
-import { ScenarioFromFile } from './ScenarioFromFile';
+import { SceneInterface } from './SceneInterface';
+import { SceneSingle } from './SceneSingle ';
 const prompt = promptSync();
 
 function main(): void {
-    const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
+    const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
 
     while(true) {
         console.log(" ");

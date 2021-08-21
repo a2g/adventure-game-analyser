@@ -85,11 +85,11 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\RowOfSheet.ts" />
     <TypeScriptCompile Include="src\ScenarioFromFile.ts" />
-    <TypeScriptCompile Include="src\ScenarioInterfaceFindLeaves.ts" />
-    <TypeScriptCompile Include="src\ScenarioInterfaceFindUnused.ts" />
-    <TypeScriptCompile Include="src\ScenarioInterfaceConcoct.ts" />
-    <TypeScriptCompile Include="src\ScenarioInterfaceHappener.ts" />
-    <TypeScriptCompile Include="src\ScenarioInterfacePlayThru.ts" />
+    <TypeScriptCompile Include="src\SceneInterfaceFindLeaves.ts" />
+    <TypeScriptCompile Include="src\SceneInterfaceFindUsed.ts" />
+    <TypeScriptCompile Include="src\SceneInterfaceConcoct.ts" />
+    <TypeScriptCompile Include="src\SceneInterfaceHappener.ts" />
+    <TypeScriptCompile Include="src\SceneInterfacePlayThru.ts" />
     <TypeScriptCompile Include="src\SingleFileData.ts" />
     <TypeScriptCompile Include="src\Solution.test.ts" />
     <TypeScriptCompile Include="src\Solution.ts" />
@@ -141,7 +141,7 @@
     <TypeScriptCompile Include="src\MixedObjectsAndVerb.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\ScenarioInterface.ts">
+    <TypeScriptCompile Include="src\SceneInterface.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\TruthTable2.test.ts" />

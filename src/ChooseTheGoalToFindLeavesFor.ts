@@ -2,7 +2,7 @@ import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
-import { ScenarioInterfaceFindLeaves } from "./ScenarioInterfaceFindLeaves";
+import { SceneInterfaceFindLeaves } from "./SceneInterfaceFindLeaves";
 const prompt = promptSync();
 
 
@@ -21,7 +21,7 @@ export class ChooseTheGoalToFindLeavesFor {
         "prop_partly_accelerated_vacuum_tube",
         "prop_fully_accelerated_vacuum_tube"
     ];
-    public DoStuff(scene: ScenarioInterfaceFindLeaves): void {
+    public DoStuff(scene: SceneInterfaceFindLeaves): void {
         while(true) {
             console.log(" ");
 

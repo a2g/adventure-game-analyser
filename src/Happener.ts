@@ -2,8 +2,8 @@ import { PlayerAI } from "./PlayerAI";
 import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { Happen } from "./Happen"; 
-import { ScenarioInterfaceHappener } from "./ScenarioInterfaceHappener";
-import { ScenarioFromFile } from "./ScenarioFromFile";
+import { SceneInterfaceHappener } from "./SceneInterfaceHappener";
+import { SceneSingle } from "./SceneSingle";
 
 
 // April 2021
@@ -32,9 +32,9 @@ export class Happener {
     private listOfPropVisibilities: Array<boolean>;
     private listOfVerbVisibilities: Array<boolean>;
     private listOfFlagsThatAreTrue: Array<boolean>;
-    private scene: ScenarioInterfaceHappener;
+    private scene: SceneInterfaceHappener;
 
-    constructor(scene: ScenarioInterfaceHappener) {
+    constructor(scene: SceneInterfaceHappener) {
         this.scene = scene;
         this.listOfInvs = new Array<string>();
         this.listOfFlags = new Array<string>();

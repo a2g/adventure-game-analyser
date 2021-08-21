@@ -7,8 +7,8 @@ import { GetDisplayName } from "./GetDisplayName";
 import { SolutionNodeInput } from "./SolutionNodeInput";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
-import { ScenarioInterface } from "./ScenarioInterface";
-import { ScenarioInterfaceConcoct } from "./ScenarioInterfaceConcoct";
+import { SceneInterface } from "./SceneInterface";
+import { SceneInterfaceConcoct } from "./SceneInterfaceConcoct";
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
         throw new Error("assert failure");
@@ -62,7 +62,7 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 }
 
 export class ChooseTheGoalToConcoctSolutionFor {
-    public DoStuff(scene: ScenarioInterfaceConcoct): void {
+    public DoStuff(scene: SceneInterfaceConcoct): void {
         while (true) {
             console.log(" ");
 

@@ -1,6 +1,6 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 
-export interface ScenarioInterfaceFindUnused {
+export interface SceneInterfaceFindUsed {
     GetArrayOfProps(): Array<string>;
     GetArrayOfInvs(): Array<string>;
     GetSolutionNodesMappedByInput(): SolutionNodeMap;

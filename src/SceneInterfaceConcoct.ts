@@ -1,6 +1,6 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 
-export interface ScenarioInterfaceConcoct {
+export interface SceneInterfaceConcoct {
     GetSetOfStartingProps(): Set<string>;
     GetSetOfStartingInvs(): Set<string>;
     GetSetOfStartingThings(): Set<[string, string]>;

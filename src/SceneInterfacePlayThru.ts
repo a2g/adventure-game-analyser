@@ -2,7 +2,7 @@ import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { SolutionNodeMap } from "./SolutionNodeMap";
 import { Happenings } from "./Happenings";
 
-export interface ScenarioInterfacePlayThru {
+export interface SceneInterfacePlayThru {
 
     GetArrayOfProps(): Array<string>;
     GetArrayOfInvs(): Array<string>;

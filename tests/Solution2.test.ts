@@ -3,14 +3,14 @@ import assert = require('assert');
 import { SolutionCollection } from '../src/SolutionCollection';
 import { SolutionNode } from '../src/SolutionNode';
 import { Solution } from '../src/Solution';
-import { ScenarioFromFile } from '../src/ScenarioFromFile';
+import { SceneSingle } from '../src/SceneSingle';
 const testName = "root via test";
 
 describe("Solution", () => {
     it("Testing just the grabbing of screwdriver", () => {
 
         // arrange
-        const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
+        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
@@ -30,7 +30,7 @@ describe("Solution", () => {
     it("Test prop_death_by_guitar", () => {
 
         // arrange
-        const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
+        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
@@ -49,7 +49,7 @@ describe("Solution", () => {
     it("Test prop_death_by_slamdunk", () => {
 
         // arrange
-        const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
+        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
@@ -69,7 +69,7 @@ describe("Solution", () => {
     it("Test the cloning at numerous ways to kill demon", () => {
 
         // arrange
-        const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
+        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_solution";
         const collection = new SolutionCollection();
@@ -99,7 +99,7 @@ describe("Solution", () => {
     it("prop_moderately_accelerated_vacuum_tube", () => {
 
         // arrange
-        const scene = new ScenarioFromFile("20210415JsonPrivate/HospScene.json");
+        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_moderately_accelerated_vacuum_tube";
         const collection = new SolutionCollection();

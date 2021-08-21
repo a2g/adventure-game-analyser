@@ -1,5 +1,5 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 
-export interface ScenarioInterfaceFindLeaves {
+export interface SceneInterfaceFindLeaves {
     GetSolutionNodesMappedByInput(): SolutionNodeMap;
 }

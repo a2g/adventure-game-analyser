@@ -1,6 +1,6 @@
 import { Colors } from "./Colors";
 
-function Parenthesize(input: string, isParenthesisNeeded: boolean): string {
+function Bracketize(input: string, isParenthesisNeeded: boolean): string {
     if (isParenthesisNeeded)
         return "(" + input + ")";
     return input;
@@ -18,7 +18,7 @@ export function GetDisplayName(input: string | Array<string>, isParenthesisNeede
 
     const single = input.toString();
     if (single.startsWith("sol_prop_"))
-        return Colors.Red + Parenthesize(single.slice(9), isParenthesisNeeded)  + Colors.Reset;
+        return Colors.Red + Bracketize(single.slice(9), isParenthesisNeeded)  + Colors.Reset;
     if (single.startsWith("sol_flag_"))
         return Colors.Red + single.slice(9) + Colors.Reset;
     if (single.startsWith("sol_inv_"))
@@ -30,7 +30,7 @@ export function GetDisplayName(input: string | Array<string>, isParenthesisNeede
     if (single.startsWith("flag_"))
         return Colors.Green + single.slice(5) + Colors.Reset;
     if (single.startsWith("char_"))
-        return Colors.Yellow + Parenthesize(single.slice(5), isParenthesisNeeded) + Colors.Reset;
+        return Colors.Yellow + Bracketize(single.slice(5), isParenthesisNeeded) + Colors.Reset;
     else if (single.startsWith("use") || single.startsWith("toggle") || single.startsWith("grab"))
         return Colors.Yellow + single + Colors.Reset;
 

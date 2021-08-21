@@ -2,19 +2,19 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
 import scenario from '../20210415JsonPrivate/HighScene.json'; 
-import _ from '../20210415JsonPrivate/Script/Script.json';
+
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
 import { Happen } from './Happen';
 import { Mix } from './Mix';
-import { ScenarioInterface } from './ScenarioInterface';
+import { SceneInterface } from './SceneInterface';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
 /*
-export class Scenario implements ScenarioInterface {
+export class Scenario implements SceneInterface {
     
     allProps: Array<string>;
     allFlags: Array<string>;

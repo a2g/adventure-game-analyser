@@ -20,9 +20,9 @@ import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
 import { SolutionNodeInput } from "./SolutionNodeInput";
-import { ScenarioInterface } from "./ScenarioInterface";
+import { SceneInterface } from "./SceneInterface";
 
-export function ChooseToPlayThrough(scene:ScenarioInterface, numberOfAutopilotTurns: number): void {
+export function ChooseToPlayThrough(scene:SceneInterface, numberOfAutopilotTurns: number): void {
 
     {
         const happener = new Happener(scene);
