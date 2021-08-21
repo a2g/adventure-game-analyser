@@ -16,10 +16,10 @@ describe("ReactionMap", () => {
 
         // test that it adds an array if the array is not yet null.
         const arrayAfter = blah.Get("outputA");
-        assert.notEqual(null, arrayAfter);
+        assert.notEqual(arrayAfter, null);
 
         const countAfterAdding = arrayAfter ? arrayAfter.length : 0;
-        assert.strictEqual(1, countAfterAdding);
+        assert.strictEqual(countAfterAdding, 1);
     });
 
     it("test RemoveTransaction works", () => {
@@ -32,7 +32,7 @@ describe("ReactionMap", () => {
         {
             const arrayBefore = blah.Get("outputA");
             const countBeforeRemoval = arrayBefore ? arrayBefore.length : 0;
-            assert.strictEqual(4, countBeforeRemoval);
+            assert.strictEqual(countBeforeRemoval, 4);
         }
 
         blah.RemoveTransaction(theOneToRemove);
@@ -40,7 +40,7 @@ describe("ReactionMap", () => {
         {
             const arrayAfter = blah.Get("outputA");
             const countAfterRemoval = arrayAfter ? arrayAfter.length : 0;
-            assert.strictEqual(3, countAfterRemoval);
+            assert.strictEqual(countAfterRemoval, 3);
         }
     });
 
@@ -72,8 +72,8 @@ describe("ReactionMap", () => {
         }
 
         // check the originals are still the same
-        assert.strictEqual("a", array[0].inputs[0].inputName);
-        assert.strictEqual("b", array[1].inputs[0].inputName);
-        assert.strictEqual("c", array[2].inputs[0].inputName);
+        assert.strictEqual(array[0].inputs[0].inputName, "a");
+        assert.strictEqual(array[1].inputs[0].inputName, "b");
+        assert.strictEqual(array[2].inputs[0].inputName, "c");
     });
 });

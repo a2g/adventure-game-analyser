@@ -17,11 +17,11 @@ import { ChooseToPlayThrough } from './ChooseToPlayThrough';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { SceneInterface } from './SceneInterface';
-import { SceneSingle } from './SceneSingle ';
+import { SceneSingle } from './SceneSingle';
 const prompt = promptSync();
 
 function main(): void {
-    const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
+    const scene = new SceneSingle("src/TestHighPermutationSolutionScene.json");
 
     while(true) {
         console.log(" ");

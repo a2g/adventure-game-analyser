@@ -12,19 +12,19 @@ describe("SolveCyclicEtc", () => {
         r1.name = "oWater";
         r1.commandToMakeVisible = "init";
         const rows: Array<RowOfSheet> = [r1];
-        assert.equal("ok", SolveCyclicEtc(rows, actions));
+        assert.equal(SolveCyclicEtc(rows, actions), "ok");
     });
 
-    it("TestInitKeywordInCapsIsOk", ()=> {
+    it("TestInitKeywordInCapsIsOk", () => {
         const r1 = new RowOfSheet();
         r1.name = "oWater";
         r1.commandToMakeVisible = "INIT";
         const rows: Array<RowOfSheet> = [r1];
 
-        assert.equal("ok", SolveCyclicEtc(rows, actions));
+        assert.equal(SolveCyclicEtc(rows, actions), "ok");
     });
 
-    it("TestComplicatedDependencyIsOk", ()=> {
+    it("TestComplicatedDependencyIsOk", () => {
         const r1 = new RowOfSheet();
         r1.name = "oObjA";
         r1.commandToMakeVisible = "use oObjB oObjC";
@@ -39,7 +39,7 @@ describe("SolveCyclicEtc", () => {
         r3.commandToMakeVisible = "use oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2, r3];
-        assert.equal("ok", SolveCyclicEtc(rows, actions))
+        assert.equal(SolveCyclicEtc(rows, actions), "ok")
     });
 
     it("TestTwoObjectCyclicalDependencyIsBad", () => {
@@ -52,7 +52,7 @@ describe("SolveCyclicEtc", () => {
         r2.commandToMakeVisible = "use oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2];
-        assert.notEqual("ok", SolveCyclicEtc(rows, actions))
+        assert.notEqual(SolveCyclicEtc(rows, actions), "ok")
     });
 
     it("TestOneObjectCyclicalDependencyIsBad", () => {
@@ -61,7 +61,7 @@ describe("SolveCyclicEtc", () => {
         r1.commandToMakeVisible = "grab oObjA";
 
         const rows: Array<RowOfSheet> = [r1];
-        assert.notEqual("ok", SolveCyclicEtc(rows, actions))
+        assert.notEqual(SolveCyclicEtc(rows, actions), "ok")
     });
 
     it("TestTwoObjectWithUseIsOk", () => {
@@ -78,7 +78,7 @@ describe("SolveCyclicEtc", () => {
         r3.commandToMakeVisible = "use oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2, r3];
-        assert.equal("ok", SolveCyclicEtc(rows, actions))
+        assert.equal(SolveCyclicEtc(rows, actions), "ok")
     });
 
     it("TestTwoObjectWithoutUseIsBad", () => {
@@ -95,8 +95,10 @@ describe("SolveCyclicEtc", () => {
         r3.commandToMakeVisible = "grab oObjA oObjB";
 
         const rows: Array<RowOfSheet> = [r1, r2, r3];
-        assert.notEqual("ok", SolveCyclicEtc(rows, actions))
+        assert.notEqual(SolveCyclicEtc(rows, actions), "ok")
     });
+
+    // TODO, the error states from Solve Cyclic?
 });
 
 

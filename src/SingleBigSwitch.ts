@@ -1,14 +1,14 @@
 import { assert } from 'console';
-import { Happenings } from 'Happenings';
-import { MixedObjectsAndVerb } from 'MixedObjectsAndVerb';
-import { SolutionNodeMap } from 'SolutionNodeMap';
+import { Happenings } from './Happenings';
+import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
+import { SolutionNodeMap } from './SolutionNodeMap';
 import * as fs from "fs";
-import _ from '../20210415JsonPrivate/Script/Script.json';
-import { Happen } from 'Happen';
-import { Happening } from 'Happening';
-import { SolutionNode } from 'SolutionNode';
-import { Mix } from 'Mix';
-import { ExtractBracketedPart } from 'ExtractBracketedPart';
+import _ from './20210415JsonPrivate/Script/Script.json';
+import { Happen } from './Happen';
+import { Happening } from './Happening';
+import { SolutionNode } from './SolutionNode';
+import { Mix } from './Mix';
+import { ExtractBracketedPart } from './ExtractBracketedPart';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";

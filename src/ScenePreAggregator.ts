@@ -1,7 +1,7 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import _ from '../20210415JsonPrivate/Script/Script.json';
+import _ from './20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
@@ -9,8 +9,8 @@ import { Happen } from './Happen';
 import { Mix } from './Mix';
 import { SceneInterface } from './SceneInterface';
 import * as fs from "fs";
-import { SceneSingle } from 'SceneSingle';
-import { SingleBigSwitch } from 'SingleBigSwitch';
+import { SceneSingle } from './SceneSingle';
+import { SingleBigSwitch } from './SingleBigSwitch';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";

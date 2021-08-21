@@ -7,7 +7,8 @@ import { SceneSingle } from '../src/SceneSingle';
 
 
 describe("Solution", () => {
-    it("Testing just the grabbing of screwdriver", () => {
+    /*
+    it("Test of a none clone solution", () => {
         const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
@@ -24,7 +25,7 @@ describe("Solution", () => {
         assert.strictEqual(1, leafNodes.size);
     });
 
-    it("Test prop_death_by_guitar", () => {
+    it("Test of a non cloning five step", () => {
         const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
@@ -51,7 +52,7 @@ describe("Solution", () => {
         }
     });
 
-    it("Test prop_death_by_slamdunk", () => {
+    it("Test of another non-cloning 5 step", () => {
         const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
@@ -78,79 +79,33 @@ describe("Solution", () => {
             //assert.ok(leafNodeMap.has("inv_pole_hook"));
         }
     });
+*/
 
-
-    it("Test the cloning at numerous ways to kill demon", () => {
-        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
+    it("Test cloning with High Permutation scene2", () => {
+        const scene = new SceneSingle("./src/TestHighPermutationSolutionScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
-        const objective = "inv_solution";
-        const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("", "",  objective), map));
-        const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
-        assert.ok(wasCloneEncountered);
-
-        assert.strictEqual(2, collection.length);
-        const solution0 = collection[0];;
-        assert.strictEqual(0, solution0.GetLeafNodes().size);
-        assert.strictEqual(1, solution0.GetIncompleteNodes().size);
-
-        const solution1 = collection[1];;
-        assert.strictEqual(0, solution1.GetLeafNodes().size);
-        assert.strictEqual(1, solution1.GetIncompleteNodes().size);
-
-        // process the rest of the transactions
-        do {
-            collection.SolvePartiallyUntilCloning();
-        } while (collection.IsNodesRemaining());
-
-
-        {
-            const leafNodeMap = solution1.GetLeafNodes();
-            assert.strictEqual(5, leafNodeMap.size);
-            // commenting out the things below, because they will change
-            //assert.ok(leafNodeMap.has("inv_deflated_ball"));
-            //assert.ok(leafNodeMap.has("inv_pump_with_bike_adapter"));
-            //assert.ok(leafNodeMap.has("inv_needle"));
-            //assert.ok(leafNodeMap.has("prop_raised_backboard"));
-            //assert.ok(leafNodeMap.has("inv_pole_hook"));
-        }
-    });
-
-  
-
-    it("Test cloning with turn on/turn off", () => {
-        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
-        const map = scene.GetSolutionNodesMappedByInput();
-        const objective = "prop_death_by_physics";
+        const objective = "flag_win";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "",  objective), map));
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 
-        assert.strictEqual(1, collection.length);
-        const solution0 = collection[0];;
-        assert.strictEqual(0, solution0.GetLeafNodes().size);
-        assert.strictEqual(1, solution0.GetIncompleteNodes().size);
-
-        const solution1 = collection[1];;
-        assert.strictEqual(0, solution1.GetLeafNodes().size);
-        assert.strictEqual(1, solution1.GetIncompleteNodes().size);
+        // having this actually result in a single solution is awesome.
+        // we don't want too many or it will be hard to understand
+        // that the multiple solutions are the same thing.
+        assert.strictEqual(collection.length, 1);
+        const solution0 = collection[0];
+        assert.strictEqual(solution0.GetLeafNodes().size, 27);
+        assert.strictEqual(solution0.GetIncompleteNodes().size, 0);
 
         // process the rest of the transactions
         do {
             collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
 
-
         {
-            const leafNodeMap = solution1.GetLeafNodes();
-            assert.strictEqual(5, leafNodeMap.size);
-            // commenting out the things below, because they will change
-            //assert.ok(leafNodeMap.has("inv_deflated_ball"));
-            //assert.ok(leafNodeMap.has("inv_pump_with_bike_adapter"));
-            //assert.ok(leafNodeMap.has("inv_needle"));
-            //assert.ok(leafNodeMap.has("prop_raised_backboard"));
-            //assert.ok(leafNodeMap.has("inv_pole_hook"));
+            const leafNodeMap = solution0.GetLeafNodes();
+            assert.strictEqual(27, leafNodeMap.size);
         }
     });
 })

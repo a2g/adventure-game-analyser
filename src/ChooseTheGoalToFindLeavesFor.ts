@@ -14,12 +14,12 @@ export class ChooseTheGoalToFindLeavesFor {
         "prop_death_by_guitar",
         "prop_death_by_slamdunk",
         "prop_death_by_physics",
-        "prop_switched_on_electromagnet2",
-        "prop_slightly_accelerated_vacuum_tube",
-        "prop_mildly_accelerated_vacuum_tube",
-        "prop_moderately_accelerated_vacuum_tube",
-        "prop_partly_accelerated_vacuum_tube",
-        "prop_fully_accelerated_vacuum_tube"
+        "prop_switched_on_item2",
+        "prop_stageA",
+        "prop_stageB",
+        "prop_stageC",
+        "prop_stageD",
+        "prop_stageE"
     ];
     public DoStuff(scene: SceneInterfaceFindLeaves): void {
         while(true) {

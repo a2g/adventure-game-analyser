@@ -1,7 +1,7 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNode } from './SolutionNode';
 import { assert } from 'console';
-import _ from '../20210415JsonPrivate/Script/Script.json';
+import _ from './20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Happening } from './Happening';
@@ -10,8 +10,9 @@ import { Mix } from './Mix';
 import { SceneInterface } from './SceneInterface';
 import * as fs from "fs";
 import { stringify } from 'querystring';
-import { SceneInterfaceCollater } from 'SceneInterfaceCollater';
-import { ExtractBracketedPart } from 'ExtractBracketedPart';
+import { SceneInterfaceCollater } from './SceneInterfaceCollater';
+import { ExtractBracketedPart } from './ExtractBracketedPart';
+import { SingleBigSwitch } from './SingleBigSwitch';
 
     
 export class SceneSingle implements SceneInterface, 
@@ -256,20 +257,17 @@ SceneInterfaceCollater{
     }
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
+        const result = new SolutionNodeMap(null);
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-        const result = SingleBigSwitch(this.filename, true, notUsed) as SolutionNodeMap;
+        SingleBigSwitch(this.filename, result, notUsed);
         return result;
     }
 
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        const result = SingleBigSwitch(this.filename, false, objects) as unknown as Happenings | null;
+        const result = SingleBigSwitch(this.filename, null, objects) as unknown as Happenings | null;
         return result;
     }
 
 }
 
-
-function SingleBigSwitch(filename: string, arg1: boolean, notUsed: MixedObjectsAndVerb): SolutionNodeMap {
-    throw new Error('Function not implemented.');
-}
 

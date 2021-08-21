@@ -16,14 +16,14 @@ describe("TruthTable", () => {
         t.SetColumnRow(2, 2);
         {
             const r1 = t.FindMostNearlyCompleteRowOrColumnCombined();
-            assert.equal(t.ColumnsStartHere + 2, r1);
+            assert.equal(r1, t.ColumnsStartHere + 2);
         }
 
         // fill the column completely and test that the column doesn't get picked
         t.SetColumnRow(2, 3);
         {
             const r2 = t.FindMostNearlyCompleteRowOrColumnCombined();
-            assert.notEqual(t.ColumnsStartHere + 2, r2);
+            assert.notEqual(r2, t.ColumnsStartHere + 2);
         }
 
         // nearly fill the 2 row, and test it gets picked
@@ -31,14 +31,14 @@ describe("TruthTable", () => {
         t.SetColumnRow(1, 2);
         {
             const r3 = t.FindMostNearlyCompleteRowOrColumnCombined();
-            assert.equal(2, r3);
+            assert.equal(r3, 2);
         }
 
         // fill the column completely and test that the column doesn't get picked
         t.SetColumnRow(3, 2);
         {
             const r4 = t.FindMostNearlyCompleteRowOrColumnCombined();
-            assert.notEqual(2, r4);
+            assert.notEqual(r4, 2);
         }
 
     });
