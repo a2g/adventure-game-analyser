@@ -56,7 +56,23 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, restrictions, prop2, count, prop3, prop4, prop5, prop6));
                 }
                 break;
-
+            case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
+                if(solutionNodesMappedByInput) {
+                    const output = "" + reaction.flag1;
+                    const inputA = "" + reaction.inv1;
+                    const inputB = "" + reaction.prop1;
+                    const inputC = "" + reaction.prop2;
+                    const inputD = "" + reaction.prop3;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count, inputC, inputD));
+                } else if (objects.Match("Use", reaction.inv1, reaction.prop1)){
+                    happs.text = "With everything set up correctly, you use the" + reaction.inv1 + " with the " + reaction.prop1 + " and something good happens";
+                    happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag)));
+                    happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop2)));
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop3)));
+                }
+                break;
             case _.INV1_AND_INV2_FORM_INV3:
                 if (solutionNodesMappedByInput) {
                     // losing all
