@@ -86,7 +86,7 @@ describe("Solution", () => {
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "flag_win";
         const collection = new SolutionCollection();
-        collection.push(new Solution(new SolutionNode("", "",  objective), map));
+        collection.push(new Solution(new SolutionNode("", "",  1, null, objective), map));
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 

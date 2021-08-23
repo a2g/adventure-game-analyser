@@ -14,6 +14,7 @@ function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
 
+
 export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: SolutionNodeMap | null, objects: MixedObjectsAndVerb): Happenings | null {
     const happs = new Happenings();
 
@@ -22,7 +23,11 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
 
     for (const reaction of scenario.reactions) {
         const scriptType = reaction.script;
-        const count = reaction.count;
+        let count = 0;
+        if(reaction.count!==undefined) {
+            count = reaction.count;
+        }
+
         const restrictions = reaction.restrictions;
         switch (scriptType) {
             case _.AUTO_PROP1_BECOMES_PROP2_BY_PROPS:
@@ -34,14 +39,14 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const prop3 = "" + reaction.prop5;
                     const prop4 = "" + reaction.prop6;
                     const prop5 = "" + reaction.prop7;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, restrictions, prop1, count, prop2, prop3, prop4, prop5));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
             case _.AUTO_FLAG1_SET_BY_FLAG2:
                 if (solutionNodesMappedByInput) {
                     const input = "" + reaction.flag1;
                     const output = "" + reaction.flag2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, input));
                 }
                 break;
             case _.AUTO_FLAG1_SET_BY_PROPS:
@@ -53,17 +58,17 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const prop4 = "" + reaction.prop4;
                     const prop5 = "" + reaction.prop5;
                     const prop6 = "" + reaction.prop6;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, prop1, restrictions, prop2, count, prop3, prop4, prop5, prop6));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, prop1, prop2, prop3, prop4, prop5, prop6));
                 }
                 break;
-            case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
+            case "FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS":
                 if(solutionNodesMappedByInput) {
                     const output = "" + reaction.flag1;
                     const inputA = "" + reaction.inv1;
                     const inputB = "" + reaction.prop1;
                     const inputC = "" + reaction.prop2;
                     const inputD = "" + reaction.prop3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count, inputC, inputD));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB, inputC, inputD));
                 } else if (objects.Match("Use", reaction.inv1, reaction.prop1)){
                     happs.text = "With everything set up correctly, you use the" + reaction.inv1 + " with the " + reaction.prop1 + " and something good happens";
                     happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag)));
@@ -79,7 +84,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const inputB = "" + reaction.inv2;
                     const output = "" + reaction.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
                 }
                 else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
                     happs.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has formed an" + reaction.inv3;
@@ -95,7 +100,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const inputB = "" + reaction.inv2;
                     const output = "" + reaction.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
                 }
                 else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
                     happs.text = "The " + reaction.inv1 + " and the " + reaction.inv2 + " has generated an" + reaction.inv3;
@@ -111,7 +116,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const output = "" + reaction.inv2;
                     const inputB = "" + reaction.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA,  inputB));
 
                 } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                     happs.text = "Your " + reaction.inv1 + " has become a " + reaction.inv2
@@ -127,7 +132,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const output = "" + reaction.inv2;
                     const inputB = "" + reaction.prop1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                     happs.text = "Your " + reaction.inv1 + " has become a  " + reaction.inv2;
@@ -143,7 +148,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const output = "" + reaction.inv2;
                     const inputB = "" + reaction.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                     happs.text = "The " + reaction.inv1 + " has become a  " + reaction.inv2;
@@ -159,7 +164,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const inputB = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                     happs.text = "Using the " + reaction.inv1 + " with the  " + reaction.prop1 + " has revealed a " + reaction.prop2;
@@ -174,7 +179,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const inputB = "" + reaction.prop1;
                     const output = "" + reaction.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                     happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and a flag is set " + reaction.flag1;
@@ -189,9 +194,9 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
                 if (solutionNodesMappedByInput) {
                     const output = "" + reaction.inv1;
-                    const input1 = "" + reaction.prop1;
-                    const input2 = "" + reaction.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input1, restrictions, input2, count));
+                    const inputA = "" + reaction.prop1;
+                    const inputB = "" + reaction.prop2;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
                     happs.text = "You use the " + reaction.prop1 + " with the " + reaction.prop2 + " and obtain the " + reaction.inv1;
@@ -206,7 +211,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
                     const inputB = "" + reaction.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                     happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
@@ -221,7 +226,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
                     const inputB = "" + reaction.prop3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                     happs.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
@@ -236,7 +241,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
                     const inputB = "" + reaction.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                     happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
@@ -252,7 +257,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
                     const inputB = "" + reaction.prop3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                     happs.text = "You use the " + reaction.prop3 + ", and the " + reaction.prop1 + " becomes a " + reaction.prop2;
@@ -269,7 +274,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.prop1;
                     //const inputB, count = "" + reactionsFile.reactions[i].prop2;
                     const output = "" + reaction.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, "undefined", count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA));
 
                 } else if (objects.Match("Grab", reaction.prop1, "")) {
                     happs.text = "You now have a " + reaction.inv1;
@@ -285,7 +290,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
                     const inputB = "" + reaction.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, inputA, restrictions, inputB, count));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
                     happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " is now " + ExtractBracketedPart(reaction.prop2);
@@ -297,9 +302,9 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 break;
             case _.PROP1_GOES_WHEN_GRAB_INV1:
                 if (solutionNodesMappedByInput) {
-                    const input = "" + reaction.prop1;
                     const output = "" + reaction.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input, restrictions, "undefined", count));
+                    const inputA = "" + reaction.prop1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA));
 
                 } else if (objects.Match("Grab", reaction.prop1, "")) {
                     happs.text = "You now have a " + reaction.inv1;
@@ -311,9 +316,9 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 break;
             case _.TOGGLE_PROP1_BECOMES_PROP2:
                 if (solutionNodesMappedByInput) {
-                    const input = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+                    const inputA = "" + reaction.prop1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA));
 
                 } else if (objects.Match("Toggle", reaction.prop1, "")) {
                     happs.text = "The " + reaction.prop1 + " has become a " + reaction.prop2;
@@ -326,7 +331,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 if (solutionNodesMappedByInput) {
                     const input = "" + reaction.prop1;
                     const output = "" + reaction.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, input));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, input));
 
                 } else if (objects.Match("Toggle", reaction.prop1, "")) {
                     happs.text = "The " + reaction.prop1 + " is now " + ExtractBracketedPart(reaction.prop2);
@@ -342,17 +347,3 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
     }
     return null;
 }
-
-/*
-
-function GetSolutionNodesMappedByInput(filename:string,objects:MixedObjectsAndVerb): SolutionNodeMap {
-    const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-    const result = SingleBigSwitch(filename, true, notUsed) as SolutionNodeMap;
-    return result;
-}
-
-function GetHappeningsIfAny(filename:string, objects:MixedObjectsAndVerb): Happenings | null {
-    const result = SingleBigSwitch(filename, false, objects) as unknown as Happenings | null;
-    return result;
-}
-*/

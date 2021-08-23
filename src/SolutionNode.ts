@@ -17,10 +17,10 @@ export class SolutionNode {
     characterRestrictions: Array<string>;
     constructor(output: string,
         type = "undefined",
-        inputA = "undefined",
-        restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
-        inputB = "undefined",
         count = 1, // put it here so all the tests don't need to specify it.
+        restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
+        inputA = "undefined",
+        inputB = "undefined",
         inputC = "undefined",
         inputD = "undefined",
         inputE = "undefined",
@@ -150,7 +150,7 @@ export class SolutionNode {
         // now to process each of those nodes that have been filled out
         for (const input of  this.inputs) {
             const inputNode = input.GetInputNode();
-            assert(inputNode && "If this fails there is something wrong with the loop in first half of this method");
+            assert(inputNode && "Input node=" + inputNode + " <-If this fails there is something wrong with the loop in first half of this method");
             if (inputNode) {
                 if (inputNode.type === SpecialNodes.VerifiedLeaf)
                     continue;// this means its already been searhed for in the map, without success.

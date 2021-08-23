@@ -38,7 +38,6 @@ SceneInterfaceCollater{
 
         for (const reaction of scenario.reactions) {
             const scriptType = reaction.script;
-            const count = reaction.count;
             const restrictions = reaction.restrictions;
             setInvs.add("" + reaction.inv1);
             setInvs.add("" + reaction.inv2);

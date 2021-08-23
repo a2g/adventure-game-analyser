@@ -64,17 +64,22 @@ export class SolutionNodeMap {
 
     RemoveTransaction(transaction: SolutionNode) {
         if (transaction) {
-            if (this.solutionNodeMap.has(transaction.output)) {
-                const oldArray = this.solutionNodeMap.get(transaction.output);
-                if (oldArray) {
-                    const newArray = new Array<SolutionNode>();
-                    this.solutionNodeMap.set(transaction.output, newArray);
-                    oldArray.forEach((t: SolutionNode) => {
-                        if (t !== transaction) {
-                            newArray.push(t);
-                        }
-                    });
+            transaction.count--;
+            if (transaction.count <= 0) {
+                if (this.solutionNodeMap.has(transaction.output)) {
+                    const oldArray = this.solutionNodeMap.get(transaction.output);
+                    if (oldArray) {
+                        const newArray = new Array<SolutionNode>();
+                        this.solutionNodeMap.set(transaction.output, newArray);
+                        oldArray.forEach((t: SolutionNode) => {
+                            if (t !== transaction) {
+                                newArray.push(t);
+                            }
+                        });
+                    }
                 }
+            } else {
+                console.log("count was great than 1" + transaction.count);
             }
         }
     }

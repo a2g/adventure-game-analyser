@@ -74,7 +74,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
             const collection = new SolutionCollection();
 
             // Solve solution nodes
-            collection.push(new Solution(new SolutionNode("root via app", "", "flag_win"), solutionNodesMappedByInput));
+            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, "flag_win"), solutionNodesMappedByInput));
             collection.SolveUntilZeroNodesRemaining();
             collection.GenerateSolutionNames(scene.GetSetOfStartingThings());
 
@@ -97,13 +97,13 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     continue;
                 const solution = collection[i];
                 console.log("Solution called " + GetDisplayName(solution.GetName()));
-                const setFromTheSolution = new Set<string>();
+                const leafNodesRequiredBySolution = new Set<string>();
                 solution.absoluteLeafNodes.forEach((value: SolutionNode) => {
-                    setFromTheSolution.add(value.output);
+                    leafNodesRequiredBySolution.add(value.output);
                 });
 
-                const setAfterReduction = IntersectionSet(setFromTheSolution, startingPropsAndInvs);
-                const isSolvable = IsASupersetOfB(startingPropsAndInvs, setFromTheSolution);
+                const setAfterReduction = IntersectionSet(leafNodesRequiredBySolution, startingPropsAndInvs);
+                const isSolvable = IsASupersetOfB(startingPropsAndInvs, leafNodesRequiredBySolution);
 
                 let command: RawObjectsAndVerb | null = null;
                 for (let j = 0; j < 200; j++) {
@@ -135,11 +135,11 @@ export class ChooseTheGoalToConcoctSolutionFor {
                 if (!command) {
                     // error handling
                     console.log("Starting set needs to have more stuff(props probably):");
-                    setFromTheSolution.forEach((entry: string) => {
+                    leafNodesRequiredBySolution.forEach((entry: string) => {
                         console.log(GetDisplayName(entry));
                     })
-                    console.log("-------^^ Above is solution Set");
-                    console.log("Below is intersection of starting and solution set");
+                    console.log("-------^^ Above are the leaf nodes laid out in the Solution");
+                    console.log("Below are all the starting things");
 
                     setAfterReduction.forEach((entry: string) => {
                         console.log(GetDisplayName(entry));

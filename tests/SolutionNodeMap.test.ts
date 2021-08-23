@@ -12,7 +12,7 @@ describe("ReactionMap", () => {
         assert.ok(isUndefined(arrayBefore));
 
         // do it!
-        blah.AddToMap(new SolutionNode("outputA", "type", "A", null, "B"));
+        blah.AddToMap(new SolutionNode("outputA", "type", 1, null, "A", "B"));
 
         // test that it adds an array if the array is not yet null.
         const arrayAfter = blah.Get("outputA");
@@ -25,9 +25,9 @@ describe("ReactionMap", () => {
     it("test RemoveTransaction works", () => {
         const blah = new SolutionNodeMap(null);
         for (let i = 0; i < 3; i++) {
-            blah.AddToMap(new SolutionNode("outputA", "piffle", "A", null, "B"));
+            blah.AddToMap(new SolutionNode("outputA", "piffle", 1, null, "A", "B"));
         }
-        const theOneToRemove = new SolutionNode("outputA", "piffle", "A", null, "B");
+        const theOneToRemove = new SolutionNode("outputA", "piffle", 1, null, "A", "B");
         blah.AddToMap(theOneToRemove);
         {
             const arrayBefore = blah.Get("outputA");
@@ -48,9 +48,9 @@ describe("ReactionMap", () => {
 
         // create original entries
         const array = new Array<SolutionNode>();
-        array.push(new SolutionNode("blah", "outputA", "a", null, "a"));
-        array.push(new SolutionNode("blah", "outputA", "b", null, "b"));
-        array.push(new SolutionNode("blah", "outputA", "c", null, "c"));
+        array.push(new SolutionNode("blah", "outputA", 1, null, "a", "a"));
+        array.push(new SolutionNode("blah", "outputA", 1, null, "b", "b"));
+        array.push(new SolutionNode("blah", "outputA", 1, null, "c", "c"));
 
         // put them in a map
         const tmap = new SolutionNodeMap(null);

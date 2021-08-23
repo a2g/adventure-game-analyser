@@ -42,7 +42,7 @@ export class ChooseTheGoalToFindLeavesFor {
 
             const collection = new SolutionCollection();
             if (objective !== null) {
-                collection.push(new Solution(new SolutionNode("root via app", "", objective), mapOfReactionsByInput));
+                collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), mapOfReactionsByInput));
 
                 do {
                     collection.SolvePartiallyUntilCloning();
