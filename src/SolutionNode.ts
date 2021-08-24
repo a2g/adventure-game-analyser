@@ -1,9 +1,14 @@
 import { SolutionCollection } from './SolutionCollection';
 import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
-import { assert } from 'console';
+//import { assert } from 'console';
 import { SolutionNodeInput } from './SolutionNodeInput';
 import { isNullOrUndefined } from 'util';
+function assert(condition: any, msg?: string): asserts condition {
+    if (!condition) {
+        throw new Error("assert failure");
+    }
+}
 
 let globalId = 1;
 
@@ -78,12 +83,12 @@ export class SolutionNode {
         return clone;
     }
 
-    FindAnyNodeMatchingGivenOutputRecursively(id: number): SolutionNode | null {
+    FindAnyNodeMatchingIdRecursively(id: number): SolutionNode | null {
         if (this.id === id)
             return this;
         for (const input of this.inputs) {
             const inputNode = input.GetInputNode();
-            const result = inputNode ? inputNode.FindAnyNodeMatchingGivenOutputRecursively(id) : null;
+            const result = inputNode ? inputNode.FindAnyNodeMatchingIdRecursively(id) : null;
             if (result)
                 return result;
         };
@@ -102,7 +107,7 @@ export class SolutionNode {
             if (this.inputs[k].GetInputNode())
                 continue;
             const objectToObtain = this.inputs[k].inputName;
-            const matchingTransactions = solution.GetTransactionsThatOutputObject(objectToObtain);
+            const matchingTransactions = solution.GetNonZeroTransactionsThatOutputObject(objectToObtain);
             if (!matchingTransactions || matchingTransactions.length === 0) {
                 const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
                 this.inputs[k].SetInputNode(verifiedLeaf, this);
@@ -112,12 +117,17 @@ export class SolutionNode {
                 // we have the convention that zero is the currentSolution
                 // so we start at the highest index in the list
                 // we when we finish the loop, we are with
-                for (let i = matchingTransactions.length - 1; i >= 0; i--) {// // classic forloop useful because reverse iterator, and check for last iteration
+                for (let i = matchingTransactions.length - 1; i >= 0; i--) {
+                    // // classic forloop useful because reverse iterator, and check for last iteration
 
                     const theMatchingTransaction = matchingTransactions[i];
+                    
                     // 1. get solution - because we might be cloning one;
                     const isCloneBeingUsed = i > 0;
                     const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
+
+                    // do this now, so others don't choose it
+                    theSolution.RemoveTransaction(theMatchingTransaction);
 
                     // this is only here to make the unit tests make sense
                     solution.SetNodeComplete(solution.rootNode);
@@ -125,7 +135,7 @@ export class SolutionNode {
                         solutions.push(theSolution);
 
                     // rediscover the current node in theSolution - again because we might be cloned
-                    const theNode = theSolution.GetRootNode().FindAnyNodeMatchingGivenOutputRecursively(this.id);
+                    const theNode = theSolution.GetRootNode().FindAnyNodeMatchingIdRecursively(this.id);
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
                         theNode.inputs[k].SetInputNode(theMatchingTransaction, theNode);
@@ -134,7 +144,7 @@ export class SolutionNode {
                         theSolution.addRestrictions(theMatchingTransaction.getRestrictions());
                     }
 
-                    theSolution.RemoveTransaction(theMatchingTransaction);
+                  
                     theSolution.addRestrictions(theMatchingTransaction.getRestrictions());
                 }
 

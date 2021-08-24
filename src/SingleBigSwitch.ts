@@ -23,7 +23,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
 
     for (const reaction of scenario.reactions) {
         const scriptType = reaction.script;
-        let count = 0;
+        let count = 1;
         if(reaction.count!==undefined) {
             count = reaction.count;
         }

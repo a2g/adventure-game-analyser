@@ -106,8 +106,20 @@ export class Solution {
         return this.transactionMap.Has(objectToObtain);
     }
 
-    GetTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
-        return this.transactionMap.Get(objectToObtain);
+    GetNonZeroTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
+        
+        let result = this.transactionMap.Get(objectToObtain);
+
+        if (result) {
+            let blah = new Array<SolutionNode>();
+            for (let item of result) {
+                if(item.count>=1){
+                    blah.push(item);
+                }
+            }
+            return blah;
+        }
+        return result;
     }
 
     RemoveTransaction(transaction: SolutionNode) {

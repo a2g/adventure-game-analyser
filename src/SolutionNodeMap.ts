@@ -79,7 +79,7 @@ export class SolutionNodeMap {
                     }
                 }
             } else {
-                console.log("count was great than 1" + transaction.count);
+                console.log("trans.count is now " + transaction.count);
             }
         }
     }
