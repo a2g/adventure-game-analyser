@@ -181,6 +181,10 @@ export class ScenePreCacheMultiple implements SceneInterface {
         return this.startingThingSet;
     }
 
+    GetSetOfStartingEverythings() : Set<string> {
+        return this.GetSetOfStartingEverythings(this.startingThingSet, this.startingInvSet, this.startingPropSet);
+    }
+
     GetStartingThingsForCharacter(name: string): Set<string> {
         const startingThingSet = new Set<string>();
         for (const thing of this.startingThingSet) {
