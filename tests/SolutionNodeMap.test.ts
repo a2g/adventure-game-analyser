@@ -22,7 +22,7 @@ describe("ReactionMap", () => {
         assert.strictEqual(countAfterAdding, 1);
     });
 
-    it("test RemoveTransaction works", () => {
+    it("test RemoveNode works", () => {
         const blah = new SolutionNodeMap(null);
         for (let i = 0; i < 3; i++) {
             blah.AddToMap(new SolutionNode("outputA", "piffle", 1, null, "A", "B"));
@@ -35,7 +35,7 @@ describe("ReactionMap", () => {
             assert.strictEqual(countBeforeRemoval, 4);
         }
 
-        blah.RemoveTransaction(theOneToRemove);
+        blah.RemoveNode(theOneToRemove);
 
         {
             const arrayAfter = blah.Get("outputA");

@@ -31,7 +31,7 @@ describe("Solution", () => {
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
-        // process the rest of the transactions
+        // process the rest of the nodes
         do {
             collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
@@ -58,7 +58,7 @@ describe("Solution", () => {
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
-        // process the rest of the transactions
+        // process the rest of the nodes
         do {
             collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());
@@ -98,7 +98,7 @@ describe("Solution", () => {
         assert.strictEqual(solution0.GetLeafNodes().size, 27);
         assert.strictEqual(solution0.GetIncompleteNodes().size, 0);
 
-        // process the rest of the transactions
+        // process the rest of the nodes
         do {
             collection.SolvePartiallyUntilCloning();
         } while (collection.IsNodesRemaining());

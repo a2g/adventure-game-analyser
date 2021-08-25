@@ -18,7 +18,7 @@ export class Solution {
         this.incompleteNodes.add(root);
         this.absoluteLeafNodes = new Map<string, SolutionNode>();
         this.usedVerbNounCombos = new Set<string>();
-        this.transactionMap = new SolutionNodeMap(map);
+        this.nodeMap = new SolutionNodeMap(map);
         this.characterRestrictions = new Set<string>();
     }
 
@@ -55,7 +55,7 @@ export class Solution {
     Clone(): Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.output);
         clonedRootNode.id = this.rootNode.id;
-        const clonedSolution = new Solution(clonedRootNode, this.transactionMap);
+        const clonedSolution = new Solution(clonedRootNode, this.nodeMap);
         let isAnyIncomplete = false;
         for (const node of this.rootNode.inputs) {
             const clonedNode = node.CreateClone(clonedSolution.incompleteNodes);
@@ -102,13 +102,13 @@ export class Solution {
         return this.rootNode;
     }
 
-    HasAnyTransactionsThatOutputObject(objectToObtain: string): boolean{
-        return this.transactionMap.Has(objectToObtain);
+    HasAnyNodesThatOutputObject(objectToObtain: string): boolean{
+        return this.nodeMap.Has(objectToObtain);
     }
 
     GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
         
-        let result = this.transactionMap.Get(objectToObtain);
+        let result = this.nodeMap.Get(objectToObtain);
 
         if (result) {
             let blah = new Array<SolutionNode>();
@@ -122,8 +122,8 @@ export class Solution {
         return result;
     }
 
-    RemoveNode(transaction: SolutionNode) {
-        this.transactionMap.RemoveTransaction(transaction);
+    RemoveNode(node: SolutionNode) {
+        this.nodeMap.RemoveNode(node);
     }
 
     SetName(solutionName: string) {
@@ -215,6 +215,6 @@ export class Solution {
     incompleteNodes: Set<SolutionNode>;
     absoluteLeafNodes: Map<string, SolutionNode>;
     usedVerbNounCombos: Set<string>;
-    transactionMap: SolutionNodeMap;
+    nodeMap: SolutionNodeMap;
     characterRestrictions: Set<string>;
 }

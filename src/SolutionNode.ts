@@ -153,7 +153,7 @@ export class SolutionNode {
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
                         theNode.inputs[k].SetInputNode(theMatchingNode, theNode);
-                        // all reactions are incomplete when they come from the transaction map
+                        // all reactions are incomplete when they come from the node map
                         theSolution.SetNodeIncomplete(theMatchingNode);
                         theSolution.addRestrictions(theMatchingNode.getRestrictions());
                     }

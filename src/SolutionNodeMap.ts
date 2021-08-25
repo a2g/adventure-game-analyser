@@ -33,11 +33,11 @@ export class SolutionNodeMap {
         return toReturn;
     }
 
-    HasAnyTransactionsThatOutputObject(objectToObtain: string): boolean {
+    HasAnyNodesThatOutputObject(objectToObtain: string): boolean {
         return this.solutionNodeMap.has(objectToObtain);
     }
 
-    GetTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
+    GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
         return this.solutionNodeMap.get(objectToObtain);
     }
 
@@ -62,24 +62,24 @@ export class SolutionNodeMap {
         this.solutionNodeMap.get(t.output)?.push(t);
     }
 
-    RemoveTransaction(transaction: SolutionNode) {
-        if (transaction) {
-            transaction.count--;
-            if (transaction.count <= 0) {
-                if (this.solutionNodeMap.has(transaction.output)) {
-                    const oldArray = this.solutionNodeMap.get(transaction.output);
+    RemoveNode(node: SolutionNode) {
+        if (node) {
+            node.count--;
+            if (node.count <= 0) {
+                if (this.solutionNodeMap.has(node.output)) {
+                    const oldArray = this.solutionNodeMap.get(node.output);
                     if (oldArray) {
                         const newArray = new Array<SolutionNode>();
-                        this.solutionNodeMap.set(transaction.output, newArray);
+                        this.solutionNodeMap.set(node.output, newArray);
                         oldArray.forEach((t: SolutionNode) => {
-                            if (t !== transaction) {
+                            if (t !== node) {
                                 newArray.push(t);
                             }
                         });
                     }
                 }
             } else {
-                console.log("trans.count is now " + transaction.count);
+                console.log("trans.count is now " + node.count);
             }
         }
     }
