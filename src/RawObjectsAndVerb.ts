@@ -19,7 +19,13 @@ export class RawObjectsAndVerb {
             const objectA = GetDisplayName(this.objectA) +  GetDisplayName(this.startingCharacterForA, true);
             const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB, true);
             const restriction = this.restrictions.length ? "( " + GetDisplayName(this.restrictions) + " )" : "";
-            console.log(verb + " " + objectA + " " + objectB + " " + restriction);
+            let joiner = " ";
+            switch (enumAsInt) {
+                case Raw.Use: joiner = " with "; break;
+                case Raw.Toggle: joiner = " to "; break;
+                case Raw.Auto: joiner = " becomes ";break;
+            }
+            console.log(verb + " " + objectA + joiner + objectB + " " + restriction);
         } else {
             console.log("Raw type was invalid");
         }

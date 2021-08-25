@@ -11,6 +11,7 @@ import { SceneInterface } from './SceneInterface';
 import * as fs from "fs";
 import { SceneSingle } from './SceneSingle';
 import { SingleBigSwitch } from './SingleBigSwitch';
+import { GetSetOfStartingAll } from './GetSetOfStartingAll';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";
@@ -181,8 +182,8 @@ export class ScenePreCacheMultiple implements SceneInterface {
         return this.startingThingSet;
     }
 
-    GetSetOfStartingEverythings() : Set<string> {
-        return this.GetSetOfStartingEverythings(this.startingThingSet, this.startingInvSet, this.startingPropSet);
+    GetSetOfStartingAll() : Set<string> {
+        return GetSetOfStartingAll(this.startingThingSet, this.startingInvSet, this.startingPropSet);
     }
 
     GetStartingThingsForCharacter(name: string): Set<string> {

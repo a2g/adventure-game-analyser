@@ -7,5 +7,5 @@ export interface SceneInterfaceConcoct {
     GetSolutionNodesMappedByInput(): SolutionNodeMap;
     GetStartingThingsForCharacter(name: string): Set<string>;
     GetArrayOfCharacters(): Array<string>;
-    GetSetOfStartingEverythings(): Set<string>;
+    GetSetOfStartingAll(): Set<string>;
 }

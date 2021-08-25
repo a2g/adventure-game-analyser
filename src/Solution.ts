@@ -36,7 +36,7 @@ export class Solution {
                     this.incompleteNodes.add(node);
     }
 
-    SetNodeComplete(node: SolutionNode | null): void {
+    MarkNodeAsCompleted(node: SolutionNode | null): void {
         if (node) {
             if (this.incompleteNodes.has(node)) {
                 this.incompleteNodes.delete(node);
@@ -106,7 +106,7 @@ export class Solution {
         return this.transactionMap.Has(objectToObtain);
     }
 
-    GetNonZeroTransactionsThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
+    GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
         
         let result = this.transactionMap.Get(objectToObtain);
 
@@ -122,7 +122,7 @@ export class Solution {
         return result;
     }
 
-    RemoveTransaction(transaction: SolutionNode) {
+    RemoveNode(transaction: SolutionNode) {
         this.transactionMap.RemoveTransaction(transaction);
     }
 
@@ -147,15 +147,15 @@ export class Solution {
         for (const input of this.absoluteLeafNodes) {
             const key: string = input[0];
             const node: SolutionNode = input[1];
-            let areAllNodesVisible = true;
+            let areAllInputsAvailable = true;
 
             // inputs are nearly always 2, but in one case they can be 6.. using for(;;) isn't such a useful optimizaiton here             // for (let i = 0; i < node.inputs.length; i++) {
             node.inputs.forEach((input: SolutionNodeInput) => {
                 if (!setToUse.has(input.inputName)) 
-                    areAllNodesVisible = false;
+                    areAllInputsAvailable = false;
             });
 
-            if (areAllNodesVisible) {
+            if (areAllInputsAvailable) {
                 // first we give them the prize            
                 if (node.type !== SpecialNodes.VerifiedLeaf)
                     setToUse.add(node.output);
@@ -170,24 +170,27 @@ export class Solution {
                 if (node.parent)
                     this.absoluteLeafNodes.set(pathOfParent, node.parent);
 
-                if (!node.parent) {
+                if (node == this.rootNode) {
                     return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.getRestrictions());
                 } else if (node.inputs.length === 0) {
                     return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions());
                 } else if (node.type.toLowerCase().includes("grab")) {
                     return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.getRestrictions());
                 } else if (node.type.toLowerCase().includes("toggle")) {
-                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, "", node.getRestrictions());
+                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, node.output, node.getRestrictions());
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
                     node.inputs.forEach((node: SolutionNodeInput) => {
                         text += node.inputName + " ";
                     });
-                    return new RawObjectsAndVerb(Raw.Auto, "", "", node.getRestrictions()); 
+                    return new RawObjectsAndVerb(Raw.Auto, node.inputs[0].inputName, node.output, node.getRestrictions()); 
                 } else if (node.inputs.length === 2) {
+                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.output, node.getRestrictions());
+                } else if (node.type.toLowerCase().includes("use")){
                     return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions());
-                } else {
-                    assert(false && "unknown!");
+                }else {
+                    assert(false && " type not identified");
+                    console.log("Assertion because of type not Identified!: "+node.type +node.inputs[0] );
                 }
             }
         };

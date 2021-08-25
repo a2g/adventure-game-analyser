@@ -5,8 +5,15 @@ import { Colors } from './Colors';
 
 
 export class SolutionCollection extends Array<Solution>{
-    constructor() {
+    startingThings:Set<string>;
+
+    constructor( startingThings:Set<string>) {
         super();
+        this.startingThings = startingThings
+    }
+
+    GetStartingThings(): Set<string> {
+        return this.startingThings
     }
 
     IsNodesRemaining(): boolean {

@@ -13,6 +13,7 @@ import { stringify } from 'querystring';
 import { SceneInterfaceCollater } from './SceneInterfaceCollater';
 import { ExtractBracketedPart } from './ExtractBracketedPart';
 import { SingleBigSwitch } from './SingleBigSwitch';
+import { GetSetOfStartingAll} from './GetSetOfStartingAll';
 
     
 export class SceneSingle implements SceneInterface, 
@@ -23,7 +24,7 @@ SceneInterfaceCollater{
     allChars: Array<string>;
     startingThingSet: Set<[string, string]>;
     startingInvSet: Set<string>;
-    startingPropsSet: Set<string>
+    startingPropSet: Set<string>
     filename:string;
     
     constructor(filename:string) {
@@ -73,7 +74,7 @@ SceneInterfaceCollater{
         scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
             startingPropsSet.add("" + value.prop);
         });
-        this.startingPropsSet = startingPropsSet;
+        this.startingPropSet = startingPropsSet;
   
         // preen starting invs from the startingThings
         this.startingInvSet = new Set<string>();
@@ -91,7 +92,7 @@ SceneInterfaceCollater{
     }
 
     AddStartingPropsToGivenSet(givenSet: Set<string>): void {
-        for(let prop of this.startingPropsSet){
+        for(let prop of this.startingPropSet){
             givenSet.add(prop);
         }
     }
@@ -106,7 +107,7 @@ SceneInterfaceCollater{
        }
     }
     AddPropsToGivenSet(givenSet: Set<string>): void {
-        for(let prop of this.startingPropsSet){
+        for(let prop of this.startingPropSet){
             givenSet.add(prop);
         }
     }
@@ -204,16 +205,19 @@ SceneInterfaceCollater{
     }
 
     GetSetOfStartingProps(): Set<string> {
-        return this.startingPropsSet;
+        return this.startingPropSet;
     }
 
     GetSetOfStartingInvs(): Set<string> {
         return this.startingInvSet;
     }
 
-
     GetSetOfStartingThings(): Set<[string, string]> {
         return this.startingThingSet;
+    }
+
+    GetSetOfStartingAll() : Set<string> {
+        return GetSetOfStartingAll(this.startingThingSet, this.startingInvSet, this.startingPropSet);
     }
 
     GetStartingThingsForCharacter(name: string): Set<string> {

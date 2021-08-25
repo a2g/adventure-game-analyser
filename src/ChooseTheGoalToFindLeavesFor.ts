@@ -29,7 +29,7 @@ export class ChooseTheGoalToFindLeavesFor {
 
             const mapOfReactionsByInput = scene.GetSolutionNodesMappedByInput();
 
-            const collection = new SolutionCollection();
+            const collection = new SolutionCollection(scene.GetSetOfStartingAll());
             const objective = "flag_win";
             collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), mapOfReactionsByInput));
 

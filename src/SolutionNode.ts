@@ -106,31 +106,45 @@ export class SolutionNode {
             // and Solution.ProcessUntilCompletion will continue forever
             if (this.inputs[k].GetInputNode())
                 continue;
+
+            // we check our starting set first!
+            // otherwise Toggle pieces will toggle until the count is zero.
             const objectToObtain = this.inputs[k].inputName;
-            const matchingTransactions = solution.GetNonZeroTransactionsThatOutputObject(objectToObtain);
-            if (!matchingTransactions || matchingTransactions.length === 0) {
+            if(solutions.GetStartingThings().has(objectToObtain)){
+                const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
+                this.inputs[k].SetInputNode(verifiedLeaf, this);
+                solution.AddVerifiedLeaf(path + this.inputs[k].inputName+"/", verifiedLeaf );
+                continue;
+            }
+
+            // This is where we get all the pieces that fit
+            // and if there is more than one, then we clone
+            const matchingNodes = solution.GetNodesThatOutputObject(objectToObtain);
+            if (!matchingNodes || matchingNodes.length === 0) {
                 const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
                 this.inputs[k].SetInputNode(verifiedLeaf, this);
                 solution.AddVerifiedLeaf(path + this.inputs[k].inputName+"/", verifiedLeaf );
             }
-            else if (matchingTransactions) {
+            else if (matchingNodes) {
                 // we have the convention that zero is the currentSolution
                 // so we start at the highest index in the list
                 // we when we finish the loop, we are with
-                for (let i = matchingTransactions.length - 1; i >= 0; i--) {
+                for (let i = matchingNodes.length - 1; i >= 0; i--) {
                     // // classic forloop useful because reverse iterator, and check for last iteration
 
-                    const theMatchingTransaction = matchingTransactions[i];
+                    const theMatchingNode = matchingNodes[i];
                     
-                    // 1. get solution - because we might be cloning one;
+                    // Clone - if needed!
                     const isCloneBeingUsed = i > 0;
                     const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
 
-                    // do this now, so others don't choose it
-                    theSolution.RemoveTransaction(theMatchingTransaction);
+                    // This is the earliest possible point we can remove the
+                    // matching node: i.e. after the cloning has occured
+                    theSolution.RemoveNode(theMatchingNode);
 
                     // this is only here to make the unit tests make sense
-                    solution.SetNodeComplete(solution.rootNode);
+                    // something like to fix a bug where cloning doesn't mark node as complete
+                    theSolution.MarkNodeAsCompleted(theSolution.rootNode);
                     if (isCloneBeingUsed)
                         solutions.push(theSolution);
 
@@ -138,17 +152,14 @@ export class SolutionNode {
                     const theNode = theSolution.GetRootNode().FindAnyNodeMatchingIdRecursively(this.id);
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
-                        theNode.inputs[k].SetInputNode(theMatchingTransaction, theNode);
+                        theNode.inputs[k].SetInputNode(theMatchingNode, theNode);
                         // all reactions are incomplete when they come from the transaction map
-                        theSolution.SetNodeIncomplete(theMatchingTransaction);
-                        theSolution.addRestrictions(theMatchingTransaction.getRestrictions());
+                        theSolution.SetNodeIncomplete(theMatchingNode);
+                        theSolution.addRestrictions(theMatchingNode.getRestrictions());
                     }
-
-                  
-                    theSolution.addRestrictions(theMatchingTransaction.getRestrictions());
                 }
 
-                const hasACloneJustBeenCreated = matchingTransactions.length > 1;
+                const hasACloneJustBeenCreated = matchingNodes.length > 1;
                 if (hasACloneJustBeenCreated)
                     return true;// yes is incomplete
             }
