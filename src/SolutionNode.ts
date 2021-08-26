@@ -110,7 +110,7 @@ export class SolutionNode {
             // we check our starting set first!
             // otherwise Toggle pieces will toggle until the count is zero.
             const objectToObtain = this.inputs[k].inputName;
-            if(solutions.GetStartingThings().has(objectToObtain)){
+            if(solution.startingThings.has(objectToObtain)){
                 const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
                 this.inputs[k].SetInputNode(verifiedLeaf, this);
                 solution.AddVerifiedLeaf(path + this.inputs[k].inputName+"/", verifiedLeaf );

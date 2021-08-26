@@ -139,55 +139,6 @@ SceneInterfaceCollater{
         return this.allFlags;
     }
 
-    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb {
-        const verb = strings[0].toLowerCase();
-
-        if (verb === "grab") {
-            if (this.allProps.includes(strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
-            else if (this.allProps.includes("prop_" + strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
-            return new MixedObjectsAndVerb(Mix.ErrorGrabButNoProp, "", "", "");
-        } else if (verb === "toggle") {
-            if (this.allProps.includes(strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "");
-            else if (this.allProps.includes("prop_" + strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "");
-            else if (this.allInvs.includes(strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, strings[1], "");
-            else if (this.allInvs.includes("inv_" + strings[1]))
-                return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, "inv_" + strings[1], "");
-            return new MixedObjectsAndVerb(Mix.ErrorToggleButNoInvOrProp, "", "", "");
-        } else if (verb === "use") {
-            if (this.allInvs.includes(strings[1]) && this.allInvs.includes(strings[2]))
-                return new MixedObjectsAndVerb(Mix.InvVsInv, verb, strings[1], strings[2]);
-            else if (this.allInvs.includes("inv_" + strings[1]) && this.allInvs.includes("inv_" + strings[2]))
-                return new MixedObjectsAndVerb(Mix.InvVsInv, verb, "inv_" + strings[1], "inv_" + strings[2]);
-            else if (this.allInvs.includes(strings[1]) && this.allProps.includes(strings[2]))
-                return new MixedObjectsAndVerb(Mix.InvVsProp, verb, strings[1], strings[2]);
-            else if (this.allInvs.includes("inv_" + strings[1]) && this.allProps.includes("prop_" + strings[2]))
-                return new MixedObjectsAndVerb(Mix.InvVsProp, verb, "inv_" + strings[1], "prop_" + strings[2]);
-            else if (this.allProps.includes("prop_" + strings[1]) && this.allProps.includes("prop_" + strings[2]))
-                return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop_" + strings[1], "prop_" + strings[2]);
-        }
-        return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
-    }
-
-    private static GetState(name: string | undefined): string {
-        if (name) {
-            const firstOpenBracket: number = name.indexOf("(");
-
-            if (firstOpenBracket >= 0) {
-                const lastIndexOf = name.lastIndexOf(")");
-
-                if (lastIndexOf > firstOpenBracket) {
-                    return name.slice(firstOpenBracket, lastIndexOf - 1);
-                }
-            }
-        }
-        return "undefined";
-    }
-
     GetArrayOfSingleObjectVerbs(): Array<string> {
         return ["grab", "toggle"];
     }
@@ -261,7 +212,7 @@ SceneInterfaceCollater{
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const result = new SolutionNodeMap(null);
-        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "");
+        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "","");
         SingleBigSwitch(this.filename, result, notUsed);
         return result;
     }

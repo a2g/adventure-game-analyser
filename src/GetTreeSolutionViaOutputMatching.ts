@@ -7,8 +7,8 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 
 export function GetTreeSolutionViaOutputMatching(map: SolutionNodeMap, solutionGoal: string, startings: Set<string>): SolutionCollection {
 
-    const collection = new SolutionCollection(startings);
-    collection.push(new Solution(new SolutionNode("theRootNode", "", 1, null, solutionGoal), map));
+    const collection = new SolutionCollection();
+    collection.push(new Solution(new SolutionNode("theRootNode", "", 1, null, solutionGoal), map, startings));
 
     do {
         collection.SolvePartiallyUntilCloning();

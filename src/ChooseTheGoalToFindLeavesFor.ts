@@ -26,12 +26,11 @@ export class ChooseTheGoalToFindLeavesFor {
             console.log(" ");
 
             const array = ChooseTheGoalToFindLeavesFor.array;
+ 
 
-            const mapOfReactionsByInput = scene.GetSolutionNodesMappedByInput();
-
-            const collection = new SolutionCollection(scene.GetSetOfStartingAll());
+            const collection = new SolutionCollection();
             const objective = "flag_win";
-            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), mapOfReactionsByInput));
+            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll()));
 
             do {
                 collection.SolvePartiallyUntilCloning();

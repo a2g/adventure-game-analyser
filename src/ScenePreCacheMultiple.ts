@@ -1,9 +1,9 @@
-import { SolutionNodeMap } from './SolutionNodeMap';
+import { SolutionNodeMap } from './SolutionNodeMap'; 
 import _ from './20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
-import { Happenings } from './Happenings';
+import { Happenings } from './Happenings'; 
 import { Mix } from './Mix';
-import { SceneInterface } from './SceneInterface';
+import { SceneInterface } from './SceneInterface'; 
 import { SceneSingle } from './SceneSingle';
 import { SingleBigSwitch } from './SingleBigSwitch';
 import { GetSetOfStartingAll } from './GetSetOfStartingAll';
@@ -175,7 +175,7 @@ export class ScenePreCacheMultiple implements SceneInterface {
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 
         for(let filename of this.allScenes.keys() ){
-            const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "ScenePreAggregator");
+            const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "GetSolutionNodesMappedByInput");
             SingleBigSwitch(filename, solutionNodesMappedByInput, notUsed);
         }
         return solutionNodesMappedByInput;

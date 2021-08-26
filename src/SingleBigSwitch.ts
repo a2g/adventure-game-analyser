@@ -6,8 +6,7 @@ import * as fs from "fs";
 import _ from './20210415JsonPrivate/Script/Script.json';
 import { Happen } from './Happen';
 import { Happening } from './Happening';
-import { SolutionNode } from './SolutionNode';
-import { Mix } from './Mix';
+import { SolutionNode } from './SolutionNode'; 
 import { ExtractBracketedPart } from './ExtractBracketedPart';
 
 function Stringify(name: string | undefined): string {
@@ -44,8 +43,8 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 break;
             case _.AUTO_FLAG1_SET_BY_FLAG2:
                 if (solutionNodesMappedByInput) {
-                    const input = "" + reaction.flag1;
-                    const output = "" + reaction.flag2;
+                    const output = "" + reaction.flag1;
+                    const input = "" + reaction.flag2;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, input));
                 }
                 break;

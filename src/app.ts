@@ -18,10 +18,14 @@ import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { SceneInterface } from './SceneInterface';
 import { SceneSingle } from './SceneSingle';
+import { ScenePreCacheMultiple } from './ScenePreCacheMultiple';
 const prompt = promptSync();
 
 function main(): void {
-    const scene = new SceneSingle("src/20210415JsonPrivate/HospScene.json");
+    const fileSet = new Set<string>();
+    fileSet.add("src/20210415JsonPrivate/HospScene.json");
+    fileSet.add("src/20210415JsonPrivate/HighScene.json");
+    const scene = new ScenePreCacheMultiple(fileSet);
 
     while(true) {
         console.log(" ");

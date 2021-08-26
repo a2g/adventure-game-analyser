@@ -2,11 +2,12 @@ import { Mix } from "./Mix";
 
 export class MixedObjectsAndVerb {
 
-    constructor(type: Mix, verb: string, objectA: string, objectB: string) {
+    constructor(type: Mix, verb: string, objectA: string, objectB: string, typeForDebug:string) {
         this.type = type;
         this.verb = verb.toLowerCase()
         this.objectA = objectA;
         this.objectB = objectB;
+        this.typeForDebug = typeForDebug;
     }
 
     Match(verb: string, objectA: string | undefined, objectB: string | undefined): boolean {
@@ -21,4 +22,5 @@ export class MixedObjectsAndVerb {
     verb: string;
     objectA: string;
     objectB: string;
+    typeForDebug: string;
 }

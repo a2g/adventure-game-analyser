@@ -21,6 +21,7 @@ import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
 import { SolutionNodeInput } from "./SolutionNodeInput";
 import { SceneInterface } from "./SceneInterface";
+import { GetMixedObjectsAndVerbFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 
 export function ChooseToPlayThrough(scene:SceneInterface, numberOfAutopilotTurns: number): void {
 
@@ -82,7 +83,7 @@ export function ChooseToPlayThrough(scene:SceneInterface, numberOfAutopilotTurns
      
 
             // 
-            const objects = scene.GetMixedObjectsAndVerbFromThreeStrings(input);
+            const objects = GetMixedObjectsAndVerbFromThreeStrings(input, scene);
 
             // handle errors
             if (objects.type.toString().startsWith("Error")) {
