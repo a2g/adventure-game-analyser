@@ -1,15 +1,17 @@
 import { Raw } from "./Raw";
 import { GetDisplayName } from "./GetDisplayName";
 import { Colors } from "./Colors";
+import { Embracketize } from "./Embracketize";
 
 export class RawObjectsAndVerb {
-    constructor(type: Raw, objectA: string, objectB: string, restrictions: Array<string>) {
+    constructor(type: Raw, objectA: string, objectB: string, restrictions: Array<string>, typeJustForDebugging:string) {
         this.type = type;
         this.objectA = objectA;
         this.objectB = objectB;
         this.startingCharacterForA = "";
         this.startingCharacterForB = "";
         this.restrictions = restrictions;
+        this.typeJustForDebugging = typeJustForDebugging;
     }
 
     WriteToConsole() {
@@ -18,7 +20,8 @@ export class RawObjectsAndVerb {
             const verb = GetDisplayName(Raw[enumAsInt]);
             const objectA = GetDisplayName(this.objectA) +  GetDisplayName(this.startingCharacterForA, true);
             const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB, true);
-            const restriction = this.restrictions.length ? "( " + GetDisplayName(this.restrictions) + " )" : "";
+            
+            const restriction = this.restrictions.length ? Embracketize(GetDisplayName(this.restrictions)) : "";
             let joiner = " ";
             switch (enumAsInt) {
                 case Raw.Use: joiner = " with "; break;
@@ -32,7 +35,7 @@ export class RawObjectsAndVerb {
     }
 
     private getDisplayName(object: string, char: string) {
-        GetDisplayName(object) + Colors.Reset + char.length ? "(" + GetDisplayName(char) + ")" : "";
+        GetDisplayName(object) + Colors.Reset + char.length ? Embracketize(GetDisplayName(char)) : "";
     }
 
     public appendStartingCharacterForA(startingCharacterForA: string) {
@@ -55,4 +58,5 @@ export class RawObjectsAndVerb {
     startingCharacterForA: string;
     startingCharacterForB: string;
     restrictions: Array<string>;
+    typeJustForDebugging:string;
 }

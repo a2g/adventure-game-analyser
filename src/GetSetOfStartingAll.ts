@@ -6,7 +6,7 @@ export function GetSetOfStartingAll(set1: Set<[string, string]>, set2: Set<strin
     const combined = new Set<string>();
 
     for (let blah of set1) {
-        combined.add(blah[0]);
+        combined.add(blah[1]);
     }
 
     for (let blah of set2) {

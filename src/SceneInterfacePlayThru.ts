@@ -14,7 +14,6 @@ export interface SceneInterfacePlayThru {
     GetArrayOfInitialStatesOfFlags(): Array<boolean>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
-    GetMixedObjectsAndVerbFromThreeStrings(strings: string[]): MixedObjectsAndVerb;
     GetSolutionNodesMappedByInput(): SolutionNodeMap; 
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }

@@ -6,20 +6,28 @@ import { assert } from 'console';
 import { SolutionNodeMap } from './SolutionNodeMap';
 import { SolutionNodeInput } from './SolutionNodeInput';
 import { RawObjectsAndVerb } from './RawObjectsAndVerb';
-import { Raw  } from './Raw';
-import { isNullOrUndefined } from 'util';
+import { Raw } from './Raw';
+import _ from './20210415JsonPrivate/Script/Script.json';
 
 export class Solution {
 
-    constructor(root: SolutionNode, map: SolutionNodeMap) {
+    constructor(root: SolutionNode, map: SolutionNodeMap, startingThings: Set<string>) {
         this.solutionName = "uninitialized";
         this.rootNode = root;
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
         this.absoluteLeafNodes = new Map<string, SolutionNode>();
         this.usedVerbNounCombos = new Set<string>();
-        this.nodeMap = new SolutionNodeMap(map);
         this.characterRestrictions = new Set<string>();
+
+        // clone nodemap, because solution graph derivation decrements it
+        this.nodeMap = new SolutionNodeMap(map);
+
+        // clone starting things, because command sequence derivation destroys it
+        this.startingThings = new Set<string>();
+        for (let item of startingThings) {
+            this.startingThings.add(item);
+        }
     }
 
     AddVerbNounCombo(verb: string, noun: string): void {
@@ -32,8 +40,8 @@ export class Solution {
 
     SetNodeIncomplete(node: SolutionNode | null): void {
         if (node)
-            if (node.type !==SpecialNodes.VerifiedLeaf)
-                    this.incompleteNodes.add(node);
+            if (node.type !== SpecialNodes.VerifiedLeaf)
+                this.incompleteNodes.add(node);
     }
 
     MarkNodeAsCompleted(node: SolutionNode | null): void {
@@ -55,7 +63,7 @@ export class Solution {
     Clone(): Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.output);
         clonedRootNode.id = this.rootNode.id;
-        const clonedSolution = new Solution(clonedRootNode, this.nodeMap);
+        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings);
         let isAnyIncomplete = false;
         for (const node of this.rootNode.inputs) {
             const clonedNode = node.CreateClone(clonedSolution.incompleteNodes);
@@ -67,7 +75,7 @@ export class Solution {
         if (isAnyIncomplete)
             clonedSolution.incompleteNodes.add(clonedRootNode);
         this.usedVerbNounCombos.forEach((combo: string) => {
-            clonedSolution.AddVerbNounCombo(combo,"");
+            clonedSolution.AddVerbNounCombo(combo, "");
         });
         return clonedSolution;
     }
@@ -81,15 +89,15 @@ export class Solution {
         this.absoluteLeafNodes.set(path, node);
     }
 
-    ProcessUntilCloning( solutions: SolutionCollection): boolean {
-        const isBreakingDueToSolutionCloning = this.rootNode.ProcessUntilCloning(this, solutions,"/");
+    ProcessUntilCloning(solutions: SolutionCollection): boolean {
+        const isBreakingDueToSolutionCloning = this.rootNode.ProcessUntilCloning(this, solutions, "/");
         if (!isBreakingDueToSolutionCloning) {
             // then this means the root node has rolled to completion
             this.incompleteNodes.clear();
         }
         return isBreakingDueToSolutionCloning;
     }
-       
+
     GetLeafNodes(): Map<string, SolutionNode> {
         return this.absoluteLeafNodes;
     }
@@ -102,18 +110,18 @@ export class Solution {
         return this.rootNode;
     }
 
-    HasAnyNodesThatOutputObject(objectToObtain: string): boolean{
+    HasAnyNodesThatOutputObject(objectToObtain: string): boolean {
         return this.nodeMap.Has(objectToObtain);
     }
 
-    GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] |undefined{
-        
+    GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
+
         let result = this.nodeMap.Get(objectToObtain);
 
         if (result) {
             let blah = new Array<SolutionNode>();
             for (let item of result) {
-                if(item.count>=1){
+                if (item.count >= 1) {
                     blah.push(item);
                 }
             }
@@ -137,13 +145,13 @@ export class Solution {
     GeneratePath(node: SolutionNode | null) {
         let path = "";
         while (node) {
-            path =  node.output + "/" + path;
+            path = node.output + "/" + path;
             node = node.GetParent();
         }
         return "/" + path;
     }
 
-    GetNextDoableCommandAndDesconstructTree(setToUse: Set<string>): RawObjectsAndVerb | null {
+    GetNextDoableCommandAndDesconstructTree(): RawObjectsAndVerb | null {
         for (const input of this.absoluteLeafNodes) {
             const key: string = input[0];
             const node: SolutionNode = input[1];
@@ -151,14 +159,16 @@ export class Solution {
 
             // inputs are nearly always 2, but in one case they can be 6.. using for(;;) isn't such a useful optimizaiton here             // for (let i = 0; i < node.inputs.length; i++) {
             node.inputs.forEach((input: SolutionNodeInput) => {
-                if (!setToUse.has(input.inputName)) 
+                if (!this.startingThings.has(input.inputName))
                     areAllInputsAvailable = false;
             });
 
             if (areAllInputsAvailable) {
-                // first we give them the prize            
+                // first we give them the output            
                 if (node.type !== SpecialNodes.VerifiedLeaf)
-                    setToUse.add(node.output);
+                    this.startingThings.add(node.output);
+                //.. we don't remove the input, because some node types don't remove
+                // and this little algorithm doesn't know how yet
 
                 const pathOfThis = this.GeneratePath(node);
                 const pathOfParent = this.GeneratePath(node.parent);
@@ -171,26 +181,30 @@ export class Solution {
                     this.absoluteLeafNodes.set(pathOfParent, node.parent);
 
                 if (node == this.rootNode) {
-                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.getRestrictions());
-                } else if (node.inputs.length === 0) {
-                    return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions());
+                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.getRestrictions(), node.type);
+              } else if (node.inputs.length === 0) {
+                    return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("grab")) {
-                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.getRestrictions());
+                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("toggle")) {
-                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, node.output, node.getRestrictions());
+                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, node.output, node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
                     node.inputs.forEach((node: SolutionNodeInput) => {
                         text += node.inputName + " ";
                     });
-                    return new RawObjectsAndVerb(Raw.Auto, node.inputs[0].inputName, node.output, node.getRestrictions()); 
-                } else if (node.inputs.length === 2) {
-                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.output, node.getRestrictions());
-                } else if (node.type.toLowerCase().includes("use")){
-                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions());
-                }else {
+                    return new RawObjectsAndVerb(Raw.Auto, node.inputs[0].inputName, node.output, node.getRestrictions(), node.type);
+                } else if (node.type.toLowerCase().includes("use")) {// then its nearly definitely "use", unless I messed up
+                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions(), node.type);
+                } else if (node.inputs.length === 2) { // smoking gun, if something is mislabelled "Use" 
+                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions(), node.type);
+                } else if (node.parent == null) {
+                    // I think this means tha the root node isn't set properly!
+                    // so we need to set breakpoint on this return, and the one above, and debug
+                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, node.inputs[0].inputName, "", node.getRestrictions(), node.type);
+                } else {
                     assert(false && " type not identified");
-                    console.log("Assertion because of type not Identified!: "+node.type +node.inputs[0] );
+                    console.log("Assertion because of type not Identified!: " + node.type + node.inputs[0]);
                 }
             }
         };
@@ -199,14 +213,14 @@ export class Solution {
     }
 
     addRestrictions(restrictions: Array<string>) {
-        
-            for (const restriction of restrictions) {
-                this.characterRestrictions.add(restriction);
-            }
-        
+
+        for (const restriction of restrictions) {
+            this.characterRestrictions.add(restriction);
+        }
+
     }
 
-    getRestrictions(): Set<string>{
+    getRestrictions(): Set<string> {
         return this.characterRestrictions;
     }
 
@@ -217,4 +231,5 @@ export class Solution {
     usedVerbNounCombos: Set<string>;
     nodeMap: SolutionNodeMap;
     characterRestrictions: Set<string>;
+    startingThings: Set<string>;
 }

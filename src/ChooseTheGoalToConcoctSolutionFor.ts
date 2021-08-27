@@ -65,17 +65,12 @@ export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(scene: SceneInterfaceConcoct): void {
         while (true) {
             console.log(" ");
-
-            const startingProps = scene.GetSetOfStartingProps();
-            const startingInvs = scene.GetSetOfStartingInvs();
-            const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
-
-            const solutionNodesMappedByInput = scene.GetSolutionNodesMappedByInput();
-            const collection = new SolutionCollection(scene.GetSetOfStartingAll());
+             
+            const collection = new SolutionCollection();
 
             // Solve solution nodes
             const solutionRootNode = new SolutionNode("root via app", "", 1, null, "flag_win");
-            collection.push(new Solution(solutionRootNode, solutionNodesMappedByInput));
+            collection.push(new Solution(solutionRootNode, scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll()));
             collection.SolveUntilZeroNodesRemaining();
             collection.GenerateSolutionNames(scene.GetSetOfStartingThings());
 
@@ -96,19 +91,13 @@ export class ChooseTheGoalToConcoctSolutionFor {
             for (let i = 0; i < collection.length; i++) {
                 if (choice !== "-1" && i !== Number(choice))
                     continue;
-                const solution = collection[i];
-                console.log("Solution called " + GetDisplayName(solution.GetName()));
-                const leafNodesRequiredBySolution = new Set<string>();
-                solution.absoluteLeafNodes.forEach((value: SolutionNode) => {
-                    leafNodesRequiredBySolution.add(value.output);
-                });
-
-                const setAfterReduction = IntersectionSet(leafNodesRequiredBySolution, startingPropsAndInvs);
-                const isSolvable = IsASupersetOfB(startingPropsAndInvs, leafNodesRequiredBySolution);
+                const originalSolution = collection[i];
+                console.log("Solution called " + GetDisplayName(originalSolution.GetName()));
+                let solutionToDestroy = originalSolution;
 
                 let rawObjectsAndVerb: RawObjectsAndVerb | null = null;
                 for (let j = 0; j < 200; j++) {
-                    rawObjectsAndVerb = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
+                    rawObjectsAndVerb = solutionToDestroy.GetNextDoableCommandAndDesconstructTree();
 
                     if (!rawObjectsAndVerb)// all out of moves!
                         break;
@@ -128,26 +117,40 @@ export class ChooseTheGoalToConcoctSolutionFor {
 
                     if (rawObjectsAndVerb.type == Raw.You_have_won_the_game) {
                         // this is just here for debugging!
-                        let debugMe = solution.GetNextDoableCommandAndDesconstructTree(startingPropsAndInvs);
+                        let debugMe = solutionToDestroy.GetNextDoableCommandAndDesconstructTree();
                         break;
                     }
                 }
 
                 if (!rawObjectsAndVerb) {
+                    const leafNodesRequiredBySolution = new Set<string>();
+                    originalSolution.absoluteLeafNodes.forEach((value: SolutionNode) => {
+                        leafNodesRequiredBySolution.add(value.output);
+                    });
+                    const startingProps = scene.GetSetOfStartingProps();
+                    const startingInvs = scene.GetSetOfStartingInvs();
+                    const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
+                    const setAfterReduction = IntersectionSet(leafNodesRequiredBySolution, startingPropsAndInvs);
+                    const isSolvable = IsASupersetOfB(startingPropsAndInvs, leafNodesRequiredBySolution);
+
                     // error handling
-                    console.log("Starting set needs to have more stuff(props probably):");
-                    leafNodesRequiredBySolution.forEach((entry: string) => {
-                        console.log(GetDisplayName(entry));
-                    })
-                    console.log("-------^^ Above are the leaf nodes laid out in the Solution");
-                    console.log("Below are all the starting things");
+                    if (!isSolvable) {
+                        console.log("Starting set needs to have more stuff(props probably):");
+                        leafNodesRequiredBySolution.forEach((entry: string) => {
+                            console.log(GetDisplayName(entry));
+                        })
+                        console.log("-------^^ Above are the leaf nodes laid out in the Solution");
+                        console.log("Below are all the starting things");
 
-                    setAfterReduction.forEach((entry: string) => {
-                        console.log(GetDisplayName(entry));
-                    })
+                        setAfterReduction.forEach((entry: string) => {
+                            console.log(GetDisplayName(entry));
+                        })
 
-                    console.log("Spot what needs to be in the starting set - and fix it!");
-                    prompt('Hit a key to continue').toLowerCase();
+                        console.log("Spot what needs to be in the starting set - and fix it!");
+                        prompt('Hit a key to continue').toLowerCase();
+                    }else{
+                        console.log("rawObjectsAndVerb was null, but it looked solvable. WEIRD! debug this.")
+                    }
                 }
                 console.log("");
             }

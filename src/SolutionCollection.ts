@@ -2,18 +2,13 @@ import { Solution } from './Solution';
 import { SolutionNode } from './SolutionNode';
 import { GetDisplayName } from './GetDisplayName';
 import { Colors } from './Colors';
+import { Embracketize } from './Embracketize';
 
 
 export class SolutionCollection extends Array<Solution>{
-    startingThings:Set<string>;
 
-    constructor( startingThings:Set<string>) {
-        super();
-        this.startingThings = startingThings
-    }
-
-    GetStartingThings(): Set<string> {
-        return this.startingThings
+    constructor() {
+        super(); 
     }
 
     IsNodesRemaining(): boolean {
@@ -94,14 +89,7 @@ export class SolutionCollection extends Array<Solution>{
 
             });
 
-            // format it in to a lovely comma-separated list
-            let restrictions = "";
-            for (const restriction of currRestrictions) {
-                const nameToAdd = GetDisplayName(restriction);
-                restrictions += restrictions.length > 0 ? (", " + nameToAdd) : nameToAdd;
-            }
-
-            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (restrictions.length>0? "(" + restrictions + ")" : ""));
+            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (currRestrictions.size>0? Embracketize(GetDisplayName(Array.from(currRestrictions))) : ""));
          }
     }
 }
