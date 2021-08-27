@@ -23,7 +23,7 @@ const prompt = promptSync();
 
 function main(): void {
     const fileSet = new Set<string>();
-    fileSet.add("src/20210415JsonPrivate/HospScene.json");
+    //fileSet.add("src/20210415JsonPrivate/HospScene.json");
     fileSet.add("src/20210415JsonPrivate/HighScene.json");
     const scene = new ScenePreCacheMultiple(fileSet);
 

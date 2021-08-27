@@ -2,7 +2,6 @@ import { SolutionCollection } from './SolutionCollection';
 import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
 //import { assert } from 'console';
-import { SolutionNodeInput } from './SolutionNodeInput';
 import { isNullOrUndefined } from 'util';
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
@@ -16,7 +15,8 @@ export class SolutionNode {
     id: number;
     type: string;
     output: string;
-    inputs: Array<SolutionNodeInput>;
+    inputs: Array<SolutionNode|null>;
+    inputHints: Array<string>;
     parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
     count: number;
     characterRestrictions: Array<string>;
@@ -42,19 +42,32 @@ export class SolutionNode {
                 this.characterRestrictions.push(restriction.char);
             }
         }
-        this.inputs = new Array<SolutionNodeInput>();
-        if (inputA !== "undefined" && inputA !== "undefined")
-            this.inputs.push(new SolutionNodeInput(inputA));
-        if (inputB !== "undefined" && inputB !== "undefined")
-            this.inputs.push(new SolutionNodeInput(inputB));
-        if (inputC !== "undefined" && inputC !== "undefined")
-            this.inputs.push(new SolutionNodeInput(inputC));
-        if (inputD !== "undefined" && inputD !== "undefined")
-            this.inputs.push(new SolutionNodeInput(inputD));
-        if (inputE !== "undefined" && inputE !== "undefined")
-            this.inputs.push(new SolutionNodeInput(inputE));
-        if (inputF !== "undefined" && inputF !== "undefined")
-            this.inputs.push(new SolutionNodeInput(inputF));
+        this.inputs = new Array<SolutionNode>();
+        this.inputHints = new Array<string>();
+        if (inputA !== "undefined" && inputA !== "undefined"){
+            this.inputHints.push(inputA);
+            this.inputs.push(null);
+        }
+        if (inputB !== "undefined" && inputB !== "undefined"){
+            this.inputHints.push(inputB);
+            this.inputs.push(null);
+        }
+        if (inputC !== "undefined" && inputC !== "undefined"){
+            this.inputHints.push(inputC);
+            this.inputs.push(null);
+        }
+        if (inputD !== "undefined" && inputD !== "undefined"){
+            this.inputHints.push(inputD);
+            this.inputs.push(null);
+        }
+        if (inputE !== "undefined" && inputE !== "undefined"){
+            this.inputHints.push(inputE);
+            this.inputs.push(null);
+        }
+        if (inputF !== "undefined" && inputF !== "undefined"){
+            this.inputHints.push(inputF);
+            this.inputs.push(null);
+        }
     }
 
     CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
@@ -64,14 +77,25 @@ export class SolutionNode {
         clone.count = this.count;
         clone.output = this.output;
 
+        // the hints
+        for(let inputHint of this.inputHints){
+            clone.inputHints.push(inputHint);
+        }
 
+        // the nodes 
         let isIncomplete = false;
-        this.inputs.forEach((input: SolutionNodeInput) => {
-            if (!input)
+        for(let input of this.inputs){
+            if (input){
+                const child = input.CreateClone(uncompleted);
+                clone.inputs.push(child);
+            }
+            else{
                 isIncomplete = true;
-            const child = input.CreateClone(uncompleted);
-            clone.inputs.push(child);
-        });
+                clone.inputs.push(null);
+            }
+            
+          
+        };
 
         for (const restriction of this.characterRestrictions) {
             clone.characterRestrictions.push(restriction);
@@ -87,8 +111,7 @@ export class SolutionNode {
         if (this.id === id)
             return this;
         for (const input of this.inputs) {
-            const inputNode = input.GetInputNode();
-            const result = inputNode ? inputNode.FindAnyNodeMatchingIdRecursively(id) : null;
+            const result = input ? input.FindAnyNodeMatchingIdRecursively(id) : null;
             if (result)
                 return result;
         };
@@ -104,16 +127,17 @@ export class SolutionNode {
 
             // without this following line, any clones will attempt to reclone themselves 
             // and Solution.ProcessUntilCompletion will continue forever
-            if (this.inputs[k].GetInputNode())
+            if (this.inputs[k])
                 continue;
 
             // we check our starting set first!
             // otherwise Toggle pieces will toggle until the count is zero.
-            const objectToObtain = this.inputs[k].inputName;
+            const objectToObtain = this.inputHints[k];
             if(solution.startingThings.has(objectToObtain)){
-                const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
-                this.inputs[k].SetInputNode(verifiedLeaf, this);
-                solution.AddVerifiedLeaf(path + this.inputs[k].inputName+"/", verifiedLeaf );
+                const newLeaf = new SolutionNode(objectToObtain, SpecialNodes.VerifiedLeaf);
+                newLeaf.parent = this;
+                this.inputs[k] = newLeaf;
+                solution.AddVerifiedLeaf(path + this.inputHints[k]+"/", newLeaf);
                 continue;
             }
 
@@ -121,9 +145,10 @@ export class SolutionNode {
             // and if there is more than one, then we clone
             const matchingNodes = solution.GetNodesThatOutputObject(objectToObtain);
             if (!matchingNodes || matchingNodes.length === 0) {
-                const verifiedLeaf = new SolutionNode(this.inputs[k].inputName, SpecialNodes.VerifiedLeaf);
-                this.inputs[k].SetInputNode(verifiedLeaf, this);
-                solution.AddVerifiedLeaf(path + this.inputs[k].inputName+"/", verifiedLeaf );
+                const newLeaf = new SolutionNode(this.inputHints[k], SpecialNodes.VerifiedLeaf);
+                newLeaf.parent = this;
+                this.inputs[k] = newLeaf;
+                solution.AddVerifiedLeaf(path + this.inputHints[k]+"/", newLeaf);
             }
             else if (matchingNodes) {
                 // we have the convention that zero is the currentSolution
@@ -152,7 +177,8 @@ export class SolutionNode {
                     const theNode = theSolution.GetRootNode().FindAnyNodeMatchingIdRecursively(this.id);
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
-                        theNode.inputs[k].SetInputNode(theMatchingNode, theNode);
+                        theMatchingNode.parent = theNode;
+                        theNode.inputs[k]=theMatchingNode; 
                         // all reactions are incomplete when they come from the node map
                         theSolution.SetNodeIncomplete(theMatchingNode);
                         theSolution.addRestrictions(theMatchingNode.getRestrictions());
@@ -170,7 +196,7 @@ export class SolutionNode {
 
         // now to process each of those nodes that have been filled out
         for (const input of  this.inputs) {
-            const inputNode = input.GetInputNode();
+            const inputNode = input;
             assert(inputNode && "Input node=" + inputNode + " <-If this fails there is something wrong with the loop in first half of this method");
             if (inputNode) {
                 if (inputNode.type === SpecialNodes.VerifiedLeaf)

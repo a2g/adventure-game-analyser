@@ -40,23 +40,23 @@ export function ChooseToPlayThrough(scene:SceneInterface, numberOfAutopilotTurns
 
             autos.forEach((node: SolutionNode) => {
                 let numberSatisified = 0;
-                node.inputs.forEach((input: SolutionNodeInput) => {
-                    if (input.inputName.startsWith("prop_")) {
-                        if (props.includes(input.inputName)) {
+                for(let inputName of node.inputHints){
+                    if (inputName.startsWith("prop_")) {
+                        if (props.includes(inputName)) {
                             numberSatisified = numberSatisified + 1;
                         }
                     }
-                    else if (input.inputName.startsWith("inv_")) {
-                        if (invs.includes(input.inputName)) {
+                    else if (inputName.startsWith("inv_")) {
+                        if (invs.includes(inputName)) {
                             numberSatisified++;
                         }
-                    } else if (input.inputName.startsWith("flag_")) {
-                        if (flags.includes(input.inputName)) {
+                    } else if (inputName.startsWith("flag_")) {
+                        if (flags.includes(inputName)) {
                             numberSatisified++;
                         }
                     }
-                });
-                if (numberSatisified === node.inputs.length) {
+                };
+                if (numberSatisified === node.inputHints.length) {
                     if (node.output.startsWith("prop_")) {
                         console.log("Auto: prop set visible " + node.output);
                         happener.SetPropVisible(node.output, true);

@@ -64,12 +64,22 @@ export class Solution {
         const clonedRootNode = new SolutionNode(this.rootNode.output);
         clonedRootNode.id = this.rootNode.id;
         const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings);
+        
+        // the hints
+        for (const inputHint of this.rootNode.inputHints) {
+            clonedSolution.rootNode.inputHints.push(inputHint)
+        }
+        
+        // the nodes
         let isAnyIncomplete = false;
         for (const node of this.rootNode.inputs) {
-            const clonedNode = node.CreateClone(clonedSolution.incompleteNodes);
-            clonedSolution.rootNode.inputs.push(clonedNode);
-            if (clonedNode.GetInputNode() === null)
+            if(node){
+                const clonedNode = node.CreateClone(clonedSolution.incompleteNodes);
+                clonedSolution.rootNode.inputs.push(clonedNode);
+            }else{
+                clonedSolution.rootNode.inputs.push(null)
                 isAnyIncomplete = true;
+            }
         }
 
         if (isAnyIncomplete)
@@ -158,10 +168,10 @@ export class Solution {
             let areAllInputsAvailable = true;
 
             // inputs are nearly always 2, but in one case they can be 6.. using for(;;) isn't such a useful optimizaiton here             // for (let i = 0; i < node.inputs.length; i++) {
-            node.inputs.forEach((input: SolutionNodeInput) => {
-                if (!this.startingThings.has(input.inputName))
+            for(let name of node.inputHints){
+                if (!this.startingThings.has(name))
                     areAllInputsAvailable = false;
-            });
+            };
 
             if (areAllInputsAvailable) {
                 // first we give them the output            
@@ -185,23 +195,23 @@ export class Solution {
               } else if (node.inputs.length === 0) {
                     return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("grab")) {
-                    return new RawObjectsAndVerb(Raw.Grab, node.inputs[0].inputName, "", node.getRestrictions(), node.type);
+                    return new RawObjectsAndVerb(Raw.Grab, node.inputHints[0], "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("toggle")) {
-                    return new RawObjectsAndVerb(Raw.Toggle, node.inputs[0].inputName, node.output, node.getRestrictions(), node.type);
+                    return new RawObjectsAndVerb(Raw.Toggle, node.inputHints[0], node.output, node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
-                    node.inputs.forEach((node: SolutionNodeInput) => {
-                        text += node.inputName + " ";
-                    });
-                    return new RawObjectsAndVerb(Raw.Auto, node.inputs[0].inputName, node.output, node.getRestrictions(), node.type);
+                    for(let inputName of node.inputHints){
+                        text += inputName + " ";
+                    };
+                    return new RawObjectsAndVerb(Raw.Auto, node.inputHints[0], node.output, node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("use")) {// then its nearly definitely "use", unless I messed up
-                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions(), node.type);
+                    return new RawObjectsAndVerb(Raw.Use, node.inputHints[0], node.inputHints[1], node.getRestrictions(), node.type);
                 } else if (node.inputs.length === 2) { // smoking gun, if something is mislabelled "Use" 
-                    return new RawObjectsAndVerb(Raw.Use, node.inputs[0].inputName, node.inputs[1].inputName, node.getRestrictions(), node.type);
+                    return new RawObjectsAndVerb(Raw.Use, node.inputHints[0], node.inputHints[1], node.getRestrictions(), node.type);
                 } else if (node.parent == null) {
                     // I think this means tha the root node isn't set properly!
                     // so we need to set breakpoint on this return, and the one above, and debug
-                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, node.inputs[0].inputName, "", node.getRestrictions(), node.type);
+                    return new RawObjectsAndVerb(Raw.You_have_won_the_game, node.inputHints[0], "", node.getRestrictions(), node.type);
                 } else {
                     assert(false && " type not identified");
                     console.log("Assertion because of type not Identified!: " + node.type + node.inputs[0]);

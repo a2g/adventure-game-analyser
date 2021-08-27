@@ -65,15 +65,15 @@ describe("ReactionMap", () => {
             assert.ok(!isUndefined(array));
             assert.notEqual(null, array);
             if (clonedOutputA) {
-                clonedOutputA[0].inputs[0].inputName = "d";
-                clonedOutputA[1].inputs[0].inputName = "e";
-                clonedOutputA[2].inputs[0].inputName = "f";
+                clonedOutputA[0].inputHints[0] = "d";
+                clonedOutputA[1].inputHints[0] = "e";
+                clonedOutputA[2].inputHints[0] = "f";
             }
         }
 
         // check the originals are still the same
-        assert.strictEqual(array[0].inputs[0].inputName, "a");
-        assert.strictEqual(array[1].inputs[0].inputName, "b");
-        assert.strictEqual(array[2].inputs[0].inputName, "c");
+        assert.strictEqual(array[0].inputHints[0], "a");
+        assert.strictEqual(array[1].inputHints[0], "b");
+        assert.strictEqual(array[2].inputHints[0], "c");
     });
 });
