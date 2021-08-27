@@ -87,14 +87,13 @@ export class SolutionNode {
         for(let input of this.inputs){
             if (input){
                 const child = input.CreateClone(uncompleted);
+                child.SetParent(clone);
                 clone.inputs.push(child);
             }
             else{
                 isIncomplete = true;
                 clone.inputs.push(null);
             }
-            
-          
         };
 
         for (const restriction of this.characterRestrictions) {

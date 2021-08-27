@@ -75,6 +75,7 @@ export class Solution {
         for (const node of this.rootNode.inputs) {
             if(node){
                 const clonedNode = node.CreateClone(clonedSolution.incompleteNodes);
+                clonedNode.SetParent(clonedRootNode);
                 clonedSolution.rootNode.inputs.push(clonedNode);
             }else{
                 clonedSolution.rootNode.inputs.push(null)
