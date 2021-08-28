@@ -8,7 +8,7 @@ import { Embracketize } from './Embracketize';
 export class SolutionCollection extends Array<Solution>{
 
     constructor() {
-        super(); 
+        super();
     }
 
     IsNodesRemaining(): boolean {
@@ -40,7 +40,7 @@ export class SolutionCollection extends Array<Solution>{
     }
 
     GenerateSolutionNames(startingSetOfThings: Set<[string, string]> | null) {
-        for (let i = 0; i < this.length; i++) { 
+        for (let i = 0; i < this.length; i++) {
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
             for (let j = 0; j < this.length; j++) {
@@ -48,14 +48,14 @@ export class SolutionCollection extends Array<Solution>{
                     continue;
                 const otherSolution = this[j];
                 const otherLeafs = otherSolution.GetLeafNodes();
-                otherLeafs.forEach((value: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
-                    const otherLeafNodeName = value.output;
+                for(let leafNode of otherLeafs.values()){
+                    const otherLeafNodeName = leafNode.output;
                     let otherLeafNodeNameCount = 0;
                     const result = mapForCounting.get(otherLeafNodeName);
                     if (result !== undefined)
                         otherLeafNodeNameCount = result;
                     mapForCounting.set(otherLeafNodeName, otherLeafNodeNameCount + 1);
-                });
+                };
             }
 
             // find least popular leaf in solution i
@@ -67,29 +67,29 @@ export class SolutionCollection extends Array<Solution>{
             const currRestrictions = currSolution.getRestrictions();
 
             const currLeaves = currSolution.GetLeafNodes();
-            currLeaves.forEach((solutionLeafNode: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
-                const result = mapForCounting.get(solutionLeafNode.output)
+            for (let leafNode of currLeaves.values()) {
+                const result = mapForCounting.get(leafNode.output)
                 if (result !== undefined && result < minLeafNodeNameCount) {
                     minLeafNodeNameCount = result;
-                    minLeafNodeName = solutionLeafNode.output;
-                } else if (!mapForCounting.has(solutionLeafNode.output)) {
+                    minLeafNodeName = leafNode.output;
+                } else if (!mapForCounting.has(leafNode.output)) {
                     // our leaf is no where in the leafs of other solutions - we can use it!
                     minLeafNodeNameCount = 0;
-                    minLeafNodeName = solutionLeafNode.output;
+                    minLeafNodeName = leafNode.output;
                 }
 
                 // now we potentially add startingSet items to restrictions
                 if (startingSetOfThings) {
                     for (const startingThing of startingSetOfThings) {
-                        if (startingThing[1] === solutionLeafNode.output) {
+                        if (startingThing[1] === leafNode.output) {
                             currRestrictions.add(startingThing[0]);
                         }
                     }
                 }
 
-            });
+            }
 
-            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (currRestrictions.size>0? Embracketize(GetDisplayName(Array.from(currRestrictions))) : ""));
-         }
+            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (currRestrictions.size > 0 ? Embracketize(GetDisplayName(Array.from(currRestrictions))) : ""));
+        }
     }
 }

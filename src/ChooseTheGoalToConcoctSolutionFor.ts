@@ -124,7 +124,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
 
                 if (!rawObjectsAndVerb) {
                     const leafNodesRequiredBySolution = new Set<string>();
-                    originalSolution.absoluteLeafNodes.forEach((value: SolutionNode) => {
+                    originalSolution.GetLeafNodes().forEach((value: SolutionNode) => {
                         leafNodesRequiredBySolution.add(value.output);
                     });
                     const startingProps = scene.GetSetOfStartingProps();

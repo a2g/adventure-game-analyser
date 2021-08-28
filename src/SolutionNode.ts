@@ -70,7 +70,7 @@ export class SolutionNode {
         }
     }
 
-    CreateClone(uncompleted: Set<SolutionNode>): SolutionNode {
+    CloneNodeAndEntireTree(incompleteNodeSet: Set<SolutionNode>): SolutionNode {
         const clone = new SolutionNode(this.output, "");
         clone.id = this.id;
         clone.type = this.type;
@@ -86,7 +86,7 @@ export class SolutionNode {
         let isIncomplete = false;
         for(let input of this.inputs){
             if (input){
-                const child = input.CreateClone(uncompleted);
+                const child = input.CloneNodeAndEntireTree(incompleteNodeSet);
                 child.SetParent(clone);
                 clone.inputs.push(child);
             }
@@ -96,12 +96,12 @@ export class SolutionNode {
             }
         };
 
+        if(isIncomplete)
+            incompleteNodeSet.add(this);
+
         for (const restriction of this.characterRestrictions) {
             clone.characterRestrictions.push(restriction);
         }
-
-        if (isIncomplete)
-            uncompleted.add(this);
 
         return clone;
     }

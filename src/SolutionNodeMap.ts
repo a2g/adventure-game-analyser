@@ -13,7 +13,7 @@ export class SolutionNodeMap {
                 let clonedArray = new Array<SolutionNode>();
                 let throwawaySet = new Set<SolutionNode>();
                 array.forEach((node: SolutionNode) => {
-                    let clonedNode = node.CreateClone(throwawaySet);
+                    let clonedNode = node.CloneNodeAndEntireTree(throwawaySet);
                     clonedArray.push(clonedNode);
                 });
                 this.solutionNodeMap.set(key, clonedArray);

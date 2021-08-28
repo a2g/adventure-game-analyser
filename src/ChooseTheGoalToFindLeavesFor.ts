@@ -43,13 +43,13 @@ export class ChooseTheGoalToFindLeavesFor {
                 // display list
                 collection.forEach(function (solution: Solution) {
                     console.log("------------------------------------------------------------(solution separator)");
-                    const needs = solution.absoluteLeafNodes;
-                    needs.forEach((value: SolutionNode, key: string, map: Map<string, SolutionNode>) => {
+                    const needs = solution.GetLeafNodes();
+                    for(let node of needs.values()){
                         numberOfLeaves++;
 
                         // display list item
-                        console.log("    " + numberOfLeaves + "." + value.output);
-                    });
+                        console.log("    " + numberOfLeaves + "." + node.output);
+                    };
                 });
 
                 // allow user to choose item
@@ -62,7 +62,7 @@ export class ChooseTheGoalToFindLeavesFor {
                     if (number > 0 && number <= numberOfLeaves) {
                         let i = 0;
                         collection.forEach(function (solution: Solution) {
-                            const needs = solution.absoluteLeafNodes;
+                            const needs = solution.GetLeafNodes();
                             needs.forEach((value: SolutionNode, key: string) => {
                                 i++;
                                 if (i === number) {

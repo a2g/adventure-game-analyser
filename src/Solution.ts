@@ -10,24 +10,70 @@ import { Raw } from './Raw';
 import _ from './20210415JsonPrivate/Script/Script.json';
 
 export class Solution {
+    // non aggregates
+    solutionName: string;
+    rootNode: SolutionNode;
+    nodeMap: SolutionNodeMap;
 
-    constructor(root: SolutionNode, map: SolutionNodeMap, startingThings: Set<string>) {
-        this.solutionName = "uninitialized";
-        this.rootNode = root;
+    // aggregates
+    incompleteNodes: Set<SolutionNode>;
+    usedVerbNounCombos: Set<string>;
+    characterRestrictions: Set<string>;
+    startingThings: Set<string>;
+    leafNodes: Map<string, SolutionNode>;
+
+    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Set<string>, verbNounCombos: Set<string> | null = null, restrictions: Set<string> | null = null) {
+        // initialize non aggregates
+        {
+            this.solutionName = "uninitialized";
+            this.rootNode = root;
+            this.nodeMap = new SolutionNodeMap(copyThisMapOfPieces);
+        }
+
+        // still tossing up whether to add the root to the incompletes
+        // on the against side: what if we are cloning a completed solution?
+        // on the for side: vaguely remember that a solution needs to be incomplete when empty
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
-        this.absoluteLeafNodes = new Map<string, SolutionNode>();
+
+
+        // its its passed in we deep copy it
         this.usedVerbNounCombos = new Set<string>();
+        if (verbNounCombos) {
+            for (let combo of verbNounCombos) {
+                this.usedVerbNounCombos.add(combo);
+            }
+        }
+
+        // its its passed in we deep copy it
         this.characterRestrictions = new Set<string>();
+        if (restrictions) {
+            for (let restriction of restrictions) {
+                this.characterRestrictions.add(restriction);
+            }
+        }
 
-        // clone nodemap, because solution graph derivation decrements it
-        this.nodeMap = new SolutionNodeMap(map);
-
-        // clone starting things, because command sequence derivation destroys it
+        // its its passed in we deep copy it
         this.startingThings = new Set<string>();
-        for (let item of startingThings) {
+        for (let item of startingThingsPassedIn) {
             this.startingThings.add(item);
         }
+
+        // interestingly, leaf nodes don't get cloned 
+        // but it doesn't matter that much because they are just used to 
+        this.leafNodes = new Map<string, SolutionNode>();
+    }
+
+    Clone(): Solution {
+        // the weird order of this is because Solution constructor is used 
+        // primarily to construct, so passing in root node is needed..
+        // so we clone the whole tree and pass it in
+        const incompleteNodes = new Set<SolutionNode>();
+        const clonedRootNode = this.rootNode.CloneNodeAndEntireTree(incompleteNodes);
+        clonedRootNode.id = this.rootNode.id;//not sure why do this, but looks crucial!
+        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings, this.usedVerbNounCombos, this.characterRestrictions);
+        clonedSolution.SetIncompleteNodes(incompleteNodes);
+        return clonedSolution;
     }
 
     AddVerbNounCombo(verb: string, noun: string): void {
@@ -60,35 +106,13 @@ export class Solution {
         }
     }
 
-    Clone(): Solution {
-        const clonedRootNode = new SolutionNode(this.rootNode.output);
-        clonedRootNode.id = this.rootNode.id;
-        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings);
-        
-        // the hints
-        for (const inputHint of this.rootNode.inputHints) {
-            clonedSolution.rootNode.inputHints.push(inputHint)
-        }
-        
-        // the nodes
-        let isAnyIncomplete = false;
-        for (const node of this.rootNode.inputs) {
-            if(node){
-                const clonedNode = node.CreateClone(clonedSolution.incompleteNodes);
-                clonedNode.SetParent(clonedRootNode);
-                clonedSolution.rootNode.inputs.push(clonedNode);
-            }else{
-                clonedSolution.rootNode.inputs.push(null)
-                isAnyIncomplete = true;
-            }
-        }
 
-        if (isAnyIncomplete)
-            clonedSolution.incompleteNodes.add(clonedRootNode);
-        this.usedVerbNounCombos.forEach((combo: string) => {
-            clonedSolution.AddVerbNounCombo(combo, "");
-        });
-        return clonedSolution;
+    SetIncompleteNodes(set: Set<SolutionNode>) {
+        // safer to copy this - just being cautious
+        this.incompleteNodes = new Set<SolutionNode>();
+        for (let node of set) {
+            this.incompleteNodes.add(node);
+        }
     }
 
     IsNodesRemaining(): boolean {
@@ -97,7 +121,7 @@ export class Solution {
 
     AddVerifiedLeaf(path: string, node: SolutionNode): void {
         assert(node.output);
-        this.absoluteLeafNodes.set(path, node);
+        this.leafNodes.set(path, node);
     }
 
     ProcessUntilCloning(solutions: SolutionCollection): boolean {
@@ -109,8 +133,8 @@ export class Solution {
         return isBreakingDueToSolutionCloning;
     }
 
-    GetLeafNodes(): Map<string, SolutionNode> {
-        return this.absoluteLeafNodes;
+    GetLeafNodes(): ReadonlyMap<string, SolutionNode> {
+        return this.leafNodes;
     }
 
     GetIncompleteNodes(): Set<SolutionNode> {
@@ -163,13 +187,13 @@ export class Solution {
     }
 
     GetNextDoableCommandAndDesconstructTree(): RawObjectsAndVerb | null {
-        for (const input of this.absoluteLeafNodes) {
+        for (const input of this.leafNodes) {
             const key: string = input[0];
             const node: SolutionNode = input[1];
             let areAllInputsAvailable = true;
 
             // inputs are nearly always 2, but in one case they can be 6.. using for(;;) isn't such a useful optimizaiton here             // for (let i = 0; i < node.inputs.length; i++) {
-            for(let name of node.inputHints){
+            for (let name of node.inputHints) {
                 if (!this.startingThings.has(name))
                     areAllInputsAvailable = false;
             };
@@ -185,15 +209,15 @@ export class Solution {
                 const pathOfParent = this.GeneratePath(node.parent);
 
                 // then we remove this key as a leaf node..
-                this.absoluteLeafNodes.delete(key);
+                this.leafNodes.delete(key);
 
                 // ... and add a parent in its place
                 if (node.parent)
-                    this.absoluteLeafNodes.set(pathOfParent, node.parent);
+                    this.leafNodes.set(pathOfParent, node.parent);
 
                 if (node == this.rootNode) {
                     return new RawObjectsAndVerb(Raw.You_have_won_the_game, "", "", node.getRestrictions(), node.type);
-              } else if (node.inputs.length === 0) {
+                } else if (node.inputs.length === 0) {
                     return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("grab")) {
                     return new RawObjectsAndVerb(Raw.Grab, node.inputHints[0], "", node.getRestrictions(), node.type);
@@ -201,7 +225,7 @@ export class Solution {
                     return new RawObjectsAndVerb(Raw.Toggle, node.inputHints[0], node.output, node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("auto")) {
                     let text = "auto using (";
-                    for(let inputName of node.inputHints){
+                    for (let inputName of node.inputHints) {
                         text += inputName + " ";
                     };
                     return new RawObjectsAndVerb(Raw.Auto, node.inputHints[0], node.output, node.getRestrictions(), node.type);
@@ -235,12 +259,4 @@ export class Solution {
         return this.characterRestrictions;
     }
 
-    rootNode: SolutionNode;
-    solutionName: string;
-    incompleteNodes: Set<SolutionNode>;
-    absoluteLeafNodes: Map<string, SolutionNode>;
-    usedVerbNounCombos: Set<string>;
-    nodeMap: SolutionNodeMap;
-    characterRestrictions: Set<string>;
-    startingThings: Set<string>;
 }
