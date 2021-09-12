@@ -60,7 +60,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, prop1, prop2, prop3, prop4, prop5, prop6));
                 }
                 break;
-            case "FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS":
+            case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
                 if(solutionNodesMappedByInput) {
                     const output = "" + reaction.flag1;
                     const inputA = "" + reaction.inv1;
@@ -69,12 +69,54 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputD = "" + reaction.prop3;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB, inputC, inputD));
                 } else if (objects.Match("Use", reaction.inv1, reaction.prop1)){
-                    happs.text = "With everything set up correctly, you use the" + reaction.inv1 + " with the " + reaction.prop1 + " and something good happens";
+                    happs.text = "With everything set up correctly, you use the" + reaction.inv1 + " with the " + reaction.prop1 + " and something good happens...";
                     happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag)));
                     happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                     happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
                     happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop2)));
                     happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop3)));
+                }
+                break;
+            case _.FLAG1_SET_BY_USING_INV1_WITH_INV2:
+                    if (solutionNodesMappedByInput) {
+                        const inputA = "" + reaction.inv1;
+                        const inputB = "" + reaction.inv2;
+                        const output = "" + reaction.flag1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
+                    } else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
+                        happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.inv2 + " and something good happens...";
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
+                        happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                        return happs;
+                    }
+                    break;
+            case _.FLAG1_SET_BY_USING_INV1_WITH_PROP1:
+                    if (solutionNodesMappedByInput) {
+                        const inputA = "" + reaction.inv1;
+                        const inputB = "" + reaction.prop1;
+                        const output = "" + reaction.flag1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
+                    } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
+                        happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and something good happens...";
+                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                        happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                        return happs;
+                    }
+                    break;
+            case _.FLAG1_SET_BY_USING_PROP1_WITH_PROP2:
+                if (solutionNodesMappedByInput) {
+                    const inputA = "" + reaction.prop1;
+                    const inputB = "" + reaction.prop2;
+                    const output = "" + reaction.flag1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
+                } else if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
+                    happs.text = "You use the " + reaction.prop1 + " with the  " + reaction.prop2  + " and something good happens...";
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop2)));
+                    happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                    return happs;
                 }
                 break;
             case _.INV1_AND_INV2_FORM_INV3:
@@ -170,21 +212,6 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                     happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
                     happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
-                    return happs;
-                }
-                break;
-            case _.INV1_WITH_PROP1_SETS_FLAG1_KEPT_ALL:
-                if (solutionNodesMappedByInput) {
-                    const inputA = "" + reaction.inv1;
-                    const inputB = "" + reaction.prop1;
-                    const output = "" + reaction.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
-
-                } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
-                    happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and a flag is set " + reaction.flag1;
-                    happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
-                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
-                    happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
                     return happs;
                 }
                 break;
