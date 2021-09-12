@@ -2,7 +2,7 @@
     "$schema": "./TestHighPermutationSolutionSchema.json",
     "reactions": [
         {
-            "script": "INV1_WITH_PROP1_SETS_FLAG1_KEPT_ALL",
+            "script" :"FLAG1_SET_BY_USING_INV1_WITH_PROP1",
             "inv1": "inv_final_catalyst",
             "prop1": "prop_stageE",
             "flag1": "flag_win"

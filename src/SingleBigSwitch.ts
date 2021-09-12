@@ -99,7 +99,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                         solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
                     } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                         happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and something good happens...";
-                        happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
+                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
                         happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
                         happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
                         return happs;
