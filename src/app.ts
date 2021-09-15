@@ -17,7 +17,7 @@ import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { SceneInterface } from './SceneInterface';
 import { SceneSingle } from './SceneSingle';
-import { ScenePreCacheMultiple } from './SceneMultipleCombined';
+import { ScenePreCacheMultiple } from './ScenePreAggregator';
 import { levels } from './20210415JsonPrivate/All.json'
 import { ChooseToPlayCampaign } from './ChooseToPlayCampaign';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
