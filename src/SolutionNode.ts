@@ -15,9 +15,9 @@ export class SolutionNode {
     id: number;
     type: string;
     output: string;
-    inputs: Array<SolutionNode|null>;
+    inputs: Array<SolutionNode | null>;
     inputHints: Array<string>;
-    parent: SolutionNode|null;// this is not needed for leaf finding - but *is* needed for command finding. 
+    parent: SolutionNode | null;// this is not needed for leaf finding - but *is* needed for command finding. 
     count: number;
     characterRestrictions: Array<string>;
     constructor(output: string,
@@ -44,27 +44,27 @@ export class SolutionNode {
         }
         this.inputs = new Array<SolutionNode>();
         this.inputHints = new Array<string>();
-        if (inputA !== "undefined" && inputA !== "undefined"){
+        if (inputA !== "undefined" && inputA !== "undefined") {
             this.inputHints.push(inputA);
             this.inputs.push(null);
         }
-        if (inputB !== "undefined" && inputB !== "undefined"){
+        if (inputB !== "undefined" && inputB !== "undefined") {
             this.inputHints.push(inputB);
             this.inputs.push(null);
         }
-        if (inputC !== "undefined" && inputC !== "undefined"){
+        if (inputC !== "undefined" && inputC !== "undefined") {
             this.inputHints.push(inputC);
             this.inputs.push(null);
         }
-        if (inputD !== "undefined" && inputD !== "undefined"){
+        if (inputD !== "undefined" && inputD !== "undefined") {
             this.inputHints.push(inputD);
             this.inputs.push(null);
         }
-        if (inputE !== "undefined" && inputE !== "undefined"){
+        if (inputE !== "undefined" && inputE !== "undefined") {
             this.inputHints.push(inputE);
             this.inputs.push(null);
         }
-        if (inputF !== "undefined" && inputF !== "undefined"){
+        if (inputF !== "undefined" && inputF !== "undefined") {
             this.inputHints.push(inputF);
             this.inputs.push(null);
         }
@@ -78,25 +78,25 @@ export class SolutionNode {
         clone.output = this.output;
 
         // the hints
-        for(let inputHint of this.inputHints){
+        for (let inputHint of this.inputHints) {
             clone.inputHints.push(inputHint);
         }
 
         // the nodes 
         let isIncomplete = false;
-        for(let input of this.inputs){
-            if (input){
+        for (let input of this.inputs) {
+            if (input) {
                 const child = input.CloneNodeAndEntireTree(incompleteNodeSet);
                 child.SetParent(clone);
                 clone.inputs.push(child);
             }
-            else{
+            else {
                 isIncomplete = true;
                 clone.inputs.push(null);
             }
         };
 
-        if(isIncomplete)
+        if (isIncomplete)
             incompleteNodeSet.add(this);
 
         for (const restriction of this.characterRestrictions) {
@@ -118,7 +118,7 @@ export class SolutionNode {
     }
 
     ProcessUntilCloning(solution: Solution, solutions: SolutionCollection, path: string): boolean {
-        path +=  this.output + "/";
+        path += this.output + "/";
         if (this.type === SpecialNodes.VerifiedLeaf)
             return false;// false just means keep processing.
 
@@ -132,11 +132,11 @@ export class SolutionNode {
             // we check our starting set first!
             // otherwise Toggle pieces will toggle until the count is zero.
             const objectToObtain = this.inputHints[k];
-            if(solution.startingThings.has(objectToObtain)){
+            if (solution.startingThings.has(objectToObtain)) {
                 const newLeaf = new SolutionNode(objectToObtain, SpecialNodes.VerifiedLeaf);
                 newLeaf.parent = this;
                 this.inputs[k] = newLeaf;
-                solution.AddVerifiedLeaf(path + this.inputHints[k]+"/", newLeaf);
+                solution.AddVerifiedLeaf(path + this.inputHints[k] + "/", newLeaf);
                 continue;
             }
 
@@ -147,7 +147,7 @@ export class SolutionNode {
                 const newLeaf = new SolutionNode(this.inputHints[k], SpecialNodes.VerifiedLeaf);
                 newLeaf.parent = this;
                 this.inputs[k] = newLeaf;
-                solution.AddVerifiedLeaf(path + this.inputHints[k]+"/", newLeaf);
+                solution.AddVerifiedLeaf(path + this.inputHints[k] + "/", newLeaf);
             }
             else if (matchingNodes) {
                 // we have the convention that zero is the currentSolution
@@ -157,7 +157,7 @@ export class SolutionNode {
                     // // classic forloop useful because reverse iterator, and check for last iteration
 
                     const theMatchingNode = matchingNodes[i];
-                    
+
                     // Clone - if needed!
                     const isCloneBeingUsed = i > 0;
                     const theSolution = isCloneBeingUsed ? solution.Clone() : solution;
@@ -177,7 +177,7 @@ export class SolutionNode {
                     assert(theNode && "if node is null then we are cloning wrong");
                     if (theNode) {
                         theMatchingNode.parent = theNode;
-                        theNode.inputs[k]=theMatchingNode; 
+                        theNode.inputs[k] = theMatchingNode;
                         // all reactions are incomplete when they come from the node map
                         theSolution.SetNodeIncomplete(theMatchingNode);
                         theSolution.addRestrictions(theMatchingNode.getRestrictions());
@@ -194,7 +194,7 @@ export class SolutionNode {
         solution.SetNodeCompleteGenuine(this);
 
         // now to process each of those nodes that have been filled out
-        for (const input of  this.inputs) {
+        for (const input of this.inputs) {
             const inputNode = input;
             assert(inputNode && "Input node=" + inputNode + " <-If this fails there is something wrong with the loop in first half of this method");
             if (inputNode) {
@@ -209,7 +209,7 @@ export class SolutionNode {
         return false;
     }
 
-    SetParent(parent: SolutionNode|null) {
+    SetParent(parent: SolutionNode | null) {
         this.parent = parent;
     }
 

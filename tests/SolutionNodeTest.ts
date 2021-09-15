@@ -1,6 +1,6 @@
 //Typescript Unit test
 import assert = require('assert');
-import { SolutionCollection } from '../src/SolutionCollection'; 
+import { SolutionCollection } from '../src/SolutionCollection';
 import { SolutionNode } from '../src/SolutionNode';
 import { Solution } from '../src/Solution';
 import { SceneSingle } from '../src/SceneSingle';
@@ -98,7 +98,7 @@ describe("Solution", () => {
         root.inputHints.push("C");
         root.inputHints.push("B");
 
-        
+
         //assert.strictEqual("", segC.G)
     });
 })

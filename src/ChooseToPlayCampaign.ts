@@ -57,7 +57,7 @@ class Section {
     private isWon: boolean;
 }
 
-function PlaySingleSection(s:Section){
+function PlaySingleSection(s: Section) {
 
     while (true) {
         // Process all the autos
@@ -106,7 +106,7 @@ function PlaySingleSection(s:Section){
             s.setWon();
             break;
         }
-        
+
         Sleep(500);
 
         let input: string[] = s.ai.GetNextCommand();
@@ -116,7 +116,7 @@ function PlaySingleSection(s:Section){
             input = s.ai.GetNextCommand();
             break;
         }
-        if (input == ["b"])
+        if (input == ['b'])
             return;// don't set as won
 
         // 

@@ -48,7 +48,7 @@ export class SolutionCollection extends Array<Solution>{
                     continue;
                 const otherSolution = this[j];
                 const otherLeafs = otherSolution.GetLeafNodes();
-                for(let leafNode of otherLeafs.values()){
+                for (let leafNode of otherLeafs.values()) {
                     const otherLeafNodeName = leafNode.output;
                     let otherLeafNodeNameCount = 0;
                     const result = mapForCounting.get(otherLeafNodeName);

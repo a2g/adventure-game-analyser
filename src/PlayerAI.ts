@@ -56,7 +56,7 @@ export class PlayerAI implements HappenerCallbacksInterface {
     }
 
     GetNextCommand(): string[] {
-        for (; ;){
+        for (; ;) {
             if (this.autoCount > 0) {
                 this.autoCount--;
 
@@ -96,14 +96,14 @@ export class PlayerAI implements HappenerCallbacksInterface {
 
                 continue;
             }
-        
+
             const input = prompt("Enter a command with two or three terms (b)ack: ");
             if (!input) {
                 console.log("At least enter something");
                 continue;
             }
-            if (input === "b")
-                return ["b"];
+            if (input == 'b')
+                return ['b'];
 
             const items: Array<string> = GetThreeStringsFromInput(input);
 
@@ -119,7 +119,7 @@ export class PlayerAI implements HappenerCallbacksInterface {
             }
 
             return items;
-        } 
+        }
 
         return [];
     }

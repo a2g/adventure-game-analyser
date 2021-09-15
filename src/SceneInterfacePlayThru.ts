@@ -6,7 +6,7 @@ export interface SceneInterfacePlayThru {
 
     GetArrayOfProps(): Array<string>;
     GetArrayOfInvs(): Array<string>;
-    GetArrayOfFlags(): Array<string>; 
+    GetArrayOfFlags(): Array<string>;
     GetArrayOfSingleObjectVerbs(): Array<string>;
 
     GetArrayOfInitialStatesOfInvs(): Array<boolean>;
@@ -14,6 +14,6 @@ export interface SceneInterfacePlayThru {
     GetArrayOfInitialStatesOfFlags(): Array<number>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
-    GetSolutionNodesMappedByInput(): SolutionNodeMap; 
+    GetSolutionNodesMappedByInput(): SolutionNodeMap;
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }

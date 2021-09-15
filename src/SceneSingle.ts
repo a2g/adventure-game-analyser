@@ -13,11 +13,11 @@ import { stringify } from 'querystring';
 import { SceneInterfaceCollater } from './SceneInterfaceCollater';
 import { ExtractBracketedPart } from './ExtractBracketedPart';
 import { SingleBigSwitch } from './SingleBigSwitch';
-import { GetSetOfStartingAll} from './GetSetOfStartingAll';
+import { GetSetOfStartingAll } from './GetSetOfStartingAll';
 
-    
-export class SceneSingle implements SceneInterface, 
-SceneInterfaceCollater{
+
+export class SceneSingle implements SceneInterface,
+    SceneInterfaceCollater {
     allProps: Array<string>;
     allFlags: Array<string>;
     allInvs: Array<string>;
@@ -26,12 +26,12 @@ SceneInterfaceCollater{
     startingInvSet: Set<string>;
     startingPropSet: Set<string>
     startingFlagSet: Set<string>
-    filename:string;
-    
-    constructor(filename:string) {
+    filename: string;
+
+    constructor(filename: string) {
         filename = filename;
         this.filename = filename;
-        const text = fs.readFileSync("src/20210415JsonPrivate/"+filename, { encoding: "UTF-8" });
+        const text = fs.readFileSync("src/20210415JsonPrivate/" + filename, { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();
@@ -81,7 +81,7 @@ SceneInterfaceCollater{
             startingPropsSet.add("" + value.prop);
         });
         this.startingPropSet = startingPropsSet;
-  
+
         // preen starting invs from the startingThings
         this.startingInvSet = new Set<string>();
         this.startingFlagSet = new Set<string>();
@@ -101,42 +101,42 @@ SceneInterfaceCollater{
     }
 
     AddStartingPropsToGivenSet(givenSet: Set<string>): void {
-        for(let prop of this.startingPropSet){
+        for (let prop of this.startingPropSet) {
             givenSet.add(prop);
         }
     }
     AddStartingFlagsToGivenSet(givenSet: Set<string>): void {
-        for(let flag of this.startingFlagSet){
+        for (let flag of this.startingFlagSet) {
             givenSet.add(flag);
         }
     }
     AddStartingInvsToGivenSet(givenSet: Set<string>): void {
-        for(let inv of this.startingInvSet){
+        for (let inv of this.startingInvSet) {
             givenSet.add(inv);
         }
     }
     AddStartingThingsToGivenSet(givenSet: Set<[string, string]>): void {
-       for(let thing of this.startingThingSet){
-           givenSet.add(thing);
-       }
+        for (let thing of this.startingThingSet) {
+            givenSet.add(thing);
+        }
     }
     AddPropsToGivenSet(givenSet: Set<string>): void {
-        for(let prop of this.allProps){
+        for (let prop of this.allProps) {
             givenSet.add(prop);
         }
     }
     AddFlagsToGivenSet(givenSet: Set<string>): void {
-       for(let flag of this.allFlags){
-           givenSet.add(flag);
-       }
+        for (let flag of this.allFlags) {
+            givenSet.add(flag);
+        }
     }
     AddInvsToGivenSet(givenSet: Set<string>): void {
-        for(let inv of this.allInvs){
+        for (let inv of this.allInvs) {
             givenSet.add(inv);
         }
     }
     AddCharsToGivenSet(givenSet: Set<string>): void {
-        for(let char of this.allChars){
+        for (let char of this.allChars) {
             givenSet.add(char);
         }
     }
@@ -160,21 +160,21 @@ SceneInterfaceCollater{
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean> {
         return [true, true];
     }
-    
+
     GetArrayOfInitialStatesOfFlags(): Array<number> {
-         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
-         const startingSet = this.GetSetOfStartingFlags();
-         const initialStates = new Array<number>();
-         for (const flag of this.allFlags) {
-             const isNonZero = startingSet.has(flag);
-             initialStates.push(isNonZero? 1 : 0);
-         };
-         return initialStates;
-     }
- 
-     GetSetOfStartingFlags(): Set<string> {
-         return this.startingFlagSet;
-     }
+        // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+        const startingSet = this.GetSetOfStartingFlags();
+        const initialStates = new Array<number>();
+        for (const flag of this.allFlags) {
+            const isNonZero = startingSet.has(flag);
+            initialStates.push(isNonZero ? 1 : 0);
+        };
+        return initialStates;
+    }
+
+    GetSetOfStartingFlags(): Set<string> {
+        return this.startingFlagSet;
+    }
 
     GetSetOfStartingProps(): Set<string> {
         return this.startingPropSet;
@@ -188,7 +188,7 @@ SceneInterfaceCollater{
         return this.startingThingSet;
     }
 
-    GetSetOfStartingAll() : Set<string> {
+    GetSetOfStartingAll(): Set<string> {
         return GetSetOfStartingAll(this.startingThingSet, this.startingInvSet, this.startingPropSet);
     }
 
@@ -233,7 +233,7 @@ SceneInterfaceCollater{
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const result = new SolutionNodeMap(null);
-        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "","");
+        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "");
         SingleBigSwitch(this.filename, result, notUsed);
         return result;
     }

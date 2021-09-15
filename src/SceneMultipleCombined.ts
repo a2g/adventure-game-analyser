@@ -11,7 +11,7 @@ import { GetSetOfStartingAll } from './GetSetOfStartingAll';
 function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
-    
+
 export class SceneMultipleCombined implements SceneInterface {
     allProps: Array<string>;
     allFlags: Array<string>;
@@ -22,12 +22,12 @@ export class SceneMultipleCombined implements SceneInterface {
     startingPropSet: Set<string>;
     startingFlagSet: Set<string>;
     allScenes: Map<string, SceneSingle>;
-    
-    constructor(filenames:Array<string>) {
+
+    constructor(filenames: Array<string>) {
         this.allScenes = new Map<string, SceneSingle>();
-        for(let file of filenames){
+        for (let file of filenames) {
             let scene = new SceneSingle(file);
-            this.allScenes.set(file,scene);
+            this.allScenes.set(file, scene);
         }
 
         // create sets for the 3 member and 4 indirect sets
@@ -39,9 +39,9 @@ export class SceneMultipleCombined implements SceneInterface {
         const setFlags = new Set<string>();
         const setInvs = new Set<string>();
         const setChars = new Set<string>();
-        
+
         // collate the 3 member and 4 indirect sets
-        for(let scene of this.allScenes.values()){
+        for (let scene of this.allScenes.values()) {
             scene.AddStartingPropsToGivenSet(this.startingPropSet);
             scene.AddStartingInvsToGivenSet(this.startingInvSet);
             scene.AddStartingThingsToGivenSet(this.startingThingSet);
@@ -55,7 +55,7 @@ export class SceneMultipleCombined implements SceneInterface {
         // clean 3 member and 4 indirect sets
         this.startingPropSet.delete("");
         this.startingInvSet.delete("");
-        this.startingThingSet.delete(["",""]);
+        this.startingThingSet.delete(["", ""]);
         this.startingFlagSet.delete("");
         setChars.delete("");
         setProps.delete("");
@@ -111,7 +111,7 @@ export class SceneMultipleCombined implements SceneInterface {
         return this.startingThingSet;
     }
 
-    GetSetOfStartingAll() : Set<string> {
+    GetSetOfStartingAll(): Set<string> {
         return GetSetOfStartingAll(this.startingThingSet, this.startingInvSet, this.startingPropSet);
     }
 
@@ -157,7 +157,7 @@ export class SceneMultipleCombined implements SceneInterface {
     GetSolutionNodesMappedByInput(): SolutionNodeMap {
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 
-        for(let filename of this.allScenes.keys() ){
+        for (let filename of this.allScenes.keys()) {
             const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "ScenePreAggregator");
             SingleBigSwitch(filename, solutionNodesMappedByInput, notUsed);
         }
@@ -165,13 +165,13 @@ export class SceneMultipleCombined implements SceneInterface {
     }
 
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
-        for(let filename of this.allScenes.keys() ){
+        for (let filename of this.allScenes.keys()) {
             const result = SingleBigSwitch(filename, null, objects) as unknown as Happenings | null;
-            if(result)
+            if (result)
                 return result;
         }
         return null;
     }
 }
 
- 
+

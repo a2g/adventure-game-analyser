@@ -25,7 +25,7 @@ export class SolutionNodeMap {
         const toReturn = new Array<SolutionNode>();
         this.solutionNodeMap.forEach((value: SolutionNode[]) => {
             value.forEach((node: SolutionNode) => {
-                if (node.type.startsWith("AUTO")){
+                if (node.type.startsWith("AUTO")) {
                     toReturn.push(node);
                 }
             });
@@ -49,7 +49,7 @@ export class SolutionNodeMap {
         return this.solutionNodeMap.get(objectToObtain);
     }
 
-    GetValues(): IterableIterator<Array<SolutionNode>>{
+    GetValues(): IterableIterator<Array<SolutionNode>> {
         return this.solutionNodeMap.values();
     }
 

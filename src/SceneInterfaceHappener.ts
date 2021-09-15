@@ -7,7 +7,7 @@ export interface SceneInterfaceHappener {
     GetArrayOfInvs(): Array<string>;
     GetArrayOfFlags(): Array<string>;
     GetArrayOfSingleObjectVerbs(): Array<string>;
-  
+
     GetArrayOfInitialStatesOfInvs(): Array<boolean>;
     GetArrayOfInitialStatesOfProps(): Array<boolean>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;

@@ -25,13 +25,13 @@ export class GameReporter {
     private Speech(speech: string): string {
         return "" + Colors.Blue + "\"" + speech + "\"" + Colors.Reset;
     }
-    
+
     ReportCommand(command: string[]) {
         this.numberOfCommandsExecuted++;
 
         let prettifiedComand = "";
         if (command.length !== 3)
-            prettifiedComand = Colors.Red  + "Command length is not 3!" + Colors.Reset;
+            prettifiedComand = Colors.Red + "Command length is not 3!" + Colors.Reset;
         else if (command[2] !== "")
             prettifiedComand = this.Prettify(command[0]) + " " + this.Prettify(command[1]) + " with " + this.Prettify(command[2]);
         else if (command[1] !== "")

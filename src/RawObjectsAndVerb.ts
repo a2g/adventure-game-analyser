@@ -4,7 +4,7 @@ import { Colors } from "./Colors";
 import { Embracketize } from "./Embracketize";
 
 export class RawObjectsAndVerb {
-    constructor(type: Raw, objectA: string, objectB: string, restrictions: Array<string>, typeJustForDebugging:string) {
+    constructor(type: Raw, objectA: string, objectB: string, restrictions: Array<string>, typeJustForDebugging: string) {
         this.type = type;
         this.objectA = objectA;
         this.objectB = objectB;
@@ -18,15 +18,15 @@ export class RawObjectsAndVerb {
         const enumAsInt = parseInt(this.type.toString(), 10);
         if (enumAsInt >= 0) {
             const verb = GetDisplayName(Raw[enumAsInt]);
-            const objectA = GetDisplayName(this.objectA) +  GetDisplayName(this.startingCharacterForA, true);
+            const objectA = GetDisplayName(this.objectA) + GetDisplayName(this.startingCharacterForA, true);
             const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB, true);
-            
+
             const restriction = this.restrictions.length ? Embracketize(GetDisplayName(this.restrictions)) : "";
             let joiner = " ";
             switch (enumAsInt) {
                 case Raw.Use: joiner = " with "; break;
                 case Raw.Toggle: joiner = " to "; break;
-                case Raw.Auto: joiner = " becomes ";break;
+                case Raw.Auto: joiner = " becomes "; break;
             }
             console.log(verb + " " + objectA + joiner + objectB + " " + restriction);
         } else {
@@ -41,7 +41,7 @@ export class RawObjectsAndVerb {
     public appendStartingCharacterForA(startingCharacterForA: string) {
         if (this.startingCharacterForA.length > 0)
             this.startingCharacterForA += ", " + startingCharacterForA;
-        else 
+        else
             this.startingCharacterForA = startingCharacterForA;
     }
 
@@ -51,12 +51,12 @@ export class RawObjectsAndVerb {
         else
             this.startingCharacterForB = startingCharacterForB;
     }
- 
-    type: Raw; 
+
+    type: Raw;
     objectA: string;
     objectB: string;
     startingCharacterForA: string;
     startingCharacterForB: string;
     restrictions: Array<string>;
-    typeJustForDebugging:string;
+    typeJustForDebugging: string;
 }

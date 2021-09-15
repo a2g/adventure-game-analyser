@@ -3,7 +3,7 @@ import { Embracketize } from "./Embracketize";
 
 
 
-export function GetDisplayName(input: string | Array<string>, isParenthesisNeeded=false): string {
+export function GetDisplayName(input: string | Array<string>, isParenthesisNeeded = false): string {
     if (Array.isArray(input)) {
         // format arrays in to a lovely comma-separated list
         let toReturn = "";
@@ -16,7 +16,7 @@ export function GetDisplayName(input: string | Array<string>, isParenthesisNeede
 
     const single = input.toString();
     if (single.startsWith("sol_prop_"))
-        return Colors.Red + Embracketize(single.slice(9), isParenthesisNeeded)  + Colors.Reset;
+        return Colors.Red + Embracketize(single.slice(9), isParenthesisNeeded) + Colors.Reset;
     if (single.startsWith("sol_flag_"))
         return Colors.Red + single.slice(9) + Colors.Reset;
     if (single.startsWith("sol_inv_"))

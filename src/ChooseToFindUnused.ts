@@ -1,16 +1,16 @@
 import promptSync from 'prompt-sync'; //const prompt = require('prompt-sync')({ sigint: true });
-import { SolutionNode } from "./SolutionNode"; 
+import { SolutionNode } from "./SolutionNode";
 import { SceneInterfaceFindUsed } from './SceneInterfaceFindUsed';
 const prompt = promptSync();
 
- 
+
 export class ChooseToFindUnused {
     public DoStuff(scene: SceneInterfaceFindUsed): void {
         const invs = scene.GetArrayOfInvs();
-        const props =  scene.GetArrayOfProps();
-        const it =  scene.GetSolutionNodesMappedByInput().GetValues();
+        const props = scene.GetArrayOfProps();
+        const it = scene.GetSolutionNodesMappedByInput().GetValues();
 
-        while(true){
+        while (true) {
             const c = it.next();
             if (c.done)
                 break;
@@ -20,7 +20,7 @@ export class ChooseToFindUnused {
                 // we put it in the list of inputs, and simple process the inputs.
                 node.inputHints.push(node.output);
                 node.inputs.push(null);
-                for(let inputName of node.inputHints) {
+                for (let inputName of node.inputHints) {
 
                     const invIndex = invs.indexOf(inputName);
                     if (invIndex >= 0)
@@ -42,6 +42,6 @@ export class ChooseToFindUnused {
             console.log(name);
         });
 
-  
+
     }
 }

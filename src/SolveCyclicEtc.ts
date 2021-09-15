@@ -3,7 +3,7 @@ import { GetThreeStringsFromInput } from "./GetThreeStringsFromInput";
 import { IsOk } from './IsOk';
 import { LogAndReturnError } from './LogAndReturnError'
 
-export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string>, isVerbose = false ) {
+export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray: Array<string>, isVerbose = false) {
     const names: Set<string> = new Set<string>();
     rows.forEach((row: RowOfSheet) => {
         names.add(row.name);
@@ -18,7 +18,7 @@ export function SolveCyclicEtc(rows: Array<RowOfSheet>, actionArray:Array<string
     actions.add("init");// this means they are like that from the start
 
     // use jar blah
-    for (let row of rows) { 
+    for (let row of rows) {
         // 1. test ** howToMakeVisible **
         const rowObject: string = row.name.trim();
         const command: string = row.commandToMakeVisible.trim();

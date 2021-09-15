@@ -64,7 +64,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(scene: SceneInterfaceConcoct): void {
         while (true) {
             console.log(" ");
-             
+
             const collection = new SolutionCollection();
 
             // Solve solution nodes
@@ -147,7 +147,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
 
                         console.log("Spot what needs to be in the starting set - and fix it!");
                         prompt('Hit a key to continue').toLowerCase();
-                    }else{
+                    } else {
                         console.log("rawObjectsAndVerb was null, but it looked solvable. WEIRD! debug this.")
                     }
                 }

@@ -8,5 +8,5 @@ export class Happenings {
     }
     verb: string;
     text: string;
-    array: Array<Happening>; 
+    array: Array<Happening>;
 }

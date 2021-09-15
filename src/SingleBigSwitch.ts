@@ -6,7 +6,7 @@ import * as fs from "fs";
 import _ from './20210415JsonPrivate/Script/Script.json';
 import { Happen } from './Happen';
 import { Happening } from './Happening';
-import { SolutionNode } from './SolutionNode'; 
+import { SolutionNode } from './SolutionNode';
 import { ExtractBracketedPart } from './ExtractBracketedPart';
 
 function Stringify(name: string | undefined): string {
@@ -17,13 +17,13 @@ function Stringify(name: string | undefined): string {
 export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: SolutionNodeMap | null, objects: MixedObjectsAndVerb): Happenings | null {
     const happs = new Happenings();
 
-    const text = fs.readFileSync("src/20210415JsonPrivate/"+filename, { encoding: "UTF-8" });
+    const text = fs.readFileSync("src/20210415JsonPrivate/" + filename, { encoding: "UTF-8" });
     const scenario = JSON.parse(text);
 
     for (const reaction of scenario.reactions) {
         const scriptType = reaction.script;
         let count = 1;
-        if(reaction.count!==undefined) {
+        if (reaction.count !== undefined) {
             count = reaction.count;
         }
 
@@ -61,14 +61,14 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 }
                 break;
             case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
-                if(solutionNodesMappedByInput) {
+                if (solutionNodesMappedByInput) {
                     const output = "" + reaction.flag1;
                     const inputA = "" + reaction.inv1;
                     const inputB = "" + reaction.prop1;
                     const inputC = "" + reaction.prop2;
                     const inputD = "" + reaction.prop3;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB, inputC, inputD));
-                } else if (objects.Match("Use", reaction.inv1, reaction.prop1)){
+                } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                     happs.text = "With everything set up correctly, you use the" + reaction.inv1 + " with the " + reaction.prop1 + " and something good happens...";
                     happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag)));
                     happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
@@ -78,33 +78,33 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 }
                 break;
             case _.FLAG1_SET_BY_USING_INV1_WITH_INV2:
-                    if (solutionNodesMappedByInput) {
-                        const inputA = "" + reaction.inv1;
-                        const inputB = "" + reaction.inv2;
-                        const output = "" + reaction.flag1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
-                    } else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
-                        happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.inv2 + " and something good happens...";
-                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
-                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
-                        happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
-                        return happs;
-                    }
-                    break;
+                if (solutionNodesMappedByInput) {
+                    const inputA = "" + reaction.inv1;
+                    const inputB = "" + reaction.inv2;
+                    const output = "" + reaction.flag1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
+                } else if (objects.Match("Use", reaction.inv1, reaction.inv2)) {
+                    happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.inv2 + " and something good happens...";
+                    happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                    happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv2)));
+                    happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                    return happs;
+                }
+                break;
             case _.FLAG1_SET_BY_USING_INV1_WITH_PROP1:
-                    if (solutionNodesMappedByInput) {
-                        const inputA = "" + reaction.inv1;
-                        const inputB = "" + reaction.prop1;
-                        const output = "" + reaction.flag1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
-                    } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
-                        happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and something good happens...";
-                        happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
-                        happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
-                        happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
-                        return happs;
-                    }
-                    break;
+                if (solutionNodesMappedByInput) {
+                    const inputA = "" + reaction.inv1;
+                    const inputB = "" + reaction.prop1;
+                    const output = "" + reaction.flag1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
+                } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
+                    happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and something good happens...";
+                    happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                    happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                    return happs;
+                }
+                break;
             case _.FLAG1_SET_BY_USING_PROP1_WITH_PROP2:
                 if (solutionNodesMappedByInput) {
                     const inputA = "" + reaction.prop1;
@@ -112,7 +112,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const output = "" + reaction.flag1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", reaction.prop1, reaction.prop2)) {
-                    happs.text = "You use the " + reaction.prop1 + " with the  " + reaction.prop2  + " and something good happens...";
+                    happs.text = "You use the " + reaction.prop1 + " with the  " + reaction.prop2 + " and something good happens...";
                     happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
                     happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop2)));
                     happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
@@ -157,7 +157,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + reaction.inv1;
                     const output = "" + reaction.inv2;
                     const inputB = "" + reaction.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA,  inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.inv1, reaction.inv3)) {
                     happs.text = "Your " + reaction.inv1 + " has become a " + reaction.inv2

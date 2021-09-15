@@ -2,7 +2,7 @@ import { Mix } from "./Mix";
 
 export class MixedObjectsAndVerb {
 
-    constructor(type: Mix, verb: string, objectA: string, objectB: string, typeForDebug:string) {
+    constructor(type: Mix, verb: string, objectA: string, objectB: string, typeForDebug: string) {
         this.type = type;
         this.verb = verb.toLowerCase()
         this.objectA = objectA;

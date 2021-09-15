@@ -1,7 +1,7 @@
 import { PlayerAI } from "./PlayerAI";
 import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
-import { Happen } from "./Happen"; 
+import { Happen } from "./Happen";
 import { SceneInterfaceHappener } from "./SceneInterfaceHappener";
 import { SceneSingle } from "./SceneSingle";
 import { assert } from "console";
@@ -44,7 +44,7 @@ export class Happener {
         this.arrayOfVerbNames = new Array<string>();
         this.arrayOfInventoryVisibilities = new Array<boolean>();
         this.arrayOfPropVisibilities = new Array<boolean>();
-        this.arrayOfVerbVisibilities = new Array<boolean>(); 
+        this.arrayOfVerbVisibilities = new Array<boolean>();
         this.arrayOfFlagValues = new Array<number>();
         this.scene = scene;
         // PlayerAI needs to be initialized last, because for 
@@ -70,7 +70,7 @@ export class Happener {
 
     GetFlagValue(flag: string): Number {
         const index = this.GetIndexOfFlag(flag);
-        let toReturn:Number = this.arrayOfFlagValues[index];
+        let toReturn: Number = this.arrayOfFlagValues[index];
         return toReturn;
     }
 
@@ -85,18 +85,18 @@ export class Happener {
     }
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
-       
+
         const happenings = this.scene.GetHappeningsIfAny(objects);
         if (happenings) {
             console.log(happenings.text);
-            for(const happening of happenings.array){
+            for (const happening of happenings.array) {
                 // one of these will be wrong - but we won't use the wrong one :)
                 const prop = this.GetIndexOfProp(happening.item);
                 const inv = this.GetIndexOfInv(happening.item);
                 const flag = this.GetIndexOfFlag(happening.item);
                 switch (happening.happen) {
                     case Happen.InvAppears:
-                        assert(inv!=-1);
+                        assert(inv != -1);
                         this.arrayOfInventoryVisibilities[inv] = true;
                         this.callbacks.OnInvVisbilityChange(inv, true, happening.item)
                         break;
@@ -111,24 +111,24 @@ export class Happener {
                         this.callbacks.OnPropVisbilityChange(prop, true, happening.item)
                         break;
                     case Happen.PropGoes:
-                        assert(prop!=-1);
+                        assert(prop != -1);
                         this.arrayOfPropVisibilities[prop] = false;
                         this.callbacks.OnPropVisbilityChange(prop, false, happening.item)
                         break;
-                    case Happen.FlagIsDecremented: 
-                        assert(flag!=-1);
-                        const incrementedValue = this.arrayOfFlagValues[flag]-1;
+                    case Happen.FlagIsDecremented:
+                        assert(flag != -1);
+                        const incrementedValue = this.arrayOfFlagValues[flag] - 1;
                         this.arrayOfFlagValues[flag] = incrementedValue;
                         this.callbacks.OnFlagValueChange(flag, incrementedValue, happening.item);
                         break;
                     case Happen.FlagIsIncremented:
-                        assert(flag!=-1);
-                        const decrementedValue = this.arrayOfFlagValues[flag]+1;
+                        assert(flag != -1);
+                        const decrementedValue = this.arrayOfFlagValues[flag] + 1;
                         this.arrayOfFlagValues[flag] = decrementedValue;
                         this.callbacks.OnFlagValueChange(flag, decrementedValue, happening.item);
                         break;
                     case Happen.FlagIsSet:
-                        assert(flag!=-1);
+                        assert(flag != -1);
                         this.arrayOfFlagValues[flag] = 1;
                         this.callbacks.OnFlagValueChange(flag, 1, happening.item);
                         break;
@@ -227,7 +227,7 @@ export class Happener {
     GetCurrentVisibleProps(): Array<string> {
         const toReturn = new Array<string>();
         for (let i = 0; i < this.arrayOfPropNames.length; i++) {// classic forloop useful because shared index
-            if ( this.arrayOfPropVisibilities[i] === true)
+            if (this.arrayOfPropVisibilities[i] === true)
                 toReturn.push(this.arrayOfPropNames[i]);
         }
         return toReturn;
@@ -236,7 +236,7 @@ export class Happener {
     GetCurrentlyTrueFlags(): Array<string> {
         const toReturn = new Array<string>();
         for (let i = 0; i < this.arrayOfFlagNames.length; i++) {// classic forloop useful because shared index
-            if (this.arrayOfFlagValues[i]>0)
+            if (this.arrayOfFlagValues[i] > 0)
                 toReturn.push(this.arrayOfFlagNames[i]);
         }
         return toReturn;

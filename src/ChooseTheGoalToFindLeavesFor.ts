@@ -30,7 +30,7 @@ export class ChooseTheGoalToFindLeavesFor {
                 collection.forEach(function (solution: Solution) {
                     console.log("------------------------------------------------------------(solution separator)");
                     const needs = solution.GetLeafNodes();
-                    for(let node of needs.values()){
+                    for (let node of needs.values()) {
                         numberOfLeaves++;
 
                         // display list item

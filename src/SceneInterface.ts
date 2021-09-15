@@ -11,5 +11,5 @@ export interface SceneInterface
     SceneInterfaceFindUsed,
     SceneInterfaceHappener {
 
-    
+
 }
