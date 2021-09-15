@@ -25,7 +25,7 @@ import { GetMixedObjectsAndVerbFromThreeStrings } from "./GetMixedObjectsAndVerb
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
 import { levels } from './20210415JsonPrivate/All.json'
-import { SceneMultipleCombined } from "./ScenePreAggregator";
+import { SceneMultipleCombined } from "./SceneMultipleCombined";
 
 class Section {
     constructor(fileset: string[]) {
