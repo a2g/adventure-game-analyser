@@ -12,7 +12,7 @@ function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
     
-export class ScenePreCacheMultiple implements SceneInterface {
+export class SceneMultipleCombined implements SceneInterface {
     allProps: Array<string>;
     allFlags: Array<string>;
     allInvs: Array<string>;
@@ -20,9 +20,10 @@ export class ScenePreCacheMultiple implements SceneInterface {
     startingThingSet: Set<[string, string]>;
     startingInvSet: Set<string>;
     startingPropSet: Set<string>;
+    startingFlagSet: Set<string>;
     allScenes: Map<string, SceneSingle>;
     
-    constructor(filenames:Set<string>) {
+    constructor(filenames:Array<string>) {
         this.allScenes = new Map<string, SceneSingle>();
         for(let file of filenames){
             let scene = new SceneSingle(file);
@@ -33,6 +34,7 @@ export class ScenePreCacheMultiple implements SceneInterface {
         this.startingPropSet = new Set<string>();
         this.startingInvSet = new Set<string>();
         this.startingThingSet = new Set<[string, string]>();
+        this.startingFlagSet = new Set<string>();
         const setProps = new Set<string>();
         const setFlags = new Set<string>();
         const setInvs = new Set<string>();
@@ -43,6 +45,7 @@ export class ScenePreCacheMultiple implements SceneInterface {
             scene.AddStartingPropsToGivenSet(this.startingPropSet);
             scene.AddStartingInvsToGivenSet(this.startingInvSet);
             scene.AddStartingThingsToGivenSet(this.startingThingSet);
+            scene.AddStartingFlagsToGivenSet(this.startingFlagSet);
             scene.AddPropsToGivenSet(setProps);
             scene.AddFlagsToGivenSet(setFlags);
             scene.AddInvsToGivenSet(setInvs);
@@ -53,6 +56,7 @@ export class ScenePreCacheMultiple implements SceneInterface {
         this.startingPropSet.delete("");
         this.startingInvSet.delete("");
         this.startingThingSet.delete(["",""]);
+        this.startingFlagSet.delete("");
         setChars.delete("");
         setProps.delete("");
         setFlags.delete("");
@@ -64,28 +68,7 @@ export class ScenePreCacheMultiple implements SceneInterface {
         this.allInvs = Array.from(setInvs.values());
         this.allChars = Array.from(setChars.values());
     }
-    
-    AddStartingPropsToGivenSet(givenSet: Set<string>): void {
-        throw new Error('Method not implemented.');
-    }
-    AddStartingInvsToGivenSet(givenSet: Set<string>): void {
-        throw new Error('Method not implemented.');
-    }
-    AddStartingThingsToGivenSet(givenSet: Set<[string, string]>): void {
-        throw new Error('Method not implemented.');
-    }
-    AddPropsToGivenSet(givenSet: Set<string>): void {
-        throw new Error('Method not implemented.');
-    }
-    AddFlagsToGivenSet(givenSet: Set<string>): void {
-        throw new Error('Method not implemented.');
-    }
-    AddInvsToGivenSet(givenSet: Set<string>): void {
-        throw new Error('Method not implemented.');
-    }
-    AddCharsToGivenSet(givenSet: Set<string>): void {
-        throw new Error('Method not implemented.');
-    }
+
 
     GetArrayOfProps(): Array<string> {
         return this.allProps;
@@ -107,10 +90,10 @@ export class ScenePreCacheMultiple implements SceneInterface {
         return [true, true];
     }
 
-    GetArrayOfInitialStatesOfFlags(): Array<boolean> {
-        const array = new Array<boolean>();
+    GetArrayOfInitialStatesOfFlags(): Array<number> {
+        const array = new Array<number>();
         for (const flag of this.allFlags) {
-            array.push(flag.length > 0);// I used value.length>0 to get rid of the unused variable warnin
+            array.push(flag.length > 0 ? 0 : 0);// I used value.length>0 to get rid of the unused variable warnin
         };
         return array;
     }

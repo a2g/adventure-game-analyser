@@ -2,7 +2,6 @@
 import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
-import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { GetDisplayName } from "./GetDisplayName";
 import { SolutionNodeInput } from "./SolutionNodeInput";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
@@ -14,6 +13,7 @@ function assert(condition: any, msg?: string): asserts condition {
         throw new Error("assert failure");
     }
 }
+import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
@@ -74,7 +74,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
             collection.SolveUntilZeroNodesRemaining();
             collection.GenerateSolutionNames(scene.GetSetOfStartingThings());
 
-            console.log("Choose a solution,  -1 for All, (b)ack ):")
+            console.log("Choose a solution,  -1 for All or (b)ack: ")
             for (let i = 0; i < collection.length; i++) {
                 console.log(" " + i + ". " + GetDisplayName(collection[i].GetName()));
             };

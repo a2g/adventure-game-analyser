@@ -62,7 +62,7 @@ export function ChooseToPlayThrough(scene:SceneInterface, numberOfAutopilotTurns
                         happener.SetPropVisible(node.output, true);
                     } else if (node.output.startsWith("flag_")) {
                         console.log("Auto: flag set to true " + node.output);
-                        happener.SetFlagValue(node.output, true);
+                        happener.SetFlagValue(node.output, 1);
                     } else if (node.output.startsWith("inv_")) {
                         console.log("Auto: inv set to visible " + node.output);
                         happener.SetInvVisible(node.output, true);
@@ -80,6 +80,9 @@ export function ChooseToPlayThrough(scene:SceneInterface, numberOfAutopilotTurns
                 input = ai.GetNextCommand();
                 break;
             }
+
+            if(input==["b"])
+                return;
      
 
             // 

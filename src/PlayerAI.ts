@@ -97,13 +97,13 @@ export class PlayerAI implements HappenerCallbacksInterface {
                 continue;
             }
         
-            const input = prompt('Enter a command with two or three terms (b)ack: ');
+            const input = prompt("Enter a command with two or three terms (b)ack: ");
             if (!input) {
                 console.log("At least enter something");
                 continue;
             }
             if (input === "b")
-                break;
+                return ["b"];
 
             const items: Array<string> = GetThreeStringsFromInput(input);
 
@@ -121,7 +121,7 @@ export class PlayerAI implements HappenerCallbacksInterface {
             return items;
         } 
 
-        return [];;
+        return [];
     }
 
     OnInvVisbilityChange(number: number, newValue: boolean, nameForDebugging: string): void {
@@ -140,6 +140,15 @@ export class PlayerAI implements HappenerCallbacksInterface {
         this.invVsProp.SetVisibilityOfRow(number, newValue, nameForDebugging);
         this.propVsProp.SetVisibilityOfRow(number, newValue, nameForDebugging);
         this.propVsProp.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+    }
+
+    OnFlagValueChange(number: number, newValue: number, nameForDebugging: string): void {
+        // the convention for the array is x then y, or column then row.
+        // so Set..Column sets the first t
+        //this.propVsVerb.SetVisibilityOfColumn(number, newValue, nameForDebugging);
+        //this.invVsProp.SetVisibilityOfRow(number, newValue, nameForDebugging);
+        //this.propVsProp.SetVisibilityOfRow(number, newValue, nameForDebugging);
+        //this.propVsProp.SetVisibilityOfColumn(number, newValue, nameForDebugging);
     }
 
 }

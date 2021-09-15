@@ -25,11 +25,13 @@ SceneInterfaceCollater{
     startingThingSet: Set<[string, string]>;
     startingInvSet: Set<string>;
     startingPropSet: Set<string>
+    startingFlagSet: Set<string>
     filename:string;
     
     constructor(filename:string) {
+        filename = filename;
         this.filename = filename;
-        const text = fs.readFileSync(filename, { encoding: "UTF-8" });
+        const text = fs.readFileSync("src/20210415JsonPrivate/"+filename, { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();
@@ -78,10 +80,13 @@ SceneInterfaceCollater{
   
         // preen starting invs from the startingThings
         this.startingInvSet = new Set<string>();
+        this.startingFlagSet = new Set<string>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
             if (thing.thing.startsWith("inv"))
                 this.startingInvSet.add(thing.thing)
+            if (thing.thing.startsWith("flag"))
+                this.startingFlagSet.add(thing.thing)
         }
 
         this.startingThingSet = new Set<[string, string]>();
@@ -94,6 +99,11 @@ SceneInterfaceCollater{
     AddStartingPropsToGivenSet(givenSet: Set<string>): void {
         for(let prop of this.startingPropSet){
             givenSet.add(prop);
+        }
+    }
+    AddStartingFlagsToGivenSet(givenSet: Set<string>): void {
+        for(let flag of this.startingFlagSet){
+            givenSet.add(flag);
         }
     }
     AddStartingInvsToGivenSet(givenSet: Set<string>): void {
@@ -146,14 +156,21 @@ SceneInterfaceCollater{
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean> {
         return [true, true];
     }
-
-    GetArrayOfInitialStatesOfFlags(): Array<boolean> {
-        const array = new Array<boolean>();
-        for (const flag of this.allFlags) {
-            array.push(flag.length > 0);// I used value.length>0 to get rid of the unused variable warnin
-        };
-        return array;
-    }
+    
+    GetArrayOfInitialStatesOfFlags(): Array<number> {
+         // construct array of booleans in exact same order as ArrayOfProps - so they can be correlated
+         const startingSet = this.GetSetOfStartingFlags();
+         const initialStates = new Array<number>();
+         for (const flag of this.allFlags) {
+             const isNonZero = startingSet.has(flag);
+             initialStates.push(isNonZero? 1 : 0);
+         };
+         return initialStates;
+     }
+ 
+     GetSetOfStartingFlags(): Set<string> {
+         return this.startingFlagSet;
+     }
 
     GetSetOfStartingProps(): Set<string> {
         return this.startingPropSet;

@@ -17,7 +17,7 @@ function Stringify(name: string | undefined): string {
 export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: SolutionNodeMap | null, objects: MixedObjectsAndVerb): Happenings | null {
     const happs = new Happenings();
 
-    const text = fs.readFileSync(filename, { encoding: "UTF-8" });
+    const text = fs.readFileSync("src/20210415JsonPrivate/"+filename, { encoding: "UTF-8" });
     const scenario = JSON.parse(text);
 
     for (const reaction of scenario.reactions) {
@@ -270,7 +270,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", reaction.prop1, reaction.inv1)) {
-                    happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv2;
+                    happs.text = "You use the " + reaction.inv1 + ", and the " + reaction.prop1 + " becomes a " + reaction.inv1;
                     happs.array.push(new Happening(Happen.PropGoes, Stringify(reaction.prop1)));
                     happs.array.push(new Happening(Happen.PropAppears, Stringify(reaction.prop2)));
                     happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));

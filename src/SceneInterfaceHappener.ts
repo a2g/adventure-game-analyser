@@ -13,6 +13,6 @@ export interface SceneInterfaceHappener {
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap;
-    GetArrayOfInitialStatesOfFlags(): Array<boolean>;
+    GetArrayOfInitialStatesOfFlags(): Array<number>;
     GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }

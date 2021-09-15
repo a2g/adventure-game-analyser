@@ -25,6 +25,7 @@ export class GameReporter {
     private Speech(speech: string): string {
         return "" + Colors.Blue + "\"" + speech + "\"" + Colors.Reset;
     }
+    
     ReportCommand(command: string[]) {
         this.numberOfCommandsExecuted++;
 
@@ -62,6 +63,18 @@ export class GameReporter {
         let sceneString: string = "You can see: " + GetDisplayName(sceneItems[0]);
         for (let i = 1; i < sceneItems.length; i++) {// classic forloop useful because starting at 1
             sceneString += ", " + GetDisplayName(sceneItems[i]);
+        };
+
+        console.log(sceneString);
+    }
+
+    ReportFlags(flags: string[]) {
+        if (flags.length === 0)
+            return console.log("No flags have been set");
+
+        let sceneString: string = "Non zero flags: " + GetDisplayName(flags[0]);
+        for (let i = 1; i < flags.length; i++) {// classic forloop useful because starting at 1
+            sceneString += ", " + GetDisplayName(flags[i]);
         };
 
         console.log(sceneString);

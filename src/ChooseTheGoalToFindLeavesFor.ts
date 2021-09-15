@@ -9,24 +9,10 @@ const prompt = promptSync();
 
 export class ChooseTheGoalToFindLeavesFor {
 
-    static array: Array<string> = [
-        "inv_solution",
-        "prop_death_by_guitar",
-        "prop_death_by_slamdunk",
-        "prop_death_by_physics",
-        "prop_switched_on_item2",
-        "prop_stageA",
-        "prop_stageB",
-        "prop_stageC",
-        "prop_stageD",
-        "prop_stageE"
-    ];
+
     public DoStuff(scene: SceneInterfaceFindLeaves): void {
         while (true) {
             console.log(" ");
-
-            const array = ChooseTheGoalToFindLeavesFor.array;
- 
 
             const collection = new SolutionCollection();
             const objective = "flag_win";
@@ -53,9 +39,9 @@ export class ChooseTheGoalToFindLeavesFor {
                 });
 
                 // allow user to choose item
-                const input = prompt('Choose an ingredient of one of the solutions (b) back').toLowerCase();
+                const input = prompt("Choose an ingredient of one of the solutions or (b)ack: ").toLowerCase();
                 if (input === null || input === "b") {
-                    break;
+                    return;
                 } else {
                     // show map entry for chosen item
                     const number = Number(input);
@@ -69,8 +55,8 @@ export class ChooseTheGoalToFindLeavesFor {
                                     console.log("This is the life of the selected ingredient: ");
                                     const items: Array<string> = key.split("/");
                                     const length = items.length;
-                                    for (let j = length - 1; j > 1; j--) {
-                                        console.log("    " + (length - j) + "." + items[j]);
+                                    for (let j = length - 2; j > 1; j--) {
+                                        console.log("    - " + items[j]);
                                     };
                                     prompt("Hit a key to continue...");
                                 }

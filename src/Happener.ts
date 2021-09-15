@@ -4,6 +4,7 @@ import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { Happen } from "./Happen"; 
 import { SceneInterfaceHappener } from "./SceneInterfaceHappener";
 import { SceneSingle } from "./SceneSingle";
+import { assert } from "console";
 
 
 // April 2021
@@ -21,55 +22,66 @@ import { SceneSingle } from "./SceneSingle";
 //
 
 export class Happener {
+
     public readonly Examine = 0;
 
     private callbacks: HappenerCallbacksInterface;
-    private listOfInvs: Array<string>;
-    private listOfProps: Array<string>;
-    private listOfVerbs: Array<string>;
-    private listOfFlags: Array<string>;
-    private listOfInvVisibilities: Array<boolean>;
-    private listOfPropVisibilities: Array<boolean>;
-    private listOfVerbVisibilities: Array<boolean>;
-    private listOfFlagsThatAreTrue: Array<boolean>;
+    private arrayOfInvNames: Array<string>;
+    private arrayOfPropNames: Array<string>;
+    private arrayOfVerbNames: Array<string>;
+    private arrayOfFlagNames: Array<string>;
+    private arrayOfInventoryVisibilities: Array<boolean>;
+    private arrayOfPropVisibilities: Array<boolean>;
+    private arrayOfVerbVisibilities: Array<boolean>;
+    private arrayOfFlagValues: Array<number>;
     private scene: SceneInterfaceHappener;
 
     constructor(scene: SceneInterfaceHappener) {
+        // yes, all of these need to be initialized to harmless values due to PlayerAI below
+        this.arrayOfInvNames = new Array<string>();
+        this.arrayOfFlagNames = new Array<string>();
+        this.arrayOfPropNames = new Array<string>();
+        this.arrayOfVerbNames = new Array<string>();
+        this.arrayOfInventoryVisibilities = new Array<boolean>();
+        this.arrayOfPropVisibilities = new Array<boolean>();
+        this.arrayOfVerbVisibilities = new Array<boolean>(); 
+        this.arrayOfFlagValues = new Array<number>();
         this.scene = scene;
-        this.listOfInvs = new Array<string>();
-        this.listOfFlags = new Array<string>();
-        this.listOfProps = new Array<string>();
-        this.listOfVerbs = new Array<string>();
-        
-        this.listOfInvVisibilities = new Array<boolean>();
-        this.listOfPropVisibilities = new Array<boolean>();
-        this.listOfVerbVisibilities = new Array<boolean>(); 
-        this.listOfFlagsThatAreTrue = new Array<boolean>();
+        // PlayerAI needs to be initialized last, because for 
+        // the first parameter it passes this - and the PlayerAI
+        // constructor expects a fully constructed item to be
+        // passed to it.
         this.callbacks = new PlayerAI(this, 0);
 
-        this.listOfInvs = scene.GetArrayOfInvs();
-        this.listOfFlags = scene.GetArrayOfFlags();
-        this.listOfProps = scene.GetArrayOfProps();
-        this.listOfVerbs = scene.GetArrayOfSingleObjectVerbs();
-        this.listOfInvVisibilities = scene.GetArrayOfInitialStatesOfInvs()
-        this.listOfPropVisibilities = scene.GetArrayOfInitialStatesOfProps();
-        this.listOfVerbVisibilities = scene.GetArrayOfInitialStatesOfSingleObjectVerbs();
-        this.listOfFlagsThatAreTrue = scene.GetArrayOfInitialStatesOfFlags();
+        this.arrayOfInvNames = scene.GetArrayOfInvs();
+        this.arrayOfFlagNames = scene.GetArrayOfFlags();
+        this.arrayOfPropNames = scene.GetArrayOfProps();
+        this.arrayOfVerbNames = scene.GetArrayOfSingleObjectVerbs();
+        this.arrayOfInventoryVisibilities = scene.GetArrayOfInitialStatesOfInvs()
+        this.arrayOfPropVisibilities = scene.GetArrayOfInitialStatesOfProps();
+        this.arrayOfVerbVisibilities = scene.GetArrayOfInitialStatesOfSingleObjectVerbs();
+        this.arrayOfFlagValues = scene.GetArrayOfInitialStatesOfFlags();
     }
 
-    SetFlagValue(flag: string, value: boolean): void {
+    SetFlagValue(flag: string, value: number): void {
         const index = this.GetIndexOfFlag(flag);
-        this.listOfFlagsThatAreTrue[index] = value;
+        this.arrayOfFlagValues[index] = value;
+    }
+
+    GetFlagValue(flag: string): Number {
+        const index = this.GetIndexOfFlag(flag);
+        let toReturn:Number = this.arrayOfFlagValues[index];
+        return toReturn;
     }
 
     SetInvVisible(inv: string, value: boolean): void {
         const index = this.GetIndexOfInv(inv);
-        this.listOfInvVisibilities[index] = value;
+        this.arrayOfInventoryVisibilities[index] = value;
     }
 
     SetPropVisible(prop: string, value: boolean): void {
         const index = this.GetIndexOfProp(prop);
-        this.listOfPropVisibilities[index] = value;
+        this.arrayOfPropVisibilities[index] = value;
     }
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
@@ -77,53 +89,74 @@ export class Happener {
         const happenings = this.scene.GetHappeningsIfAny(objects);
         if (happenings) {
             console.log(happenings.text);
-            happenings.array.forEach((happening) => {
+            for(const happening of happenings.array){
                 // one of these will be wrong - but we won't use the wrong one :)
                 const prop = this.GetIndexOfProp(happening.item);
                 const inv = this.GetIndexOfInv(happening.item);
+                const flag = this.GetIndexOfFlag(happening.item);
 
                 switch (happening.happen) {
                     case Happen.InvAppears:
-                        this.listOfInvVisibilities[inv] = true;
+                        assert(inv!=-1);
+                        this.arrayOfInventoryVisibilities[inv] = true;
                         this.callbacks.OnInvVisbilityChange(inv, true, happening.item)
                         break;
                     case Happen.InvGoes:
-                        this.listOfInvVisibilities[inv] = false;
+                        assert(inv!=-1);
+                        this.arrayOfInventoryVisibilities[inv] = false;
                         this.callbacks.OnInvVisbilityChange(inv, false, happening.item)
                         break;
                     case Happen.PropAppears:
-                        this.listOfPropVisibilities[prop] = true;
+                        assert(prop!=-1);
+                        this.arrayOfPropVisibilities[prop] = true;
                         this.callbacks.OnPropVisbilityChange(prop, true, happening.item)
                         break;
                     case Happen.PropGoes:
-                        this.listOfPropVisibilities[prop] = false;
+                        assert(prop!=-1);
+                        this.arrayOfPropVisibilities[prop] = false;
                         this.callbacks.OnPropVisbilityChange(prop, false, happening.item)
                         break;
+                    case Happen.FlagIsDecremented: 
+                        assert(flag!=-1);
+                        const incrementedValue = this.arrayOfFlagValues[flag]-1;
+                        this.arrayOfFlagValues[flag] = incrementedValue;
+                        this.callbacks.OnFlagValueChange(flag, incrementedValue, happening.item);
+                        break;
+                    case Happen.FlagIsIncremented:
+                        assert(flag!=-1);
+                        const decrementedValue = this.arrayOfFlagValues[flag]+1;
+                        this.arrayOfFlagValues[flag] = decrementedValue;
+                        this.callbacks.OnFlagValueChange(flag, decrementedValue, happening.item);
+                        break;
+                    case Happen.FlagIsSet:
+                        assert(flag!=-1);
+                        this.arrayOfFlagValues[flag] = 1;
+                        this.callbacks.OnFlagValueChange(flag, 1, happening.item);
+                        break;
                 }
-            });
+            };
         } else {
             console.log("Nothing happened");
         }
     }
 
     GetIndexOfVerb(verb: string): number {
-        const indexOfVerb: number = this.listOfVerbs.indexOf(verb);
+        const indexOfVerb: number = this.arrayOfVerbNames.indexOf(verb);
         return indexOfVerb;
     }
 
     GetIndexOfInv(item: string): number {
-        const indexOfInv: number = this.listOfInvs.indexOf(item);
+        const indexOfInv: number = this.arrayOfInvNames.indexOf(item);
         return indexOfInv;
     }
 
-
     GetIndexOfFlag(item: string): number {
-        const indexOfFlag: number = this.listOfFlags.indexOf(item);
+        const indexOfFlag: number = this.arrayOfFlagNames.indexOf(item);
         return indexOfFlag;
     }
 
     GetIndexOfProp(item: string): number {
-        const indexOfProp: number = this.listOfProps.indexOf(item);
+        const indexOfProp: number = this.arrayOfPropNames.indexOf(item);
         return indexOfProp;
     }
 
@@ -143,7 +176,7 @@ export class Happener {
     }
 
     GetFlag(i: number): string {
-        const name: string = i >= 0 ? this.GetEntireInvSuite()[i][0] : "-1 lookup for GetFlag";
+        const name: string = i >= 0 ? this.GetEntireFlagSuite()[i][0] : "-1 lookup for GetFlag";
         return name;
     }
 
@@ -153,59 +186,59 @@ export class Happener {
 
     GetVerbsExcludingUse(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        this.listOfVerbs.forEach(function (Verb) {
+        this.arrayOfVerbNames.forEach(function (Verb) {
             toReturn.push([Verb, true]);
         });
         return toReturn;
     }
 
-    GetEntireFlagsuit(): Array<[string, boolean]> {
-        const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
-            toReturn.push([this.listOfFlags[i], this.listOfFlagsThatAreTrue[i]]);
+    GetEntireFlagSuite(): Array<[string, Number]> {
+        const toReturn = new Array<[string, Number]>();
+        for (let i = 0; i < this.arrayOfPropNames.length; i++) {// classic forloop useful because shared index
+            toReturn.push([this.arrayOfFlagNames[i], this.arrayOfFlagValues[i]]);
         }
         return toReturn;
     }
 
     GetEntirePropSuite(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
-            toReturn.push([this.listOfProps[i], this.listOfPropVisibilities[i]]);
+        for (let i = 0; i < this.arrayOfPropNames.length; i++) {// classic forloop useful because shared index
+            toReturn.push([this.arrayOfPropNames[i], this.arrayOfPropVisibilities[i]]);
         }
         return toReturn;
     }
 
     GetEntireInvSuite(): Array<[string, boolean]> {
         const toReturn = new Array<[string, boolean]>();
-        for (let i = 0; i < this.listOfInvs.length; i++) {// classic forloop useful because shared index
-            toReturn.push([this.listOfInvs[i], this.listOfInvVisibilities[i]]);
+        for (let i = 0; i < this.arrayOfInvNames.length; i++) {// classic forloop useful because shared index
+            toReturn.push([this.arrayOfInvNames[i], this.arrayOfInventoryVisibilities[i]]);
         }
         return toReturn;
     }
 
     GetCurrentVisibleInventory(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfInvs.length; i++) {// classic forloop useful because shared index
-            if (this.listOfInvVisibilities[i] === true)
-                toReturn.push(this.listOfInvs[i]);
+        for (let i = 0; i < this.arrayOfInvNames.length; i++) {// classic forloop useful because shared index
+            if (this.arrayOfInventoryVisibilities[i] === true)
+                toReturn.push(this.arrayOfInvNames[i]);
         }
         return toReturn;
     }
 
     GetCurrentVisibleProps(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfProps.length; i++) {// classic forloop useful because shared index
-            if ( this.listOfPropVisibilities[i] === true)
-                toReturn.push(this.listOfProps[i]);
+        for (let i = 0; i < this.arrayOfPropNames.length; i++) {// classic forloop useful because shared index
+            if ( this.arrayOfPropVisibilities[i] === true)
+                toReturn.push(this.arrayOfPropNames[i]);
         }
         return toReturn;
     }
 
     GetCurrentlyTrueFlags(): Array<string> {
         const toReturn = new Array<string>();
-        for (let i = 0; i < this.listOfFlags.length; i++) {// classic forloop useful because shared index
-            if (this.listOfFlagsThatAreTrue[i] === true)
-                toReturn.push(this.listOfFlags[i]);
+        for (let i = 0; i < this.arrayOfFlagNames.length; i++) {// classic forloop useful because shared index
+            if (this.arrayOfFlagValues[i]>0)
+                toReturn.push(this.arrayOfFlagNames[i]);
         }
         return toReturn;
     }

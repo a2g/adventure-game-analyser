@@ -11,7 +11,7 @@ export interface SceneInterfacePlayThru {
 
     GetArrayOfInitialStatesOfInvs(): Array<boolean>;
     GetArrayOfInitialStatesOfProps(): Array<boolean>;
-    GetArrayOfInitialStatesOfFlags(): Array<boolean>;
+    GetArrayOfInitialStatesOfFlags(): Array<number>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
     GetSolutionNodesMappedByInput(): SolutionNodeMap; 
