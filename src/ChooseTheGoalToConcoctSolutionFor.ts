@@ -3,7 +3,6 @@ import { SolutionCollection } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import { GetDisplayName } from "./GetDisplayName";
-import { SolutionNodeInput } from "./SolutionNodeInput";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
 import { SceneInterface } from "./SceneInterface";

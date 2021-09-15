@@ -94,7 +94,6 @@ export class Happener {
                 const prop = this.GetIndexOfProp(happening.item);
                 const inv = this.GetIndexOfInv(happening.item);
                 const flag = this.GetIndexOfFlag(happening.item);
-
                 switch (happening.happen) {
                     case Happen.InvAppears:
                         assert(inv!=-1);
@@ -102,12 +101,12 @@ export class Happener {
                         this.callbacks.OnInvVisbilityChange(inv, true, happening.item)
                         break;
                     case Happen.InvGoes:
-                        assert(inv!=-1);
+                        assert(inv != -1);
                         this.arrayOfInventoryVisibilities[inv] = false;
                         this.callbacks.OnInvVisbilityChange(inv, false, happening.item)
                         break;
                     case Happen.PropAppears:
-                        assert(prop!=-1);
+                        assert(prop != -1);
                         this.arrayOfPropVisibilities[prop] = true;
                         this.callbacks.OnPropVisbilityChange(prop, true, happening.item)
                         break;

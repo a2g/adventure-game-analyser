@@ -17,7 +17,6 @@ import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { SceneInterface } from './SceneInterface';
 import { SceneSingle } from './SceneSingle';
-import { ScenePreCacheMultiple } from './SceneMultipleCombined';
 import { levels } from './20210415JsonPrivate/All.json'
 import { ChooseToPlayCampaign } from './ChooseToPlayCampaign';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
@@ -28,6 +27,9 @@ function main(): void {
    
     while (true) {
         let i = 1;
+        console.log(" ");
+        console.log(" Master Menu")
+        console.log("==================");
         console.log("0. Play Campaign");
 
         const arrayOfFiles = new Array<string>();
@@ -42,7 +44,7 @@ function main(): void {
         const choice = prompt("Choose an option (b)ail): ").toLowerCase();
         switch (choice) {
             case 'b':
-                continue;
+                return;
             case '0':
                 ChooseToPlayCampaign();
                 break;
@@ -50,17 +52,18 @@ function main(): void {
                 const index = Number(choice) - 1;
                 if (index >= 0 && index < arrayOfFiles.length) {
                     const scene = new SceneMultipleCombined([arrayOfFiles[index]]);
-                    console.log(arrayOfFiles[i] + "......");
                     while (true) {
-                        console.log(" ");
+                        console.log("\nSubMenu of " + arrayOfFiles[index]);
+                        console.log("---------------------------------------");
                         console.log("1. Play Single");
                         console.log("2. Solve to Leaf Nodes <--leafs unresolved? add reactions and validate schema");
                         console.log("3. Check for unused props and invs <-- delete these");
                         console.log("4. Try Concocting solutions <-- solutions missing? add props to starting props, or things");
                         console.log("5. Choose a character <-- this will give you which characters each solution is restricted to");
-                        console.log("b. bail");
+                   
                         const choice = prompt("Choose an option (b)ail: ").toLowerCase();
-
+                        if(choice=='b')
+                            break;
                         switch (choice) {
                             case '1':
                                 ChooseToPlaySingleSection(scene, 0);
@@ -77,8 +80,7 @@ function main(): void {
                             case '5':
                                 //ChooseTwoCharacters.prototype.DoStuff();
                                 break;
-                            case 'b':
-                                continue;
+                          
                         }
                     }
                 }

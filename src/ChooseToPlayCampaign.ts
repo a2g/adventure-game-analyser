@@ -19,7 +19,6 @@ import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
-import { SolutionNodeInput } from "./SolutionNodeInput";
 import { SceneInterface } from "./SceneInterface";
 import { GetMixedObjectsAndVerbFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });

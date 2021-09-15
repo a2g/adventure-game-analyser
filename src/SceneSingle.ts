@@ -62,9 +62,13 @@ SceneInterfaceCollater{
         }
 
         setChars.delete("");
+        setChars.delete("undefined");
         setProps.delete("");
+        setProps.delete("undefined");
         setFlags.delete("");
+        setFlags.delete("undefined");
         setInvs.delete("");
+        setInvs.delete("undefined");
 
         this.allProps = Array.from(setProps.values());
         this.allFlags = Array.from(setFlags.values());
@@ -117,7 +121,7 @@ SceneInterfaceCollater{
        }
     }
     AddPropsToGivenSet(givenSet: Set<string>): void {
-        for(let prop of this.startingPropSet){
+        for(let prop of this.allProps){
             givenSet.add(prop);
         }
     }

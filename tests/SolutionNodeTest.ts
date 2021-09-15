@@ -5,7 +5,6 @@ import { SolutionNode } from '../src/SolutionNode';
 import { Solution } from '../src/Solution';
 import { SceneSingle } from '../src/SceneSingle';
 import { SpecialNodes } from '../src/SpecialNodes';
-import { SolutionNodeInput } from '../src/SolutionNodeInput';
 
 
 describe("Solution", () => {
