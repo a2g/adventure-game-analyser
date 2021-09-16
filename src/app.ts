@@ -34,10 +34,11 @@ function main(): void {
 
         const arrayOfFiles = new Array<string>();
         for (let level of levels) {
-            for(let file of level.files){
+            arrayOfFiles.push(level.mainFile);
+            console.log("" + i++ + ". " + level.mainFile);
+            for(let file of level.extraFiles){
                 arrayOfFiles.push(file);
-                console.log("" + i + ". " + file);
-                i++
+                console.log("" + i++ + ". " + file);
             }
         }
 

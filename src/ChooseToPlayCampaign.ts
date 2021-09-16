@@ -24,14 +24,16 @@ import { GetMixedObjectsAndVerbFromThreeStrings } from "./GetMixedObjectsAndVerb
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
 import { levels } from './20210415JsonPrivate/All.json'
-import { SceneMultipleCombined } from "./SceneMultipleCombined";
+import {definitions} from './20210415JsonPrivate/AllSchema.json'
+import { SceneMultipleCombined } from "./SceneMultipleCombined";  
 
 class Section {
-    constructor(fileset: string[]) {
-        this.fileset = fileset;
+    constructor(mainFile:string, extraFiles: string[]) {
+        this.fileset = extraFiles;
+        this.fileset.push(mainFile);
         this.prerequisiteArray = [];
         this.prerequisiteType = "";
-        this.unlocksGlobalCharacter = "";
+        this.flagSetUponCompletion = "";
         this.name = "";
         this.scene = new SceneMultipleCombined(this.fileset);
         this.happener = new Happener(this.scene);
@@ -49,7 +51,7 @@ class Section {
     fileset: string[];
     prerequisiteArray: string[];
     prerequisiteType: string;
-    unlocksGlobalCharacter: string;
+    flagSetUponCompletion: string;
     name: string;
     scene: SceneInterface;
     happener: Happener;
@@ -57,6 +59,50 @@ class Section {
     private isWon: boolean;
 }
 
+class SectionCollection{
+    private sections : Array<Section>;
+    constructor(){
+        this.sections = new Array<Section>();
+    }
+
+    array() : Array<Section>{
+        return this.sections;
+    }
+
+    isActive(index:number):boolean{
+        const gflags = new Set<string>();
+        if(index<0 || index>= this.sections.length)
+            return false;
+        for(let section  of this.sections){
+            if(section.getWon())
+                gflags.add(section.flagSetUponCompletion);
+        }
+        let numberCompleted = 0;
+        for(let prerequisite of this.sections[index].prerequisiteArray){
+            if(gflags.has(prerequisite))
+                numberCompleted++;
+        }
+        let type = this.sections[index].prerequisiteType;
+        switch (type) {
+            case definitions.prerequisite_type.oneRequired:
+                return numberCompleted >= 1;
+            case definitions.prerequisite_type.twoRequired:
+                return numberCompleted >= 2;
+            case definitions.prerequisite_type.threeRequired:
+                return numberCompleted >= 3;
+        }
+        //default to must have completed all
+        return numberCompleted==this.sections[index].prerequisiteArray.length;
+    }
+
+    isWon(index:number):boolean{
+        return this.sections[index].getWon();
+    }
+
+    getName(index:number):string{
+        return this.sections[index].name;
+    }
+}
 function PlaySingleSection(s: Section) {
 
     while (true) {
@@ -116,7 +162,7 @@ function PlaySingleSection(s: Section) {
             input = s.ai.GetNextCommand();
             break;
         }
-        if (input == ['b'])
+        if (input.length == 1 && input[0] == 'b')
             return;// don't set as won
 
         // 
@@ -179,20 +225,20 @@ function PlaySingleSection(s: Section) {
 }
 
 export function ChooseToPlayCampaign(): void {
-    const sections = new Array<Section>();
+    const sections = new SectionCollection();
     for (let level of levels) {
-        let s = new Section(level.files);
-        s.prerequisiteArray = level.prerequisiteArray;
+        let s = new Section(level.mainFile, level.extraFiles);
+        s.prerequisiteArray = level.prerequisiteFlags;
         s.prerequisiteType = level.prerequisiteType;
-        s.unlocksGlobalCharacter = level.unlocksGlobalCharacter;
-        s.name = level.name;
-        sections.push(s);
+        s.flagSetUponCompletion = level.flagSetUponCompletion;
+        s.name = level.displayName;
+        sections.array().push(s);
     }
 
     while (true) {
         // list the sections to choose from
-        for (let i = 0; i < sections.length; i++) {
-            console.log("" + i + ". " + sections[i].name + (sections[i].getWon() ? "  COMPLETE!" : "  incomplete"));
+        for (let i = 0; i < sections.array().length; i++) {
+            console.log("" + i + ". " + sections.getName(i) + (sections.isActive(i) ? "  active" : "  locked")+ (sections.isWon(i) ? "  COMPLETE!" : "  incomplete"));
         }
 
         // ask which section they want to play?
@@ -200,11 +246,13 @@ export function ChooseToPlayCampaign(): void {
         if (choice == 'b')
             break;// break the while(true);
         const number = Number(choice);
-        if (number < 0 || number >= sections.length) {
+        if (number < 0 || number >= sections.array().length) {
             console.log("out-of-range");
             break;
         }
-        const s = sections[number];
+        const s = sections.array()[number];
         PlaySingleSection(s);
+
     }// end while true of selecting a section
+
 }// end fn

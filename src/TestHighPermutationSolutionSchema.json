@@ -12,7 +12,7 @@
             ],
             "properties": {
                 "flag1": {
-                    "$ref": "TestHighPermutationSolutionObjects.json#/definitions/flag_type"
+                    "$ref": "ATestHighPermutationSolutionObjects.json#/definitions/flag_type"
                 },
                 "flag2": {
                     "$ref": "TestHighPermutationSolutionObjects.json#/definitions/flag_type"
