@@ -31,10 +31,12 @@ class Section {
     constructor(mainFile:string, extraFiles: string[]) {
         this.fileset = extraFiles;
         this.fileset.push(mainFile);
-        this.prerequisiteArray = [];
+        this.prerequisiteFlags = [];
         this.prerequisiteType = "";
+        this.sunsetFlags = [];
+        this.sunsetType = "";
         this.flagSetUponCompletion = "";
-        this.name = "";
+        this.displayName = "";
         this.scene = new SceneMultipleCombined(this.fileset);
         this.happener = new Happener(this.scene);
         const numberOfAutopilotTurns = 0;
@@ -49,10 +51,12 @@ class Section {
     }
 
     fileset: string[];
-    prerequisiteArray: string[];
+    prerequisiteFlags: string[];
     prerequisiteType: string;
+    sunsetFlags: string[];
+    sunsetType: string;
     flagSetUponCompletion: string;
-    name: string;
+    displayName: string;
     scene: SceneInterface;
     happener: Happener;
     ai: PlayerAI;
@@ -77,22 +81,51 @@ class SectionCollection{
             if(section.getWon())
                 gflags.add(section.flagSetUponCompletion);
         }
-        let numberCompleted = 0;
-        for(let prerequisite of this.sections[index].prerequisiteArray){
+        let prerequisitesCompleted = 0;
+        for(let prerequisite of this.sections[index].prerequisiteFlags){
             if(gflags.has(prerequisite))
-                numberCompleted++;
+                prerequisitesCompleted++;
         }
-        let type = this.sections[index].prerequisiteType;
-        switch (type) {
-            case definitions.prerequisite_type.oneRequired:
-                return numberCompleted >= 1;
-            case definitions.prerequisite_type.twoRequired:
-                return numberCompleted >= 2;
-            case definitions.prerequisite_type.threeRequired:
-                return numberCompleted >= 3;
+
+        let sunsetsCompleted = 0;
+        for(let sunset of this.sections[index].sunsetFlags){
+            if(gflags.has(sunset))
+                sunsetsCompleted++;
         }
+       
+        let isPrerequisiteSatisfied = false;
+        switch (this.sections[index].prerequisiteType) {
+            case definitions.condition_type.oneOrMore:
+                isPrerequisiteSatisfied = prerequisitesCompleted >= 1;
+                break;
+            case definitions.condition_type.twoOrMore:
+                isPrerequisiteSatisfied =  prerequisitesCompleted >= 2;
+                break;
+            case definitions.condition_type.threeOrMore:
+                isPrerequisiteSatisfied = prerequisitesCompleted >= 3;
+                break;
+            default:
+                isPrerequisiteSatisfied = prerequisitesCompleted>=this.sections[index].prerequisiteFlags.length;
+        }
+
+        let isSunsetSatisfied = false;
+        switch (this.sections[index].sunsetType) {
+            case definitions.condition_type.oneOrMore:
+                isSunsetSatisfied = sunsetsCompleted >= 1;
+                break;
+            case definitions.condition_type.twoOrMore:
+                isSunsetSatisfied =  sunsetsCompleted >= 2;
+                break;
+            case definitions.condition_type.threeOrMore:
+                isSunsetSatisfied = sunsetsCompleted >= 3;
+                break;
+            default:
+                isSunsetSatisfied = sunsetsCompleted>=this.sections[index].sunsetFlags.length;
+        }
+
         //default to must have completed all
-        return numberCompleted==this.sections[index].prerequisiteArray.length;
+        const isActive = isPrerequisiteSatisfied && !isSunsetSatisfied;
+        return isActive;
     }
 
     isWon(index:number):boolean{
@@ -100,7 +133,7 @@ class SectionCollection{
     }
 
     getName(index:number):string{
-        return this.sections[index].name;
+        return this.sections[index].displayName;
     }
 }
 function PlaySingleSection(s: Section) {
@@ -228,10 +261,12 @@ export function ChooseToPlayCampaign(): void {
     const sections = new SectionCollection();
     for (let level of levels) {
         let s = new Section(level.mainFile, level.extraFiles);
-        s.prerequisiteArray = level.prerequisiteFlags;
+        s.prerequisiteFlags = level.prerequisiteFlags;
         s.prerequisiteType = level.prerequisiteType;
         s.flagSetUponCompletion = level.flagSetUponCompletion;
-        s.name = level.displayName;
+        s.displayName = level.displayName;
+        s.sunsetFlags = level.sunsetFlags;
+        s.sunsetType = level.sunsetType;
         sections.array().push(s);
     }
 
