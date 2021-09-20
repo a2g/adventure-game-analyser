@@ -20,7 +20,7 @@ import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
 import { SceneInterface } from "./SceneInterface";
-import { GetMixedObjectsAndVerbFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
+import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 
 export function ChooseToPlayThrough(scene: SceneInterface, numberOfAutopilotTurns: number): void {
 
@@ -85,7 +85,7 @@ export function ChooseToPlayThrough(scene: SceneInterface, numberOfAutopilotTurn
 
 
             // 
-            const objects = GetMixedObjectsAndVerbFromThreeStrings(input, scene);
+            const objects = ParseTokenizedCommandLineFromFromThreeStrings(input, scene);
 
             // handle errors
             if (objects.type.toString().startsWith("Error")) {

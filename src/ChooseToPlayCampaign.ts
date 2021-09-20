@@ -20,15 +20,16 @@ import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
 import { SceneInterface } from "./SceneInterface";
-import { GetMixedObjectsAndVerbFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
+import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
 import { levels } from './20210415JsonPrivate/All.json'
-import {definitions} from './20210415JsonPrivate/AllSchema.json'
-import { SceneMultipleCombined } from "./SceneMultipleCombined";  
+import { definitions } from './20210415JsonPrivate/AllSchema.json'
+import { SceneMultipleCombined } from "./SceneMultipleCombined";
+import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 
 class Section {
-    constructor(mainFile:string, extraFiles: string[]) {
+    constructor(mainFile: string, extraFiles: string[]) {
         this.fileset = extraFiles;
         this.fileset.push(mainFile);
         this.prerequisiteFlags = [];
@@ -40,7 +41,7 @@ class Section {
         this.scene = new SceneMultipleCombined(this.fileset);
         this.happener = new Happener(this.scene);
         const numberOfAutopilotTurns = 0;
-        this.ai = new PlayerAI(this.happener, numberOfAutopilotTurns);
+        this.player = new PlayerAI(this.happener, numberOfAutopilotTurns);
         this.isWon = false;
     }
     setWon() {
@@ -59,53 +60,53 @@ class Section {
     displayName: string;
     scene: SceneInterface;
     happener: Happener;
-    ai: PlayerAI;
+    player: PlayerAI;
     private isWon: boolean;
 }
 
-class SectionCollection{
-    private sections : Array<Section>;
-    constructor(){
+class SectionCollection {
+    private sections: Array<Section>;
+    constructor() {
         this.sections = new Array<Section>();
     }
 
-    array() : Array<Section>{
+    array(): Array<Section> {
         return this.sections;
     }
 
-    isActive(index:number):boolean{
+    isActive(index: number): boolean {
         const gflags = new Set<string>();
-        if(index<0 || index>= this.sections.length)
+        if (index < 0 || index >= this.sections.length)
             return false;
-        for(let section  of this.sections){
-            if(section.getWon())
+        for (let section of this.sections) {
+            if (section.getWon())
                 gflags.add(section.flagSetUponCompletion);
         }
         let prerequisitesCompleted = 0;
-        for(let prerequisite of this.sections[index].prerequisiteFlags){
-            if(gflags.has(prerequisite))
+        for (let prerequisite of this.sections[index].prerequisiteFlags) {
+            if (gflags.has(prerequisite))
                 prerequisitesCompleted++;
         }
 
         let sunsetsCompleted = 0;
-        for(let sunset of this.sections[index].sunsetFlags){
-            if(gflags.has(sunset))
+        for (let sunset of this.sections[index].sunsetFlags) {
+            if (gflags.has(sunset))
                 sunsetsCompleted++;
         }
-       
+
         let isPrerequisiteSatisfied = false;
         switch (this.sections[index].prerequisiteType) {
             case definitions.condition_type.oneOrMore:
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 1;
                 break;
             case definitions.condition_type.twoOrMore:
-                isPrerequisiteSatisfied =  prerequisitesCompleted >= 2;
+                isPrerequisiteSatisfied = prerequisitesCompleted >= 2;
                 break;
             case definitions.condition_type.threeOrMore:
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 3;
                 break;
             default:
-                isPrerequisiteSatisfied = prerequisitesCompleted>=this.sections[index].prerequisiteFlags.length;
+                isPrerequisiteSatisfied = prerequisitesCompleted >= this.sections[index].prerequisiteFlags.length;
         }
 
         let isSunsetSatisfied = false;
@@ -114,13 +115,13 @@ class SectionCollection{
                 isSunsetSatisfied = sunsetsCompleted >= 1;
                 break;
             case definitions.condition_type.twoOrMore:
-                isSunsetSatisfied =  sunsetsCompleted >= 2;
+                isSunsetSatisfied = sunsetsCompleted >= 2;
                 break;
             case definitions.condition_type.threeOrMore:
                 isSunsetSatisfied = sunsetsCompleted >= 3;
                 break;
             default:
-                isSunsetSatisfied = sunsetsCompleted>=this.sections[index].sunsetFlags.length;
+                isSunsetSatisfied = sunsetsCompleted >= this.sections[index].sunsetFlags.length;
         }
 
         //default to must have completed all
@@ -128,57 +129,29 @@ class SectionCollection{
         return isActive;
     }
 
-    isWon(index:number):boolean{
+    isWon(index: number): boolean {
         return this.sections[index].getWon();
     }
 
-    getName(index:number):string{
+    getName(index: number): string {
         return this.sections[index].displayName;
     }
 }
+
 function PlaySingleSection(s: Section) {
 
     while (true) {
-        // Process all the autos
-        const autos = s.scene.GetSolutionNodesMappedByInput().GetAutos();
-
+        // report current situation to cmd output
+        const reporter = GameReporter.GetInstance();
         const flags = s.happener.GetCurrentlyTrueFlags();
-        GameReporter.GetInstance().ReportFlags(flags);
         const invs = s.happener.GetCurrentVisibleInventory();
-        GameReporter.GetInstance().ReportInventory(invs);
         const props = s.happener.GetCurrentVisibleProps();
-        GameReporter.GetInstance().ReportScene(props);
-        autos.forEach((node: SolutionNode) => {
-            let numberSatisified = 0;
-            for (let inputName of node.inputHints) {
-                if (inputName.startsWith("prop_")) {
-                    if (props.includes(inputName)) {
-                        numberSatisified = numberSatisified + 1;
-                    }
-                }
-                else if (inputName.startsWith("inv_")) {
-                    if (invs.includes(inputName)) {
-                        numberSatisified++;
-                    }
-                } else if (inputName.startsWith("flag_")) {
-                    if (flags.includes(inputName)) {
-                        numberSatisified++;
-                    }
-                }
-            };
-            if (numberSatisified === node.inputHints.length) {
-                if (node.output.startsWith("prop_")) {
-                    console.log("Auto: prop set visible " + node.output);
-                    s.happener.SetPropVisible(node.output, true);
-                } else if (node.output.startsWith("flag_")) {
-                    console.log("Auto: flag set to true " + node.output);
-                    s.happener.SetFlagValue(node.output, 1);
-                } else if (node.output.startsWith("inv_")) {
-                    console.log("Auto: inv set to visible " + node.output);
-                    s.happener.SetInvVisible(node.output, true);
-                }
-            }
-        });
+        reporter.ReportFlags(flags);
+        reporter.ReportInventory(invs);
+        reporter.ReportScene(props);
+
+        // Process all the autos
+        ProcessAutos(s);
 
         // check have we won?
         if (s.happener.GetFlagValue("flag_win")) {
@@ -188,70 +161,31 @@ function PlaySingleSection(s: Section) {
 
         Sleep(500);
 
-        let input: string[] = s.ai.GetNextCommand();
-        if (input.length === 0) {
-            // null command means ai can't find another guess.
-            // so lets just see what's going on here
-            input = s.ai.GetNextCommand();
+        // take input & handle null and escape character
+        let input: string[] = s.player.GetNextCommand();
+        if (input.length <= 1) {
+            if (input.length == 1 && input[0] == 'b')
+                return;// GetNextCommand returns ['b'] if the user chooses 'b'
+            // this next line is only here to easily debug
+            input = s.player.GetNextCommand();
             break;
         }
-        if (input.length == 1 && input[0] == 'b')
-            return;// don't set as won
-
-        // 
-        const objects = GetMixedObjectsAndVerbFromThreeStrings(input, s.scene);
-
-        // handle errors
-        if (objects.type.toString().startsWith("Error")) {
-            console.log(objects.type.toString() + " blah");
-            return;// don't set as won
+        
+        // parse & handle parsing errors
+        const commandLine = ParseTokenizedCommandLineFromFromThreeStrings(input, s.scene);
+        if (commandLine.error.length) {
+            console.log(input + " <-- Couldn't tokenize input, specifically "+commandLine.error);
+            continue
         }
 
-        // handle more errors
-        const visibleInvs = s.happener.GetCurrentVisibleInventory();
-        const visibleProps = s.happener.GetCurrentVisibleProps();
-        const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
-        const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
-        const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
-        const isObjectBInVisibleProps = visibleProps.includes(objects.objectB);
-
-        switch (objects.type) {
-            case Mix.InvVsInv:
-                if (!isObjectAInVisibleInvs || !isObjectBInVisibleInvs) {
-                    console.log("One of those inventory items is not visible!");
-                    continue;
-                }
-                break;
-            case Mix.InvVsProp:
-                if (!isObjectAInVisibleInvs || !isObjectBInVisibleProps) {
-                    console.log("One of those items is not visible!");
-                    continue;
-                }
-                break;
-            case Mix.PropVsProp:
-                if (!isObjectAInVisibleProps || !isObjectBInVisibleProps) {
-                    console.log("One of those props is not visible!");
-                    continue;
-                }
-                break;
-            case Mix.SingleVsInv:
-                if (!isObjectAInVisibleInvs) {
-                    console.log("That inv is not visible!");
-                    continue;
-                }
-                break;
-            case Mix.SingleVsProp:
-                if (!isObjectAInVisibleProps) {
-                    console.log("That prop is not visible!");
-                    continue;
-                }
-                break;
+        // if all objects are available then execute
+        const errors = GetAnyErrorsFromObjectAvailability(commandLine, s.happener);
+        if (errors.length == 0) {
+            GameReporter.GetInstance().ReportCommand(input);
+            s.happener.ExecuteCommand(commandLine);
+        } else {
+            console.log(errors);
         }
-
-        GameReporter.GetInstance().ReportCommand(input);
-
-        // execute command - it will handle callbacks itself
-        s.happener.ExecuteCommand(objects);
     }// end while (true) of playing game
     s.setWon();
     console.log("Success");
@@ -273,7 +207,7 @@ export function ChooseToPlayCampaign(): void {
     while (true) {
         // list the sections to choose from
         for (let i = 0; i < sections.array().length; i++) {
-            console.log("" + i + ". " + sections.getName(i) + (sections.isActive(i) ? "  active" : "  locked")+ (sections.isWon(i) ? "  COMPLETE!" : "  incomplete"));
+            console.log("" + i + ". " + sections.getName(i) + (sections.isActive(i) ? "  active" : "  locked") + (sections.isWon(i) ? "  COMPLETE!" : "  incomplete"));
         }
 
         // ask which section they want to play?
@@ -291,3 +225,67 @@ export function ChooseToPlayCampaign(): void {
     }// end while true of selecting a section
 
 }// end fn
+
+function GetAnyErrorsFromObjectAvailability(objects: MixedObjectsAndVerb, happener: Happener): string {
+    const visibleInvs = happener.GetCurrentVisibleInventory();
+    const visibleProps = happener.GetCurrentVisibleProps();
+    const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
+    const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
+    const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
+    const isObjectBInVisibleProps = visibleProps.includes(objects.objectB);
+
+    const type = objects.type;
+    if (type === Mix.InvVsInv && !isObjectAInVisibleInvs || !isObjectBInVisibleInvs) {
+        return "One of those inventory items is not visible!";
+    } else if (type === Mix.InvVsProp && !isObjectAInVisibleInvs || !isObjectBInVisibleProps) {
+        return "One of those items is not visible!";
+    } else if (type == Mix.PropVsProp && !isObjectAInVisibleProps || !isObjectBInVisibleProps) {
+        return "One of those props is not visible!";
+    } else if (type === Mix.SingleVsInv && !isObjectAInVisibleInvs) {
+        return "That inv is not visible!";
+    } else if (type === Mix.SingleVsProp && !isObjectAInVisibleProps) {
+        return "That prop is not visible!";
+    }
+
+    return "";// no error!
+}
+
+function ProcessAutos(s: Section) {
+    const flags = s.happener.GetCurrentlyTrueFlags();
+    const invs = s.happener.GetCurrentVisibleInventory();
+    const props = s.happener.GetCurrentVisibleProps();
+    
+    const autos = s.scene.GetSolutionNodesMappedByInput().GetAutos();
+    for (const autonode of autos) {
+        let numberSatisified = 0;
+        for (let inputName of autonode.inputHints) {
+            if (inputName.startsWith("prop_")) {
+                if (props.includes(inputName)) {
+                    numberSatisified = numberSatisified + 1;
+                }
+            }
+            else if (inputName.startsWith("inv_")) {
+                if (invs.includes(inputName)) {
+                    numberSatisified++;
+                }
+            } else if (inputName.startsWith("flag_")) {
+                if (flags.includes(inputName)) {
+                    numberSatisified++;
+                }
+            }
+        };
+        if (numberSatisified === autonode.inputHints.length) {
+            if (autonode.output.startsWith("prop_")) {
+                console.log("Auto: prop set visible " + autonode.output);
+                s.happener.SetPropVisible(autonode.output, true);
+            } else if (autonode.output.startsWith("flag_")) {
+                console.log("Auto: flag set to true " + autonode.output);
+                s.happener.SetFlagValue(autonode.output, 1);
+            } else if (autonode.output.startsWith("inv_")) {
+                console.log("Auto: inv set to visible " + autonode.output);
+                s.happener.SetInvVisible(autonode.output, true);
+            }
+        }
+    }
+}
+
