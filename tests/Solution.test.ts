@@ -95,7 +95,7 @@ describe("Solution", () => {
         // that the multiple solutions are the same thing.
         assert.strictEqual(collection.length, 1);
         const solution0 = collection[0];
-        assert.strictEqual(solution0.GetLeafNodes().size, 27);
+        assert.strictEqual(solution0.GetLeafNodes().size, 26);
         assert.strictEqual(solution0.GetIncompleteNodes().size, 0);
 
         // process the rest of the nodes
@@ -105,7 +105,7 @@ describe("Solution", () => {
 
         {
             const leafNodeMap = solution0.GetLeafNodes();
-            assert.strictEqual(27, leafNodeMap.size);
+            assert.strictEqual(26, leafNodeMap.size);
         }
     });
 })
