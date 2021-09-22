@@ -17,7 +17,7 @@ function Stringify(name: string | undefined): string {
 export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: SolutionNodeMap | null, objects: MixedObjectsAndVerb): Happenings | null {
     const happs = new Happenings();
 
-    const text = fs.readFileSync("src/20210415JsonPrivate/" + filename, { encoding: "UTF-8" });
+    const text = fs.readFileSync(filename, { encoding: "UTF-8" });
     const scenario = JSON.parse(text);
 
     for (const reaction of scenario.reactions) {

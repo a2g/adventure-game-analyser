@@ -3,12 +3,18 @@ import { SolutionNode } from './SolutionNode';
 import { GetDisplayName } from './GetDisplayName';
 import { Colors } from './Colors';
 import { Embracketize } from './Embracketize';
+import { SolutionNodeMap } from './SolutionNodeMap';
 
 
 export class SolutionCollection extends Array<Solution>{
 
     constructor() {
         super();
+    }
+
+    InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, setOfStartingAll: Set<string>) {
+        const solutionRootNode = new SolutionNode("root via app", "", 1, null, "flag_win");
+        this.push(new Solution(solutionRootNode, solutionNodesMappedByInput, setOfStartingAll));
     }
 
     IsNodesRemaining(): boolean {

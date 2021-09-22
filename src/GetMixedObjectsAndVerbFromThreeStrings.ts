@@ -18,7 +18,7 @@ export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[],
         if (is1InPropsRaw)
             return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, strings[1], "", "");
         else if (is1InPropsPrefixed)
-            return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "",  "Couldn't recognise '"+strings[1]+ "' as something to grab");
+            return new MixedObjectsAndVerb(Mix.SingleVsProp, verb, "prop_" + strings[1], "", "Couldn't recognise '" + strings[1] + "' as something to grab");
         return new MixedObjectsAndVerb(Mix.ErrorGrabButNoProp, "", "", "", "");
     } else if (verb === "toggle") {// no combinations needed
         if (is1InPropsRaw)
@@ -28,8 +28,8 @@ export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[],
         else if (is1InInvsRaw)
             return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, strings[1], "", "");
         else if (is1InInvsPrefixed)
-            return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, "inv_" + strings[1], "","");
-        return new MixedObjectsAndVerb(Mix.ErrorToggleButNoInvOrProp, "", "", "", "Couldn't recognise '"+strings[1]+ "' as something to toggle");
+            return new MixedObjectsAndVerb(Mix.SingleVsInv, verb, "inv_" + strings[1], "", "");
+        return new MixedObjectsAndVerb(Mix.ErrorToggleButNoInvOrProp, "", "", "", "Couldn't recognise '" + strings[1] + "' as something to toggle");
     } else if (verb === "use") {
         // pure raw
         if (is1InInvsRaw && is2InInvsRaw)// a
@@ -74,8 +74,8 @@ export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[],
             return new MixedObjectsAndVerb(Mix.PropVsProp, verb, strings[1], "prop_" + strings[2], "");
         else if (is1InPropsPrefixed && is2InPropsRaw)// d
             return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop" + strings[1], strings[2], "");
-        return new MixedObjectsAndVerb(Mix.ErrorUseButNoInvOrProp, "", "", "",  "Couldn't recognise '"+strings[1]+ "' '"+strings[2]+ " as something to use");
+        return new MixedObjectsAndVerb(Mix.ErrorUseButNoInvOrProp, "", "", "", "Couldn't recognise '" + strings[1] + "' '" + strings[2] + " as something to use");
     }
-    return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "",  "Couldn't recognise '"+strings[1]+ " as a verb");
+    return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "Couldn't recognise '" + strings[1] + " as a verb");
 }
-    
+

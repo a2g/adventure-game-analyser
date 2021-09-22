@@ -9,19 +9,7 @@ import { Raw } from './Raw';
 import _ from './20210415JsonPrivate/Script/Script.json';
 
 export class Solution {
-    // non aggregates
-    solutionName: string;
-    rootNode: SolutionNode;
-    nodeMap: SolutionNodeMap;
-
-    // aggregates
-    incompleteNodes: Set<SolutionNode>;
-    usedVerbNounCombos: Set<string>;
-    characterRestrictions: Set<string>;
-    startingThings: Set<string>;
-    leafNodes: Map<string, SolutionNode>;
-
-    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Set<string>, verbNounCombos: Set<string> | null = null, restrictions: Set<string> | null = null) {
+    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Set<string>, restrictions: Set<string> | null = null) {
         // initialize non aggregates
         {
             this.solutionName = "uninitialized";
@@ -34,15 +22,6 @@ export class Solution {
         // on the for side: vaguely remember that a solution needs to be incomplete when empty
         this.incompleteNodes = new Set<SolutionNode>();
         this.incompleteNodes.add(root);
-
-
-        // its its passed in we deep copy it
-        this.usedVerbNounCombos = new Set<string>();
-        if (verbNounCombos) {
-            for (let combo of verbNounCombos) {
-                this.usedVerbNounCombos.add(combo);
-            }
-        }
 
         // its its passed in we deep copy it
         this.characterRestrictions = new Set<string>();
@@ -70,17 +49,9 @@ export class Solution {
         const incompleteNodes = new Set<SolutionNode>();
         const clonedRootNode = this.rootNode.CloneNodeAndEntireTree(incompleteNodes);
         clonedRootNode.id = this.rootNode.id;//not sure why do this, but looks crucial!
-        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings, this.usedVerbNounCombos, this.characterRestrictions);
+        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings, this.characterRestrictions);
         clonedSolution.SetIncompleteNodes(incompleteNodes);
         return clonedSolution;
-    }
-
-    AddVerbNounCombo(verb: string, noun: string): void {
-        this.usedVerbNounCombos.add(verb + noun);
-    }
-    HasAlreadyUsedVerbNounCombo(verb: string, noun: string): boolean {
-        const isIncluded = this.usedVerbNounCombos.has(verb + noun);
-        return isIncluded;
     }
 
     SetNodeIncomplete(node: SolutionNode | null): void {
@@ -257,5 +228,16 @@ export class Solution {
     getRestrictions(): Set<string> {
         return this.characterRestrictions;
     }
+
+    // non aggregates
+    solutionName: string;
+    rootNode: SolutionNode;
+    nodeMap: SolutionNodeMap;
+
+    // aggregates
+    incompleteNodes: Set<SolutionNode>;
+    leafNodes: Map<string, SolutionNode>;
+    readonly characterRestrictions: Set<string>;
+    readonly startingThings: Set<string>;
 
 }

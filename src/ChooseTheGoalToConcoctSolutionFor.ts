@@ -65,11 +65,10 @@ export class ChooseTheGoalToConcoctSolutionFor {
         while (true) {
             console.log(" ");
 
-            const collection = new SolutionCollection();
-
+          
             // Solve solution nodes
-            const solutionRootNode = new SolutionNode("root via app", "", 1, null, "flag_win");
-            collection.push(new Solution(solutionRootNode, scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll()));
+            const collection = new SolutionCollection();
+            collection.InitializeByCopyingThese(scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll());
             collection.SolveUntilZeroNodesRemaining();
             collection.GenerateSolutionNames(scene.GetSetOfStartingThings());
 

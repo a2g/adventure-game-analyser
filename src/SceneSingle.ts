@@ -31,7 +31,7 @@ export class SceneSingle implements SceneInterface,
     constructor(filename: string) {
         filename = filename;
         this.filename = filename;
-        const text = fs.readFileSync("src/20210415JsonPrivate/" + filename, { encoding: "UTF-8" });
+        const text = fs.readFileSync(filename, { encoding: "UTF-8" });
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();

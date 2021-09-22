@@ -254,7 +254,7 @@ function ProcessAutos(s: Section) {
     const flags = s.happener.GetCurrentlyTrueFlags();
     const invs = s.happener.GetCurrentVisibleInventory();
     const props = s.happener.GetCurrentVisibleProps();
-    
+
     const autos = s.scene.GetSolutionNodesMappedByInput().GetAutos();
     for (const autonode of autos) {
         let numberSatisified = 0;
