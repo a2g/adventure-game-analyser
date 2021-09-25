@@ -27,6 +27,7 @@ import { levels } from './20210415JsonPrivate/All.json'
 import { definitions } from './20210415JsonPrivate/AllSchema.json'
 import { SceneMultipleCombined } from "./SceneMultipleCombined";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
+import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
 
 class Section {
     constructor(mainFile: string, extraFiles: string[]) {
@@ -170,16 +171,16 @@ function PlaySingleSection(s: Section) {
             input = s.player.GetNextCommand();
             break;
         }
-        
+
         // parse & handle parsing errors
         const commandLine = ParseTokenizedCommandLineFromFromThreeStrings(input, s.scene);
         if (commandLine.error.length) {
-            console.log(input + " <-- Couldn't tokenize input, specifically "+commandLine.error);
+            console.log(input + " <-- Couldn't tokenize input, specifically " + commandLine.error);
             continue
         }
 
         // if all objects are available then execute
-        const errors = GetAnyErrorsFromObjectAvailability(commandLine, s.happener);
+        const errors = GetAnyErrorsFromObjectAvailability(commandLine, s.happener.GetCurrentVisibleProps(), s.happener.GetCurrentVisibleInventory());
         if (errors.length == 0) {
             GameReporter.GetInstance().ReportCommand(input);
             s.happener.ExecuteCommand(commandLine);
@@ -225,30 +226,6 @@ export function ChooseToPlayCampaign(): void {
     }// end while true of selecting a section
 
 }// end fn
-
-function GetAnyErrorsFromObjectAvailability(objects: MixedObjectsAndVerb, happener: Happener): string {
-    const visibleInvs = happener.GetCurrentVisibleInventory();
-    const visibleProps = happener.GetCurrentVisibleProps();
-    const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
-    const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
-    const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
-    const isObjectBInVisibleProps = visibleProps.includes(objects.objectB);
-
-    const type = objects.type;
-    if (type === Mix.InvVsInv && !isObjectAInVisibleInvs || !isObjectBInVisibleInvs) {
-        return "One of those inventory items is not visible!";
-    } else if (type === Mix.InvVsProp && !isObjectAInVisibleInvs || !isObjectBInVisibleProps) {
-        return "One of those items is not visible!";
-    } else if (type == Mix.PropVsProp && !isObjectAInVisibleProps || !isObjectBInVisibleProps) {
-        return "One of those props is not visible!";
-    } else if (type === Mix.SingleVsInv && !isObjectAInVisibleInvs) {
-        return "That inv is not visible!";
-    } else if (type === Mix.SingleVsProp && !isObjectAInVisibleProps) {
-        return "That prop is not visible!";
-    }
-
-    return "";// no error!
-}
 
 function ProcessAutos(s: Section) {
     const flags = s.happener.GetCurrentlyTrueFlags();

@@ -96,10 +96,10 @@ export function ChooseToPlayThrough(scene: SceneInterface, numberOfAutopilotTurn
             // handle more errors
             const visibleInvs = happener.GetCurrentVisibleInventory();
             const visibleProps = happener.GetCurrentVisibleProps();
-            const isObjectAInVisibleInvs = visibleInvs.includes(objects.objectA);
-            const isObjectAInVisibleProps = visibleProps.includes(objects.objectA);
-            const isObjectBInVisibleInvs = visibleInvs.includes(objects.objectB);
-            const isObjectBInVisibleProps = visibleProps.includes(objects.objectB);
+            const isObjectAInVisibleInvs = visibleInvs.includes(objects.object1);
+            const isObjectAInVisibleProps = visibleProps.includes(objects.object1);
+            const isObjectBInVisibleInvs = visibleInvs.includes(objects.object2);
+            const isObjectBInVisibleProps = visibleProps.includes(objects.object2);
 
             switch (objects.type) {
                 case Mix.InvVsInv:
