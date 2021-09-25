@@ -7,22 +7,10 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 import { RawObjectsAndVerb } from './RawObjectsAndVerb';
 import { Raw } from './Raw';
 import _ from './20210415JsonPrivate/Script/Script.json';
+import { stringify } from 'querystring';
 
 export class Solution {
-    IsRolloverable(): boolean {
-        // rootNode.inputs[0] is "flag_win"
-        // rootNode.inputs[0].input[0] is flag_subwin_anthony
-        // but since we moved the name in to inputHints, the
-        if (this.rootNode) {
-            if (this.rootNode.inputs[0]){
-                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_subwin")){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Set<string>, restrictions: Set<string> | null = null) {
+    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string,Set<string>>, restrictions: Set<string> | null = null) {
         // initialize non aggregates
         {
             this.solutionName = "uninitialized";
@@ -37,18 +25,18 @@ export class Solution {
         this.incompleteNodes.add(root);
 
         // its its passed in we deep copy it
-        this.characterRestrictions = new Set<string>();
+        this.restrictionsEncounteredDuringSolving = new Set<string>();
         if (restrictions) {
             for (let restriction of restrictions) {
-                this.characterRestrictions.add(restriction);
+                this.restrictionsEncounteredDuringSolving.add(restriction);
             }
         }
 
         // its its passed in we deep copy it
-        this.startingThings = new Set<string>();
-        for (let item of startingThingsPassedIn) {
-            this.startingThings.add(item);
-        }
+        this.mapOfVisibleThings = new Map<string,Set<string>>(); 
+        startingThingsPassedIn.forEach((value:Set<string>, key:string)=>{
+            this.mapOfVisibleThings.set(key,value);
+        });
 
         // interestingly, leaf nodes don't get cloned 
         // but it doesn't matter that much because they are just used to 
@@ -62,7 +50,7 @@ export class Solution {
         const incompleteNodes = new Set<SolutionNode>();
         const clonedRootNode = this.rootNode.CloneNodeAndEntireTree(incompleteNodes);
         clonedRootNode.id = this.rootNode.id;//not sure why do this, but looks crucial!
-        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.startingThings, this.characterRestrictions);
+        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.mapOfVisibleThings, this.restrictionsEncounteredDuringSolving);
         clonedSolution.SetIncompleteNodes(incompleteNodes);
         return clonedSolution;
     }
@@ -177,14 +165,14 @@ export class Solution {
 
             // inputs are nearly always 2, but in one case they can be 6.. using for(;;) isn't such a useful optimizaiton here             // for (let i = 0; i < node.inputs.length; i++) {
             for (let name of node.inputHints) {
-                if (!this.startingThings.has(name))
+                if (!this.mapOfVisibleThings.has(name))
                     areAllInputsAvailable = false;
             };
 
             if (areAllInputsAvailable) {
                 // first we give them the output            
                 if (node.type !== SpecialNodes.VerifiedLeaf)
-                    this.startingThings.add(node.output);
+                    this.AddToMapOfVisibleThings(node.output);
                 //.. we don't remove the input, because some node types don't remove
                 // and this little algorithm doesn't know how yet
 
@@ -230,17 +218,46 @@ export class Solution {
         return null;
     }
 
-    addRestrictions(restrictions: Array<string>) {
-
+    AddRestrictions(restrictions: Array<string>) {
         for (const restriction of restrictions) {
-            this.characterRestrictions.add(restriction);
+            this.restrictionsEncounteredDuringSolving.add(restriction);
         }
-
     }
 
-    getRestrictions(): Set<string> {
-        return this.characterRestrictions;
+    GetAccumulatedRestrictions(): Set<string> {
+        return this.restrictionsEncounteredDuringSolving;
     }
+
+    IsRolloverable(): boolean {
+        // rootNode.inputs[0] is "flag_win"
+        // rootNode.inputs[0].input[0] is flag_subwin_anthony
+        // but since we moved the name in to inputHints, the
+        if (this.rootNode) {
+            if (this.rootNode.inputs[0]){
+                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_subwin")){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    GetMapOfCurrentlyVisibleThings(): Map<string,Set<string>> {
+       return this.mapOfVisibleThings;
+    }
+    GetMapOfCurrentlyRemainingNodes(): SolutionNodeMap {
+        // yup looks like we remove nodes from this when we use them up
+        // so returning the current node map is ok
+        return this.nodeMap;
+    }
+
+    private AddToMapOfVisibleThings(thing:string){
+        if(!this.mapOfVisibleThings.has(thing))
+        {
+            this.mapOfVisibleThings.set(thing, new Set<string>());
+        }
+    }
+ 
 
     // non aggregates
     solutionName: string;
@@ -250,7 +267,7 @@ export class Solution {
     // aggregates
     incompleteNodes: Set<SolutionNode>;
     leafNodes: Map<string, SolutionNode>;
-    readonly characterRestrictions: Set<string>;
-    readonly startingThings: Set<string>;
+    mapOfVisibleThings: Map<string,Set<string>>;
+    readonly restrictionsEncounteredDuringSolving: Set<string>;
 
 }

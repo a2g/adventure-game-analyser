@@ -6,7 +6,6 @@ import { Mix } from './Mix';
 import { SceneInterface } from './SceneInterface';
 import { SceneSingle } from './SceneSingle';
 import { SingleBigSwitch } from './SingleBigSwitch';
-import { GetSetOfStartingAll } from './GetSetOfStartingAll';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";
@@ -17,7 +16,7 @@ export class SceneMultipleCombined implements SceneInterface {
     allFlags: Array<string>;
     allInvs: Array<string>;
     allChars: Array<string>;
-    startingThingSet: Set<[string, string]>;
+    mapOfStartingThingsWithChars: Map<string,Set<string>>;
     startingInvSet: Set<string>;
     startingPropSet: Set<string>;
     startingFlagSet: Set<string>;
@@ -33,7 +32,7 @@ export class SceneMultipleCombined implements SceneInterface {
         // create sets for the 3 member and 4 indirect sets
         this.startingPropSet = new Set<string>();
         this.startingInvSet = new Set<string>();
-        this.startingThingSet = new Set<[string, string]>();
+        this.mapOfStartingThingsWithChars = new Map<string,Set<string>>();
         this.startingFlagSet = new Set<string>();
         const setProps = new Set<string>();
         const setFlags = new Set<string>();
@@ -44,7 +43,7 @@ export class SceneMultipleCombined implements SceneInterface {
         for (let scene of this.allScenes.values()) {
             scene.AddStartingPropsToGivenSet(this.startingPropSet);
             scene.AddStartingInvsToGivenSet(this.startingInvSet);
-            scene.AddStartingThingsToGivenSet(this.startingThingSet);
+            scene.AddStartingThingCharsToGivenMap(this.mapOfStartingThingsWithChars);
             scene.AddStartingFlagsToGivenSet(this.startingFlagSet);
             scene.AddPropsToGivenSet(setProps);
             scene.AddFlagsToGivenSet(setFlags);
@@ -55,7 +54,7 @@ export class SceneMultipleCombined implements SceneInterface {
         // clean 3 member and 4 indirect sets
         this.startingPropSet.delete("");
         this.startingInvSet.delete("");
-        this.startingThingSet.delete(["", ""]);
+        this.mapOfStartingThingsWithChars.delete("");
         this.startingFlagSet.delete("");
         setChars.delete("");
         setProps.delete("");
@@ -106,22 +105,22 @@ export class SceneMultipleCombined implements SceneInterface {
         return this.startingInvSet;
     }
 
-
-    GetSetOfStartingThings(): Set<[string, string]> {
-        return this.startingThingSet;
+    GetMapOfAllStartingThings(): Map<string,Set<string>> {
+        return this.mapOfStartingThingsWithChars;
     }
 
-    GetSetOfStartingAll(): Set<string> {
-        return GetSetOfStartingAll(this.startingThingSet, this.startingInvSet, this.startingPropSet);
-    }
 
-    GetStartingThingsForCharacter(name: string): Set<string> {
+    GetStartingThingsForCharacter(charName: string): Set<string> {
         const startingThingSet = new Set<string>();
-        for (const thing of this.startingThingSet) {
-            if (thing[0] === name) {
-                startingThingSet.add(thing[1])
+        this.mapOfStartingThingsWithChars.forEach((value: Set<string>, thing: string) => {
+            for (let item of value) {
+                if (item == charName) {
+                    startingThingSet.add(thing);
+                    break;
+                }
             }
-        }
+        });
+        
         return startingThingSet;
     }
 

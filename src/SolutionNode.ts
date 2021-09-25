@@ -132,7 +132,7 @@ export class SolutionNode {
             // we check our starting set first!
             // otherwise Toggle pieces will toggle until the count is zero.
             const objectToObtain = this.inputHints[k];
-            if (solution.startingThings.has(objectToObtain)) {
+            if (solution.mapOfVisibleThings.has(objectToObtain)) {
                 const newLeaf = new SolutionNode(objectToObtain, SpecialNodes.VerifiedLeaf);
                 newLeaf.parent = this;
                 this.inputs[k] = newLeaf;
@@ -180,7 +180,7 @@ export class SolutionNode {
                         theNode.inputs[k] = theMatchingNode;
                         // all reactions are incomplete when they come from the node map
                         theSolution.SetNodeIncomplete(theMatchingNode);
-                        theSolution.addRestrictions(theMatchingNode.getRestrictions());
+                        theSolution.AddRestrictions(theMatchingNode.getRestrictions());
                     }
                 }
 

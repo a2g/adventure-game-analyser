@@ -2,5 +2,5 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 
 export interface SceneInterfaceFindLeaves {
     GetSolutionNodesMappedByInput(): SolutionNodeMap;
-    GetSetOfStartingAll(): Set<string>;
+    GetMapOfAllStartingThings(): Map<string, Set<string>>;
 }

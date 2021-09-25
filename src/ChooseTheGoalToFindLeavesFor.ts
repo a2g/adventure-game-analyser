@@ -16,7 +16,7 @@ export class ChooseTheGoalToFindLeavesFor {
 
             const collection = new SolverViaRootNode();
             const objective = "flag_win";
-            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll()));
+            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), scene.GetSolutionNodesMappedByInput(), scene.GetMapOfAllStartingThings()));
 
             do {
                 collection.SolvePartiallyUntilCloning();

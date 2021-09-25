@@ -83,10 +83,8 @@ describe("Solution", () => {
 
     it("Test cloning with High Permutation scene2", () => {
         const scene = new SceneSingle("./src/TestHighPermutationSolutionScene.json");
-        const map = scene.GetSolutionNodesMappedByInput();
-        const objective = "flag_win";
         const collection = new SolverViaRootNode();
-        collection.push(new Solution(new SolutionNode("", "", 1, null, objective), map, new Set<string>(),));
+        collection.InitializeByCopyingThese(scene.GetSolutionNodesMappedByInput(), scene.GetMapOfAllStartingThings());
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 

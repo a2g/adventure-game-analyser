@@ -62,17 +62,17 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 
 export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(scene: SceneInterfaceConcoct): void {
-        let setOfStartingThings = scene.GetSetOfStartingThings();
-        let solutionNodes = scene.GetSolutionNodesMappedByInput();
-        let setOfStartingAll = scene.GetSetOfStartingAll();
+        let mapOfVisibleThings = scene.GetMapOfAllStartingThings();
+        let mapOfRemainingNodes = scene.GetSolutionNodesMappedByInput();
+
         while (true) {
             console.log(" ");
 
             // Solve solution nodes
             const solver = new SolverViaRootNode();
-            solver.InitializeByCopyingThese(solutionNodes, setOfStartingAll);
+            solver.InitializeByCopyingThese(mapOfRemainingNodes, mapOfVisibleThings);
             solver.SolveUntilZeroNodesRemaining();
-            solver.GenerateSolutionNames(setOfStartingThings);
+            solver.GenerateSolutionNames(mapOfVisibleThings);
 
             const arrayOfRollovers = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
@@ -167,9 +167,9 @@ export class ChooseTheGoalToConcoctSolutionFor {
                 // traverse the solution graph, and find out - 
                 // from the map - which things are visible
                 // and which things aren't - wow
-                // setOfStartingThings = solution.GetSetOfStartingThings();
-                // solutionNodes = solution.GetSolutionNodesMappedByInput();
-                // setOfStartingAll = solution.GetSetOfStartingAll();
+                 
+                mapOfRemainingNodes = solution.GetMapOfCurrentlyRemainingNodes();
+                mapOfVisibleThings = solution.GetMapOfCurrentlyVisibleThings();
             }
         }
     }

@@ -12,9 +12,9 @@ export class SolverViaRootNode extends Array<Solution>{
         super();
     }
 
-    InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, setOfStartingAll: Set<string>) {
+    InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, mapOfVisibleThings: Map<string,Set<string>>) {
         const solutionRootNode = new SolutionNode("root via app", "", 1, null, "flag_win");
-        this.push(new Solution(solutionRootNode, solutionNodesMappedByInput, setOfStartingAll));
+        this.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfVisibleThings));
     }
 
     IsNodesRemaining(): boolean {
@@ -45,7 +45,7 @@ export class SolverViaRootNode extends Array<Solution>{
         this.GenerateSolutionNames(null);
     }
 
-    GenerateSolutionNames(startingSetOfThings: Set<[string, string]> | null) {
+    GenerateSolutionNames(mapOfStartingThings: Map<string,Set<string>> | null) {
         for (let i = 0; i < this.length; i++) {
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
@@ -69,8 +69,8 @@ export class SolverViaRootNode extends Array<Solution>{
             let minLeafNodeNameCount = 1000; //something high
             let minLeafNodeName = "not found";
 
-            // get all the restrictions from solution nodes
-            const currRestrictions = currSolution.getRestrictions();
+            // get the restrictions accumulated from all the solution nodes
+            const accumulatedRestrictions = currSolution.GetAccumulatedRestrictions();
 
             const currLeaves = currSolution.GetLeafNodes();
             for (let leafNode of currLeaves.values()) {
@@ -85,17 +85,19 @@ export class SolverViaRootNode extends Array<Solution>{
                 }
 
                 // now we potentially add startingSet items to restrictions
-                if (startingSetOfThings) {
-                    for (const startingThing of startingSetOfThings) {
-                        if (startingThing[1] === leafNode.output) {
-                            currRestrictions.add(startingThing[0]);
+                if (mapOfStartingThings) {
+                    mapOfStartingThings.forEach((value:Set<string>, key:string)=>{
+                        if (key === leafNode.output) {
+                            for(let char of accumulatedRestrictions){
+                                accumulatedRestrictions.add(char);
+                            }
                         }
-                    }
+                    });
                 }
 
             }
 
-            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (currRestrictions.size > 0 ? Embracketize(GetDisplayName(Array.from(currRestrictions))) : ""));
+            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (accumulatedRestrictions.size > 0 ? Embracketize(GetDisplayName(Array.from(accumulatedRestrictions))) : ""));
         }
     }
 }

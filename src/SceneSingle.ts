@@ -1,19 +1,13 @@
-import { SolutionNodeMap } from './SolutionNodeMap';
-import { SolutionNode } from './SolutionNode';
-import { assert } from 'console';
+import { SolutionNodeMap } from './SolutionNodeMap'; 
 import _ from './20210415JsonPrivate/Script/Script.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
-import { Happenings } from './Happenings';
-import { Happening } from './Happening';
-import { Happen } from './Happen';
+import { Happenings } from './Happenings'; 
 import { Mix } from './Mix';
 import { SceneInterface } from './SceneInterface';
-import * as fs from "fs";
-import { stringify } from 'querystring';
-import { SceneInterfaceCollater } from './SceneInterfaceCollater';
-import { ExtractBracketedPart } from './ExtractBracketedPart';
+import * as fs from "fs"; 
+import { SceneInterfaceCollater } from './SceneInterfaceCollater'; 
 import { SingleBigSwitch } from './SingleBigSwitch';
-import { GetSetOfStartingAll } from './GetSetOfStartingAll';
+import { isNullOrUndefined } from 'util';
 
 
 export class SceneSingle implements SceneInterface,
@@ -22,7 +16,7 @@ export class SceneSingle implements SceneInterface,
     allFlags: Array<string>;
     allInvs: Array<string>;
     allChars: Array<string>;
-    startingThingSet: Set<[string, string]>;
+    startingThingsMaster:  Map<string, Set<string>>
     startingInvSet: Set<string>;
     startingPropSet: Set<string>
     startingFlagSet: Set<string>
@@ -58,7 +52,8 @@ export class SceneSingle implements SceneInterface,
 
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
-            setChars.add(thing.char);
+            if(!isNullOrUndefined(thing.char))
+                setChars.add(thing.char);
         }
 
         setChars.delete("");
@@ -89,11 +84,17 @@ export class SceneSingle implements SceneInterface,
                 this.startingPropSet.add(thing.thing)
         }
 
-        this.startingThingSet = new Set<[string, string]>();
+        this.startingThingsMaster = new Map<string, Set<string>>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
-            const thing = scenario.startingThings[i];
-            if(thing.char !== undefined)
-                this.startingThingSet.add([thing.char, thing.thing]);
+            const char: string = isNullOrUndefined(scenario.startingThings[i].char) ? "" : scenario.startingThings[i].char;
+            const item = scenario.startingThings[i].thing;
+            if (!this.startingThingsMaster.has(item.thing)) {
+                this.startingThingsMaster.set(item.thing, new Set<string>());
+            }
+            const array = this.startingThingsMaster.get(item.thing);
+            if (char.length && array != null) {
+                array.add(char);
+            }
         }
     }
 
@@ -112,16 +113,19 @@ export class SceneSingle implements SceneInterface,
             givenSet.add(inv);
         }
     }
-    AddStartingThingsToGivenSet(givenSet: Set<[string, string]>): void {
-        for (let thing of this.startingThingSet) {
-            givenSet.add(thing);
-        }
+
+    AddStartingThingCharsToGivenMap(givenMap: Map<string, Set<string>>): void {
+        this.startingThingsMaster.forEach((value:Set<string>, key:string)=>{
+            givenMap.set(key,value);
+        });
     }
+
     AddPropsToGivenSet(givenSet: Set<string>): void {
         for (let prop of this.allProps) {
             givenSet.add(prop);
         }
     }
+
     AddFlagsToGivenSet(givenSet: Set<string>): void {
         for (let flag of this.allFlags) {
             givenSet.add(flag);
@@ -181,21 +185,21 @@ export class SceneSingle implements SceneInterface,
         return this.startingInvSet;
     }
 
-    GetSetOfStartingThings(): Set<[string, string]> {
-        return this.startingThingSet;
+    GetMapOfAllStartingThings(): Map<string, Set<string>> {
+        return this.startingThingsMaster;
     }
 
-    GetSetOfStartingAll(): Set<string> {
-        return GetSetOfStartingAll(this.startingThingSet, this.startingInvSet, this.startingPropSet);
-    }
-
-    GetStartingThingsForCharacter(name: string): Set<string> {
+    GetStartingThingsForCharacter(charName: string): Set<string> {
         const startingThingSet = new Set<string>();
-        for (const thing of this.startingThingSet) {
-            if (thing[0] === name) {
-                startingThingSet.add(thing[1])
+        this.startingThingsMaster.forEach((value: Set<string>, thing: string) => {
+            for (let item of value) {
+                if (item == charName) {
+                    startingThingSet.add(thing);
+                    break;
+                }
             }
-        }
+        });
+        
         return startingThingSet;
     }
 
