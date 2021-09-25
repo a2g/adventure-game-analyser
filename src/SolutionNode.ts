@@ -1,4 +1,4 @@
-import { SolverViaRootNode } from './SolutionCollection';
+import { SolverViaRootNode } from './SolverViaRootNode';
 import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
 //import { assert } from 'console';

@@ -1,4 +1,4 @@
-import { SolverViaRootNode } from "./SolutionCollection";
+import { SolverViaRootNode } from "./SolverViaRootNode";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
