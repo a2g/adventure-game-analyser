@@ -1,6 +1,6 @@
 //Typescript Unit test
 import assert = require('assert');
-import { SolutionCollection } from '../src/SolutionCollection';
+import { SolverViaRootNode } from '../src/SolutionCollection';
 import { SolutionNode } from '../src/SolutionNode';
 import { Solution } from '../src/Solution';
 import { SceneSingle } from '../src/SceneSingle';
@@ -85,7 +85,7 @@ describe("Solution", () => {
         const scene = new SceneSingle("./src/TestHighPermutationSolutionScene.json");
         const map = scene.GetSolutionNodesMappedByInput();
         const objective = "flag_win";
-        const collection = new SolutionCollection();
+        const collection = new SolverViaRootNode();
         collection.push(new Solution(new SolutionNode("", "", 1, null, objective), map, new Set<string>(),));
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);

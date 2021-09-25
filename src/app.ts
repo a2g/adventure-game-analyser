@@ -9,7 +9,7 @@ import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
 import { HappenerCallbacksInterface } from './HappenerCallbacksInterface';
 import { Happener } from './Happener';
 import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
-import { SolutionCollection } from './SolutionCollection';
+import { SolverViaRootNode } from './SolutionCollection';
 import { SolutionNode } from './SolutionNode';
 import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import { ChooseToPlayThrough as ChooseToPlaySingleSection } from './ChooseToPlaySingle';

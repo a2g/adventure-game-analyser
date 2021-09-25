@@ -1,6 +1,6 @@
 //Typescript Unit test
 import assert = require('assert');
-import { SolutionCollection } from '../src/SolutionCollection';
+import { SolverViaRootNode } from '../src/SolutionCollection';
 import { SolutionNode } from '../src/SolutionNode';
 import { Solution } from '../src/Solution';
 import { SceneSingle } from '../src/SceneSingle';

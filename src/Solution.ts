@@ -1,5 +1,5 @@
 
-import { SolutionCollection } from './SolutionCollection';
+import { SolverViaRootNode } from './SolutionCollection';
 import { SolutionNode } from './SolutionNode';
 import { SpecialNodes } from './SpecialNodes';
 import { assert } from 'console';
@@ -9,6 +9,19 @@ import { Raw } from './Raw';
 import _ from './20210415JsonPrivate/Script/Script.json';
 
 export class Solution {
+    IsRolloverable(): boolean {
+        // rootNode.inputs[0] is "flag_win"
+        // rootNode.inputs[0].input[0] is flag_subwin_anthony
+        // but since we moved the name in to inputHints, the
+        if (this.rootNode) {
+            if (this.rootNode.inputs[0]){
+                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_subwin")){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Set<string>, restrictions: Set<string> | null = null) {
         // initialize non aggregates
         {
@@ -94,7 +107,7 @@ export class Solution {
         this.leafNodes.set(path, node);
     }
 
-    ProcessUntilCloning(solutions: SolutionCollection): boolean {
+    ProcessUntilCloning(solutions: SolverViaRootNode): boolean {
         const isBreakingDueToSolutionCloning = this.rootNode.ProcessUntilCloning(this, solutions, "/");
         if (!isBreakingDueToSolutionCloning) {
             // then this means the root node has rolled to completion

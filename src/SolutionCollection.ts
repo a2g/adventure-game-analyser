@@ -6,7 +6,7 @@ import { Embracketize } from './Embracketize';
 import { SolutionNodeMap } from './SolutionNodeMap';
 
 
-export class SolutionCollection extends Array<Solution>{
+export class SolverViaRootNode extends Array<Solution>{
 
     constructor() {
         super();

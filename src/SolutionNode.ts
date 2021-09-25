@@ -1,4 +1,4 @@
-import { SolutionCollection } from './SolutionCollection';
+import { SolverViaRootNode } from './SolutionCollection';
 import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
 //import { assert } from 'console';
@@ -117,7 +117,7 @@ export class SolutionNode {
         return null;
     }
 
-    ProcessUntilCloning(solution: Solution, solutions: SolutionCollection, path: string): boolean {
+    ProcessUntilCloning(solution: Solution, solutions: SolverViaRootNode, path: string): boolean {
         path += this.output + "/";
         if (this.type === SpecialNodes.VerifiedLeaf)
             return false;// false just means keep processing.

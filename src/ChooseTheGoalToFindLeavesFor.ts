@@ -1,4 +1,4 @@
-import { SolutionCollection } from "./SolutionCollection";
+import { SolverViaRootNode } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
@@ -14,7 +14,7 @@ export class ChooseTheGoalToFindLeavesFor {
         while (true) {
             console.log(" ");
 
-            const collection = new SolutionCollection();
+            const collection = new SolverViaRootNode();
             const objective = "flag_win";
             collection.push(new Solution(new SolutionNode("root via app", "", 1, null, objective), scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll()));
 

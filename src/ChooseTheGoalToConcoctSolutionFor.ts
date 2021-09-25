@@ -1,5 +1,5 @@
 
-import { SolutionCollection } from "./SolutionCollection";
+import { SolverViaRootNode } from "./SolutionCollection";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import { GetDisplayName } from "./GetDisplayName";
@@ -62,95 +62,114 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 
 export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(scene: SceneInterfaceConcoct): void {
+        let setOfStartingThings = scene.GetSetOfStartingThings();
+        let solutionNodes = scene.GetSolutionNodesMappedByInput();
+        let setOfStartingAll = scene.GetSetOfStartingAll();
         while (true) {
             console.log(" ");
 
-          
             // Solve solution nodes
-            const collection = new SolutionCollection();
-            collection.InitializeByCopyingThese(scene.GetSolutionNodesMappedByInput(), scene.GetSetOfStartingAll());
-            collection.SolveUntilZeroNodesRemaining();
-            collection.GenerateSolutionNames(scene.GetSetOfStartingThings());
+            const solver = new SolverViaRootNode();
+            solver.InitializeByCopyingThese(solutionNodes, setOfStartingAll);
+            solver.SolveUntilZeroNodesRemaining();
+            solver.GenerateSolutionNames(setOfStartingThings);
 
+            const arrayOfRollovers = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
-            for (let i = 0; i < collection.length; i++) {
-                console.log(" " + i + ". " + GetDisplayName(collection[i].GetName()));
+            for (let i = 0; i < solver.length; i++) {
+                console.log(" " + i + ". Analyze " + GetDisplayName(solver[i].GetName()));
+                if (solver[i].IsRolloverable())
+                    arrayOfRollovers.push(solver[i]);
             };
+
+            for (let i = 0; i < arrayOfRollovers.length; i++) {
+                console.log(" " + i + ". Rollover " + GetDisplayName(arrayOfRollovers[i].GetName()));
+            }
 
             const choice = prompt('').toLowerCase();
             if (choice === "b")
                 break;
 
-            // use either index or 
-            //const objective = (Number(choice) >= 0 && Number(choice) < collection.length) ? collection[Number(choice)].GetName() : choice;
-            //console.log("\"" + GetDisplayName(objective) + "\" was entered");
-
             // go through each one 
-            for (let i = 0; i < collection.length; i++) {
-                if (choice !== "-1" && i !== Number(choice))
-                    continue;
-                const originalSolution = collection[i];
-                console.log("Solution called " + GetDisplayName(originalSolution.GetName()));
-                let solutionToDestroy = originalSolution;
+            if (Number(choice) < solver.length) {
+                // Process an Analyse option from above
+                for (let i = 0; i < solver.length; i++) {
+                    if (choice !== "-1" && i !== Number(choice))
+                        continue;
+                    const originalSolution = solver[i];
+                    console.log("Solution called " + GetDisplayName(originalSolution.GetName()));
+                    let solutionToDestroy = originalSolution;
 
-                let rawObjectsAndVerb: RawObjectsAndVerb | null = null;
-                for (let j = 0; j < 200; j++) {
-                    rawObjectsAndVerb = solutionToDestroy.GetNextDoableCommandAndDesconstructTree();
+                    let rawObjectsAndVerb: RawObjectsAndVerb | null = null;
+                    for (let j = 0; j < 200; j++) {
+                        rawObjectsAndVerb = solutionToDestroy.GetNextDoableCommandAndDesconstructTree();
 
-                    if (!rawObjectsAndVerb)// all out of moves!
-                        break;
+                        if (!rawObjectsAndVerb)// all out of moves!
+                            break;
 
-                    const chars = scene.GetArrayOfCharacters();
-                    for (let i = 0; i < chars.length; i++) {
-                        const char = chars[i];
-                        const startingSet = scene.GetStartingThingsForCharacter(char);
-                        if (startingSet.has(rawObjectsAndVerb.objectA))
-                            rawObjectsAndVerb.appendStartingCharacterForA(char);
-                        if (startingSet.has(rawObjectsAndVerb.objectB))
-                            rawObjectsAndVerb.appendStartingCharacterForB(char);
+                        const chars = scene.GetArrayOfCharacters();
+                        for (let i = 0; i < chars.length; i++) {
+                            const char = chars[i];
+                            const startingSet = scene.GetStartingThingsForCharacter(char);
+                            if (startingSet.has(rawObjectsAndVerb.objectA))
+                                rawObjectsAndVerb.appendStartingCharacterForA(char);
+                            if (startingSet.has(rawObjectsAndVerb.objectB))
+                                rawObjectsAndVerb.appendStartingCharacterForB(char);
+                        }
+
+                        if (rawObjectsAndVerb.type !== Raw.None)
+                            rawObjectsAndVerb.WriteToConsole();
+
+                        if (rawObjectsAndVerb.type == Raw.You_have_won_the_game) {
+                            // this is just here for debugging!
+                            let debugMe = solutionToDestroy.GetNextDoableCommandAndDesconstructTree();
+                            break;
+                        }
                     }
 
-                    if (rawObjectsAndVerb.type !== Raw.None)
-                        rawObjectsAndVerb.WriteToConsole();
+                    if (!rawObjectsAndVerb) {
+                        const leafNodesRequiredBySolution = new Set<string>();
+                        originalSolution.GetLeafNodes().forEach((value: SolutionNode) => {
+                            leafNodesRequiredBySolution.add(value.output);
+                        });
+                        const startingProps = scene.GetSetOfStartingProps();
+                        const startingInvs = scene.GetSetOfStartingInvs();
+                        const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
+                        const setAfterReduction = IntersectionSet(leafNodesRequiredBySolution, startingPropsAndInvs);
+                        const isSolvable = IsASupersetOfB(startingPropsAndInvs, leafNodesRequiredBySolution);
 
-                    if (rawObjectsAndVerb.type == Raw.You_have_won_the_game) {
-                        // this is just here for debugging!
-                        let debugMe = solutionToDestroy.GetNextDoableCommandAndDesconstructTree();
-                        break;
+                        // error handling
+                        if (!isSolvable) {
+                            console.log("Starting set needs to have more stuff(props probably):");
+                            leafNodesRequiredBySolution.forEach((entry: string) => {
+                                console.log(GetDisplayName(entry));
+                            })
+                            console.log("-------^^ Above are the leaf nodes laid out in the Solution");
+                            console.log("Below are all the starting things");
+
+                            setAfterReduction.forEach((entry: string) => {
+                                console.log(GetDisplayName(entry));
+                            })
+
+                            console.log("Spot what needs to be in the starting set - and fix it!");
+                            prompt('Hit a key to continue').toLowerCase();
+                        } else {
+                            console.log("rawObjectsAndVerb was null, but it looked solvable. WEIRD! debug this.")
+                        }
                     }
+                    console.log("");
                 }
+            } else {// Process rollover
+                const newIndex = Number(choice)-solver.length;
+                const solution = arrayOfRollovers[newIndex];
 
-                if (!rawObjectsAndVerb) {
-                    const leafNodesRequiredBySolution = new Set<string>();
-                    originalSolution.GetLeafNodes().forEach((value: SolutionNode) => {
-                        leafNodesRequiredBySolution.add(value.output);
-                    });
-                    const startingProps = scene.GetSetOfStartingProps();
-                    const startingInvs = scene.GetSetOfStartingInvs();
-                    const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
-                    const setAfterReduction = IntersectionSet(leafNodesRequiredBySolution, startingPropsAndInvs);
-                    const isSolvable = IsASupersetOfB(startingPropsAndInvs, leafNodesRequiredBySolution);
-
-                    // error handling
-                    if (!isSolvable) {
-                        console.log("Starting set needs to have more stuff(props probably):");
-                        leafNodesRequiredBySolution.forEach((entry: string) => {
-                            console.log(GetDisplayName(entry));
-                        })
-                        console.log("-------^^ Above are the leaf nodes laid out in the Solution");
-                        console.log("Below are all the starting things");
-
-                        setAfterReduction.forEach((entry: string) => {
-                            console.log(GetDisplayName(entry));
-                        })
-
-                        console.log("Spot what needs to be in the starting set - and fix it!");
-                        prompt('Hit a key to continue').toLowerCase();
-                    } else {
-                        console.log("rawObjectsAndVerb was null, but it looked solvable. WEIRD! debug this.")
-                    }
-                }
-                console.log("");
+                // need to implement these methods so that they
+                // traverse the solution graph, and find out - 
+                // from the map - which things are visible
+                // and which things aren't - wow
+                // setOfStartingThings = solution.GetSetOfStartingThings();
+                // solutionNodes = solution.GetSolutionNodesMappedByInput();
+                // setOfStartingAll = solution.GetSetOfStartingAll();
             }
         }
     }
