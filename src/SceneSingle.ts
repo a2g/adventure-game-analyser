@@ -75,28 +75,25 @@ export class SceneSingle implements SceneInterface,
         this.allInvs = Array.from(setInvs.values());
         this.allChars = Array.from(setChars.values());
 
-        // preen starting set from JSON
-        const startingPropsSet = new Set<string>();
-        scenario.startingProps.forEach(function (value: { prop: string; }, index: number, array: { prop: string; }[]): void {
-            startingPropsSet.add("" + value.prop);
-        });
-        this.startingPropSet = startingPropsSet;
-
         // preen starting invs from the startingThings
         this.startingInvSet = new Set<string>();
         this.startingFlagSet = new Set<string>();
+        this.startingPropSet  = new Set<string>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
             if (thing.thing.startsWith("inv"))
                 this.startingInvSet.add(thing.thing)
             if (thing.thing.startsWith("flag"))
                 this.startingFlagSet.add(thing.thing)
+            if (thing.thing.startsWith("prop"))
+                this.startingPropSet.add(thing.thing)
         }
 
         this.startingThingSet = new Set<[string, string]>();
         for (let i = 0; i < scenario.startingThings.length; i++) {
             const thing = scenario.startingThings[i];
-            this.startingThingSet.add([thing.char, thing.thing]);
+            if(thing.char !== undefined)
+                this.startingThingSet.add([thing.char, thing.thing]);
         }
     }
 

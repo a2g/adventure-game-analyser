@@ -133,41 +133,6 @@
             "prop3": "prop_switched_on_item1"
         }
     ],
-    "startingProps": [
-        {
-            "prop": "prop_vacuum_tube"
-        },
-        {
-            "prop": "prop_switch1"
-        },
-        {
-            "prop": "prop_rigging_place1"
-        },
-        {
-            "prop": "prop_switch2"
-        },
-        {
-            "prop": "prop_rigging_place2"
-        },
-        {
-            "prop": "prop_switch3"
-        },
-        {
-            "prop": "prop_rigging_place3"
-        },
-        {
-            "prop": "prop_switch4"
-        },
-        {
-            "prop": "prop_rigging_place4"
-        },
-        {
-            "prop": "prop_switch5"
-        },
-        {
-            "prop": "prop_rigging_place5"
-        }
-    ],
     "startingThings": [
         {
             "char":"char_",
@@ -176,6 +141,39 @@
         {
             "char" : "char_",
             "thing" :"inv_final_catalyst"
+        },
+        {
+            "thing": "prop_vacuum_tube"
+        },
+        {
+            "thing": "prop_switch1"
+        },
+        {
+            "thing": "prop_rigging_place1"
+        },
+        {
+            "thing": "prop_switch2"
+        },
+        {
+            "thing": "prop_rigging_place2"
+        },
+        {
+            "thing": "prop_switch3"
+        },
+        {
+            "thing": "prop_rigging_place3"
+        },
+        {
+            "thing": "prop_switch4"
+        },
+        {
+            "thing": "prop_rigging_place4"
+        },
+        {
+            "thing": "prop_switch5"
+        },
+        {
+            "thing": "prop_rigging_place5"
         }
     ]
 }
