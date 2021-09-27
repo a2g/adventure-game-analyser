@@ -8,6 +8,7 @@ import { RawObjectsAndVerb } from './RawObjectsAndVerb';
 import { Raw } from './Raw';
 import _ from './20210415JsonPrivate/Script/Script.json';
 import { stringify } from 'querystring';
+import { isNullOrUndefined } from 'util';
 
 export class Solution {
     constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string,Set<string>>, restrictions: Set<string> | null = null) {
@@ -242,13 +243,33 @@ export class Solution {
         return false;
     }
 
-    GetMapOfCurrentlyVisibleThings(): Map<string,Set<string>> {
-       return this.mapOfVisibleThings;
+    GetMapOfCurrentlyVisibleThings(visibleNodes:Map<string,Set<string>>): Map<string, Set<string>> {
+        const array = new Array<SolutionNode>();
+        this.CollectArrayOfNodesInAWidthFirstRecursively(this.rootNode, array);
+
+        for(let i=array.length-1;i>=0;i--){
+            array[i].UpdateMapWithOutcomes(visibleNodes);
+        }
+        return this.mapOfVisibleThings;
     }
+
     GetMapOfCurrentlyRemainingNodes(): SolutionNodeMap {
-        // yup looks like we remove nodes from this when we use them up
+        // we already remove nodes from this when we use them up
         // so returning the current node map is ok
         return this.nodeMap;
+    }
+
+    private CollectArrayOfNodesInAWidthFirstRecursively(n:SolutionNode, array:Array<SolutionNode|null>){
+        for(let input of n.inputs){
+            array.push(input);
+        }
+
+        for(let input of n.inputs){
+            if(!isNullOrUndefined(input))
+            {
+                this.CollectArrayOfNodesInAWidthFirstRecursively(input, array);
+            }
+        }
     }
 
     private AddToMapOfVisibleThings(thing:string){

@@ -162,14 +162,9 @@ export class ChooseTheGoalToConcoctSolutionFor {
             } else {// Process rollover
                 const newIndex = Number(choice)-solver.length;
                 const solution = arrayOfRollovers[newIndex];
-
                 // need to implement these methods so that they
-                // traverse the solution graph, and find out - 
-                // from the map - which things are visible
-                // and which things aren't - wow
-                 
                 mapOfRemainingNodes = solution.GetMapOfCurrentlyRemainingNodes();
-                mapOfVisibleThings = solution.GetMapOfCurrentlyVisibleThings();
+                mapOfVisibleThings = solution.GetMapOfCurrentlyVisibleThings(mapOfVisibleThings);
             }
         }
     }

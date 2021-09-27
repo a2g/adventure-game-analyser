@@ -3,6 +3,8 @@ import { SpecialNodes } from './SpecialNodes';
 import { Solution } from './Solution';
 //import { assert } from 'console';
 import { isNullOrUndefined } from 'util';
+import { Happenings } from './Happenings';
+import { Happen } from './Happen';
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
         throw new Error("assert failure");
@@ -12,17 +14,11 @@ function assert(condition: any, msg?: string): asserts condition {
 let globalId = 1;
 
 export class SolutionNode {
-    id: number;
-    type: string;
-    output: string;
-    inputs: Array<SolutionNode | null>;
-    inputHints: Array<string>;
-    parent: SolutionNode | null;// this is not needed for leaf finding - but *is* needed for command finding. 
-    count: number;
-    characterRestrictions: Array<string>;
+
     constructor(output: string,
         type = "undefined",
         count = 1, // put it here so all the tests don't need to specify it.
+        happs: Happenings | null = null,
         restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
         inputA = "undefined",
         inputB = "undefined",
@@ -36,6 +32,7 @@ export class SolutionNode {
         this.count = count;
         this.output = output;
         this.type = type;
+        this.happs = happs;
         this.characterRestrictions = new Array<string>();
         if (!isNullOrUndefined(restrictions)) {
             for (const restriction of restrictions) {
@@ -220,6 +217,35 @@ export class SolutionNode {
     getRestrictions(): Array<string> {
         return this.characterRestrictions;
     }
+
+
+    UpdateMapWithOutcomes(visibleNodes: Map<string, Set<string>>) {
+        if (this.happs) {
+            for (let happ of this.happs.array){
+                switch(happ.happen){
+                    case Happen.FlagIsSet:
+                    case Happen.InvAppears:
+                    case Happen.PropAppears:
+                        visibleNodes.set(happ.item, new Set<string>())
+                        break;
+                    case Happen.InvGoes:
+                    case Happen.PropGoes:
+                        visibleNodes.delete(happ.item);
+                        break;
+                }
+            }
+        }
+    }
+
+    id: number;
+    type: string;
+    output: string;
+    inputs: Array<SolutionNode | null>;
+    inputHints: Array<string>;
+    parent: SolutionNode | null;// this is not needed for leaf finding - but *is* needed for command finding. 
+    count: number;
+    characterRestrictions: Array<string>;
+    happs: Happenings | null;
 
 }
 

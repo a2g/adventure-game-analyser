@@ -80,11 +80,11 @@ describe("Solution", () => {
 */
 
     it("Test cloning with High Permutation scene2", () => {
-        let root = new SolutionNode("root", "", 1, null, "A");
-        let segA = new SolutionNode("A", "", 1, null, "B");
-        let segB = new SolutionNode("B", "", 1, null, "C");
-        let segC = new SolutionNode("C", "", 1, null, "D");
-        let segD = new SolutionNode("D", SpecialNodes.VerifiedLeaf, 1, null, "E");
+        let root = new SolutionNode("root", "", 1, null, null, "A");
+        let segA = new SolutionNode("A", "", 1, null, null, "B");
+        let segB = new SolutionNode("B", "", 1, null, null, "C");
+        let segC = new SolutionNode("C", "", 1, null, null, "D");
+        let segD = new SolutionNode("D", SpecialNodes.VerifiedLeaf, 1, null, null, "E");
         root.inputs.push(segA);
         segA.inputs.push(segB);
         segB.inputs.push(segC);

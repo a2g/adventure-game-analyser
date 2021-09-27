@@ -13,7 +13,7 @@ export class SolverViaRootNode extends Array<Solution>{
     }
 
     InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, mapOfVisibleThings: Map<string,Set<string>>) {
-        const solutionRootNode = new SolutionNode("root via app", "", 1, null, "flag_win");
+        const solutionRootNode = new SolutionNode("root via app", "", 1, null, null, "flag_win");
         this.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfVisibleThings));
     }
 
