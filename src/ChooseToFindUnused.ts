@@ -3,12 +3,11 @@ import { SolutionNode } from "./SolutionNode";
 import { SceneInterfaceFindUsed } from './SceneInterfaceFindUsed';
 const prompt = promptSync();
 
-
 export class ChooseToFindUnused {
     public DoStuff(scene: SceneInterfaceFindUsed): void {
         const invs = scene.GetArrayOfInvs();
         const props = scene.GetArrayOfProps();
-        const it = scene.GetSolutionNodesMappedByInput().GetValues();
+        const it = scene.GenerateSolutionNodesMappedByInput().GetValues();
 
         while (true) {
             const c = it.next();
@@ -41,7 +40,5 @@ export class ChooseToFindUnused {
         invs.forEach((name: string) => {
             console.log(name);
         });
-
-
     }
 }

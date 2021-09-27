@@ -12,7 +12,7 @@ export interface SceneInterfaceHappener {
     GetArrayOfInitialStatesOfProps(): Array<boolean>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
-    GetSolutionNodesMappedByInput(): SolutionNodeMap;
+    GenerateSolutionNodesMappedByInput(): SolutionNodeMap;
     GetArrayOfInitialStatesOfFlags(): Array<number>;
-    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
+    FindHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }

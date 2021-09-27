@@ -14,6 +14,6 @@ export interface SceneInterfacePlayThru {
     GetArrayOfInitialStatesOfFlags(): Array<number>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
-    GetSolutionNodesMappedByInput(): SolutionNodeMap;
-    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
+    GenerateSolutionNodesMappedByInput(): SolutionNodeMap;
+    FindHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }

@@ -153,7 +153,7 @@ export class SceneMultipleCombined implements SceneInterface {
         return this.allChars;
     }
 
-    GetSolutionNodesMappedByInput(): SolutionNodeMap {
+    GenerateSolutionNodesMappedByInput(): SolutionNodeMap {
         const solutionNodesMappedByInput = new SolutionNodeMap(null);
 
         for (let filename of this.allScenes.keys()) {
@@ -163,7 +163,7 @@ export class SceneMultipleCombined implements SceneInterface {
         return solutionNodesMappedByInput;
     }
 
-    GetHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
+    FindHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
         for (let filename of this.allScenes.keys()) {
             const result = SingleBigSwitch(filename, null, objects) as unknown as Happenings | null;
             if (result)

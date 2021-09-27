@@ -27,7 +27,7 @@ export function ChooseToPlayThrough(scene: SceneInterface, numberOfAutopilotTurn
     {
         const happener = new Happener(scene);
         const ai: PlayerAI = new PlayerAI(happener, numberOfAutopilotTurns);
-        const autos = scene.GetSolutionNodesMappedByInput().GetAutos();
+        const autos = scene.GenerateSolutionNodesMappedByInput().GetAutos();
 
         while (true) {
             const invs = happener.GetCurrentVisibleInventory();

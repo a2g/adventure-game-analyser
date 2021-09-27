@@ -86,7 +86,7 @@ export class Happener {
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
 
-        const happenings = this.scene.GetHappeningsIfAny(objects);
+        const happenings = this.scene.FindHappeningsIfAny(objects);
         if (happenings) {
             console.log(happenings.text);
             for (const happening of happenings.array) {

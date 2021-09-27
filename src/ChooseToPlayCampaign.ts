@@ -232,7 +232,7 @@ function ProcessAutos(s: Section) {
     const invs = s.happener.GetCurrentVisibleInventory();
     const props = s.happener.GetCurrentVisibleProps();
 
-    const autos = s.scene.GetSolutionNodesMappedByInput().GetAutos();
+    const autos = s.scene.GenerateSolutionNodesMappedByInput().GetAutos();
     for (const autonode of autos) {
         let numberSatisified = 0;
         for (let inputName of autonode.inputHints) {

@@ -63,7 +63,7 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(scene: SceneInterfaceConcoct): void {
         let mapOfVisibleThings = scene.GetMapOfAllStartingThings();
-        let mapOfRemainingNodes = scene.GetSolutionNodesMappedByInput();
+        let mapOfRemainingNodes = scene.GenerateSolutionNodesMappedByInput();
 
         while (true) {
             console.log(" ");
