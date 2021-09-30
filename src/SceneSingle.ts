@@ -16,7 +16,7 @@ export class SceneSingle implements SceneInterface,
     allFlags: Array<string>;
     allInvs: Array<string>;
     allChars: Array<string>;
-    startingThingsMaster:  Map<string, Set<string>>
+    mapOfStartingThings:  Map<string, Set<string>>
     startingInvSet: Set<string>;
     startingPropSet: Set<string>
     startingFlagSet: Set<string>
@@ -84,16 +84,17 @@ export class SceneSingle implements SceneInterface,
                 this.startingPropSet.add(thing.thing)
         }
 
-        this.startingThingsMaster = new Map<string, Set<string>>();
-        for (let i = 0; i < scenario.startingThings.length; i++) {
-            const char: string = isNullOrUndefined(scenario.startingThings[i].char) ? "" : scenario.startingThings[i].char;
-            const item = scenario.startingThings[i].thing;
-            if (!this.startingThingsMaster.has(item.thing)) {
-                this.startingThingsMaster.set(item.thing, new Set<string>());
+        this.mapOfStartingThings = new Map<string, Set<string>>();
+        for (let item of scenario.startingThings) {
+            if (!this.mapOfStartingThings.has(item.thing)) {
+                this.mapOfStartingThings.set(item.thing, new Set<string>());
             }
-            const array = this.startingThingsMaster.get(item.thing);
-            if (char.length && array != null) {
-                array.add(char);
+            if (!isNullOrUndefined(item.char)) {
+                const char = item.char;
+                const array = this.mapOfStartingThings.get(item.thing);
+                if (char.length && array != null) {
+                    array.add(char);
+                }
             }
         }
     }
@@ -115,7 +116,7 @@ export class SceneSingle implements SceneInterface,
     }
 
     AddStartingThingCharsToGivenMap(givenMap: Map<string, Set<string>>): void {
-        this.startingThingsMaster.forEach((value:Set<string>, key:string)=>{
+        this.mapOfStartingThings.forEach((value:Set<string>, key:string)=>{
             givenMap.set(key,value);
         });
     }
@@ -186,12 +187,12 @@ export class SceneSingle implements SceneInterface,
     }
 
     GetMapOfAllStartingThings(): Map<string, Set<string>> {
-        return this.startingThingsMaster;
+        return this.mapOfStartingThings;
     }
 
     GetStartingThingsForCharacter(charName: string): Set<string> {
         const startingThingSet = new Set<string>();
-        this.startingThingsMaster.forEach((value: Set<string>, thing: string) => {
+        this.mapOfStartingThings.forEach((value: Set<string>, thing: string) => {
             for (let item of value) {
                 if (item == charName) {
                     startingThingSet.add(thing);
