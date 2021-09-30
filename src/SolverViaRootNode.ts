@@ -86,9 +86,9 @@ export class SolverViaRootNode extends Array<Solution>{
 
                 // now we potentially add startingSet items to restrictions
                 if (mapOfStartingThings) {
-                    mapOfStartingThings.forEach((value:Set<string>, key:string)=>{
+                    mapOfStartingThings.forEach((chars:Set<string>, key:string)=>{
                         if (key === leafNode.output) {
-                            for(let char of accumulatedRestrictions){
+                            for(let char of chars){
                                 accumulatedRestrictions.add(char);
                             }
                         }
