@@ -5,11 +5,7 @@ import { Solution } from './Solution';
 import { isNullOrUndefined } from 'util';
 import { Happenings } from './Happenings';
 import { Happen } from './Happen';
-function assert(condition: any, msg?: string): asserts condition {
-    if (!condition) {
-        throw new Error("assert failure");
-    }
-}
+
 
 let globalId = 1;
 
@@ -171,14 +167,16 @@ export class SolutionNode {
 
                     // rediscover the current node in theSolution - again because we might be cloned
                     const theNode = theSolution.GetRootNode().FindAnyNodeMatchingIdRecursively(this.id);
-                    assert(theNode && "if node is null then we are cloning wrong");
-                    if (theNode) {
+                   if (theNode) {
                         theMatchingNode.parent = theNode;
                         theNode.inputs[k] = theMatchingNode;
                         // all reactions are incomplete when they come from the node map
                         theSolution.SetNodeIncomplete(theMatchingNode);
                         theSolution.AddRestrictions(theMatchingNode.getRestrictions());
+                    }else{
+                        console.log("node is null - so we havet we are cloning wrong");
                     }
+
                 }
 
                 const hasACloneJustBeenCreated = matchingNodes.length > 1;
@@ -193,13 +191,15 @@ export class SolutionNode {
         // now to process each of those nodes that have been filled out
         for (const input of this.inputs) {
             const inputNode = input;
-            assert(inputNode && "Input node=" + inputNode + " <-If this fails there is something wrong with the loop in first half of this method");
             if (inputNode) {
                 if (inputNode.type === SpecialNodes.VerifiedLeaf)
                     continue;// this means its already been searhed for in the map, without success.
                 const hasACloneJustBeenCreated = inputNode.ProcessUntilCloning(solution, solutions, path);
                 if (hasACloneJustBeenCreated)
                     return true;
+            }else{
+                 //assert(inputNode && "Input node=" + inputNode + " <-If this fails there is something wrong with the loop in first half of this method");
+                console.log( "Input node=" + inputNode + " <-If this fails there is something wrong with the loop in first half of this method");
             }
         }
 

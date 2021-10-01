@@ -92,7 +92,6 @@ export class Solution {
     }
 
     AddVerifiedLeaf(path: string, node: SolutionNode): void {
-        assert(node.output);
         this.leafNodes.set(path, node);
     }
 
@@ -210,7 +209,7 @@ export class Solution {
                     // so we need to set breakpoint on this return, and the one above, and debug
                     return new RawObjectsAndVerb(Raw.You_have_won_the_game, node.inputHints[0], "", node.getRestrictions(), node.type);
                 } else {
-                    assert(false && " type not identified");
+                    //assert(false && " type not identified");
                     console.log("Assertion because of type not Identified!: " + node.type + node.inputs[0]);
                 }
             }

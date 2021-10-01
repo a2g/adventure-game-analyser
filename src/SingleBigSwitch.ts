@@ -353,7 +353,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 }
                 break;
             default:
-                assert(false && scriptType && "We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema.");
+                console.log( "We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema. " + scriptType);
 
         }
     }

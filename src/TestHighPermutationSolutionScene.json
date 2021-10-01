@@ -33,7 +33,7 @@
             "prop2": "prop_switched_on_item5"
         },
         {
-            "script": "FLAG1_SET_BY_USING_PROP1_WITH_PROP2",
+            "script": "PROP1_BECOMES_PROP2_BY_LOSING_INV1",
             "prop1": "prop_rigging_place1",
             "prop2": "prop_attached_item1",
             "inv1": "inv_box_of_items"

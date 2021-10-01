@@ -9,17 +9,21 @@ export class Happening {
             case Happen.InvGoes:
             case Happen.InvStays:
             case Happen.InvAppears:
-                assert(item?.startsWith("inv"));
+                if(!item.startsWith("inv"))
+                    console.log("Mismatch! the item doesn't start with 'inv'");
                 break;
             case Happen.PropGoes:
             case Happen.PropStays:
             case Happen.PropAppears:
-                assert(item?.startsWith("prop"));
+                if(!item.startsWith("prop"))
+                    console.log("Mismatch! the item doesn't start with 'Prop'");
                 break;
             case Happen.FlagIsDecremented:
             case Happen.FlagIsIncremented:
             case Happen.FlagIsSet:
-                assert(item?.startsWith("flag"));
+                if(!item.startsWith("flag"))
+                    console.log("Mismatch! the item doesn't start with 'flag'");
+                break;
                 break;
         }
     }
