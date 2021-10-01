@@ -6,14 +6,23 @@
     "definitions": {
         "char_type": {
             "enum": [
-                "char_"
+                "char1",
+                "char2",
+                "char3",
+                "char4"
             ]
         },
         "inv_type": {
             "enum": [
                 "inv_final_catalyst",
                 "inv_tube_carrier",
-                "inv_box_of_items"
+                "inv_box_of_items",
+                "inv_char1_toy",
+                "inv_char2_toy",
+                "inv_char3_toy",
+                "inv_char4_toy",
+                "inv_shared_toy"
+
             ]
         },
         "prop_type": {
@@ -49,7 +58,7 @@
                 "prop_stageB",
                 "prop_stageC",
                 "prop_stageD",
-                "prop_stageE"
+                "prop_stageE"              
             ]
         },
         "flag_type": {

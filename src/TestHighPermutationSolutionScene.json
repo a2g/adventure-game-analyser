@@ -135,12 +135,28 @@
     ],
     "startingThings": [
         {
-            "char":"char_",
-            "thing": "inv_box_of_items"
+            "thing": "inv_box_of_items",
+            "char": "char1"
         },
         {
-            "char" : "char_",
-            "thing" :"inv_final_catalyst"
+            "thing": "inv_final_catalyst",
+            "char": "char2"
+        },
+        {
+            "thing": "inv_shared_toy",
+            "char": "char1"
+        },
+        {
+            "thing": "inv_shared_toy",
+            "char": "char2"
+        },
+        {
+            "thing": "inv_shared_toy",
+            "char": "char3"
+        },
+        {
+            "thing": "inv_shared_toy",
+            "char": "char4"
         },
         {
             "thing": "prop_vacuum_tube"
