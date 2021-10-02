@@ -10,19 +10,19 @@ export class Happening {
             case Happen.InvStays:
             case Happen.InvAppears:
                 if(!item.startsWith("inv"))
-                    console.log("Mismatch! the item doesn't start with 'inv'");
+                    console.log("Mismatch! the item (" + item + ") doesn't start with 'inv'");
                 break;
             case Happen.PropGoes:
             case Happen.PropStays:
             case Happen.PropAppears:
                 if(!item.startsWith("prop"))
-                    console.log("Mismatch! the item doesn't start with 'Prop'");
+                    console.log("Mismatch! the item (" + item + ") doesn't start with 'prop'");
                 break;
             case Happen.FlagIsDecremented:
             case Happen.FlagIsIncremented:
             case Happen.FlagIsSet:
                 if(!item.startsWith("flag"))
-                    console.log("Mismatch! the item doesn't start with 'flag'");
+                    console.log("Mismatch! the item (" + item + ") doesn't start with 'flag'");
                 break;
                 break;
         }

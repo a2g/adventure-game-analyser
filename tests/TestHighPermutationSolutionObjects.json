@@ -17,17 +17,15 @@
                 "inv_final_catalyst",
                 "inv_tube_carrier",
                 "inv_box_of_items",
-                "inv_char1_toy",
-                "inv_char2_toy",
-                "inv_char3_toy",
-                "inv_char4_toy",
-                "inv_shared_toy"
-
+                "prop_char1_toy",
+                "prop_char2_toy",
+                "prop_char3_toy",
+                "prop_char4_toy"
             ]
         },
         "prop_type": {
             "enum": [
-                "prop_accelerated_dispatcher",
+                "prop_accelerated_EasyTube™",
                 "prop_switch1",
                 "prop_rigging_place1",
                 "prop_attached_item1",
@@ -53,7 +51,7 @@
                 "prop_attached_item5",
                 "prop_rigged_item5",
                 "prop_switched_on_item5",
-                "prop_dispatcher",
+                "prop_EasyTube™",
                 "prop_stageA",
                 "prop_stageB",
                 "prop_stageC",

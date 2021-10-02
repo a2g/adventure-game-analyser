@@ -8,6 +8,7 @@ import { Happen } from './Happen';
 import { Happening } from './Happening';
 import { SolutionNode } from './SolutionNode';
 import { ExtractBracketedPart } from './ExtractBracketedPart';
+import { isNullOrUndefined } from 'util';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";
@@ -62,11 +63,13 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 break;
             case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
                 happs.text = "With everything set up correctly, you use the" + reaction.inv1 + " with the " + reaction.prop1 + " and something good happens...";
-                happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag)));
+                happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
                 happs.array.push(new Happening(Happen.InvGoes, Stringify(reaction.inv1)));
                 happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
-                happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop2)));
-                happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop3)));
+                if(!isNullOrUndefined(reaction.prop2))
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop2)));
+                if(!isNullOrUndefined(reaction.prop3))
+                    happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop3)));
                 if (solutionNodesMappedByInput) {
                     const output = "" + reaction.flag1;
                     const inputA = "" + reaction.inv1;
@@ -78,6 +81,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+          
             case _.FLAG1_SET_BY_USING_INV1_WITH_INV2:
                 happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.inv2 + " and something good happens...";
                 happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
@@ -102,6 +106,21 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + reaction.prop1;
                     const output = "" + reaction.flag1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
+                    return happs;
+                }
+                break;
+            case _.FLAG1_SET_BY_USING_INV1_WITH_PROP1_NEED_FLAG2:
+                happs.text = "You use the " + reaction.inv1 + " with the  " + reaction.prop1 + " and something good happens...";
+                happs.array.push(new Happening(Happen.InvStays, Stringify(reaction.inv1)));
+                happs.array.push(new Happening(Happen.PropStays, Stringify(reaction.prop1)));
+                happs.array.push(new Happening(Happen.FlagIsSet, Stringify(reaction.flag1)));
+                if (solutionNodesMappedByInput) {
+                    const output = "" + reaction.flag1;
+                    const inputA = "" + reaction.inv1;
+                    const inputB = "" + reaction.prop1;
+                    const inputC = "" + reaction.flag2;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB, inputC));
                 } else if (objects.Match("Use", reaction.inv1, reaction.prop1)) {
                     return happs;
                 }

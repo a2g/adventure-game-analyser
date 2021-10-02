@@ -114,7 +114,7 @@ describe("Solution", () => {
             assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_stageD/prop_stageC/prop_switched_on_item3/"));
             assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_stageD/prop_stageC/prop_stageB/prop_switched_on_item1/"));
             assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_stageD/prop_stageC/prop_stageB/prop_switched_on_item2/"));
-            assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_stageD/prop_stageC/prop_stageB/prop_stageA/prop_vacuum_tube/"));
+            assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_stageD/prop_stageC/prop_stageB/prop_stageA/prop_dispatcher/"));
             assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_stageD/prop_stageC/prop_stageB/prop_stageA/prop_switched_on_item1/"));
             assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_switched_on_item1/prop_rigged_item1/prop_switch1/"));
             assert.ok(leaves.has("/root via app/flag_win/prop_stageE/prop_switched_on_item1/prop_rigged_item1/prop_attached_item1/prop_rigging_place1/"));
