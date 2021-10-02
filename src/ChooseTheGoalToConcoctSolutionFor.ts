@@ -74,16 +74,16 @@ export class ChooseTheGoalToConcoctSolutionFor {
             solver.SolveUntilZeroNodesRemaining();
             solver.GenerateSolutionNames(mapOfVisibleThings);
 
-            const arrayOfRollovers = new Array<Solution>();
+            const arrayOfChapterWins = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
             for (let i = 0; i < solver.length; i++) {
-                console.log(" " + i + ". Analyze " + GetDisplayName(solver[i].GetName()));
-                if (solver[i].IsRolloverable())
-                    arrayOfRollovers.push(solver[i]);
+                console.log(" " + i + ". Analyze " + GetDisplayName(solver[i].GetName()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
+                if (solver[i].IsChapterWin())
+                    arrayOfChapterWins.push(solver[i]);
             };
 
-            for (let i = 0; i < arrayOfRollovers.length; i++) {
-                console.log(" " + i + ". Rollover " + GetDisplayName(arrayOfRollovers[i].GetName()));
+            for (let i = 0; i < arrayOfChapterWins.length; i++) {
+                console.log(" " + (i+solver.length) + ". Chapter win " + GetDisplayName(arrayOfChapterWins[i].GetName()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
             }
 
             const choice = prompt('').toLowerCase();
@@ -159,9 +159,9 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     }
                     console.log("");
                 }
-            } else {// Process rollover
+            } else {// Process chapter win
                 const newIndex = Number(choice)-solver.length;
-                const solution = arrayOfRollovers[newIndex];
+                const solution = arrayOfChapterWins[newIndex];
                 // need to implement these methods so that they
                 mapOfRemainingNodes = solution.GetMapOfCurrentlyRemainingNodes();
                 mapOfVisibleThings = solution.GetMapOfCurrentlyVisibleThings(mapOfVisibleThings);

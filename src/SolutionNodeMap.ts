@@ -3,27 +3,27 @@ import { SolutionNode } from "./SolutionNode";
  * need to test
  */
 export class SolutionNodeMap {
-    private solutionNodeMap: Map<string, SolutionNode[]>;
+
+    private solutionNodeMap: Map<string, Set<SolutionNode>>;
 
     constructor(cloneFromMe: SolutionNodeMap | null) {
-        this.solutionNodeMap = new Map<string, SolutionNode[]>();
-
+        this.solutionNodeMap = new Map<string, Set<SolutionNode>>();
         if (cloneFromMe) {
-            cloneFromMe.solutionNodeMap.forEach((array: SolutionNode[], key: string) => {
-                let clonedArray = new Array<SolutionNode>();
+            for(let set of cloneFromMe.solutionNodeMap.values()){
+                let clonedSet = new Set<SolutionNode>();
                 let throwawaySet = new Set<SolutionNode>();
-                array.forEach((node: SolutionNode) => {
+                for(let node of set){
                     let clonedNode = node.CloneNodeAndEntireTree(throwawaySet);
-                    clonedArray.push(clonedNode);
-                });
-                this.solutionNodeMap.set(key, clonedArray);
-            });
+                    clonedSet.add(clonedNode);
+                    this.solutionNodeMap.set(clonedNode.output, clonedSet);
+                }   
+            };
         }
     }
 
     GetAutos(): Array<SolutionNode> {
         const toReturn = new Array<SolutionNode>();
-        this.solutionNodeMap.forEach((value: SolutionNode[]) => {
+        this.solutionNodeMap.forEach((value: Set<SolutionNode>) => {
             value.forEach((node: SolutionNode) => {
                 if (node.type.startsWith("AUTO")) {
                     toReturn.push(node);
@@ -37,7 +37,7 @@ export class SolutionNodeMap {
         return this.solutionNodeMap.has(objectToObtain);
     }
 
-    GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
+    GetNodesThatOutputObject(objectToObtain: string): Set<SolutionNode> | undefined {
         return this.solutionNodeMap.get(objectToObtain);
     }
 
@@ -45,42 +45,49 @@ export class SolutionNodeMap {
         return this.solutionNodeMap.has(objectToObtain);
     }
 
-    Get(objectToObtain: string): SolutionNode[] | undefined {
+    Get(objectToObtain: string): Set<SolutionNode> | undefined {
         return this.solutionNodeMap.get(objectToObtain);
     }
 
-    GetValues(): IterableIterator<Array<SolutionNode>> {
+    GetValues(): IterableIterator<Set<SolutionNode>> {
         return this.solutionNodeMap.values();
     }
 
     AddToMap(t: SolutionNode) {
         // initiatize array, if it hasn't yet been
         if (!this.solutionNodeMap.has(t.output)) {
-            this.solutionNodeMap.set(t.output, new Array<SolutionNode>());
+            this.solutionNodeMap.set(t.output, new Set<SolutionNode>());
         }
         // always add to list
-        this.solutionNodeMap.get(t.output)?.push(t);
+        this.solutionNodeMap.get(t.output)?.add(t);
     }
 
     RemoveNode(node: SolutionNode) {
         if (node) {
-            node.count--;
-            if (node.count <= 0) {
-                if (this.solutionNodeMap.has(node.output)) {
-                    const oldArray = this.solutionNodeMap.get(node.output);
-                    if (oldArray) {
-                        const newArray = new Array<SolutionNode>();
-                        this.solutionNodeMap.set(node.output, newArray);
-                        oldArray.forEach((t: SolutionNode) => {
-                            if (t !== node) {
-                                newArray.push(t);
-                            }
-                        });
+           
+            if (node.count-1 <= 0) {
+                let key = node.output;
+                if (this.solutionNodeMap.has(key)) {
+                    const oldSet = this.solutionNodeMap.get(key);
+                    if (oldSet)
+                    {
+                        console.log(" old size = "+oldSet.size);
+                        oldSet.delete(node);
+                        console.log(" newSize = "+oldSet.size);
                     }
+                } else {
+                    node.count--;
+                    console.log("trans.count is now " + node.count);
                 }
-            } else {
-                console.log("trans.count is now " + node.count);
             }
         }
+    }
+
+    Size() {
+        let count = 0;
+        for(let set of this.solutionNodeMap.values()){
+            count+=set.size;
+        }
+        return count;
     }
 }

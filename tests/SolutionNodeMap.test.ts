@@ -18,7 +18,7 @@ describe("ReactionMap", () => {
         const arrayAfter = blah.Get("outputA");
         assert.notEqual(arrayAfter, null);
 
-        const countAfterAdding = arrayAfter ? arrayAfter.length : 0;
+        const countAfterAdding = arrayAfter ? arrayAfter.size : 0;
         assert.strictEqual(countAfterAdding, 1);
     });
 
@@ -31,7 +31,7 @@ describe("ReactionMap", () => {
         blah.AddToMap(theOneToRemove);
         {
             const arrayBefore = blah.Get("outputA");
-            const countBeforeRemoval = arrayBefore ? arrayBefore.length : 0;
+            const countBeforeRemoval = arrayBefore ? arrayBefore.size : 0;
             assert.strictEqual(countBeforeRemoval, 4);
         }
 
@@ -39,7 +39,7 @@ describe("ReactionMap", () => {
 
         {
             const arrayAfter = blah.Get("outputA");
-            const countAfterRemoval = arrayAfter ? arrayAfter.length : 0;
+            const countAfterRemoval = arrayAfter ? arrayAfter.size : 0;
             assert.strictEqual(countAfterRemoval, 3);
         }
     });
@@ -62,12 +62,12 @@ describe("ReactionMap", () => {
         {
             const cloned = new SolutionNodeMap(tmap);
             const clonedOutputA = cloned.Get("outputA");
-            assert.ok(!isUndefined(array));
-            assert.notEqual(null, array);
+
             if (clonedOutputA) {
-                clonedOutputA[0].inputHints[0] = "d";
-                clonedOutputA[1].inputHints[0] = "e";
-                clonedOutputA[2].inputHints[0] = "f";
+                for(let item of clonedOutputA)
+                {
+                    item.inputHints[0] = "d";
+                }
             }
         }
 

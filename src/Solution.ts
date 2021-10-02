@@ -228,13 +228,13 @@ export class Solution {
         return this.restrictionsEncounteredDuringSolving;
     }
 
-    IsRolloverable(): boolean {
+    IsChapterWin(): boolean {
         // rootNode.inputs[0] is "flag_win"
-        // rootNode.inputs[0].input[0] is flag_subwin_anthony
+        // rootNode.inputs[0].input[0] is flag_chapter_xxx
         // but since we moved the name in to inputHints, the
         if (this.rootNode) {
             if (this.rootNode.inputs[0]){
-                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_subwin")){
+                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_chapter")){
                     return true;
                 }
             }
