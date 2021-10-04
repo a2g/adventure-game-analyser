@@ -3,7 +3,7 @@ import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import { ChooseToPlayThrough as ChooseToPlaySingleSection } from './ChooseToPlaySingle';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
-import { levels } from './20210415JsonPrivate/All.json'
+import { books } from './20210415JsonPrivate/All.json'
 import { ChooseToPlayCampaign } from './ChooseToPlayCampaign';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
@@ -19,10 +19,10 @@ function main(): void {
         console.log("0. Play Campaign");
 
         const arrayOfFiles = new Array<string>();
-        for (let level of levels) {
-            arrayOfFiles.push(level.mainFile);
-            console.log("" + i++ + ". " + level.mainFile);
-            for(let file of level.extraFiles){
+        for (let book of books) {
+            arrayOfFiles.push(book.mainFile);
+            console.log("" + i++ + ". " + book.mainFile);
+            for(let file of book.extraFiles){
                 arrayOfFiles.push(file);
                 console.log("" + i++ + ". " + file);
             }

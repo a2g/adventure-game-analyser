@@ -1,5 +1,16 @@
 import { SingleFileData } from "./SingleFileData";
 
+
+/**
+ * Logic grid (aka Elimination Grid)
+ *
+ *Uusing these as a solver in an adventure game is useful
+ * because - if an object has a use at all - and you've used it
+ * with some things already, then its use lies with one of the
+ * things you've not used it with. This process of elimination
+ * is helped using a logic grid (aka elimination grid.
+ *  https://en.wikipedia.org/wiki/Logic_puzzle#Logic_grid_puzzles
+ */
 export class LogicGrid {
     constructor(colNamesAndInitialVisibilities: Array<[string, boolean]>, rowNamesAndInitialVisibilities: Array<[string, boolean]>) {
         this.ColumnsStartHere = 1000;

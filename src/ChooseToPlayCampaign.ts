@@ -23,7 +23,7 @@ import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
-import { levels } from './20210415JsonPrivate/All.json'
+import { books } from './20210415JsonPrivate/All.json'
 import { definitions } from './20210415JsonPrivate/AllSchema.json'
 import { ReadOnlyJsonMultipleCombined } from "./ReadOnlyJsonMultipleCombined";
 import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
@@ -31,7 +31,7 @@ import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { SolutionNodeMap } from "./SolutionNodeMap";
 import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
 
-class Section {
+class Book {
     constructor(happener:Happener, startingThings:Map<string, Set<string>>, solutionNodeMap: SolutionNodeMap) {
        
         this.prerequisiteFlags = [];
@@ -68,12 +68,12 @@ class Section {
 }
 
 class SectionCollection {
-    private sections: Array<Section>;
+    private sections: Array<Book>;
     constructor() {
-        this.sections = new Array<Section>();
+        this.sections = new Array<Book>();
     }
 
-    array(): Array<Section> {
+    array(): Array<Book> {
         return this.sections;
     }
 
@@ -141,7 +141,7 @@ class SectionCollection {
     }
 }
 
-function PlaySingleSection(section: Section) {
+function PlaySingleSection(section: Book) {
 
     while (true) {
         // report current situation to cmd output
@@ -196,21 +196,21 @@ function PlaySingleSection(section: Section) {
 
 export function ChooseToPlayCampaign(): void {
     const sections = new SectionCollection();
-    for (let level of levels) {
+    for (let book of books) {
         let fileset =  new Array<string>();
-        fileset.push(level.mainFile)
-        for(let extra of level.extraFiles){
+        fileset.push(book.mainFile)
+        for(let extra of book.extraFiles){
             fileset.push(extra);
         }
         let json = new ReadOnlyJsonMultipleCombined(fileset);
         let happener = new Happener(json);
-        let s = new Section(happener, json.GetMapOfAllStartingThings(), json.GenerateSolutionNodesMappedByInput());
-        s.prerequisiteFlags = level.prerequisiteFlags;
-        s.prerequisiteType = level.prerequisiteType;
-        s.flagSetUponCompletion = level.flagSetUponCompletion;
-        s.displayName = level.displayName;
-        s.sunsetFlags = level.sunsetFlags;
-        s.sunsetType = level.sunsetType;
+        let s = new Book(happener, json.GetMapOfAllStartingThings(), json.GenerateSolutionNodesMappedByInput());
+        s.prerequisiteFlags = book.prerequisiteFlags;
+        s.prerequisiteType = book.prerequisiteType;
+        s.flagSetUponCompletion = book.flagSetUponCompletion;
+        s.displayName = book.bookName;
+        s.sunsetFlags = book.sunsetFlags;
+        s.sunsetType = book.sunsetType;
         sections.array().push(s);
     }
 
