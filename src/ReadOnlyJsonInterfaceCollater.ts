@@ -1,6 +1,3 @@
-import { SolutionNodeMap } from './SolutionNodeMap';
-import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
-import { Happenings } from './Happenings';
 
 export interface ReadOnlyJsonInterfaceCollater {
     AddStartingPropsToGivenSet(givenSet: Set<string>): void;

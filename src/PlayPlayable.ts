@@ -2,7 +2,6 @@ import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
 import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
-import { BookSession } from "./BookSession";
 import { ProcessAutos } from "./ProcessAutos";
 import { Playable} from "./Playable";
 

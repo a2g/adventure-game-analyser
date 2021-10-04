@@ -1,8 +1,6 @@
 import { Colors } from "./Colors";
 import { Embracketize } from "./Embracketize";
 
-
-
 export function GetDisplayName(input: string | Array<string>, isParenthesisNeeded = false): string {
     if (Array.isArray(input)) {
         // format arrays in to a lovely comma-separated list

@@ -1,7 +1,6 @@
 import { Happener } from "./Happener";
 import { Mix } from "./Mix";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
-import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 
 export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[], happener: Happener): MixedObjectsAndVerb {
     const verb = strings[0].toLowerCase();

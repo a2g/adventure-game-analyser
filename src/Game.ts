@@ -1,4 +1,3 @@
-import { Happener } from "./Happener";
 import { GameReporter } from "./GameReporter";
 
 export class Game {

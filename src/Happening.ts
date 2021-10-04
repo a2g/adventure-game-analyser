@@ -1,5 +1,4 @@
 import { Happen } from "./Happen";
-import { assert } from "console";
 
 export class Happening {
     constructor(play: Happen, item: string) {

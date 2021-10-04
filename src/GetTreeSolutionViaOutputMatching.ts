@@ -1,8 +1,6 @@
-
 import { SolverViaRootNode } from './SolverViaRootNode';
 import { SolutionNode } from './SolutionNode';
 import { Solution } from './Solution';
-import { assert } from 'console';
 import { SolutionNodeMap } from './SolutionNodeMap';
 
 export function GetTreeSolutionViaOutputMatching(map: SolutionNodeMap, solutionGoal: string, startings: Map<string,Set<string>>): SolverViaRootNode {
