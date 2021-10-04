@@ -72,11 +72,11 @@ class BookCollection {
         this.books = new Array<Book>();
     }
 
-    array(): Array<Book> {
+    GetArray(): Array<Book> {
         return this.books;
     }
 
-    isActive(index: number): boolean {
+    IsActive(index: number): boolean {
         const gflags = new Set<string>();
         if (index < 0 || index >= this.books.length)
             return false;
@@ -131,11 +131,11 @@ class BookCollection {
         return isActive;
     }
 
-    isWon(index: number): boolean {
+    IsCompleted(index: number): boolean {
         return this.books[index].IsCompleted();
     }
 
-    getName(index: number): string {
+    GetBookTitle(index: number): string {
         return this.books[index].bookTitle;
     }
 }
@@ -210,13 +210,13 @@ export function ChooseToPlayCampaign(): void {
         s.bookTitle = book.bookName;
         s.sunsetFlags = book.sunsetFlags;
         s.sunsetType = book.sunsetType;
-        books.array().push(s);
+        books.GetArray().push(s);
     }
 
     while (true) {
         // list the sections to choose from
-        for (let i = 0; i < books.array().length; i++) {
-            console.log("" + i + ". " + books.getName(i) + (books.isActive(i) ? "  active" : "  locked") + (books.isWon(i) ? "  COMPLETE!" : "  incomplete"));
+        for (let i = 0; i < books.GetArray().length; i++) {
+            console.log("" + i + ". " + books.GetBookTitle(i) + (books.IsActive(i) ? "  active" : "  locked") + (books.IsCompleted(i) ? "  COMPLETE!" : "  incomplete"));
         }
 
         // ask which section they want to play?
@@ -224,11 +224,11 @@ export function ChooseToPlayCampaign(): void {
         if (choice == 'b')
             break;// break the while(true);
         const number = Number(choice);
-        if (number < 0 || number >= books.array().length) {
+        if (number < 0 || number >= books.GetArray().length) {
             console.log("out-of-range");
             break;
         }
-        const s = books.array()[number];
+        const s = books.GetArray()[number];
         PlaySingleBook(s);
 
     }// end while true of selecting a section
