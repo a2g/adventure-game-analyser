@@ -23,7 +23,7 @@ import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
-import { books } from './20210415JsonPrivate/All.json'
+import { books as importedBooks } from './20210415JsonPrivate/All.json'
 import { definitions } from './20210415JsonPrivate/AllSchema.json'
 import { ReadOnlyJsonMultipleCombined } from "./ReadOnlyJsonMultipleCombined";
 import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
@@ -33,25 +33,24 @@ import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
 
 class Book {
     constructor(happener:Happener, startingThings:Map<string, Set<string>>, solutionNodeMap: SolutionNodeMap) {
-       
         this.prerequisiteFlags = [];
         this.prerequisiteType = "";
         this.sunsetFlags = [];
         this.sunsetType = "";
         this.flagSetUponCompletion = "";
-        this.displayName = "";
+        this.bookTitle = "";
         this.happener = happener;
         const numberOfAutopilotTurns = 0;
         this.player = new PlayerAI(this.happener, numberOfAutopilotTurns);
         this.solutionNodeMap = solutionNodeMap;
         this.startingThings = startingThings;
-        this.isWon = false;
+        this.isCompleted = false;
     }
-    setWon() {
-        this.isWon = true;
+    SetCompleted() {
+        this.isCompleted = true;
     }
-    getWon() {
-        return this.isWon;
+    IsCompleted() {
+        return this.isCompleted;
     }
 
     prerequisiteFlags: string[];
@@ -59,46 +58,46 @@ class Book {
     sunsetFlags: string[];
     sunsetType: string;
     flagSetUponCompletion: string;
-    displayName: string; 
+    bookTitle: string; 
     happener: Happener;
     player: PlayerAI;
     startingThings:Map<string, Set<string>>;
     solutionNodeMap: SolutionNodeMap;
-    private isWon: boolean;
+    private isCompleted: boolean;
 }
 
-class SectionCollection {
-    private sections: Array<Book>;
+class BookCollection {
+    private books: Array<Book>;
     constructor() {
-        this.sections = new Array<Book>();
+        this.books = new Array<Book>();
     }
 
     array(): Array<Book> {
-        return this.sections;
+        return this.books;
     }
 
     isActive(index: number): boolean {
         const gflags = new Set<string>();
-        if (index < 0 || index >= this.sections.length)
+        if (index < 0 || index >= this.books.length)
             return false;
-        for (let section of this.sections) {
-            if (section.getWon())
+        for (let section of this.books) {
+            if (section.IsCompleted())
                 gflags.add(section.flagSetUponCompletion);
         }
         let prerequisitesCompleted = 0;
-        for (let prerequisite of this.sections[index].prerequisiteFlags) {
+        for (let prerequisite of this.books[index].prerequisiteFlags) {
             if (gflags.has(prerequisite))
                 prerequisitesCompleted++;
         }
 
         let sunsetsCompleted = 0;
-        for (let sunset of this.sections[index].sunsetFlags) {
+        for (let sunset of this.books[index].sunsetFlags) {
             if (gflags.has(sunset))
                 sunsetsCompleted++;
         }
 
         let isPrerequisiteSatisfied = false;
-        switch (this.sections[index].prerequisiteType) {
+        switch (this.books[index].prerequisiteType) {
             case definitions.condition_type.oneOrMore:
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 1;
                 break;
@@ -109,11 +108,11 @@ class SectionCollection {
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 3;
                 break;
             default:
-                isPrerequisiteSatisfied = prerequisitesCompleted >= this.sections[index].prerequisiteFlags.length;
+                isPrerequisiteSatisfied = prerequisitesCompleted >= this.books[index].prerequisiteFlags.length;
         }
 
         let isSunsetSatisfied = false;
-        switch (this.sections[index].sunsetType) {
+        switch (this.books[index].sunsetType) {
             case definitions.condition_type.oneOrMore:
                 isSunsetSatisfied = sunsetsCompleted >= 1;
                 break;
@@ -124,7 +123,7 @@ class SectionCollection {
                 isSunsetSatisfied = sunsetsCompleted >= 3;
                 break;
             default:
-                isSunsetSatisfied = sunsetsCompleted >= this.sections[index].sunsetFlags.length;
+                isSunsetSatisfied = sunsetsCompleted >= this.books[index].sunsetFlags.length;
         }
 
         //default to must have completed all
@@ -133,15 +132,15 @@ class SectionCollection {
     }
 
     isWon(index: number): boolean {
-        return this.sections[index].getWon();
+        return this.books[index].IsCompleted();
     }
 
     getName(index: number): string {
-        return this.sections[index].displayName;
+        return this.books[index].bookTitle;
     }
 }
 
-function PlaySingleSection(section: Book) {
+function PlaySingleBook(section: Book) {
 
     while (true) {
         // report current situation to cmd output
@@ -158,7 +157,7 @@ function PlaySingleSection(section: Book) {
 
         // check have we won?
         if (section.happener.GetFlagValue("flag_win")) {
-            section.setWon();
+            section.SetCompleted();
             break;
         }
 
@@ -190,13 +189,13 @@ function PlaySingleSection(section: Book) {
             console.log(errors);
         }
     }// end while (true) of playing game
-    section.setWon();
+    section.SetCompleted();
     console.log("Success");
 }
 
 export function ChooseToPlayCampaign(): void {
-    const sections = new SectionCollection();
-    for (let book of books) {
+    const books = new BookCollection();
+    for (let book of importedBooks) {
         let fileset =  new Array<string>();
         fileset.push(book.mainFile)
         for(let extra of book.extraFiles){
@@ -208,16 +207,16 @@ export function ChooseToPlayCampaign(): void {
         s.prerequisiteFlags = book.prerequisiteFlags;
         s.prerequisiteType = book.prerequisiteType;
         s.flagSetUponCompletion = book.flagSetUponCompletion;
-        s.displayName = book.bookName;
+        s.bookTitle = book.bookName;
         s.sunsetFlags = book.sunsetFlags;
         s.sunsetType = book.sunsetType;
-        sections.array().push(s);
+        books.array().push(s);
     }
 
     while (true) {
         // list the sections to choose from
-        for (let i = 0; i < sections.array().length; i++) {
-            console.log("" + i + ". " + sections.getName(i) + (sections.isActive(i) ? "  active" : "  locked") + (sections.isWon(i) ? "  COMPLETE!" : "  incomplete"));
+        for (let i = 0; i < books.array().length; i++) {
+            console.log("" + i + ". " + books.getName(i) + (books.isActive(i) ? "  active" : "  locked") + (books.isWon(i) ? "  COMPLETE!" : "  incomplete"));
         }
 
         // ask which section they want to play?
@@ -225,12 +224,12 @@ export function ChooseToPlayCampaign(): void {
         if (choice == 'b')
             break;// break the while(true);
         const number = Number(choice);
-        if (number < 0 || number >= sections.array().length) {
+        if (number < 0 || number >= books.array().length) {
             console.log("out-of-range");
             break;
         }
-        const s = sections.array()[number];
-        PlaySingleSection(s);
+        const s = books.array()[number];
+        PlaySingleBook(s);
 
     }// end while true of selecting a section
 
