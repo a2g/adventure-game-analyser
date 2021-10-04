@@ -1,9 +1,8 @@
-import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
-import { SolutionNodeMap } from "./SolutionNodeMap";
-import { Happenings } from "./Happenings";
+import { SolutionNodeMap } from './SolutionNodeMap';
+import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
+import { Happenings } from './Happenings';
 
-export interface SceneInterfacePlayThru {
-
+export interface SceneInterfaceHappener {
     GetArrayOfProps(): Array<string>;
     GetArrayOfInvs(): Array<string>;
     GetArrayOfFlags(): Array<string>;
@@ -11,9 +10,9 @@ export interface SceneInterfacePlayThru {
 
     GetArrayOfInitialStatesOfInvs(): Array<boolean>;
     GetArrayOfInitialStatesOfProps(): Array<boolean>;
-    GetArrayOfInitialStatesOfFlags(): Array<number>;
     GetArrayOfInitialStatesOfSingleObjectVerbs(): Array<boolean>;
 
     GenerateSolutionNodesMappedByInput(): SolutionNodeMap;
+    GetArrayOfInitialStatesOfFlags(): Array<number>;
     FindHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null;
 }
