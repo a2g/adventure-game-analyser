@@ -1,5 +1,3 @@
-import { Colors } from "./Colors";
-
 export function ExtractBracketedPart(name: string | undefined): string {
     if (name) {
         const firstOpenBracket: number = name.indexOf("(");

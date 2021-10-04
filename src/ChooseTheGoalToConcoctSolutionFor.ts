@@ -5,7 +5,6 @@ import { Solution } from "./Solution";
 import { GetDisplayName } from "./GetDisplayName";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
-import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 import { ReadOnlyJsonInterfaceConcoct } from "./ReadOnlyJsonInterfaceConcoct";
 import _ from './20210415JsonPrivate/Gate/Gate.json';
 

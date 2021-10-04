@@ -1,6 +1,6 @@
 
 import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
-import { ChooseToPlayThrough as ChooseToPlaySingleSection } from './ChooseToPlaySingle';
+import { ChooseToPlaySingleSection } from './ChooseToPlaySingle';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
 import { books } from './20210415JsonPrivate/All.json'
