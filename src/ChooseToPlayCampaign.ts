@@ -19,18 +19,17 @@ import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
-import { SceneInterface } from "./SceneInterface";
+import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
 import { levels } from './20210415JsonPrivate/All.json'
 import { definitions } from './20210415JsonPrivate/AllSchema.json'
-import { SceneMultipleCombined } from "./SceneMultipleCombined";
-import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
+import { ReadOnlyJsonMultipleCombined } from "./ReadOnlyJsonMultipleCombined";
 import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
 import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { SolutionNodeMap } from "./SolutionNodeMap";
-import { SceneSingle } from "./SceneSingle";
+import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
 
 class Section {
     constructor(happener:Happener, startingThings:Map<string, Set<string>>, solutionNodeMap: SolutionNodeMap) {
@@ -203,7 +202,7 @@ export function ChooseToPlayCampaign(): void {
         for(let extra of level.extraFiles){
             fileset.push(extra);
         }
-        let scene = new SceneMultipleCombined(fileset);
+        let scene = new ReadOnlyJsonMultipleCombined(fileset);
         let happener = new Happener(scene);
         let s = new Section(happener, scene.GetMapOfAllStartingThings(), scene.GenerateSolutionNodesMappedByInput());
         s.prerequisiteFlags = level.prerequisiteFlags;
@@ -245,7 +244,7 @@ function ProcessAutos(happener:Happener, solutionNodeMap:SolutionNodeMap) {
     const autos = solutionNodeMap.GetAutos();
     for (const node of autos) {
         if(node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON){
-            let scene = new SceneSingle(node.output);
+            let scene = new ReadOnlyJsonSingle(node.output);
             happener.MergeNewThingsFromScene(scene);
             solutionNodeMap.MergeInNodesFromScene(scene);
             continue;

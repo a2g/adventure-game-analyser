@@ -1,15 +1,15 @@
-import { SceneInterfaceFindLeaves } from './SceneInterfaceFindLeaves';
-import { SceneInterfaceConcoct } from './SceneInterfaceConcoct';
-import { SceneInterfaceFindUsed } from './SceneInterfaceFindUsed';
-import { SceneInterfacePlayThru } from './SceneInterfacePlayThru';
-import { SceneInterfaceHappener } from './SceneInterfaceHappener';
+import { ReadOnlyJsonInterfaceFindLeaves } from './ReadOnlyJsonInterfaceFindLeaves';
+import { ReadOnlyJsonInterfaceConcoct } from './ReadOnlyJsonInterfaceConcoct';
+import { ReadOnlyJsonInterfaceFindUsed } from './ReadOnlyJsonInterfaceFindUsed';
+import { ReadOnlyJsonInterfacePlayThru } from './ReadOnlyJsonInterfacePlayThru';
+import { ReadOnlyJsonInterfaceHappener } from './ReadOnlyJsonInterfaceHappener';
 
-export interface SceneInterface
-    extends SceneInterfacePlayThru,
-    SceneInterfaceConcoct,
-    SceneInterfaceFindLeaves,
-    SceneInterfaceFindUsed,
-    SceneInterfaceHappener {
+export interface ReadOnlyJsonInterface
+    extends ReadOnlyJsonInterfacePlayThru,
+    ReadOnlyJsonInterfaceConcoct,
+    ReadOnlyJsonInterfaceFindLeaves,
+    ReadOnlyJsonInterfaceFindUsed,
+    ReadOnlyJsonInterfaceHappener {
 
 
 }

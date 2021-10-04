@@ -1,26 +1,12 @@
-import { Game } from './Game';
-//import { GameRuleEnforcer } from './GameRuleEnforcer';
-import { GameReporter } from './GameReporter';
-import { ParseRowsFromSheet } from "./ParseRowsFromSheet";
-import { SolveCyclicEtc } from "./SolveCyclicEtc";
-import { PlayerAI } from './PlayerAI';
-import { RowOfSheet } from './RowOfSheet';
-import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
-import { HappenerCallbacksInterface } from './HappenerCallbacksInterface';
-import { Happener } from './Happener';
-import { GetTreeSolutionViaOutputMatching } from './GetTreeSolutionViaOutputMatching';
-import { SolverViaRootNode } from './SolverViaRootNode';
-import { SolutionNode } from './SolutionNode';
+
 import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import { ChooseToPlayThrough as ChooseToPlaySingleSection } from './ChooseToPlaySingle';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
-import { SceneInterface } from './SceneInterface';
-import { SceneSingle } from './SceneSingle';
 import { levels } from './20210415JsonPrivate/All.json'
 import { ChooseToPlayCampaign } from './ChooseToPlayCampaign';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
-import { SceneMultipleCombined } from './SceneMultipleCombined';
+import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
 const prompt = promptSync();
 
 function main(): void {
@@ -52,7 +38,7 @@ function main(): void {
             default:
                 const index = Number(choice) - 1;
                 if (index >= 0 && index < arrayOfFiles.length) {
-                    const scene = new SceneMultipleCombined([arrayOfFiles[index]]);
+                    const scene = new ReadOnlyJsonMultipleCombined([arrayOfFiles[index]]);
                     while (true) {
                         console.log("\nSubMenu of " + arrayOfFiles[index]);
                         console.log("---------------------------------------");

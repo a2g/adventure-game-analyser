@@ -3,24 +3,30 @@ import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings'; 
 import { Mix } from './Mix';
-import { SceneInterface } from './SceneInterface';
+import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
 import * as fs from "fs"; 
-import { SceneInterfaceCollater } from './SceneInterfaceCollater'; 
+import { ReadOnlyJsonInterfaceCollater } from './ReadOnlyJsonInterfaceCollater'; 
 import { SingleBigSwitch } from './SingleBigSwitch';
 import { isNullOrUndefined } from 'util';
 
+/**
+ * So the most important part of this class is that the data
+ * in it is read only. So I've put that in the name.
+ * I wanted to convey the idea that it represents one *.json file
+ * so that's in there too.
+ * */
 
-export class SceneSingle implements SceneInterface,
-    SceneInterfaceCollater {
-    allProps: Array<string>;
-    allFlags: Array<string>;
-    allInvs: Array<string>;
-    allChars: Array<string>;
-    mapOfStartingThings:  Map<string, Set<string>>
-    startingInvSet: Set<string>;
-    startingPropSet: Set<string>
-    startingFlagSet: Set<string>
-    filename: string;
+export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
+    ReadOnlyJsonInterfaceCollater {
+    readonly allProps: Array<string>;
+    readonly allFlags: Array<string>;
+    readonly allInvs: Array<string>;
+    readonly allChars: Array<string>;
+    readonly mapOfStartingThings:  Map<string, Set<string>>
+    readonly startingInvSet: Set<string>;
+    readonly startingPropSet: Set<string>
+    readonly startingFlagSet: Set<string>
+    readonly filename: string;
 
     constructor(filename: string) {
         filename = filename;

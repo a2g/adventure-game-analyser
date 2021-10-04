@@ -2,7 +2,7 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 
-export interface SceneInterfaceHappener {
+export interface ReadOnlyJsonInterfaceHappener {
     GetArrayOfProps(): Array<string>;
     GetArrayOfInvs(): Array<string>;
     GetArrayOfFlags(): Array<string>;

@@ -3,29 +3,35 @@ import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Mix } from './Mix';
-import { SceneInterface } from './SceneInterface';
-import { SceneSingle } from './SceneSingle';
+import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
+import { ReadOnlyJsonSingle } from './ReadOnlyJsonSingle';
 import { SingleBigSwitch } from './SingleBigSwitch';
 
 function Stringify(name: string | undefined): string {
     return name ? name : "";
 }
 
-export class SceneMultipleCombined implements SceneInterface {
-    allProps: Array<string>;
-    allFlags: Array<string>;
-    allInvs: Array<string>;
-    allChars: Array<string>;
-    mapOfStartingThingsWithChars: Map<string,Set<string>>;
-    startingInvSet: Set<string>;
-    startingPropSet: Set<string>;
-    startingFlagSet: Set<string>;
-    allScenes: Map<string, SceneSingle>;
+/**
+ * So the most important part of this class is that the data
+ * in it is read only. So I've put that in the name.
+ * I wanted to convey the idea that it represents  *.json files,
+ * in this case multiple, so that goes in there too.
+ * */
+export class ReadOnlyJsonMultipleCombined implements ReadOnlyJsonInterface {
+    readonly allProps: Array<string>;
+    readonly allFlags: Array<string>;
+    readonly allInvs: Array<string>;
+    readonly allChars: Array<string>;
+    readonly mapOfStartingThingsWithChars: Map<string,Set<string>>;
+    readonly startingInvSet: Set<string>;
+    readonly startingPropSet: Set<string>;
+    readonly startingFlagSet: Set<string>;
+    readonly allScenes: Map<string, ReadOnlyJsonSingle>;
 
     constructor(filenames: Array<string>) {
-        this.allScenes = new Map<string, SceneSingle>();
+        this.allScenes = new Map<string, ReadOnlyJsonSingle>();
         for (let file of filenames) {
-            let scene = new SceneSingle(file);
+            let scene = new ReadOnlyJsonSingle(file);
             this.allScenes.set(file, scene);
         }
 

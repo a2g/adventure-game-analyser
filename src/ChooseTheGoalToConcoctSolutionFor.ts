@@ -5,8 +5,8 @@ import { Solution } from "./Solution";
 import { GetDisplayName } from "./GetDisplayName";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
-import { SceneInterface } from "./SceneInterface";
-import { SceneInterfaceConcoct } from "./SceneInterfaceConcoct";
+import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
+import { ReadOnlyJsonInterfaceConcoct } from "./ReadOnlyJsonInterfaceConcoct";
 import _ from './20210415JsonPrivate/Gate/Gate.json';
 
 function assert(condition: any, msg?: string): asserts condition {
@@ -15,7 +15,7 @@ function assert(condition: any, msg?: string): asserts condition {
     }
 }
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
-import { SceneSingle } from "./SceneSingle";
+import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
 const prompt = promptSync();
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
@@ -64,7 +64,7 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 }
 
 export class ChooseTheGoalToConcoctSolutionFor {
-    public DoStuff(scene: SceneInterfaceConcoct): void {
+    public DoStuff(scene: ReadOnlyJsonInterfaceConcoct): void {
         let mapOfVisibleThings = scene.GetMapOfAllStartingThings();
         let mapOfRemainingNodes = scene.GenerateSolutionNodesMappedByInput();
 
@@ -174,7 +174,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
                 for (const node of autos) {
                     if (node.inputHints[0] === chapterFlag) {
                         if (node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON) {
-                            let scene = new SceneSingle(node.output);
+                            let scene = new ReadOnlyJsonSingle(node.output);
                             mapOfRemainingNodes.MergeInNodesFromScene(scene);
                             continue;
                         }

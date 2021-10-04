@@ -19,10 +19,10 @@ import { GameReporter } from "./GameReporter";
 import { Sleep } from "./Sleep";
 import { Mix } from "./Mix";
 import { SolutionNode } from "./SolutionNode";
-import { SceneInterface } from "./SceneInterface";
+import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 
-export function ChooseToPlayThrough(scene: SceneInterface, numberOfAutopilotTurns: number): void {
+export function ChooseToPlayThrough(scene: ReadOnlyJsonInterface, numberOfAutopilotTurns: number): void {
 
     {
         const happener = new Happener(scene);

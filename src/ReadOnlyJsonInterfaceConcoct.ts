@@ -1,6 +1,6 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 
-export interface SceneInterfaceConcoct {
+export interface ReadOnlyJsonInterfaceConcoct {
     GetSetOfStartingProps(): Set<string>;
     GetSetOfStartingInvs(): Set<string>;
     GenerateSolutionNodesMappedByInput(): SolutionNodeMap;

@@ -3,13 +3,13 @@ import assert = require('assert');
 import { SolverViaRootNode } from '../src/SolverViaRootNode';
 import { SolutionNode } from '../src/SolutionNode';
 import { Solution } from '../src/Solution';
-import { SceneSingle } from '../src/SceneSingle';
+import { ReadOnlyJsonSingle } from '../src/ReadOnlyJsonSingle';
 
 
 describe("SceneSingle", () => {
   
     it("Test GetMapOfAllStartingThings", () => {
-        const scene = new SceneSingle("./src/TestHighPermutationSolutionScene.json");
+        const scene = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
        
         // this failed recently
         const map = scene.GetMapOfAllStartingThings();

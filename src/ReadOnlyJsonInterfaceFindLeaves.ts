@@ -1,6 +1,6 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
 
-export interface SceneInterfaceFindLeaves {
+export interface ReadOnlyJsonInterfaceFindLeaves {
     GenerateSolutionNodesMappedByInput(): SolutionNodeMap;
     GetMapOfAllStartingThings(): Map<string, Set<string>>;
 }

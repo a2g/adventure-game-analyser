@@ -1,10 +1,10 @@
 import promptSync from 'prompt-sync'; //const prompt = require('prompt-sync')({ sigint: true });
 import { SolutionNode } from "./SolutionNode";
-import { SceneInterfaceFindUsed } from './SceneInterfaceFindUsed';
+import { ReadOnlyJsonInterfaceFindUsed } from './ReadOnlyJsonInterfaceFindUsed';
 const prompt = promptSync();
 
 export class ChooseToFindUnused {
-    public DoStuff(scene: SceneInterfaceFindUsed): void {
+    public DoStuff(scene: ReadOnlyJsonInterfaceFindUsed): void {
         const invs = scene.GetArrayOfInvs();
         const props = scene.GetArrayOfProps();
         const it = scene.GenerateSolutionNodesMappedByInput().GetValues();

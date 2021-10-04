@@ -2,7 +2,7 @@ import { SolutionNodeMap } from './SolutionNodeMap';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 
-export interface SceneInterfaceCollater {
+export interface ReadOnlyJsonInterfaceCollater {
     AddStartingPropsToGivenSet(givenSet: Set<string>): void;
     AddStartingInvsToGivenSet(givenSet: Set<string>): void;
     AddStartingFlagsToGivenSet(givenSet: Set<string>): void;

@@ -2,7 +2,7 @@ import { SolverViaRootNode } from "./SolverViaRootNode";
 import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
-import { SceneInterfaceFindLeaves } from "./SceneInterfaceFindLeaves";
+import { ReadOnlyJsonInterfaceFindLeaves } from "./ReadOnlyJsonInterfaceFindLeaves";
 import { GetDisplayName } from "./GetDisplayName";
 const prompt = promptSync();
 
@@ -11,7 +11,7 @@ const prompt = promptSync();
 export class ChooseTheGoalToFindLeavesFor {
 
 
-    public DoStuff(scene: SceneInterfaceFindLeaves): void {
+    public DoStuff(scene: ReadOnlyJsonInterfaceFindLeaves): void {
         while (true) {
             console.log(" ");
 

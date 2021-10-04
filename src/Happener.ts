@@ -2,8 +2,8 @@ import { PlayerAI } from "./PlayerAI";
 import { HappenerCallbacksInterface } from "./HappenerCallbacksInterface";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { Happen } from "./Happen";
-import { SceneInterfaceHappener } from "./SceneInterfaceHappener";
-import { SceneSingle } from "./SceneSingle";
+import { ReadOnlyJsonInterfaceHappener } from "./ReadOnlyJsonInterfaceHappener";
+import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
 import { assert } from "console";
 
 
@@ -22,7 +22,7 @@ import { assert } from "console";
 //
 
 export class Happener {
-    constructor(scene: SceneInterfaceHappener) {
+    constructor(scene: ReadOnlyJsonInterfaceHappener) {
         // yes, all of these need to be initialized to harmless values due to PlayerAI below
         this.arrayOfInvNames = new Array<string>();
         this.arrayOfFlagNames = new Array<string>();
@@ -235,7 +235,7 @@ export class Happener {
         return this.arrayOfPropNames;
     }
 
-    MergeNewThingsFromScene(scene: SceneSingle) {
+    MergeNewThingsFromScene(scene: ReadOnlyJsonSingle) {
         let invs = scene.GetArrayOfInvs();
         for(let inv of invs){
             if(this.arrayOfInvNames.indexOf(inv)== -1)
@@ -280,7 +280,7 @@ export class Happener {
     private arrayOfFlagNames: Array<string>;  
     private arrayOfFlagValues: Array<number>;
 
-    private scene: SceneInterfaceHappener;
+    private scene: ReadOnlyJsonInterfaceHappener;
     public readonly Examine = 0;
     private callbacks: HappenerCallbacksInterface;
 }

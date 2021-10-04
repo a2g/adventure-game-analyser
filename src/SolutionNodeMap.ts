@@ -1,4 +1,4 @@
-import { SceneSingle } from "./SceneSingle";
+import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
 import { SolutionNode } from "./SolutionNode";
 /**
  * need to test
@@ -90,7 +90,7 @@ export class SolutionNodeMap {
         return count;
     }
     
-    MergeInNodesFromScene(scene: SceneSingle) {
+    MergeInNodesFromScene(scene: ReadOnlyJsonSingle) {
        scene.AddAllSolutionNodesToGivenMap(this);
     }
 
