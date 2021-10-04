@@ -1,14 +1,14 @@
 //Typescript Unit test
 import assert = require('assert');
-import { TruthTable } from "../src/TruthTable";
+import { LogicGrid } from "../src/LogicGrid";
 
 
-describe("TruthTable", () => {
+describe("LogicGrid", () => {
     it("FindMostNearlyCompleteRowOrColumnCombined", () => {
 
         const sizeFour: [string, boolean][] = [["a", true], ["b", true], ["c", true], ["d", true]];
 
-        const t = new TruthTable(sizeFour, sizeFour);
+        const t = new LogicGrid(sizeFour, sizeFour);
 
         // nearly fill the 2 column and test that the column gets picked
         t.SetColumnRow(2, 0);

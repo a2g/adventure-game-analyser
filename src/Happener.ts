@@ -15,14 +15,14 @@ import { assert } from "console";
 // 3. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
 // 4. Ensure there is no PROPS VS PROPS because:
 //     A.unless we  give the AI knowledge of locations, then a blind  brute force would take forever.
-//     B.even if we did have knowledge of locations, it would mean creating a truth table per location...which is easy - and doable.hmmn. 
+//     B.even if we did have knowledge of locations, it would mean creating a logic grid per location...which is easy - and doable.hmmn. 
 //
 // May 2021, regarding point number 4... Some puzzles are just like that, eg use hanging cable in powerpoint.
 // // even in maniac mansion it was like use radtion suit with meteot etc.
 //
 
 export class Happener {
-    constructor(scene: ReadOnlyJsonInterfaceHappener) {
+    constructor(json: ReadOnlyJsonInterfaceHappener) {
         // yes, all of these need to be initialized to harmless values due to PlayerAI below
         this.arrayOfInvNames = new Array<string>();
         this.arrayOfFlagNames = new Array<string>();
@@ -32,21 +32,21 @@ export class Happener {
         this.arrayOfPropVisibilities = new Array<boolean>();
         this.arrayOfVerbVisibilities = new Array<boolean>();
         this.arrayOfFlagValues = new Array<number>();
-        this.scene = scene;
+        this.json = json;
         // PlayerAI needs to be initialized last, because for 
         // the first parameter it passes this - and the PlayerAI
         // constructor expects a fully constructed item to be
         // passed to it.
         this.callbacks = new PlayerAI(this, 0);
 
-        this.arrayOfInvNames = scene.GetArrayOfInvs();
-        this.arrayOfFlagNames = scene.GetArrayOfFlags();
-        this.arrayOfPropNames = scene.GetArrayOfProps();
-        this.arrayOfVerbNames = scene.GetArrayOfSingleObjectVerbs();
-        this.arrayOfInventoryVisibilities = scene.GetArrayOfInitialStatesOfInvs()
-        this.arrayOfPropVisibilities = scene.GetArrayOfInitialStatesOfProps();
-        this.arrayOfVerbVisibilities = scene.GetArrayOfInitialStatesOfSingleObjectVerbs();
-        this.arrayOfFlagValues = scene.GetArrayOfInitialStatesOfFlags();
+        this.arrayOfInvNames = json.GetArrayOfInvs();
+        this.arrayOfFlagNames = json.GetArrayOfFlags();
+        this.arrayOfPropNames = json.GetArrayOfProps();
+        this.arrayOfVerbNames = json.GetArrayOfSingleObjectVerbs();
+        this.arrayOfInventoryVisibilities = json.GetArrayOfInitialStatesOfInvs()
+        this.arrayOfPropVisibilities = json.GetArrayOfInitialStatesOfProps();
+        this.arrayOfVerbVisibilities = json.GetArrayOfInitialStatesOfSingleObjectVerbs();
+        this.arrayOfFlagValues = json.GetArrayOfInitialStatesOfFlags();
     }
 
     SetFlagValue(flag: string, value: number): void {
@@ -72,7 +72,7 @@ export class Happener {
 
     ExecuteCommand(objects: MixedObjectsAndVerb): void {
 
-        const happenings = this.scene.FindHappeningsIfAny(objects);
+        const happenings = this.json.FindHappeningsIfAny(objects);
         if (happenings) {
             console.log(happenings.text);
             for (const happening of happenings.array) {
@@ -235,8 +235,8 @@ export class Happener {
         return this.arrayOfPropNames;
     }
 
-    MergeNewThingsFromScene(scene: ReadOnlyJsonSingle) {
-        let invs = scene.GetArrayOfInvs();
+    MergeNewThingsFromScene(json: ReadOnlyJsonSingle) {
+        let invs = json.GetArrayOfInvs();
         for(let inv of invs){
             if(this.arrayOfInvNames.indexOf(inv)== -1)
             { 
@@ -245,8 +245,8 @@ export class Happener {
                 this.arrayOfInventoryVisibilities.push(false);
             }
         }
-        let props = scene.GetArrayOfProps();
-        let startingProps = scene.GetSetOfStartingProps();
+        let props = json.GetArrayOfProps();
+        let startingProps = json.GetSetOfStartingProps();
         for(let prop of props){
             if(this.arrayOfPropNames.indexOf(prop)== -1)
             { 
@@ -256,8 +256,8 @@ export class Happener {
             }
         }
 
-        let flags = scene.GetArrayOfFlags();
-        let startingFlags = scene.GetSetOfStartingFlags();
+        let flags = json.GetArrayOfFlags();
+        let startingFlags = json.GetSetOfStartingFlags();
         for(let flag of flags){
             if(this.arrayOfFlagNames.indexOf(flag)== -1)
             { 
@@ -280,7 +280,7 @@ export class Happener {
     private arrayOfFlagNames: Array<string>;  
     private arrayOfFlagValues: Array<number>;
 
-    private scene: ReadOnlyJsonInterfaceHappener;
+    private json: ReadOnlyJsonInterfaceHappener;
     public readonly Examine = 0;
     private callbacks: HappenerCallbacksInterface;
 }

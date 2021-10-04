@@ -4,10 +4,10 @@ import { ReadOnlyJsonInterfaceFindUsed } from './ReadOnlyJsonInterfaceFindUsed';
 const prompt = promptSync();
 
 export class ChooseToFindUnused {
-    public DoStuff(scene: ReadOnlyJsonInterfaceFindUsed): void {
-        const invs = scene.GetArrayOfInvs();
-        const props = scene.GetArrayOfProps();
-        const it = scene.GenerateSolutionNodesMappedByInput().GetValues();
+    public DoStuff(json: ReadOnlyJsonInterfaceFindUsed): void {
+        const invs = json.GetArrayOfInvs();
+        const props = json.GetArrayOfProps();
+        const it = json.GenerateSolutionNodesMappedByInput().GetValues();
 
         while (true) {
             const c = it.next();

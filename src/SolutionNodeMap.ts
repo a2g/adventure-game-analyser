@@ -90,8 +90,8 @@ export class SolutionNodeMap {
         return count;
     }
     
-    MergeInNodesFromScene(scene: ReadOnlyJsonSingle) {
-       scene.AddAllSolutionNodesToGivenMap(this);
+    MergeInNodesFromScene(json: ReadOnlyJsonSingle) {
+       json.AddAllSolutionNodesToGivenMap(this);
     }
 
     private solutionNodeMap: Map<string, Set<SolutionNode>>;

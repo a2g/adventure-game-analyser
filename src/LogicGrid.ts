@@ -1,6 +1,6 @@
 import { SingleFileData } from "./SingleFileData";
 
-export class TruthTable {
+export class LogicGrid {
     constructor(colNamesAndInitialVisibilities: Array<[string, boolean]>, rowNamesAndInitialVisibilities: Array<[string, boolean]>) {
         this.ColumnsStartHere = 1000;
         const numberOfColumns = colNamesAndInitialVisibilities.length;

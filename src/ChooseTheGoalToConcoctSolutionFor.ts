@@ -64,9 +64,9 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 }
 
 export class ChooseTheGoalToConcoctSolutionFor {
-    public DoStuff(scene: ReadOnlyJsonInterfaceConcoct): void {
-        let mapOfVisibleThings = scene.GetMapOfAllStartingThings();
-        let mapOfRemainingNodes = scene.GenerateSolutionNodesMappedByInput();
+    public DoStuff(json: ReadOnlyJsonInterfaceConcoct): void {
+        let mapOfVisibleThings = json.GetMapOfAllStartingThings();
+        let mapOfRemainingNodes = json.GenerateSolutionNodesMappedByInput();
 
         while (true) {
             console.log(" ");
@@ -110,10 +110,10 @@ export class ChooseTheGoalToConcoctSolutionFor {
                         if (!rawObjectsAndVerb)// all out of moves!
                             break;
 
-                        const chars = scene.GetArrayOfCharacters();
+                        const chars = json.GetArrayOfCharacters();
                         for (let i = 0; i < chars.length; i++) {
                             const char = chars[i];
-                            const startingSet = scene.GetStartingThingsForCharacter(char);
+                            const startingSet = json.GetStartingThingsForCharacter(char);
                             if (startingSet.has(rawObjectsAndVerb.objectA))
                                 rawObjectsAndVerb.appendStartingCharacterForA(char);
                             if (startingSet.has(rawObjectsAndVerb.objectB))
@@ -135,8 +135,8 @@ export class ChooseTheGoalToConcoctSolutionFor {
                         originalSolution.GetLeafNodes().forEach((value: SolutionNode) => {
                             leafNodesRequiredBySolution.add(value.output);
                         });
-                        const startingProps = scene.GetSetOfStartingProps();
-                        const startingInvs = scene.GetSetOfStartingInvs();
+                        const startingProps = json.GetSetOfStartingProps();
+                        const startingInvs = json.GetSetOfStartingInvs();
                         const startingPropsAndInvs = UnionSet(startingProps, startingInvs);
                         const setAfterReduction = IntersectionSet(leafNodesRequiredBySolution, startingPropsAndInvs);
                         const isSolvable = IsASupersetOfB(startingPropsAndInvs, leafNodesRequiredBySolution);
@@ -174,8 +174,8 @@ export class ChooseTheGoalToConcoctSolutionFor {
                 for (const node of autos) {
                     if (node.inputHints[0] === chapterFlag) {
                         if (node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON) {
-                            let scene = new ReadOnlyJsonSingle(node.output);
-                            mapOfRemainingNodes.MergeInNodesFromScene(scene);
+                            let json = new ReadOnlyJsonSingle(node.output);
+                            mapOfRemainingNodes.MergeInNodesFromScene(json);
                             continue;
                         }
                     }

@@ -7,7 +7,7 @@
 // 3. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
 // 4. Ensure there is no PROPS VS PROPS because:
 //     A.unless we  give the AI knowledge of locations, then a blind  brute force would take forever.
-//     B.even if we did have knowledge of locations, it would mean creating a truth table per location...which is easy - and doable.hmmn. 
+//     B.even if we did have knowledge of locations, it would mean creating a logic grid per location...which is easy - and doable.hmmn. 
 //
 // May 2021, regarding point number 4... Some puzzles are just like that, eg use hanging cable in powerpoint.
 // // even in maniac mansion it was like use radtion suit with meteot etc.
@@ -202,9 +202,9 @@ export function ChooseToPlayCampaign(): void {
         for(let extra of level.extraFiles){
             fileset.push(extra);
         }
-        let scene = new ReadOnlyJsonMultipleCombined(fileset);
-        let happener = new Happener(scene);
-        let s = new Section(happener, scene.GetMapOfAllStartingThings(), scene.GenerateSolutionNodesMappedByInput());
+        let json = new ReadOnlyJsonMultipleCombined(fileset);
+        let happener = new Happener(json);
+        let s = new Section(happener, json.GetMapOfAllStartingThings(), json.GenerateSolutionNodesMappedByInput());
         s.prerequisiteFlags = level.prerequisiteFlags;
         s.prerequisiteType = level.prerequisiteType;
         s.flagSetUponCompletion = level.flagSetUponCompletion;
@@ -244,9 +244,9 @@ function ProcessAutos(happener:Happener, solutionNodeMap:SolutionNodeMap) {
     const autos = solutionNodeMap.GetAutos();
     for (const node of autos) {
         if(node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON){
-            let scene = new ReadOnlyJsonSingle(node.output);
-            happener.MergeNewThingsFromScene(scene);
-            solutionNodeMap.MergeInNodesFromScene(scene);
+            let json = new ReadOnlyJsonSingle(node.output);
+            happener.MergeNewThingsFromScene(json);
+            solutionNodeMap.MergeInNodesFromScene(json);
             continue;
         }
         let numberSatisified = 0;

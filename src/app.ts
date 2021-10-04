@@ -38,7 +38,7 @@ function main(): void {
             default:
                 const index = Number(choice) - 1;
                 if (index >= 0 && index < arrayOfFiles.length) {
-                    const scene = new ReadOnlyJsonMultipleCombined([arrayOfFiles[index]]);
+                    const json = new ReadOnlyJsonMultipleCombined([arrayOfFiles[index]]);
                     while (true) {
                         console.log("\nSubMenu of " + arrayOfFiles[index]);
                         console.log("---------------------------------------");
@@ -53,16 +53,16 @@ function main(): void {
                             break;
                         switch (choice) {
                             case '1':
-                                ChooseToPlaySingleSection(scene, 0);
+                                ChooseToPlaySingleSection(json, 0);
                                 break;
                             case '2':
-                                ChooseTheGoalToFindLeavesFor.prototype.DoStuff(scene);
+                                ChooseTheGoalToFindLeavesFor.prototype.DoStuff(json);
                                 break;
                             case '3':
-                                ChooseToFindUnused.prototype.DoStuff(scene);
+                                ChooseToFindUnused.prototype.DoStuff(json);
                                 break;
                             case '4':
-                                ChooseTheGoalToConcoctSolutionFor.prototype.DoStuff(scene);
+                                ChooseTheGoalToConcoctSolutionFor.prototype.DoStuff(json);
                                 break;
                             case '5':
                                 //ChooseTwoCharacters.prototype.DoStuff();

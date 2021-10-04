@@ -7,7 +7,7 @@
 // 3. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
 // 4. Ensure there is no PROPS VS PROPS because:
 //     A.unless we  give the AI knowledge of locations, then a blind  brute force would take forever.
-//     B.even if we did have knowledge of locations, it would mean creating a truth table per location...which is easy - and doable.hmmn. 
+//     B.even if we did have knowledge of locations, it would mean creating a logic grid per location...which is easy - and doable.hmmn. 
 //
 // May 2021, regarding point number 4... Some puzzles are just like that, eg use hanging cable in powerpoint.
 // // even in maniac mansion it was like use radtion suit with meteot etc.
@@ -22,12 +22,12 @@ import { SolutionNode } from "./SolutionNode";
 import { ReadOnlyJsonInterface } from "./ReadOnlyJsonInterface";
 import { ParseTokenizedCommandLineFromFromThreeStrings } from "./GetMixedObjectsAndVerbFromThreeStrings";
 
-export function ChooseToPlayThrough(scene: ReadOnlyJsonInterface, numberOfAutopilotTurns: number): void {
+export function ChooseToPlayThrough(json: ReadOnlyJsonInterface, numberOfAutopilotTurns: number): void {
 
     {
-        const happener = new Happener(scene);
+        const happener = new Happener(json);
         const ai: PlayerAI = new PlayerAI(happener, numberOfAutopilotTurns);
-        const autos = scene.GenerateSolutionNodesMappedByInput().GetAutos();
+        const autos = json.GenerateSolutionNodesMappedByInput().GetAutos();
 
         while (true) {
             const invs = happener.GetCurrentVisibleInventory();

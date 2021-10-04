@@ -1,4 +1,4 @@
-import { TruthTable } from './TruthTable';
+import { LogicGrid } from './LogicGrid';
 import { Happener } from './Happener';
 import { HappenerCallbacksInterface } from './HappenerCallbacksInterface';
 import { GetThreeStringsFromInput } from './GetThreeStringsFromInput';
@@ -13,7 +13,7 @@ const prompt = promptSync();
 // 4. Check the verbs vs props ? this is the fourth lowest hanging truit - if find something, then go to 1.
 // 5. Ensure there is no PROPS VS PROPS because:
 //     A.unless we  give the AI knowledge of locations, then a blind  brute force would take forever.
-//     B.even if we did have knowledge of locations, it would mean creating a truth table per location...which is easy - and doable.hmmn. 
+//     B.even if we did have knowledge of locations, it would mean creating a logic grid per location...which is easy - and doable.hmmn. 
 //
 // May 2021, regarding point number 4... Some puzzles are just like that, eg use hanging cable in powerpoint.
 // // even in maniac mansion it was like use radtion suit with meteot etc.
@@ -21,11 +21,11 @@ const prompt = promptSync();
 
 export class PlayerAI implements HappenerCallbacksInterface {
 
-    invVsInv: TruthTable;
-    invVsVerb: TruthTable;
-    invVsProp: TruthTable;
-    propVsVerb: TruthTable;
-    propVsProp: TruthTable;
+    invVsInv: LogicGrid;
+    invVsVerb: LogicGrid;
+    invVsProp: LogicGrid;
+    propVsVerb: LogicGrid;
+    propVsProp: LogicGrid;
 
     game: Happener;
     autoCount: number;
@@ -37,11 +37,11 @@ export class PlayerAI implements HappenerCallbacksInterface {
         const invs = game.GetEntireInvSuite();
         const props = game.GetEntirePropSuite();
 
-        this.invVsInv = new TruthTable(invs, invs);
-        this.invVsVerb = new TruthTable(invs, verbs);
-        this.invVsProp = new TruthTable(invs, props);
-        this.propVsVerb = new TruthTable(props, verbs);
-        this.propVsProp = new TruthTable(props, props);
+        this.invVsInv = new LogicGrid(invs, invs);
+        this.invVsVerb = new LogicGrid(invs, verbs);
+        this.invVsProp = new LogicGrid(invs, props);
+        this.propVsVerb = new LogicGrid(props, verbs);
+        this.propVsProp = new LogicGrid(props, props);
         this.game.SubscribeToCallbacks(this);
 
         // since use same with same is illegal move, we block these out

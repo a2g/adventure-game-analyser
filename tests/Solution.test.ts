@@ -9,8 +9,8 @@ import { ReadOnlyJsonSingle } from '../src/ReadOnlyJsonSingle';
 describe("Solution", () => {
     /*
     it("Test of a none clone solution", () => {
-        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
-        const map = scene.GenerateSolutionNodesMappedByInput();
+        const json = new SceneSingle("20210415JsonPrivate/HospScene.json");
+        const map = json.GenerateSolutionNodesMappedByInput();
         const objective = "inv_screwdriver";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -26,8 +26,8 @@ describe("Solution", () => {
     });
 
     it("Test of a non cloning five step", () => {
-        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
-        const map = scene.GenerateSolutionNodesMappedByInput();
+        const json = new SceneSingle("20210415JsonPrivate/HospScene.json");
+        const map = json.GenerateSolutionNodesMappedByInput();
         const objective = "prop_death_by_guitar";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -53,8 +53,8 @@ describe("Solution", () => {
     });
 
     it("Test of another non-cloning 5 step", () => {
-        const scene = new SceneSingle("20210415JsonPrivate/HospScene.json");
-        const map = scene.GenerateSolutionNodesMappedByInput();
+        const json = new SceneSingle("20210415JsonPrivate/HospScene.json");
+        const map = json.GenerateSolutionNodesMappedByInput();
         const objective = "prop_death_by_slamdunk";
         const collection = new SolutionCollection();
         collection.push(new Solution(new SolutionNode("", "", objective), map));
@@ -82,9 +82,9 @@ describe("Solution", () => {
 */
 
     it("Solution test cloning with High Permutation scene2", () => {
-        const scene = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
+        const json = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
         const collection = new SolverViaRootNode();
-        collection.InitializeByCopyingThese(scene.GenerateSolutionNodesMappedByInput(), scene.GetMapOfAllStartingThings());
+        collection.InitializeByCopyingThese(json.GenerateSolutionNodesMappedByInput(), json.GetMapOfAllStartingThings());
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 

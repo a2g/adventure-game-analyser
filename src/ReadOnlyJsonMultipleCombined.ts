@@ -31,8 +31,8 @@ export class ReadOnlyJsonMultipleCombined implements ReadOnlyJsonInterface {
     constructor(filenames: Array<string>) {
         this.allScenes = new Map<string, ReadOnlyJsonSingle>();
         for (let file of filenames) {
-            let scene = new ReadOnlyJsonSingle(file);
-            this.allScenes.set(file, scene);
+            let json = new ReadOnlyJsonSingle(file);
+            this.allScenes.set(file, json);
         }
 
         // create sets for the 3 member and 4 indirect sets
@@ -46,15 +46,15 @@ export class ReadOnlyJsonMultipleCombined implements ReadOnlyJsonInterface {
         const setChars = new Set<string>();
 
         // collate the 3 member and 4 indirect sets
-        for (let scene of this.allScenes.values()) {
-            scene.AddStartingPropsToGivenSet(this.startingPropSet);
-            scene.AddStartingInvsToGivenSet(this.startingInvSet);
-            scene.AddStartingThingCharsToGivenMap(this.mapOfStartingThingsWithChars);
-            scene.AddStartingFlagsToGivenSet(this.startingFlagSet);
-            scene.AddPropsToGivenSet(setProps);
-            scene.AddFlagsToGivenSet(setFlags);
-            scene.AddInvsToGivenSet(setInvs);
-            scene.AddCharsToGivenSet(setChars);
+        for (let json of this.allScenes.values()) {
+            json.AddStartingPropsToGivenSet(this.startingPropSet);
+            json.AddStartingInvsToGivenSet(this.startingInvSet);
+            json.AddStartingThingCharsToGivenMap(this.mapOfStartingThingsWithChars);
+            json.AddStartingFlagsToGivenSet(this.startingFlagSet);
+            json.AddPropsToGivenSet(setProps);
+            json.AddFlagsToGivenSet(setFlags);
+            json.AddInvsToGivenSet(setInvs);
+            json.AddCharsToGivenSet(setChars);
         }
 
         // clean 3 member and 4 indirect sets

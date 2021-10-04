@@ -9,10 +9,10 @@ import { ReadOnlyJsonSingle } from '../src/ReadOnlyJsonSingle';
 describe("SceneSingle", () => {
   
     it("Test GetMapOfAllStartingThings", () => {
-        const scene = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
+        const json = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
        
         // this failed recently
-        const map = scene.GetMapOfAllStartingThings();
+        const map = json.GetMapOfAllStartingThings();
        // assert.strictEqual(collection.length, 1);
         assert.ok(true);
         assert.strictEqual(map.size,14);
