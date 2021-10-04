@@ -128,38 +128,38 @@
         },
         {
             "gate": "AUTO_PROP1_BECOMES_PROP2_BY_PROPS",
-            "prop1": "prop_EasyTube™",
+            "prop1": "prop_dispatcher",
             "prop2": "prop_stageA",
             "prop3": "prop_switched_on_item1"
         }
     ],
     "startingThings": [
         {
-            "char":"char1",
-            "thing": "inv_box_of_items"
+            "thing": "inv_box_of_items",
+            "char": "char1"
         },
         {
-            "char" : "char2",
-            "thing" :"inv_final_catalyst"
+            "thing": "inv_final_catalyst",
+            "char": "char2"
         },
         {
-            "char":"char1",
-            "thing": "inv_char1_toy"
+            "thing": "inv_shared_toy",
+            "char": "char1"
         },
         {
-            "char":"char2",
-            "thing": "inv_char2_toy"
+            "thing": "inv_shared_toy",
+            "char": "char2"
         },
         {
-            "char":"char3",
-            "thing": "inv_char3_toy"
+            "thing": "inv_shared_toy",
+            "char": "char3"
         },
         {
-            "char":"char4",
-            "thing": "inv_char4_toy"
+            "thing": "inv_shared_toy",
+            "char": "char4"
         },
         {
-            "thing": "prop_EasyTube™"
+            "thing": "prop_dispatcher"
         },
         {
             "thing": "prop_switch1"

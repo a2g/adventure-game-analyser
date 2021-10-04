@@ -82,7 +82,7 @@ describe("Solution", () => {
 */
 
     it("Solution test cloning with High Permutation scene2", () => {
-        const json = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
+        const json = new ReadOnlyJsonSingle("./tests/TestHighPermutationSolution.json");
         const collection = new SolverViaRootNode();
         collection.InitializeByCopyingThese(json.GenerateSolutionNodesMappedByInput(), json.GetMapOfAllStartingThings());
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();

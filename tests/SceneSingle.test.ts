@@ -9,7 +9,7 @@ import { ReadOnlyJsonSingle } from '../src/ReadOnlyJsonSingle';
 describe("SceneSingle", () => {
   
     it("Test GetMapOfAllStartingThings", () => {
-        const json = new ReadOnlyJsonSingle("./src/TestHighPermutationSolutionScene.json");
+        const json = new ReadOnlyJsonSingle("./tests/TestHighPermutationSolution.json");
        
         // this failed recently
         const map = json.GetMapOfAllStartingThings();
