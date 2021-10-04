@@ -22,20 +22,6 @@ import { assert } from "console";
 //
 
 export class Happener {
-
-    public readonly Examine = 0;
-
-    private callbacks: HappenerCallbacksInterface;
-    private arrayOfInvNames: Array<string>;
-    private arrayOfPropNames: Array<string>;
-    private arrayOfVerbNames: Array<string>;
-    private arrayOfFlagNames: Array<string>;
-    private arrayOfInventoryVisibilities: Array<boolean>;
-    private arrayOfPropVisibilities: Array<boolean>;
-    private arrayOfVerbVisibilities: Array<boolean>;
-    private arrayOfFlagValues: Array<number>;
-    private scene: SceneInterfaceHappener;
-
     constructor(scene: SceneInterfaceHappener) {
         // yes, all of these need to be initialized to harmless values due to PlayerAI below
         this.arrayOfInvNames = new Array<string>();
@@ -241,4 +227,60 @@ export class Happener {
         }
         return toReturn;
     }
+
+    GetArrayOfInvs() {
+       return this.arrayOfInvNames;
+    }
+    GetArrayOfProps() {
+        return this.arrayOfPropNames;
+    }
+
+    MergeNewThingsFromScene(scene: SceneSingle) {
+        let invs = scene.GetArrayOfInvs();
+        for(let inv of invs){
+            if(this.arrayOfInvNames.indexOf(inv)== -1)
+            { 
+                // new inventories come in as false
+                this.arrayOfInvNames.push(inv);
+                this.arrayOfInventoryVisibilities.push(false);
+            }
+        }
+        let props = scene.GetArrayOfProps();
+        let startingProps = scene.GetSetOfStartingProps();
+        for(let prop of props){
+            if(this.arrayOfPropNames.indexOf(prop)== -1)
+            { 
+                // new inventories come in as false
+                this.arrayOfPropNames.push(prop);
+                this.arrayOfPropVisibilities.push(startingProps.has(prop));
+            }
+        }
+
+        let flags = scene.GetArrayOfFlags();
+        let startingFlags = scene.GetSetOfStartingFlags();
+        for(let flag of flags){
+            if(this.arrayOfFlagNames.indexOf(flag)== -1)
+            { 
+                // new inventories come in as false
+                this.arrayOfFlagNames.push(flag);
+                this.arrayOfFlagValues.push(startingFlags.has(flag)? 1 : 0);
+            }
+        }
+    }
+
+    private arrayOfInvNames: Array<string>;
+    private arrayOfInventoryVisibilities: Array<boolean>;
+
+    private arrayOfPropNames: Array<string>;
+    private arrayOfPropVisibilities: Array<boolean>;
+
+    private arrayOfVerbNames: Array<string>;
+    private arrayOfVerbVisibilities: Array<boolean>;
+ 
+    private arrayOfFlagNames: Array<string>;  
+    private arrayOfFlagValues: Array<number>;
+
+    private scene: SceneInterfaceHappener;
+    public readonly Examine = 0;
+    private callbacks: HappenerCallbacksInterface;
 }

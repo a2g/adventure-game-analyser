@@ -28,21 +28,24 @@ import { definitions } from './20210415JsonPrivate/AllSchema.json'
 import { SceneMultipleCombined } from "./SceneMultipleCombined";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
+import _ from './20210415JsonPrivate/Script/Script.json';
+import { SolutionNodeMap } from "./SolutionNodeMap";
+import { SceneSingle } from "./SceneSingle";
 
 class Section {
-    constructor(mainFile: string, extraFiles: string[]) {
-        this.fileset = extraFiles;
-        this.fileset.push(mainFile);
+    constructor(happener:Happener, startingThings:Map<string, Set<string>>, solutionNodeMap: SolutionNodeMap) {
+       
         this.prerequisiteFlags = [];
         this.prerequisiteType = "";
         this.sunsetFlags = [];
         this.sunsetType = "";
         this.flagSetUponCompletion = "";
         this.displayName = "";
-        this.scene = new SceneMultipleCombined(this.fileset);
-        this.happener = new Happener(this.scene);
+        this.happener = happener;
         const numberOfAutopilotTurns = 0;
         this.player = new PlayerAI(this.happener, numberOfAutopilotTurns);
+        this.solutionNodeMap = solutionNodeMap;
+        this.startingThings = startingThings;
         this.isWon = false;
     }
     setWon() {
@@ -52,16 +55,16 @@ class Section {
         return this.isWon;
     }
 
-    fileset: string[];
     prerequisiteFlags: string[];
     prerequisiteType: string;
     sunsetFlags: string[];
     sunsetType: string;
     flagSetUponCompletion: string;
-    displayName: string;
-    scene: SceneInterface;
+    displayName: string; 
     happener: Happener;
     player: PlayerAI;
+    startingThings:Map<string, Set<string>>;
+    solutionNodeMap: SolutionNodeMap;
     private isWon: boolean;
 }
 
@@ -139,63 +142,70 @@ class SectionCollection {
     }
 }
 
-function PlaySingleSection(s: Section) {
+function PlaySingleSection(section: Section) {
 
     while (true) {
         // report current situation to cmd output
         const reporter = GameReporter.GetInstance();
-        const flags = s.happener.GetCurrentlyTrueFlags();
-        const invs = s.happener.GetCurrentVisibleInventory();
-        const props = s.happener.GetCurrentVisibleProps();
+        const flags = section.happener.GetCurrentlyTrueFlags();
+        const invs = section.happener.GetCurrentVisibleInventory();
+        const props = section.happener.GetCurrentVisibleProps();
         reporter.ReportFlags(flags);
         reporter.ReportInventory(invs);
         reporter.ReportScene(props);
 
         // Process all the autos
-        ProcessAutos(s);
+        ProcessAutos(section.happener, section.solutionNodeMap);
 
         // check have we won?
-        if (s.happener.GetFlagValue("flag_win")) {
-            s.setWon();
+        if (section.happener.GetFlagValue("flag_win")) {
+            section.setWon();
             break;
         }
 
         Sleep(500);
 
         // take input & handle null and escape character
-        let input: string[] = s.player.GetNextCommand();
+        let input: string[] = section.player.GetNextCommand();
         if (input.length <= 1) {
             if (input.length == 1 && input[0] == 'b')
                 return;// GetNextCommand returns ['b'] if the user chooses 'b'
             // this next line is only here to easily debug
-            input = s.player.GetNextCommand();
+            input = section.player.GetNextCommand();
             break;
         }
 
         // parse & handle parsing errors
-        const commandLine = ParseTokenizedCommandLineFromFromThreeStrings(input, s.scene);
+        const commandLine = ParseTokenizedCommandLineFromFromThreeStrings(input, section.happener);
         if (commandLine.error.length) {
             console.log(input + " <-- Couldn't tokenize input, specifically " + commandLine.error);
             continue
         }
 
         // if all objects are available then execute
-        const errors = GetAnyErrorsFromObjectAvailability(commandLine, s.happener.GetCurrentVisibleProps(), s.happener.GetCurrentVisibleInventory());
+        const errors = GetAnyErrorsFromObjectAvailability(commandLine, section.happener.GetCurrentVisibleProps(), section.happener.GetCurrentVisibleInventory());
         if (errors.length == 0) {
             GameReporter.GetInstance().ReportCommand(input);
-            s.happener.ExecuteCommand(commandLine);
+            section.happener.ExecuteCommand(commandLine);
         } else {
             console.log(errors);
         }
     }// end while (true) of playing game
-    s.setWon();
+    section.setWon();
     console.log("Success");
 }
 
 export function ChooseToPlayCampaign(): void {
     const sections = new SectionCollection();
     for (let level of levels) {
-        let s = new Section(level.mainFile, level.extraFiles);
+        let fileset =  new Array<string>();
+        fileset.push(level.mainFile)
+        for(let extra of level.extraFiles){
+            fileset.push(extra);
+        }
+        let scene = new SceneMultipleCombined(fileset);
+        let happener = new Happener(scene);
+        let s = new Section(happener, scene.GetMapOfAllStartingThings(), scene.GenerateSolutionNodesMappedByInput());
         s.prerequisiteFlags = level.prerequisiteFlags;
         s.prerequisiteType = level.prerequisiteType;
         s.flagSetUponCompletion = level.flagSetUponCompletion;
@@ -227,15 +237,21 @@ export function ChooseToPlayCampaign(): void {
 
 }// end fn
 
-function ProcessAutos(s: Section) {
-    const flags = s.happener.GetCurrentlyTrueFlags();
-    const invs = s.happener.GetCurrentVisibleInventory();
-    const props = s.happener.GetCurrentVisibleProps();
+function ProcessAutos(happener:Happener, solutionNodeMap:SolutionNodeMap) {
+    const flags = happener.GetCurrentlyTrueFlags();
+    const invs = happener.GetCurrentVisibleInventory();
+    const props = happener.GetCurrentVisibleProps();
 
-    const autos = s.scene.GenerateSolutionNodesMappedByInput().GetAutos();
-    for (const autonode of autos) {
+    const autos = solutionNodeMap.GetAutos();
+    for (const node of autos) {
+        if(node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON){
+            let scene = new SceneSingle(node.output);
+            happener.MergeNewThingsFromScene(scene);
+            solutionNodeMap.MergeInNodesFromScene(scene);
+            continue;
+        }
         let numberSatisified = 0;
-        for (let inputName of autonode.inputHints) {
+        for (let inputName of node.inputHints) {
             if (inputName.startsWith("prop_")) {
                 if (props.includes(inputName)) {
                     numberSatisified = numberSatisified + 1;
@@ -251,17 +267,17 @@ function ProcessAutos(s: Section) {
                 }
             }
         };
-        if (numberSatisified === autonode.inputHints.length) {
-            if (autonode.output.startsWith("prop_")) {
-                console.log("Auto: prop set visible " + autonode.output);
-                s.happener.SetPropVisible(autonode.output, true);
-            } else if (autonode.output.startsWith("flag_")) {
-                console.log("Auto: flag set to true " + autonode.output);
-                s.happener.SetFlagValue(autonode.output, 1);
-            } else if (autonode.output.startsWith("inv_")) {
-                console.log("Auto: inv set to visible " + autonode.output);
-                s.happener.SetInvVisible(autonode.output, true);
-            }
+        if (numberSatisified === node.inputHints.length) {
+            if (node.output.startsWith("prop_")) {
+                console.log("Auto: prop set visible " + node.output);
+                happener.SetPropVisible(node.output, true);
+            } else if (node.output.startsWith("flag_")) {
+                console.log("Auto: flag set to true " + node.output);
+                happener.SetFlagValue(node.output, 1);
+            } else if (node.output.startsWith("inv_")) {
+                console.log("Auto: inv set to visible " + node.output);
+                happener.SetInvVisible(node.output, true);
+            } 
         }
     }
 }

@@ -7,12 +7,15 @@ import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
 import { SceneInterface } from "./SceneInterface";
 import { SceneInterfaceConcoct } from "./SceneInterfaceConcoct";
+import _ from './20210415JsonPrivate/Script/Script.json';
+
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
         throw new Error("assert failure");
     }
 }
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
+import { SceneSingle } from "./SceneSingle";
 const prompt = promptSync();
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
@@ -83,7 +86,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
             };
 
             for (let i = 0; i < arrayOfChapterWins.length; i++) {
-                console.log(" " + (i+solver.length) + ". Chapter win " + GetDisplayName(arrayOfChapterWins[i].GetName()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
+                console.log(" " + (i+solver.length) + ". Chapter win " + GetDisplayName(arrayOfChapterWins[i].GetName()) + "("+(arrayOfChapterWins[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
             }
 
             const choice = prompt('').toLowerCase();
@@ -162,9 +165,21 @@ export class ChooseTheGoalToConcoctSolutionFor {
             } else {// Process chapter win
                 const newIndex = Number(choice)-solver.length;
                 const solution = arrayOfChapterWins[newIndex];
+                let chapterFlag = solution.GetChapterWinFlag();
                 // need to implement these methods so that they
                 mapOfRemainingNodes = solution.GetMapOfCurrentlyRemainingNodes();
                 mapOfVisibleThings = solution.GetMapOfCurrentlyVisibleThings(mapOfVisibleThings);
+                
+                let autos = mapOfRemainingNodes.GetAutos();
+                for (const node of autos) {
+                    if (node.inputHints[0] === chapterFlag) {
+                        if (node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON) {
+                            let scene = new SceneSingle(node.output);
+                            mapOfRemainingNodes.MergeInNodesFromScene(scene);
+                            continue;
+                        }
+                    }
+                }
             }
         }
     }

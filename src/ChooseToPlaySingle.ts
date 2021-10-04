@@ -85,7 +85,7 @@ export function ChooseToPlayThrough(scene: SceneInterface, numberOfAutopilotTurn
 
 
             // 
-            const objects = ParseTokenizedCommandLineFromFromThreeStrings(input, scene);
+            const objects = ParseTokenizedCommandLineFromFromThreeStrings(input, happener);
 
             // handle errors
             if (objects.type.toString().startsWith("Error")) {

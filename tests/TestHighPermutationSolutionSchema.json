@@ -7,7 +7,7 @@
             "type": "object",
             "allOf": [
                 {
-                    "$ref": "20210415JsonPrivate/Script/Script.json#/definitions/script_type"
+                    "$ref": "./../20210415JsonPrivate/Script/Script.json#/definitions/script_type"
                 }
             ],
             "properties": {

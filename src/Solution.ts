@@ -11,6 +11,7 @@ import { stringify } from 'querystring';
 import { isNullOrUndefined } from 'util';
 
 export class Solution {
+
     constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string,Set<string>>, restrictions: Set<string> | null = null) {
         // initialize non aggregates
         {
@@ -121,9 +122,7 @@ export class Solution {
     }
 
     GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
-
         let result = this.nodeMap.Get(objectToObtain);
-
         if (result) {
             let blah = new Array<SolutionNode>();
             for (let item of result) {
@@ -228,19 +227,7 @@ export class Solution {
         return this.restrictionsEncounteredDuringSolving;
     }
 
-    IsChapterWin(): boolean {
-        // rootNode.inputs[0] is "flag_win"
-        // rootNode.inputs[0].input[0] is flag_chapter_xxx
-        // but since we moved the name in to inputHints, the
-        if (this.rootNode) {
-            if (this.rootNode.inputs[0]){
-                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_chapter")){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+
 
     GetMapOfCurrentlyVisibleThings(visibleNodes:Map<string,Set<string>>): Map<string, Set<string>> {
         const array = new Array<SolutionNode>();
@@ -276,6 +263,21 @@ export class Solution {
         {
             this.mapOfVisibleThings.set(thing, new Set<string>());
         }
+    }
+
+    IsChapterWin(): boolean {
+        return this.GetChapterWinFlag().length > 0;
+    }
+
+    GetChapterWinFlag(): string {
+        if (this.rootNode) {
+            if (this.rootNode.inputs[0]) {
+                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_chapter")) {
+                    return this.rootNode.inputs[0].inputHints[0];
+                }
+            }
+        }
+        return "";
     }
  
 

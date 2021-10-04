@@ -1,10 +1,9 @@
+import { SceneSingle } from "./SceneSingle";
 import { SolutionNode } from "./SolutionNode";
 /**
  * need to test
  */
 export class SolutionNodeMap {
-
-    private solutionNodeMap: Map<string, Set<SolutionNode>>;
 
     constructor(cloneFromMe: SolutionNodeMap | null) {
         this.solutionNodeMap = new Map<string, Set<SolutionNode>>();
@@ -71,9 +70,9 @@ export class SolutionNodeMap {
                     const oldSet = this.solutionNodeMap.get(key);
                     if (oldSet)
                     {
-                        console.log(" old size = "+oldSet.size);
+                        //console.log(" old size = "+oldSet.size);
                         oldSet.delete(node);
-                        console.log(" newSize = "+oldSet.size);
+                        //console.log(" newSize = "+oldSet.size);
                     }
                 } else {
                     node.count--;
@@ -90,4 +89,11 @@ export class SolutionNodeMap {
         }
         return count;
     }
+    
+    MergeInNodesFromScene(scene: SceneSingle) {
+       scene.AddAllSolutionNodesToGivenMap(this);
+    }
+
+    private solutionNodeMap: Map<string, Set<SolutionNode>>;
+
 }

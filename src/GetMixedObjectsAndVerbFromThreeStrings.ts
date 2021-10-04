@@ -1,18 +1,19 @@
+import { Happener } from "./Happener";
 import { Mix } from "./Mix";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { SceneInterface } from "./SceneInterface";
 
-export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[], scene: SceneInterface): MixedObjectsAndVerb {
+export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[], happener: Happener): MixedObjectsAndVerb {
     const verb = strings[0].toLowerCase();
 
-    const is1InPropsRaw = scene.GetArrayOfProps().includes(strings[1]);
-    const is1InPropsPrefixed = scene.GetArrayOfProps().includes("prop_" + strings[1]);
-    const is1InInvsRaw = scene.GetArrayOfInvs().includes(strings[1])
-    const is1InInvsPrefixed = scene.GetArrayOfInvs().includes("inv_" + strings[1]);
-    const is2InPropsRaw = scene.GetArrayOfProps().includes(strings[2]);
-    const is2InPropsPrefixed = scene.GetArrayOfProps().includes("prop_" + strings[2]);
-    const is2InInvsRaw = scene.GetArrayOfInvs().includes(strings[2])
-    const is2InInvsPrefixed = scene.GetArrayOfInvs().includes("inv_" + strings[2]);
+    const is1InPropsRaw = happener.GetArrayOfProps().includes(strings[1]);
+    const is1InPropsPrefixed = happener.GetArrayOfProps().includes("prop_" + strings[1]);
+    const is1InInvsRaw = happener.GetArrayOfInvs().includes(strings[1])
+    const is1InInvsPrefixed = happener.GetArrayOfInvs().includes("inv_" + strings[1]);
+    const is2InPropsRaw = happener.GetArrayOfProps().includes(strings[2]);
+    const is2InPropsPrefixed = happener.GetArrayOfProps().includes("prop_" + strings[2]);
+    const is2InInvsRaw = happener.GetArrayOfInvs().includes(strings[2])
+    const is2InInvsPrefixed = happener.GetArrayOfInvs().includes("inv_" + strings[2]);
 
     if (verb === "grab") {// no combinations needed
         if (is1InPropsRaw)

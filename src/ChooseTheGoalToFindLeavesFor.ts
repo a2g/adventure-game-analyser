@@ -3,6 +3,7 @@ import { SolutionNode } from "./SolutionNode";
 import { Solution } from "./Solution";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { SceneInterfaceFindLeaves } from "./SceneInterfaceFindLeaves";
+import { GetDisplayName } from "./GetDisplayName";
 const prompt = promptSync();
 
 
@@ -27,8 +28,9 @@ export class ChooseTheGoalToFindLeavesFor {
                 let numberOfLeaves = 0;
 
                 // display list
-                collection.forEach(function (solution: Solution) {
-                    console.log("------------------------------------------------------------(solution separator)");
+                collection.GenerateSolutionNames(scene.GetMapOfAllStartingThings());
+                for(let solution of collection){
+                    console.log(GetDisplayName(solution.GetName()))
                     const needs = solution.GetLeafNodes();
                     for (let node of needs.values()) {
                         numberOfLeaves++;
@@ -36,7 +38,7 @@ export class ChooseTheGoalToFindLeavesFor {
                         // display list item
                         console.log("    " + numberOfLeaves + "." + node.output);
                     };
-                });
+                };
 
                 // allow user to choose item
                 const input = prompt("Choose an ingredient of one of the solutions or (b)ack: ").toLowerCase();

@@ -30,6 +30,13 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
         const happs = new Happenings();
         const restrictions = reaction.restrictions;
         switch (scriptType) {
+            case _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON:
+                if (solutionNodesMappedByInput) {
+                    const output = "" + reaction.filePath;
+                    const input = "" + reaction.flag1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
+                }
+                break;
             case _.AUTO_PROP1_BECOMES_PROP2_BY_PROPS:
                 if (solutionNodesMappedByInput) {
                     const input = "" + reaction.prop1;
@@ -42,6 +49,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
+           
             case _.AUTO_FLAG1_SET_BY_FLAG2:
                 if (solutionNodesMappedByInput) {
                     const output = "" + reaction.flag1;

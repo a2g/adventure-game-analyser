@@ -233,11 +233,18 @@ export class SceneSingle implements SceneInterface,
         return this.allChars;
     }
 
+    
     GenerateSolutionNodesMappedByInput(): SolutionNodeMap {
         const result = new SolutionNodeMap(null);
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "");
         SingleBigSwitch(this.filename, result, notUsed);
         return result;
+    }
+
+    AddAllSolutionNodesToGivenMap(givenMap: SolutionNodeMap): SolutionNodeMap {
+        const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "");
+        SingleBigSwitch(this.filename, givenMap, notUsed);
+        return givenMap;
     }
 
     FindHappeningsIfAny(objects: MixedObjectsAndVerb): Happenings | null {
