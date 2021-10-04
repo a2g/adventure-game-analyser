@@ -1,5 +1,5 @@
 import { SolutionNodeMap } from './SolutionNodeMap'; 
-import _ from './20210415JsonPrivate/Script/Script.json';
+import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings'; 
 import { Mix } from './Mix';
@@ -33,21 +33,21 @@ export class SceneSingle implements SceneInterface,
         const setInvs = new Set<string>();
         const setChars = new Set<string>();
 
-        for (const reaction of scenario.reactions) {
-            const scriptType = reaction.script;
-            const restrictions = reaction.restrictions;
-            setInvs.add("" + reaction.inv1);
-            setInvs.add("" + reaction.inv2);
-            setInvs.add("" + reaction.inv3);
-            setFlags.add("" + reaction.flag1);
-            setFlags.add("" + reaction.flag2);
-            setProps.add("" + reaction.prop1);
-            setProps.add("" + reaction.prop2);
-            setProps.add("" + reaction.prop3);
-            setProps.add("" + reaction.prop4);
-            setProps.add("" + reaction.prop5);
-            setProps.add("" + reaction.prop6);
-            setProps.add("" + reaction.prop7);
+        for (const gate of scenario.gates) {
+            const scriptType = gate.gate;
+            const restrictions = gate.restrictions;
+            setInvs.add("" + gate.inv1);
+            setInvs.add("" + gate.inv2);
+            setInvs.add("" + gate.inv3);
+            setFlags.add("" + gate.flag1);
+            setFlags.add("" + gate.flag2);
+            setProps.add("" + gate.prop1);
+            setProps.add("" + gate.prop2);
+            setProps.add("" + gate.prop3);
+            setProps.add("" + gate.prop4);
+            setProps.add("" + gate.prop5);
+            setProps.add("" + gate.prop6);
+            setProps.add("" + gate.prop7);
         }
 
         for (let i = 0; i < scenario.startingThings.length; i++) {

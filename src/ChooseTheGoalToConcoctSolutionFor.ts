@@ -7,7 +7,7 @@ import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
 import { SceneInterface } from "./SceneInterface";
 import { SceneInterfaceConcoct } from "./SceneInterfaceConcoct";
-import _ from './20210415JsonPrivate/Script/Script.json';
+import _ from './20210415JsonPrivate/Gate/Gate.json';
 
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {

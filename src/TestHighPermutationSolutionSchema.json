@@ -7,7 +7,7 @@
             "type": "object",
             "allOf": [
                 {
-                    "$ref": "20210415JsonPrivate/Script/Script.json#/definitions/script_type"
+                    "$ref": "20210415JsonPrivate/Gate/Gate.json#/definitions/gate_type"
                 }
             ],
             "properties": {
@@ -107,7 +107,7 @@
                 }
             }
         },    
-        "reactions": {
+        "gates": {
             "type": "array",
             "minItems": 1,
             "items": {

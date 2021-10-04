@@ -57,7 +57,7 @@ function main(): void {
                         console.log("\nSubMenu of " + arrayOfFiles[index]);
                         console.log("---------------------------------------");
                         console.log("1. Play Single");
-                        console.log("2. Solve to Leaf Nodes <--leafs unresolved? add reactions and validate schema");
+                        console.log("2. Solve to Leaf Nodes <--leafs unresolved? add gates and validate schema");
                         console.log("3. Check for unused props and invs <-- delete these");
                         console.log("4. Try Concocting solutions <-- solutions missing? add props to starting props, or things");
                         console.log("5. Choose a character <-- this will give you which characters each solution is restricted to");

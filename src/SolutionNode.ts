@@ -170,7 +170,7 @@ export class SolutionNode {
                    if (theNode) {
                         theMatchingNode.parent = theNode;
                         theNode.inputs[k] = theMatchingNode;
-                        // all reactions are incomplete when they come from the node map
+                        // all gates are incomplete when they come from the node map
                         theSolution.SetNodeIncomplete(theMatchingNode);
                         theSolution.AddRestrictions(theMatchingNode.getRestrictions());
                     }else{

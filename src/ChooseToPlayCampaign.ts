@@ -28,7 +28,7 @@ import { definitions } from './20210415JsonPrivate/AllSchema.json'
 import { SceneMultipleCombined } from "./SceneMultipleCombined";
 import { MixedObjectsAndVerb } from "./MixedObjectsAndVerb";
 import { GetAnyErrorsFromObjectAvailability } from "./GetAnyErrorsFromObjectAvailability";
-import _ from './20210415JsonPrivate/Script/Script.json';
+import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { SolutionNodeMap } from "./SolutionNodeMap";
 import { SceneSingle } from "./SceneSingle";
 

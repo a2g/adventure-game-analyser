@@ -1,5 +1,5 @@
 import { SolutionNodeMap } from './SolutionNodeMap';
-import _ from './20210415JsonPrivate/Script/Script.json';
+import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
 import { Happenings } from './Happenings';
 import { Mix } from './Mix';
