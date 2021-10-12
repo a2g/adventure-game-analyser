@@ -254,6 +254,28 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+            case _.PROP1_BECOMES_PROP2_AS_INV1_BECOMES_INV2:
+                {
+                    happs.text = "The " + gate.prop1 + "has become a " + gate.prop2 + ". And your " + gate.inv1 + " has become a " + gate.inv2 + ".";
+                    //ly don't mention what happen to the prop you clicked on.  "\n You notice the " + gate.prop1 + " has now become a " + gate.prop2;
+                    happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
+                    happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop2)));
+                    happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
+                    happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv2)));
+                    if (solutionNodesMappedByInput) {
+                        // Another weird one, with two outputs - but only one output slot in the graph
+                        // We fill the graph with the main output of the puzzle, otherwise
+                        // the won't puzzle won't get solved.
+                        const output = "" + gate.prop1;
+                        const inputA = "" + gate.prop2;
+                        const inputB = "" + gate.inv1;
+                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
+                       return happs;
+                    }
+                
+                }
+                break;
             case _.PROP1_BECOMES_PROP2_BY_KEEPING_INV1:
                 happs.text = "You use the " + gate.inv1 + ", and the " + gate.prop1 + " becomes a " + gate.inv2;
                 happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
@@ -327,6 +349,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                    return happs;
                 }
                 break;
+            
             case _.PROP1_CHANGES_STATE_TO_PROP2_BY_KEEPING_INV1:
                 happs.text = "You use the " + gate.inv1 + ", and the " + gate.prop1 + " is now " + ExtractBracketedPart(gate.prop2);
                 happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
