@@ -9,6 +9,13 @@ import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ s
 import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
 const prompt = promptSync();
 
+function GetLastSeg(path:string) : string{
+    let lastSeg = path;
+    if(path.includes("/"))
+        return path.substring(path.lastIndexOf("/")+1);
+    return lastSeg;
+}
+
 function main(): void {
    
     while (true) {
@@ -21,10 +28,10 @@ function main(): void {
         const arrayOfFiles = new Array<string>();
         for (let book of books) {
             arrayOfFiles.push(book.mainFile);
-            console.log("" + i++ + ". " + book.mainFile);
+            console.log("" + i++ + ". " + GetLastSeg(book.mainFile));
             for(let file of book.extraFiles){
                 arrayOfFiles.push(file);
-                console.log("" + i++ + ". " + file);
+                console.log("" + i++ + ". " + GetLastSeg(file));
             }
         }
 
