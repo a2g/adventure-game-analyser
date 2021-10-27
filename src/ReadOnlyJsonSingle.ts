@@ -1,13 +1,15 @@
-import { SolutionNodeMap } from './SolutionNodeMap'; 
+import { SolutionNodeMap } from './SolutionNodeMap';
 import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { MixedObjectsAndVerb } from './MixedObjectsAndVerb';
-import { Happenings } from './Happenings'; 
+import { Happenings } from './Happenings';
 import { Mix } from './Mix';
 import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
-import * as fs from "fs"; 
-import { ReadOnlyJsonInterfaceCollater } from './ReadOnlyJsonInterfaceCollater'; 
+import * as fs from "fs";
+import { ReadOnlyJsonInterfaceCollater } from './ReadOnlyJsonInterfaceCollater';
 import { SingleBigSwitch } from './SingleBigSwitch';
 import { isNullOrUndefined } from 'util';
+import { assert } from 'console';
+ 
 
 /**
  * So the most important part of this class is that the data
@@ -22,7 +24,7 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
     readonly allFlags: Array<string>;
     readonly allInvs: Array<string>;
     readonly allChars: Array<string>;
-    readonly mapOfStartingThings:  Map<string, Set<string>>
+    readonly mapOfStartingThings: Map<string, Set<string>>
     readonly startingInvSet: Set<string>;
     readonly startingPropSet: Set<string>
     readonly startingFlagSet: Set<string>
@@ -31,7 +33,9 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
     constructor(filename: string) {
         filename = filename;
         this.filename = filename;
+        assert(fs.existsSync(filename));
         const text = fs.readFileSync(filename, { encoding: "UTF-8" });
+        
         const scenario = JSON.parse(text);
 
         const setProps = new Set<string>();
@@ -56,10 +60,13 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
             setProps.add("" + gate.prop7);
         }
 
-        for (let i = 0; i < scenario.startingThings.length; i++) {
-            const thing = scenario.startingThings[i];
-            if(!isNullOrUndefined(thing.char))
-                setChars.add(thing.char);
+        // starting things is optional in the json
+        if (scenario.hasOwnProperty("startingThings")) {
+            for (let i = 0; i < scenario.startingThings.length; i++) {
+                const thing = scenario.startingThings[i];
+                if (!isNullOrUndefined(thing.char))
+                    setChars.add(thing.char);
+            }
         }
 
         setChars.delete("");
@@ -79,27 +86,34 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
         // preen starting invs from the startingThings
         this.startingInvSet = new Set<string>();
         this.startingFlagSet = new Set<string>();
-        this.startingPropSet  = new Set<string>();
-        for (let i = 0; i < scenario.startingThings.length; i++) {
-            const thing = scenario.startingThings[i];
-            if (thing.thing.startsWith("inv"))
-                this.startingInvSet.add(thing.thing)
-            if (thing.thing.startsWith("flag"))
-                this.startingFlagSet.add(thing.thing)
-            if (thing.thing.startsWith("prop"))
-                this.startingPropSet.add(thing.thing)
-        }
-
+        this.startingPropSet = new Set<string>();
         this.mapOfStartingThings = new Map<string, Set<string>>();
-        for (let item of scenario.startingThings) {
-            if (!this.mapOfStartingThings.has(item.thing)) {
-                this.mapOfStartingThings.set(item.thing, new Set<string>());
+
+
+        // starting things is optional in the json
+        if (scenario.hasOwnProperty("startingThings")) {
+            for (let i = 0; i < scenario.startingThings.length; i++) {
+                const thing = scenario.startingThings[i];
+                if (thing.thing.startsWith("inv"))
+                    this.startingInvSet.add(thing.thing)
+                if (thing.thing.startsWith("flag"))
+                    this.startingFlagSet.add(thing.thing)
+                if (thing.thing.startsWith("prop"))
+                    this.startingPropSet.add(thing.thing)
             }
-            if (!isNullOrUndefined(item.char)) {
-                const char = item.char;
-                const array = this.mapOfStartingThings.get(item.thing);
-                if (char.length && array != null) {
-                    array.add(char);
+
+
+
+            for (let item of scenario.startingThings) {
+                if (!this.mapOfStartingThings.has(item.thing)) {
+                    this.mapOfStartingThings.set(item.thing, new Set<string>());
+                }
+                if (!isNullOrUndefined(item.char)) {
+                    const char = item.char;
+                    const array = this.mapOfStartingThings.get(item.thing);
+                    if (char.length && array != null) {
+                        array.add(char);
+                    }
                 }
             }
         }
@@ -122,8 +136,8 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
     }
 
     AddStartingThingCharsToGivenMap(givenMap: Map<string, Set<string>>): void {
-        this.mapOfStartingThings.forEach((value:Set<string>, key:string)=>{
-            givenMap.set(key,value);
+        this.mapOfStartingThings.forEach((value: Set<string>, key: string) => {
+            givenMap.set(key, value);
         });
     }
 
@@ -206,7 +220,7 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
                 }
             }
         });
-        
+
         return startingThingSet;
     }
 
@@ -239,7 +253,7 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
         return this.allChars;
     }
 
-    
+
     GenerateSolutionNodesMappedByInput(): SolutionNodeMap {
         const result = new SolutionNodeMap(null);
         const notUsed = new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "");

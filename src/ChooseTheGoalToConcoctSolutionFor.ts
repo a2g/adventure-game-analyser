@@ -5,6 +5,7 @@ import { Solution } from "./Solution";
 import { GetDisplayName } from "./GetDisplayName";
 import { RawObjectsAndVerb } from "./RawObjectsAndVerb";
 import { Raw } from "./Raw";
+import * as fs from "fs";
 import { ReadOnlyJsonInterfaceConcoct } from "./ReadOnlyJsonInterfaceConcoct";
 import _ from './20210415JsonPrivate/Gate/Gate.json';
 
@@ -15,6 +16,7 @@ function assert(condition: any, msg?: string): asserts condition {
 }
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
+import { fstat } from "fs";
 const prompt = promptSync();
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
@@ -79,13 +81,13 @@ export class ChooseTheGoalToConcoctSolutionFor {
             const arrayOfChapterWins = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
             for (let i = 0; i < solver.length; i++) {
-                console.log(" " + i + ". Analyze " + GetDisplayName(solver[i].GetName()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
+                console.log(" " + i + ". Examine " + GetDisplayName(solver[i].GetName()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
                 if (solver[i].IsChapterWin())
                     arrayOfChapterWins.push(solver[i]);
             };
 
             for (let i = 0; i < arrayOfChapterWins.length; i++) {
-                console.log(" " + (i+solver.length) + ". Chapter win " + GetDisplayName(arrayOfChapterWins[i].GetName()) + "("+(arrayOfChapterWins[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
+                console.log(" " + (i+solver.length) + ". Recurse chapter " + GetDisplayName(arrayOfChapterWins[i].GetName()) + "("+(arrayOfChapterWins[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
             }
 
             const choice = prompt('').toLowerCase();
@@ -152,6 +154,10 @@ export class ChooseTheGoalToConcoctSolutionFor {
                             setAfterReduction.forEach((entry: string) => {
                                 console.log(GetDisplayName(entry));
                             })
+                            console.log("Below are the map");
+                            for (let blah of mapOfVisibleThings.keys()){
+                                console.log(GetDisplayName(blah));
+                            }
 
                             console.log("Spot what needs to be in the starting set - and fix it!");
                             prompt('Hit a key to continue').toLowerCase();
@@ -173,8 +179,10 @@ export class ChooseTheGoalToConcoctSolutionFor {
                 for (const node of autos) {
                     if (node.inputHints[0] === chapterFlag) {
                         if (node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON) {
-                            let json = new ReadOnlyJsonSingle(node.output);
-                            mapOfRemainingNodes.MergeInNodesFromScene(json);
+                            if(fs.existsSync(node.output)){
+                                let json = new ReadOnlyJsonSingle(node.output);
+                                mapOfRemainingNodes.MergeInNodesFromScene(json);
+                            }
                             continue;
                         }
                     }

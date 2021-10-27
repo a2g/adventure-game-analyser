@@ -269,8 +269,10 @@ export class Solution {
     GetChapterWinFlag(): string {
         if (this.rootNode) {
             if (this.rootNode.inputs[0]) {
-                if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_chapter")) {
-                    return this.rootNode.inputs[0].inputHints[0];
+                if (this.rootNode.inputs[0].inputHints[0]) {
+                    if (this.rootNode.inputs[0].inputHints[0].startsWith("flag_chapter")) {
+                        return this.rootNode.inputs[0].inputHints[0];
+                    }
                 }
             }
         }

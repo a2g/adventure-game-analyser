@@ -31,7 +31,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
         switch (scriptType) {
             case _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON:
                 if (solutionNodesMappedByInput) {
-                    const output = "" + gate.filePath;
+                    const output = "" + gate.fileToMerge;
                     const input = "" + gate.flag1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
                 }
@@ -103,10 +103,25 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                    return happs;
                 }
                 break;
+            
             case _.FLAG1_SET_BY_USING_INV1_WITH_PROP1:
                 happs.text = "You use the " + gate.inv1 + " with the  " + gate.prop1 + " and something good happens...";
                 happs.array.push(new Happening(Happen.InvStays, Stringify(gate.inv1)));
                 happs.array.push(new Happening(Happen.PropStays, Stringify(gate.prop1)));
+                happs.array.push(new Happening(Happen.FlagIsSet, Stringify(gate.flag1)));
+                if (solutionNodesMappedByInput) {
+                    const inputA = "" + gate.inv1;
+                    const inputB = "" + gate.prop1;
+                    const output = "" + gate.flag1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
+                    return happs;
+                }
+                break;
+            case _.FLAG1_SET_BY_USING_INV1_WITH_PROP1_LOSE_PROPS:
+                happs.text = "You use the " + gate.inv1 + " with the  " + gate.prop1 + " and something good happens...";
+                happs.array.push(new Happening(Happen.InvStays, Stringify(gate.inv1)));
+                happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
                 happs.array.push(new Happening(Happen.FlagIsSet, Stringify(gate.flag1)));
                 if (solutionNodesMappedByInput) {
                     const inputA = "" + gate.inv1;
