@@ -7,6 +7,8 @@ import { books } from './20210415JsonPrivate/All.json'
 import { ChooseToPlayCampaign } from './ChooseToPlayCampaign';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
+import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
+import { ReadOnlyJsonSingle } from './ReadOnlyJsonSingle';
 const prompt = promptSync();
 
 function GetLastSeg(path:string) : string{
@@ -25,14 +27,33 @@ function main(): void {
         console.log("==================");
         console.log("0. Play Campaign");
 
-        const arrayOfFiles = new Array<string>();
+
+        const arrayOfMultiLevels = new Array<Array<string>>();
+        let arrayOfSingles = new Array<string>();
         for (let book of books) {
-            arrayOfFiles.push(book.mainFile);
-            console.log("" + i++ + ". " + GetLastSeg(book.mainFile));
+            let newArray = new Array<string>(); 
+
+            // push mainFile first, in case we want the
+            // ReadOnlyJsonMultipleCombined implementation
+            // to know which file is the main
+            newArray.push(book.mainFile);
+            console.log("" + i++ + ". " + GetLastSeg(book.mainFile)+ " (full multi)");
             for(let file of book.extraFiles){
-                arrayOfFiles.push(file);
-                console.log("" + i++ + ". " + GetLastSeg(file));
+                newArray.push(file);
             }
+
+            arrayOfMultiLevels.push(newArray); 
+            // if there are some extras then we add all to singles
+            // ...but if there is none we don't add any because 
+            // you can just choose full to experience it in isolation
+            if(book.extraFiles.length>0)
+            {
+                arrayOfSingles = arrayOfSingles.concat(newArray);
+            }
+        }
+
+        for(let isolated of arrayOfSingles){
+            console.log("" + i++ + ". " + GetLastSeg(isolated) + " (only)");
         }
 
         const choice = prompt("Choose an option (b)ail): ").toLowerCase();
@@ -43,11 +64,15 @@ function main(): void {
                 ChooseToPlayCampaign();
                 break;
             default:
-                const index = Number(choice) - 1;
-                if (index >= 0 && index < arrayOfFiles.length) {
-                    const json = new ReadOnlyJsonMultipleCombined([arrayOfFiles[index]]);
+                let index = Number(choice) - 1;
+                const total = arrayOfMultiLevels.length + arrayOfSingles.length;
+                if (index >= 0 && index < total) {
+                    let isMulti = (index<arrayOfMultiLevels.length);
+                    // adjust index so it picks out its intended type (multi or single) 
+                    index = isMulti? index : index-arrayOfMultiLevels.length;
+                    const json:ReadOnlyJsonInterface = isMulti? new ReadOnlyJsonMultipleCombined(arrayOfMultiLevels[index]) : new ReadOnlyJsonSingle(arrayOfSingles[index]); 
                     while (true) {
-                        console.log("\nSubMenu of " + arrayOfFiles[index]);
+                        console.log("\nSubMenu of " + arrayOfSingles[index]);
                         console.log("---------------------------------------");
                         console.log("1. Play Single");
                         console.log("2. Solve to Leaf Nodes <--leafs unresolved? add gates and validate schema");

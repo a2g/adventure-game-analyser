@@ -145,9 +145,7 @@ export class SolutionNode {
                 // we have the convention that zero is the currentSolution
                 // so we start at the highest index in the list
                 // we when we finish the loop, we are with
-                for (let i = matchingNodes.length - 1; i >= 0; i--) {
-                    // // classic forloop useful because reverse iterator, and check for last iteration
-
+                for (let i = matchingNodes.length - 1; i >= 0; i--) {// need reverse iterator
                     const theMatchingNode = matchingNodes[i];
 
                     // Clone - if needed!

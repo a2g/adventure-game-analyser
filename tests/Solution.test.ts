@@ -83,8 +83,9 @@ describe("Solution", () => {
 
     it("Solution test cloning with High Permutation scene2", () => {
         const json = new ReadOnlyJsonSingle("./tests/TestHighPermutationSolution.json");
-        const collection = new SolverViaRootNode();
-        collection.InitializeByCopyingThese(json.GenerateSolutionNodesMappedByInput(), json.GetMapOfAllStartingThings());
+        const startingThings = json.GetMapOfAllStartingThings();
+        const collection = new SolverViaRootNode(startingThings);
+        collection.InitializeByCopyingThese(json.GenerateSolutionNodesMappedByInput(), startingThings);
         const wasCloneEncountered = collection.SolvePartiallyUntilCloning();
         assert.strictEqual(false, wasCloneEncountered);
 
@@ -94,12 +95,12 @@ describe("Solution", () => {
         assert.strictEqual(collection.length, 1);
         const solution0 = collection[0];
         assert.strictEqual(solution0.GetLeafNodes().size, 27);
-        assert.strictEqual(solution0.GetIncompleteNodes().size, 0);
+        assert.strictEqual(solution0.GetUnprocessedNodes().size, 0);
 
         // process the rest of the nodes
         do {
             collection.SolvePartiallyUntilCloning();
-        } while (collection.IsNodesRemaining());
+        } while (collection.IsAnyNodesUnprocessed());
 
         {
             const leaves = solution0.GetLeafNodes();

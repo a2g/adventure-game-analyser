@@ -6,22 +6,32 @@ import { RawObjectsAndVerb } from './RawObjectsAndVerb';
 import { Raw } from './Raw';
 import _ from './20210415JsonPrivate/Gate/Gate.json';
 import { isNullOrUndefined } from 'util';
+import * as fs from "fs";
+import { ReadOnlyJsonSingle } from './ReadOnlyJsonSingle';
+import { GetDisplayName } from './GetDisplayName';
 
 export class Solution {
+
+    CopyNameToVirginSolution(virginSolution: Solution) {
+        for(let nameSegment of this.solutionNames){
+            virginSolution.PushNameSegment(nameSegment);
+        }
+    }
 
     constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string,Set<string>>, restrictions: Set<string> | null = null) {
         // initialize non aggregates
         {
-            this.solutionName = "uninitialized";
+            this.solutionNames = new Array<string>();
             this.rootNode = root;
-            this.nodeMap = new SolutionNodeMap(copyThisMapOfPieces);
+            this.remainingNodes = new SolutionNodeMap(copyThisMapOfPieces);
+            this.isArchived = false;
         }
 
         // still tossing up whether to add the root to the incompletes
         // on the against side: what if we are cloning a completed solution?
         // on the for side: vaguely remember that a solution needs to be incomplete when empty
-        this.incompleteNodes = new Set<SolutionNode>();
-        this.incompleteNodes.add(root);
+        this.unprocessedNodes = new Set<SolutionNode>();
+        this.unprocessedNodes.add(root);
 
         // its its passed in we deep copy it
         this.restrictionsEncounteredDuringSolving = new Set<string>();
@@ -34,7 +44,11 @@ export class Solution {
         // its its passed in we deep copy it
         this.mapOfVisibleThings = new Map<string,Set<string>>(); 
         startingThingsPassedIn.forEach((value:Set<string>, key:string)=>{
-            this.mapOfVisibleThings.set(key,value);
+            let newSet = new Set<string>();
+            for(let item of value){
+                newSet.add(item);
+            }
+            this.mapOfVisibleThings.set(key,newSet);
         });
 
         // interestingly, leaf nodes don't get cloned 
@@ -49,7 +63,7 @@ export class Solution {
         const incompleteNodes = new Set<SolutionNode>();
         const clonedRootNode = this.rootNode.CloneNodeAndEntireTree(incompleteNodes);
         clonedRootNode.id = this.rootNode.id;//not sure why do this, but looks crucial!
-        const clonedSolution = new Solution(clonedRootNode, this.nodeMap, this.mapOfVisibleThings, this.restrictionsEncounteredDuringSolving);
+        const clonedSolution = new Solution(clonedRootNode, this.remainingNodes, this.mapOfVisibleThings, this.restrictionsEncounteredDuringSolving);
         clonedSolution.SetIncompleteNodes(incompleteNodes);
         return clonedSolution;
     }
@@ -57,21 +71,21 @@ export class Solution {
     SetNodeIncomplete(node: SolutionNode | null): void {
         if (node)
             if (node.type !== SpecialNodes.VerifiedLeaf)
-                this.incompleteNodes.add(node);
+                this.unprocessedNodes.add(node);
     }
 
     MarkNodeAsCompleted(node: SolutionNode | null): void {
         if (node) {
-            if (this.incompleteNodes.has(node)) {
-                this.incompleteNodes.delete(node);
+            if (this.unprocessedNodes.has(node)) {
+                this.unprocessedNodes.delete(node);
             }
         }
     }
 
     SetNodeCompleteGenuine(node: SolutionNode | null): void {
         if (node) {
-            if (this.incompleteNodes.has(node)) {
-                this.incompleteNodes.delete(node);
+            if (this.unprocessedNodes.has(node)) {
+                this.unprocessedNodes.delete(node);
             }
         }
     }
@@ -79,14 +93,14 @@ export class Solution {
 
     SetIncompleteNodes(set: Set<SolutionNode>) {
         // safer to copy this - just being cautious
-        this.incompleteNodes = new Set<SolutionNode>();
+        this.unprocessedNodes = new Set<SolutionNode>();
         for (let node of set) {
-            this.incompleteNodes.add(node);
+            this.unprocessedNodes.add(node);
         }
     }
 
-    IsNodesRemaining(): boolean {
-        return this.incompleteNodes.size > 0;
+    IsAnyNodesUnprocessed(): boolean {
+        return this.unprocessedNodes.size > 0;
     }
 
     AddVerifiedLeaf(path: string, node: SolutionNode): void {
@@ -97,7 +111,7 @@ export class Solution {
         const isBreakingDueToSolutionCloning = this.rootNode.ProcessUntilCloning(this, solutions, "/");
         if (!isBreakingDueToSolutionCloning) {
             // then this means the root node has rolled to completion
-            this.incompleteNodes.clear();
+            this.unprocessedNodes.clear();
         }
         return isBreakingDueToSolutionCloning;
     }
@@ -106,8 +120,8 @@ export class Solution {
         return this.leafNodes;
     }
 
-    GetIncompleteNodes(): Set<SolutionNode> {
-        return this.incompleteNodes;
+    GetUnprocessedNodes(): Set<SolutionNode> {
+        return this.unprocessedNodes;
     }
 
     GetRootNode(): SolutionNode {
@@ -115,11 +129,11 @@ export class Solution {
     }
 
     HasAnyNodesThatOutputObject(objectToObtain: string): boolean {
-        return this.nodeMap.Has(objectToObtain);
+        return this.remainingNodes.Has(objectToObtain);
     }
 
     GetNodesThatOutputObject(objectToObtain: string): SolutionNode[] | undefined {
-        let result = this.nodeMap.Get(objectToObtain);
+        let result = this.remainingNodes.Get(objectToObtain);
         if (result) {
             let blah = new Array<SolutionNode>();
             for (let item of result) {
@@ -133,15 +147,20 @@ export class Solution {
     }
 
     RemoveNode(node: SolutionNode) {
-        this.nodeMap.RemoveNode(node);
+        this.remainingNodes.RemoveNode(node);
     }
 
-    SetName(solutionName: string) {
-        this.solutionName = solutionName;
+    PushNameSegment(solutionName: string) {
+        this.solutionNames.push(solutionName);
     }
 
-    GetName(): string {
-        return this.solutionName;
+    GetDisplayNamesConcatenated(): string {
+        let result = "";
+        for (let i = 0; i < this.solutionNames.length; i++) {
+            let symbol = i == 0 ? "" : "/";
+            result += symbol + GetDisplayName(this.solutionNames[i]);
+        }
+        return result;
     }
 
     GeneratePath(node: SolutionNode | null) {
@@ -226,20 +245,22 @@ export class Solution {
 
 
 
-    GetMapOfCurrentlyVisibleThings(visibleNodes:Map<string,Set<string>>): Map<string, Set<string>> {
+    UpdateMapOfVisibleThingsWithAReverseTraversal() {
         const array = new Array<SolutionNode>();
+
+        // we do this width first recursively to get order from root to leaves
         this.CollectArrayOfNodesInAWidthFirstRecursively(this.rootNode, array);
 
+        // then we traverse the array backwards - from oldest to newest
         for(let i=array.length-1;i>=0;i--){
-            array[i].UpdateMapWithOutcomes(visibleNodes);
+            array[i].UpdateMapWithOutcomes(this.mapOfVisibleThings);
         }
-        return this.mapOfVisibleThings;
     }
 
     GetMapOfCurrentlyRemainingNodes(): SolutionNodeMap {
         // we already remove nodes from this when we use them up
         // so returning the current node map is ok
-        return this.nodeMap;
+        return this.remainingNodes;
     }
 
     private CollectArrayOfNodesInAWidthFirstRecursively(n:SolutionNode, array:Array<SolutionNode|null>){
@@ -278,17 +299,44 @@ export class Solution {
         }
         return "";
     }
+
+    MergeInNodesForChapterCompletion(chapterFlag:string){
+        let autos = this.remainingNodes.GetAutos();
+        for (const node of autos) {
+            // find the auto that imports json
+            if (node.inputHints[0] === chapterFlag) {
+                if (node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON) {
+                    if (fs.existsSync(node.output)) {
+                        let json = new ReadOnlyJsonSingle(node.output);
+                        this.remainingNodes.MergeInNodesFromScene(json);
+                    }
+                    continue;
+                }
+            }
+        }
+    }
+
+    GetMapOfVisibleThings() : Map<string,Set<string>> {
+        return this.mapOfVisibleThings;
+    }
  
+    SetAsArchived() {
+        this.isArchived = true;
+    }
+
+    IsArchived(){
+        return this.isArchived;
+    }
 
     // non aggregates
-    solutionName: string;
+    solutionNames: Array<string>;
     rootNode: SolutionNode;
-    nodeMap: SolutionNodeMap;
+    remainingNodes: SolutionNodeMap;
+    isArchived : boolean;
 
     // aggregates
-    incompleteNodes: Set<SolutionNode>;
+    unprocessedNodes: Set<SolutionNode>;
     leafNodes: Map<string, SolutionNode>;
-    mapOfVisibleThings: Map<string,Set<string>>;
-    readonly restrictionsEncounteredDuringSolving: Set<string>;
-
+    mapOfVisibleThings: Map<string,Set<string>>;// this is updated dynamically in GetNextDoableCommandAndDesconstructTree
+    readonly restrictionsEncounteredDuringSolving: Set<string>; 
 }

@@ -8,16 +8,15 @@ import { Raw } from "./Raw";
 import * as fs from "fs";
 import { ReadOnlyJsonInterfaceConcoct } from "./ReadOnlyJsonInterfaceConcoct";
 import _ from './20210415JsonPrivate/Gate/Gate.json';
+import promptSync from 'prompt-sync';
 
+const prompt = promptSync();
 function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
         throw new Error("assert failure");
     }
 }
-import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
-import { ReadOnlyJsonSingle } from "./ReadOnlyJsonSingle";
-import { fstat } from "fs";
-const prompt = promptSync();
+
 
 function UnionSet(setA: Set<string>, setB: Set<string>): Set<string> {
     const union = new Set(setA)
@@ -66,33 +65,39 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 
 export class ChooseTheGoalToConcoctSolutionFor {
     public DoStuff(json: ReadOnlyJsonInterfaceConcoct): void {
-        let mapOfVisibleThings = json.GetMapOfAllStartingThings();
+        let startingThingsAndWhoCanHavethem = json.GetMapOfAllStartingThings();
         let mapOfRemainingNodes = json.GenerateSolutionNodesMappedByInput();
-
+        
+        // Solve solution nodes
+        const solver = new SolverViaRootNode(startingThingsAndWhoCanHavethem);
+        solver.InitializeByCopyingThese(mapOfRemainingNodes, startingThingsAndWhoCanHavethem);
+        solver.SolveUntilZeroUnprocessedNodes();
+        
         while (true) {
             console.log(" ");
-
-            // Solve solution nodes
-            const solver = new SolverViaRootNode();
-            solver.InitializeByCopyingThese(mapOfRemainingNodes, mapOfVisibleThings);
-            solver.SolveUntilZeroNodesRemaining();
-            solver.GenerateSolutionNames(mapOfVisibleThings);
-
+         
             const arrayOfChapterWins = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
+            let isAnyIncomplete = false;
             for (let i = 0; i < solver.length; i++) {
-                console.log(" " + i + ". Examine " + GetDisplayName(solver[i].GetName()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
-                if (solver[i].IsChapterWin())
-                    arrayOfChapterWins.push(solver[i]);
-            };
-
-            for (let i = 0; i < arrayOfChapterWins.length; i++) {
-                console.log(" " + (i+solver.length) + ". Recurse chapter " + GetDisplayName(arrayOfChapterWins[i].GetName()) + "("+(arrayOfChapterWins[i].GetMapOfCurrentlyRemainingNodes().Size())+")");
+                let isSubGoal = solver[i].IsChapterWin();
+                isAnyIncomplete = isAnyIncomplete||isSubGoal;
+                console.log(" " + i + ". " + GetDisplayName(solver[i].GetDisplayNamesConcatenated()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")" + (isSubGoal? "(subgoal)" : "<--ultimate goal!"));
             }
 
-            const choice = prompt('').toLowerCase();
+            if(isAnyIncomplete){
+                console.log(" " + solver.length + ". Follow subgoals to ultimate goal");
+            }
+
+            const choice = prompt('hmmn?').toLowerCase();
             if (choice === "b")
                 break;
+
+            if(Number(choice) == solver.length)
+            {
+                solver.ProcessChaptersToEnd();
+                continue;
+            }
 
             // go through each one 
             if (Number(choice) < solver.length) {
@@ -101,7 +106,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
                     if (choice !== "-1" && i !== Number(choice))
                         continue;
                     const originalSolution = solver[i];
-                    console.log("Solution called " + GetDisplayName(originalSolution.GetName()));
+                    console.log("Solution called " + originalSolution.GetDisplayNamesConcatenated());
                     let solutionToDestroy = originalSolution;
 
                     let rawObjectsAndVerb: RawObjectsAndVerb | null = null;
@@ -155,7 +160,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
                                 console.log(GetDisplayName(entry));
                             })
                             console.log("Below are the map");
-                            for (let blah of mapOfVisibleThings.keys()){
+                            for (let blah of startingThingsAndWhoCanHavethem.keys()){
                                 console.log(GetDisplayName(blah));
                             }
 
@@ -166,26 +171,6 @@ export class ChooseTheGoalToConcoctSolutionFor {
                         }
                     }
                     console.log("");
-                }
-            } else {// Process chapter win
-                const newIndex = Number(choice)-solver.length;
-                const solution = arrayOfChapterWins[newIndex];
-                let chapterFlag = solution.GetChapterWinFlag();
-                // need to implement these methods so that they
-                mapOfRemainingNodes = solution.GetMapOfCurrentlyRemainingNodes();
-                mapOfVisibleThings = solution.GetMapOfCurrentlyVisibleThings(mapOfVisibleThings);
-                
-                let autos = mapOfRemainingNodes.GetAutos();
-                for (const node of autos) {
-                    if (node.inputHints[0] === chapterFlag) {
-                        if (node.type == _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON) {
-                            if(fs.existsSync(node.output)){
-                                let json = new ReadOnlyJsonSingle(node.output);
-                                mapOfRemainingNodes.MergeInNodesFromScene(json);
-                            }
-                            continue;
-                        }
-                    }
                 }
             }
         }

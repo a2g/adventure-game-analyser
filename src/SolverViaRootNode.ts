@@ -4,48 +4,93 @@ import { GetDisplayName } from './GetDisplayName';
 import { Colors } from './Colors';
 import { Embracketize } from './Embracketize';
 import { SolutionNodeMap } from './SolutionNodeMap';
+import _ from './20210415JsonPrivate/Gate/Gate.json';
 
 
 export class SolverViaRootNode extends Array<Solution>{
+    
+  
+    ProcessChaptersToEnd() {
+        for (let oldSolution of this) {
+            if (oldSolution.IsChapterWin() && !oldSolution.IsArchived()) {
+                let chapterFlag = oldSolution.GetChapterWinFlag();
+                oldSolution.SetAsArchived();
 
-    constructor() {
+                // we do this here, we should really do it as part of solving
+                oldSolution.UpdateMapOfVisibleThingsWithAReverseTraversal();
+                let startingThings = oldSolution.GetMapOfVisibleThings();
+                let mapOfRemainingNodes = oldSolution.GetMapOfCurrentlyRemainingNodes();
+               
+                const solutionRootNode = new SolutionNode("root comment 2", "", 1, null, null, "flag_win");
+                let newSolution = new Solution(solutionRootNode, mapOfRemainingNodes, startingThings);
+                oldSolution.CopyNameToVirginSolution(newSolution);
+                // there is always a directive to merge in nodes upon chapter completion
+                // so find that node, and merge in the new nodes
+                newSolution.MergeInNodesForChapterCompletion(chapterFlag);
+
+                let subGroup = new SolverViaRootNode(startingThings);
+                subGroup.push(newSolution);
+                subGroup.SolveUntilZeroUnprocessedNodes();// - this includes pushing a new name segment
+            
+                let debug  = subGroup.length;
+                for(let subItem of subGroup){
+                    let isChapterWin = subItem.IsChapterWin();
+                    this.push(subItem);
+                }
+            }
+        }
+    }
+
+    constructor(mapOfStartingThingsAndWhoCanHaveThem : Map<string, Set<string>>) {
         super();
-    }
-
-    InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, mapOfVisibleThings: Map<string,Set<string>>) {
-        const solutionRootNode = new SolutionNode("root via app", "", 1, null, null, "flag_win");
-        this.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfVisibleThings));
-    }
-
-    IsNodesRemaining(): boolean {
-        let isNodesRemaining = false;
-        this.forEach((solution: Solution) => {
-            if (solution.IsNodesRemaining())
-                isNodesRemaining = true;
+        this.mapOfStartingThingsAndWhoCanHaveThem = new Map<string,Set<string> >();
+        mapOfStartingThingsAndWhoCanHaveThem.forEach((value: Set<string>, key: string) => {
+            let newSet = new Set<string>();
+            for(let item of value){
+                newSet.add(item);
+            }
+            this.mapOfStartingThingsAndWhoCanHaveThem.set(key,newSet);
         });
-        return isNodesRemaining;
+       
+    }
+
+    InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, mapOfStartingThingsAndWhoCanHaveThem: Map<string,Set<string>>) {
+        const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_win");
+        this.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfStartingThingsAndWhoCanHaveThem));
+    }
+
+    IsAnyNodesUnprocessed(): boolean {
+        let isAnyNodesUnprocessed = false;
+        this.forEach((solution: Solution) => {
+            if (solution.IsAnyNodesUnprocessed())
+                isAnyNodesUnprocessed = true;
+        });
+        return isAnyNodesUnprocessed;
     }
 
     SolvePartiallyUntilCloning(): boolean {
         let hasACloneJustBeenCreated = false
         this.forEach((solution: Solution) => {
-            if (solution.IsNodesRemaining()) {
-                if (solution.ProcessUntilCloning(this))
-                    hasACloneJustBeenCreated = true;
+            if (solution.IsAnyNodesUnprocessed()) {
+                if(!solution.IsArchived()){
+                     if (solution.ProcessUntilCloning(this)){
+                        hasACloneJustBeenCreated = true;
+                     }
+                }
             }
         });
         return hasACloneJustBeenCreated;
     }
 
-    SolveUntilZeroNodesRemaining() {
+    SolveUntilZeroUnprocessedNodes() {
         do {
             this.SolvePartiallyUntilCloning();
-        } while (this.IsNodesRemaining());
+        } while (this.IsAnyNodesUnprocessed());
 
-        this.GenerateSolutionNames(null);
+        this.GenerateSolutionNamesAndPush(this.mapOfStartingThingsAndWhoCanHaveThem);
     }
 
-    GenerateSolutionNames(mapOfStartingThings: Map<string,Set<string>> | null) {
+    GenerateSolutionNamesAndPush(mapOfStartingThingsAndWhoHasThem: Map<string,Set<string>> ) {
         for (let i = 0; i < this.length; i++) {
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
@@ -85,8 +130,8 @@ export class SolverViaRootNode extends Array<Solution>{
                 }
 
                 // now we potentially add startingSet items to restrictions
-                if (mapOfStartingThings) {
-                    mapOfStartingThings.forEach((chars:Set<string>, key:string)=>{
+                if (mapOfStartingThingsAndWhoHasThem) {
+                    mapOfStartingThingsAndWhoHasThem.forEach((chars:Set<string>, key:string)=>{
                         if (key === leafNode.output) {
                             for(let char of chars){
                                 accumulatedRestrictions.add(char);
@@ -97,7 +142,9 @@ export class SolverViaRootNode extends Array<Solution>{
 
             }
 
-            currSolution.SetName("sol_" + minLeafNodeName + Colors.Reset + (accumulatedRestrictions.size > 0 ? Embracketize(GetDisplayName(Array.from(accumulatedRestrictions))) : ""));
+            currSolution.PushNameSegment("sol_" + minLeafNodeName + Colors.Reset + (accumulatedRestrictions.size > 0 ? Embracketize(GetDisplayName(Array.from(accumulatedRestrictions))) : ""));
         }
     }
+
+    readonly mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>;
 }

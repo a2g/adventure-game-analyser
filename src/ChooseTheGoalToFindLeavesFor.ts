@@ -10,27 +10,26 @@ const prompt = promptSync();
 
 export class ChooseTheGoalToFindLeavesFor {
 
-
     public DoStuff(json: ReadOnlyJsonInterfaceFindLeaves): void {
         while (true) {
             console.log(" ");
-
-            const collection = new SolverViaRootNode();
+            let startingThingsAndWhoCanHaveThem = json.GetMapOfAllStartingThings();
+            const collection = new SolverViaRootNode(startingThingsAndWhoCanHaveThem);
             const objective = "flag_win";
-            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), json.GetMapOfAllStartingThings()));
+            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
 
             do {
                 collection.SolvePartiallyUntilCloning();
-            } while (collection.IsNodesRemaining());
+            } while (collection.IsAnyNodesUnprocessed());
 
             for (; ;) {
                 console.log("Number of solutions = " + collection.length);
                 let numberOfLeaves = 0;
 
                 // display list
-                collection.GenerateSolutionNames(json.GetMapOfAllStartingThings());
+                collection.GenerateSolutionNamesAndPush(json.GetMapOfAllStartingThings());
                 for(let solution of collection){
-                    console.log(GetDisplayName(solution.GetName()))
+                    console.log(GetDisplayName(solution.GetDisplayNamesConcatenated()))
                     const needs = solution.GetLeafNodes();
                     for (let node of needs.values()) {
                         numberOfLeaves++;
