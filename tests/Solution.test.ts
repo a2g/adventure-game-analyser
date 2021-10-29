@@ -92,8 +92,8 @@ describe("Solution", () => {
         // having this actually result in a single solution is awesome.
         // we don't want too many or it will be hard to understand
         // that the multiple solutions are the same thing.
-        assert.strictEqual(collection.length, 1);
-        const solution0 = collection[0];
+        assert.strictEqual(collection.array.length, 1);
+        const solution0 = collection.array[0];
         assert.strictEqual(solution0.GetLeafNodes().size, 27);
         assert.strictEqual(solution0.GetUnprocessedNodes().size, 0);
 

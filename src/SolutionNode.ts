@@ -160,7 +160,7 @@ export class SolutionNode {
                     // something like to fix a bug where cloning doesn't mark node as complete
                     theSolution.MarkNodeAsCompleted(theSolution.rootNode);
                     if (isCloneBeingUsed)
-                        solutions.push(theSolution);
+                        solutions.array.push(theSolution);
 
                     // rediscover the current node in theSolution - again because we might be cloned
                     const theNode = theSolution.GetRootNode().FindAnyNodeMatchingIdRecursively(this.id);

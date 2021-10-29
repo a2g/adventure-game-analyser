@@ -18,10 +18,9 @@ export class Solution {
         }
     }
 
-    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string,Set<string>>, restrictions: Set<string> | null = null) {
+    constructor(root: SolutionNode, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string,Set<string>>, restrictions: Set<string> | null = null, nameSegments: Array<string> | null = null) {
         // initialize non aggregates
         {
-            this.solutionNames = new Array<string>();
             this.rootNode = root;
             this.remainingNodes = new SolutionNodeMap(copyThisMapOfPieces);
             this.isArchived = false;
@@ -32,6 +31,14 @@ export class Solution {
         // on the for side: vaguely remember that a solution needs to be incomplete when empty
         this.unprocessedNodes = new Set<SolutionNode>();
         this.unprocessedNodes.add(root);
+
+        // if it is passed in, we deep copy it
+        this.solutionNames = new Array<string>();
+        if(nameSegments)
+        {
+            for(let segment of nameSegments)
+                this.solutionNames.push(segment);
+        }
 
         // its its passed in we deep copy it
         this.restrictionsEncounteredDuringSolving = new Set<string>();
@@ -63,7 +70,7 @@ export class Solution {
         const incompleteNodes = new Set<SolutionNode>();
         const clonedRootNode = this.rootNode.CloneNodeAndEntireTree(incompleteNodes);
         clonedRootNode.id = this.rootNode.id;//not sure why do this, but looks crucial!
-        const clonedSolution = new Solution(clonedRootNode, this.remainingNodes, this.mapOfVisibleThings, this.restrictionsEncounteredDuringSolving);
+        const clonedSolution = new Solution(clonedRootNode, this.remainingNodes, this.mapOfVisibleThings, this.restrictionsEncounteredDuringSolving, this.solutionNames);
         clonedSolution.SetIncompleteNodes(incompleteNodes);
         return clonedSolution;
     }

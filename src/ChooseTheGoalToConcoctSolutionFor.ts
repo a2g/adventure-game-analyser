@@ -79,33 +79,33 @@ export class ChooseTheGoalToConcoctSolutionFor {
             const arrayOfChapterWins = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
             let isAnyIncomplete = false;
-            for (let i = 0; i < solver.length; i++) {
-                let isSubGoal = solver[i].IsChapterWin();
+            for (let i = 0; i < solver.array.length; i++) {
+                let isSubGoal = solver.array[i].IsChapterWin();
                 isAnyIncomplete = isAnyIncomplete||isSubGoal;
-                console.log(" " + i + ". " + GetDisplayName(solver[i].GetDisplayNamesConcatenated()) + "("+(solver[i].GetMapOfCurrentlyRemainingNodes().Size())+")" + (isSubGoal? "(subgoal)" : "<--ultimate goal!"));
+                console.log(" " + i + ". " + GetDisplayName(solver.array[i].GetDisplayNamesConcatenated()) + "("+(solver.array[i].GetMapOfCurrentlyRemainingNodes().Size())+")" + (isSubGoal? "(subgoal)" : "<--ultimate goal!"));
             }
 
             if(isAnyIncomplete){
-                console.log(" " + solver.length + ". Follow subgoals to ultimate goal");
+                console.log(" " + solver.array.length + ". Follow subgoals to ultimate goal, and update");
             }
 
             const choice = prompt('hmmn?').toLowerCase();
             if (choice === "b")
                 break;
 
-            if(Number(choice) == solver.length)
+            if(Number(choice) == solver.array.length)
             {
-                solver.ProcessChaptersToEnd();
+                solver.ProcessChaptersToEndAndUpdateList();
                 continue;
             }
 
             // go through each one 
-            if (Number(choice) < solver.length) {
+            if (Number(choice) < solver.array.length) {
                 // Process an Analyse option from above
-                for (let i = 0; i < solver.length; i++) {
+                for (let i = 0; i < solver.array.length; i++) {
                     if (choice !== "-1" && i !== Number(choice))
                         continue;
-                    const originalSolution = solver[i];
+                    const originalSolution = solver.array[i];
                     console.log("Solution called " + originalSolution.GetDisplayNamesConcatenated());
                     let solutionToDestroy = originalSolution;
 
@@ -171,6 +171,8 @@ export class ChooseTheGoalToConcoctSolutionFor {
                         }
                     }
                     console.log("");
+
+                    prompt('Hit any key to continue...');
                 }
             }
         }

@@ -16,19 +16,19 @@ export class ChooseTheGoalToFindLeavesFor {
             let startingThingsAndWhoCanHaveThem = json.GetMapOfAllStartingThings();
             const collection = new SolverViaRootNode(startingThingsAndWhoCanHaveThem);
             const objective = "flag_win";
-            collection.push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
+            collection.array.push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
 
             do {
                 collection.SolvePartiallyUntilCloning();
             } while (collection.IsAnyNodesUnprocessed());
 
             for (; ;) {
-                console.log("Number of solutions = " + collection.length);
+                console.log("Number of solutions = " + collection.array.length);
                 let numberOfLeaves = 0;
 
                 // display list
                 collection.GenerateSolutionNamesAndPush(json.GetMapOfAllStartingThings());
-                for(let solution of collection){
+                for(let solution of collection.array){
                     console.log(GetDisplayName(solution.GetDisplayNamesConcatenated()))
                     const needs = solution.GetLeafNodes();
                     for (let node of needs.values()) {
@@ -48,7 +48,7 @@ export class ChooseTheGoalToFindLeavesFor {
                     const number = Number(input);
                     if (number > 0 && number <= numberOfLeaves) {
                         let i = 0;
-                        collection.forEach(function (solution: Solution) {
+                        collection.array.forEach(function (solution: Solution) {
                             const needs = solution.GetLeafNodes();
                             needs.forEach((value: SolutionNode, key: string) => {
                                 i++;
