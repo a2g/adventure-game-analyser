@@ -69,7 +69,7 @@ export class SolverViaRootNode {
                 let startingThings = oldSolution.GetMapOfVisibleThings();
                 let mapOfRemainingNodes = oldSolution.GetMapOfCurrentlyRemainingNodes();
 
-                const solutionRootNode = new SolutionNode("root comment 2", "", 1, null, null, "flag_win");
+                const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_win");
                 let newSolution = new Solution(solutionRootNode, mapOfRemainingNodes, startingThings);
                 oldSolution.CopyNameToVirginSolution(newSolution);
                 // there is always a directive to merge in nodes upon chapter completion
@@ -81,9 +81,24 @@ export class SolverViaRootNode {
                 subGroup.SolveUntilZeroUnprocessedNodes();// - this includes pushing a new name segment
 
                 let debug = subGroup.solutions.length;
-                for (let subItem of subGroup.solutions) {
-                    let isChapterWin = subItem.IsChapterWin();
-                    newList.push(subItem);
+                for (let solution of subGroup.solutions) {
+                    let isChapterWin = solution.IsChapterWin();
+                    let leafNodes = solution.GetLeafNodes();
+                    let isSameLeafNodesFoundInOtherSolution = false;
+                    for (let otherSolution of this.solutions) {
+                        let isLeafPathMissing = false;
+                        otherSolution.GetLeafNodes().forEach((value: SolutionNode, leafPath: string)=>{
+                            if (!leafNodes.has(leafPath)) {
+                                isLeafPathMissing = true;
+                            }
+                        });
+                        if (!isLeafPathMissing) {
+                            isSameLeafNodesFoundInOtherSolution = true;
+                            break;
+                        }
+                    }
+                    if(!isSameLeafNodesFoundInOtherSolution)
+                        newList.push(solution);
                 }
             }
         }
@@ -146,11 +161,10 @@ export class SolverViaRootNode {
         }
     }
 
-
-
     GetSolutions():Array<Solution>{
         return this.solutions;
     }
+
     private solutions :Array<Solution>;
     private readonly mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>;
 }

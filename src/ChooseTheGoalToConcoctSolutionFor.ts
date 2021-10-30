@@ -86,7 +86,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
             }
 
             if(isAnyIncomplete){
-                console.log(" " + solver.GetSolutions().length + ". Follow subgoals to ultimate goal, and update");
+                console.log(" " + solver.GetSolutions().length + ". Progress subgoals a single level more, and update");
             }
 
             const choice = prompt('hmmn?').toLowerCase();
