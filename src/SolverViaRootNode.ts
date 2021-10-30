@@ -80,6 +80,9 @@ export class SolverViaRootNode {
                 subGroup.solutions.push(newSolution);
                 subGroup.SolveUntilZeroUnprocessedNodes();// - this includes pushing a new name segment
 
+                // some of the new solutions could be doubles
+                // so this long process ensures that duplicates
+                // are not added to the newList
                 let debug = subGroup.solutions.length;
                 for (let solution of subGroup.solutions) {
                     let isChapterWin = solution.IsChapterWin();
