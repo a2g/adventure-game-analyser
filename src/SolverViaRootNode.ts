@@ -5,6 +5,7 @@ import { Colors } from './Colors';
 import { Embracketize } from './Embracketize';
 import { SolutionNodeMap } from './SolutionNodeMap';
 import _ from './20210415JsonPrivate/Gate/Gate.json';
+import { assert } from 'console';
 
 
 export class SolverViaRootNode {
@@ -57,6 +58,7 @@ export class SolverViaRootNode {
     }
 
     ProcessChaptersToEndAndUpdateList() {
+        // this needs to be a member function because we are overwriting this.solutions
         let newList = new Array<Solution>();
         for (let oldSolution of this.solutions) {
             if (!oldSolution.IsChapterWin()) {
@@ -72,23 +74,27 @@ export class SolverViaRootNode {
                 const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_win");
                 let newSolution = new Solution(solutionRootNode, mapOfRemainingNodes, startingThings);
                 oldSolution.CopyNameToVirginSolution(newSolution);
+
                 // there is always a directive to merge in nodes upon chapter completion
                 // so find that node, and merge in the new nodes
                 newSolution.MergeInNodesForChapterCompletion(chapterFlag);
 
                 let subGroup = new SolverViaRootNode(startingThings);
                 subGroup.solutions.push(newSolution);
-                subGroup.SolveUntilZeroUnprocessedNodes();// - this includes pushing a new name segment
+                subGroup.SolveUntilZeroUnprocessedNodes();// - this includes name generation
 
                 // some of the new solutions could be doubles
                 // so this long process ensures that duplicates
                 // are not added to the newList
                 let debug = subGroup.solutions.length;
                 for (let solution of subGroup.solutions) {
+                    let name = solution.GetDisplayNamesConcatenated();
                     let isChapterWin = solution.IsChapterWin();
                     let leafNodes = solution.GetLeafNodes();
                     let isSameLeafNodesFoundInOtherSolution = false;
                     for (let otherSolution of this.solutions) {
+                        let otherName = otherSolution.GetDisplayNamesConcatenated();
+                    
                         let isLeafPathMissing = false;
                         otherSolution.GetLeafNodes().forEach((value: SolutionNode, leafPath: string)=>{
                             if (!leafNodes.has(leafPath)) {
@@ -100,8 +106,14 @@ export class SolverViaRootNode {
                             break;
                         }
                     }
-                    if(!isSameLeafNodesFoundInOtherSolution)
-                        newList.push(solution);
+                    if (!isSameLeafNodesFoundInOtherSolution) {
+                        let newName = solution.GetLastDisplayNameSegment();
+                        let existingName = oldSolution.GetLastDisplayNameSegment());
+                        if(newName!=existingName)
+                        {
+                            newList.push(solution);
+                        }
+                    }
                 }
             }
         }

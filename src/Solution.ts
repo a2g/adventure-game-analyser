@@ -335,8 +335,12 @@ export class Solution {
         return this.isArchived;
     }
 
+    GetLastDisplayNameSegment(){
+        return this.solutionNames[this.solutionNames.length-1];
+    }
+
     // non aggregates
-    solutionNames: Array<string>;
+    private solutionNames: Array<string>;
     rootNode: SolutionNode;
     remainingNodes: SolutionNodeMap;
     isArchived : boolean;
