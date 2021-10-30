@@ -9,7 +9,7 @@ import _ from './20210415JsonPrivate/Gate/Gate.json';
 
 export class SolverViaRootNode {
     constructor(mapOfStartingThingsAndWhoCanHaveThem : Map<string, Set<string>>) {
-        this.array = new Array<Solution>();
+        this.solutions = new Array<Solution>();
         this.mapOfStartingThingsAndWhoCanHaveThem = new Map<string,Set<string> >();
         mapOfStartingThingsAndWhoCanHaveThem.forEach((value: Set<string>, key: string) => {
             let newSet = new Set<string>();
@@ -22,12 +22,12 @@ export class SolverViaRootNode {
 
     InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, mapOfStartingThingsAndWhoCanHaveThem: Map<string,Set<string>>) {
         const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_win");
-        this.array.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfStartingThingsAndWhoCanHaveThem));
+        this.solutions.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfStartingThingsAndWhoCanHaveThem));
     }
 
     IsAnyNodesUnprocessed(): boolean {
         let isAnyNodesUnprocessed = false;
-        this.array.forEach((solution: Solution) => {
+        this.solutions.forEach((solution: Solution) => {
             if (solution.IsAnyNodesUnprocessed())
                 isAnyNodesUnprocessed = true;
         });
@@ -36,7 +36,7 @@ export class SolverViaRootNode {
 
     SolvePartiallyUntilCloning(): boolean {
         let hasACloneJustBeenCreated = false
-        this.array.forEach((solution: Solution) => {
+        this.solutions.forEach((solution: Solution) => {
             if (solution.IsAnyNodesUnprocessed()) {
                 if(!solution.IsArchived()){
                      if (solution.ProcessUntilCloning(this)){
@@ -58,7 +58,7 @@ export class SolverViaRootNode {
 
     ProcessChaptersToEndAndUpdateList() {
         let newList = new Array<Solution>();
-        for (let oldSolution of this.array) {
+        for (let oldSolution of this.solutions) {
             if (!oldSolution.IsChapterWin()) {
                 newList.push(oldSolution);
             }else{
@@ -77,27 +77,27 @@ export class SolverViaRootNode {
                 newSolution.MergeInNodesForChapterCompletion(chapterFlag);
 
                 let subGroup = new SolverViaRootNode(startingThings);
-                subGroup.array.push(newSolution);
+                subGroup.solutions.push(newSolution);
                 subGroup.SolveUntilZeroUnprocessedNodes();// - this includes pushing a new name segment
 
-                let debug = subGroup.array.length;
-                for (let subItem of subGroup.array) {
+                let debug = subGroup.solutions.length;
+                for (let subItem of subGroup.solutions) {
                     let isChapterWin = subItem.IsChapterWin();
                     newList.push(subItem);
                 }
             }
         }
-        this.array = newList;
+        this.solutions = newList;
     }
 
     GenerateSolutionNamesAndPush(mapOfStartingThingsAndWhoHasThem: Map<string,Set<string>> ) {
-        for (let i = 0; i < this.array.length; i++) {
+        for (let i = 0; i < this.solutions.length; i++) {
             // now lets find out the amount leafNode name exists in all the other solutions
             const mapForCounting = new Map<string, number>();
-            for (let j = 0; j < this.array.length; j++) {
+            for (let j = 0; j < this.solutions.length; j++) {
                 if (i === j)
                     continue;
-                const otherSolution = this.array[j];
+                const otherSolution = this.solutions[j];
                 const otherLeafs = otherSolution.GetLeafNodes();
                 for (let leafNode of otherLeafs.values()) {
                     const otherLeafNodeName = leafNode.output;
@@ -110,7 +110,7 @@ export class SolverViaRootNode {
             }
 
             // find least popular leaf in solution i
-            const currSolution = this.array[i];
+            const currSolution = this.solutions[i];
             let minLeafNodeNameCount = 1000; //something high
             let minLeafNodeName = "not found";
 
@@ -146,6 +146,11 @@ export class SolverViaRootNode {
         }
     }
 
-    array:Array<Solution>;
-    readonly mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>;
+
+
+    GetSolutions():Array<Solution>{
+        return this.solutions;
+    }
+    private solutions :Array<Solution>;
+    private readonly mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>;
 }

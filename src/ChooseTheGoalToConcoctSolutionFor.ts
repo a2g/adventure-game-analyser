@@ -79,33 +79,33 @@ export class ChooseTheGoalToConcoctSolutionFor {
             const arrayOfChapterWins = new Array<Solution>();
             console.log("Choose a solution,  -1 for All or (b)ack: ")
             let isAnyIncomplete = false;
-            for (let i = 0; i < solver.array.length; i++) {
-                let isSubGoal = solver.array[i].IsChapterWin();
+            for (let i = 0; i < solver.GetSolutions().length; i++) {
+                let isSubGoal = solver.GetSolutions()[i].IsChapterWin();
                 isAnyIncomplete = isAnyIncomplete||isSubGoal;
-                console.log(" " + i + ". " + GetDisplayName(solver.array[i].GetDisplayNamesConcatenated()) + "("+(solver.array[i].GetMapOfCurrentlyRemainingNodes().Size())+")" + (isSubGoal? "(subgoal)" : "<--ultimate goal!"));
+                console.log(" " + i + ". " + GetDisplayName(solver.GetSolutions()[i].GetDisplayNamesConcatenated()) + "("+(solver.GetSolutions()[i].GetMapOfCurrentlyRemainingNodes().Size())+")" + (isSubGoal? "(subgoal)" : "<--ultimate goal!"));
             }
 
             if(isAnyIncomplete){
-                console.log(" " + solver.array.length + ". Follow subgoals to ultimate goal, and update");
+                console.log(" " + solver.GetSolutions().length + ". Follow subgoals to ultimate goal, and update");
             }
 
             const choice = prompt('hmmn?').toLowerCase();
             if (choice === "b")
                 break;
 
-            if(Number(choice) == solver.array.length)
+            if(Number(choice) == solver.GetSolutions().length)
             {
                 solver.ProcessChaptersToEndAndUpdateList();
                 continue;
             }
 
             // go through each one 
-            if (Number(choice) < solver.array.length) {
+            if (Number(choice) < solver.GetSolutions().length) {
                 // Process an Analyse option from above
-                for (let i = 0; i < solver.array.length; i++) {
+                for (let i = 0; i < solver.GetSolutions().length; i++) {
                     if (choice !== "-1" && i !== Number(choice))
                         continue;
-                    const originalSolution = solver.array[i];
+                    const originalSolution = solver.GetSolutions()[i];
                     console.log("Solution called " + originalSolution.GetDisplayNamesConcatenated());
                     let solutionToDestroy = originalSolution;
 
