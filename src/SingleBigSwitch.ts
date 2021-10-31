@@ -15,7 +15,7 @@ function Stringify(name: string | undefined): string {
 
 
 export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: SolutionNodeMap | null, objects: MixedObjectsAndVerb): Happenings | null {
- 
+
     const text = fs.readFileSync(filename, { encoding: "UTF-8" });
     const scenario = JSON.parse(text);
 
@@ -48,7 +48,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
-           
+
             case _.AUTO_FLAG1_SET_BY_FLAG2:
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.flag1;
@@ -73,9 +73,9 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 happs.array.push(new Happening(Happen.FlagIsSet, Stringify(gate.flag1)));
                 happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
                 happs.array.push(new Happening(Happen.PropStays, Stringify(gate.prop1)));
-                if(!isNullOrUndefined(gate.prop2))
+                if (!isNullOrUndefined(gate.prop2))
                     happs.array.push(new Happening(Happen.PropStays, Stringify(gate.prop2)));
-                if(!isNullOrUndefined(gate.prop3))
+                if (!isNullOrUndefined(gate.prop3))
                     happs.array.push(new Happening(Happen.PropStays, Stringify(gate.prop3)));
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.flag1;
@@ -88,7 +88,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
-          
+
             case _.FLAG1_SET_BY_USING_INV1_WITH_INV2:
                 happs.text = "You use the " + gate.inv1 + " with the  " + gate.inv2 + " and something good happens...";
                 happs.array.push(new Happening(Happen.InvStays, Stringify(gate.inv1)));
@@ -100,10 +100,10 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const output = "" + gate.flag1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.inv2)) {
-                   return happs;
+                    return happs;
                 }
                 break;
-            
+
             case _.FLAG1_SET_BY_USING_INV1_WITH_PROP1:
                 happs.text = "You use the " + gate.inv1 + " with the  " + gate.prop1 + " and something good happens...";
                 happs.array.push(new Happening(Happen.InvStays, Stringify(gate.inv1)));
@@ -174,7 +174,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
                 }
                 else if (objects.Match("Use", gate.inv1, gate.inv2)) {
-                   return happs;
+                    return happs;
                 }
                 break;
             case _.INV1_AND_INV2_GENERATE_INV3:
@@ -220,7 +220,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + gate.prop1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
-                   return happs;
+                    return happs;
                 }
                 break;
             case _.INV1_BECOMES_INV2_BY_LOSING_INV3:
@@ -270,25 +270,22 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 }
                 break;
             case _.PROP1_BECOMES_PROP2_AS_INV1_BECOMES_INV2:
-                {
-                    happs.text = "The " + gate.prop1 + "has become a " + gate.prop2 + ". And your " + gate.inv1 + " has become a " + gate.inv2 + ".";
-                    //ly don't mention what happen to the prop you clicked on.  "\n You notice the " + gate.prop1 + " has now become a " + gate.prop2;
-                    happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
-                    happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop2)));
-                    happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
-                    happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv2)));
-                    if (solutionNodesMappedByInput) {
-                        // Another weird one, with two outputs - but only one output slot in the graph
-                        // We fill the graph with the main output of the puzzle, otherwise
-                        // the won't puzzle won't get solved.
-                        const output = "" + gate.prop1;
-                        const inputA = "" + gate.prop2;
-                        const inputB = "" + gate.inv1;
-                        solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
-                    } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
-                       return happs;
-                    }
-                
+                happs.text = "The " + gate.prop1 + "has become a " + gate.prop2 + ". And your " + gate.inv1 + " has become a " + gate.inv2 + ".";
+                //ly don't mention what happen to the prop you clicked on.  "\n You notice the " + gate.prop1 + " has now become a " + gate.prop2;
+                happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
+                happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop2)));
+                happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
+                happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv2)));
+                if (solutionNodesMappedByInput) {
+                    // Another weird one, with two outputs - but only one output slot in the graph
+                    // We fill the graph with the main output of the puzzle, otherwise
+                    // the won't puzzle won't get solved.
+                    const output = "" + gate.prop1;
+                    const inputA = "" + gate.prop2;
+                    const inputB = "" + gate.inv1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
+                    return happs;
                 }
                 break;
             case _.PROP1_BECOMES_PROP2_BY_KEEPING_INV1:
@@ -361,10 +358,10 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const output = "" + gate.inv1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA));
                 } else if (objects.Match("Grab", gate.prop1, "")) {
-                   return happs;
+                    return happs;
                 }
                 break;
-            
+
             case _.PROP1_CHANGES_STATE_TO_PROP2_BY_KEEPING_INV1:
                 happs.text = "You use the " + gate.inv1 + ", and the " + gate.prop1 + " is now " + ExtractBracketedPart(gate.prop2);
                 happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
@@ -376,7 +373,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + gate.inv1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
-                     return happs;
+                    return happs;
                 }
                 break;
             case _.PROP1_GOES_WHEN_GRAB_INV1:
@@ -416,8 +413,21 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+            case _.TOGGLE_PROP1_REVEALS_PROP2_AS_IT_BECOMES_PROP3:
+                happs.text = "The " + gate.prop1 + " becomes " + gate.prop3 + " and reveals " + gate.prop2;
+                happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
+                happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop2)));
+                happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop3)));
+                if (solutionNodesMappedByInput) {
+                    const input = "" + gate.prop1;
+                    const output = "" + gate.prop2;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
+                } else if (objects.Match("Toggle", gate.prop1, "")) {
+                    return happs;
+                }
+                break;
             default:
-                console.log( "We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema. " + scriptType);
+                console.log("We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema. " + scriptType);
 
         }
     }

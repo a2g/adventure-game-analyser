@@ -108,7 +108,7 @@ export class SolverViaRootNode {
                     }
                     if (!isSameLeafNodesFoundInOtherSolution) {
                         let newName = solution.GetLastDisplayNameSegment();
-                        let existingName = oldSolution.GetLastDisplayNameSegment());
+                        let existingName = oldSolution.GetLastDisplayNameSegment();
                         if(newName!=existingName)
                         {
                             newList.push(solution);
