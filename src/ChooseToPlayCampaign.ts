@@ -6,7 +6,7 @@ import { ReadOnlyJsonMultipleCombined } from "./ReadOnlyJsonMultipleCombined";
 import { PlayPlayable } from "./PlayPlayable";
 import { Playable } from "./Playable";
 import { PlayerAI } from "./PlayerAI";
-import { definitions } from './20210415JsonPrivate/AllSchema.json';
+import { definitions } from './20210415JsonPrivate/Gate/GateCampaignFramework.json';
 import { SolutionNodeMap } from "./SolutionNodeMap";
 
 /*
