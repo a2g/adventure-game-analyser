@@ -39,9 +39,9 @@
     <Content Include="20210415JsonPrivate\HospObjects.json" />
     <Content Include="20210415JsonPrivate\HospScene.json" />
     <Content Include="20210415JsonPrivate\HospSchema.json" />
-    <Content Include="20210415JsonPrivate\Script\LICENSE" />
-    <Content Include="20210415JsonPrivate\Script\README.md" />
-    <Content Include="20210415JsonPrivate\Script\Script.json" />
+    <Content Include="20210415JsonPrivate\Gate\LICENSE" />
+    <Content Include="20210415JsonPrivate\Gate\README.md" />
+    <Content Include="20210415JsonPrivate\Gate\Gate.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="tests\mocha.json" />
@@ -159,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="20210415JsonPrivate\" />
-    <Folder Include="20210415JsonPrivate\Script\" />
+    <Folder Include="20210415JsonPrivate\Gate\" />
     <Folder Include="src\" />
     <Folder Include="test\" />
   </ItemGroup>
