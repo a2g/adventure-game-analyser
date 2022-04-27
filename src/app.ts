@@ -80,7 +80,7 @@ function main(): void {
                         console.log("4. Try Concocting solutions <-- solutions missing? add props to starting props, or things");
                         console.log("5. Choose a character <-- this will give you which characters each solution is restricted to");
                    
-                        const choice = prompt("Choose an option (b)ail: ").toLowerCase();
+                        const choice = prompt("Choose an option (b)ack: ").toLowerCase();
                         if(choice=='b')
                             break;
                         switch (choice) {

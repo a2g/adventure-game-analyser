@@ -145,7 +145,7 @@ export function ChooseToPlayCampaign(): void {
         }
 
         // ask which section they want to play?
-        const choice = prompt("Choose an option or (b)ail: ").toLowerCase();
+        const choice = prompt("Choose an option or (b)ack: ").toLowerCase();
         if (choice == 'b')
             break;// break the while(true);
         const number = Number(choice);
