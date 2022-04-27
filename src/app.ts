@@ -3,12 +3,12 @@ import { ChooseTheGoalToFindLeavesFor } from './ChooseTheGoalToFindLeavesFor';
 import { ChooseToPlaySingleSection } from './ChooseToPlaySingle';
 import { ChooseToFindUnused } from './ChooseToFindUnused';
 import { ChooseTheGoalToConcoctSolutionFor } from './ChooseTheGoalToConcoctSolutionFor';
-import { books } from './20210415JsonPrivate/All.json'
 import { ChooseToPlayCampaign } from './ChooseToPlayCampaign';
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
 import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
 import { ReadOnlyJsonSingle } from './ReadOnlyJsonSingle';
+import { books } from './20210415JsonPrivate/LostBoys/LostBoysCampaign.json'
 const prompt = promptSync();
 
 function GetLastSeg(path:string) : string{

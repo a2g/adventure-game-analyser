@@ -1,13 +1,13 @@
 import { Happener } from "./Happener";
 import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ sigint: true });
 const prompt = promptSync();
-import { books } from './20210415JsonPrivate/All.json'
 import { ReadOnlyJsonMultipleCombined } from "./ReadOnlyJsonMultipleCombined";
 import { PlayPlayable } from "./PlayPlayable";
 import { Playable } from "./Playable";
 import { PlayerAI } from "./PlayerAI";
 import { definitions } from './20210415JsonPrivate/Gate/GateCampaignFramework.json';
 import { SolutionNodeMap } from "./SolutionNodeMap";
+import { books } from './20210415JsonPrivate/LostBoys/LostBoysCampaign.json'
 
 /*
 * This class isn't used anywhere else
