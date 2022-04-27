@@ -20,7 +20,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
     const scenario = JSON.parse(text);
 
     for (const gate of scenario.gates) {
-        const scriptType = gate.gate;
+        const gateType = gate.gate;
         let count = 1;
         if (gate.count !== undefined) {
             count = gate.count;
@@ -28,12 +28,12 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
 
         const happs = new Happenings();
         const restrictions = gate.restrictions;
-        switch (scriptType) {
+        switch (gateType) {
             case _.AUTO_FLAG1_CAUSES_IMPORT_OF_JSON:
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.fileToMerge;
                     const input = "" + gate.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, input));
                 }
                 break;
             case _.AUTO_PROP1_BECOMES_PROP2_BY_PROPS:
@@ -45,7 +45,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const prop3 = "" + gate.prop5;
                     const prop4 = "" + gate.prop6;
                     const prop5 = "" + gate.prop7;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input, prop1, prop2, prop3, prop4, prop5));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, input, prop1, prop2, prop3, prop4, prop5));
                 }
                 break;
 
@@ -53,7 +53,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.flag1;
                     const input = "" + gate.flag2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, input));
                 }
                 break;
             case _.AUTO_FLAG1_SET_BY_PROPS:
@@ -65,7 +65,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const prop4 = "" + gate.prop4;
                     const prop5 = "" + gate.prop5;
                     const prop6 = "" + gate.prop6;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, prop1, prop2, prop3, prop4, prop5, prop6));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, prop1, prop2, prop3, prop4, prop5, prop6));
                 }
                 break;
             case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
@@ -83,7 +83,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + gate.prop1;
                     const inputC = "" + gate.prop2;
                     const inputD = "" + gate.prop3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB, inputC, inputD));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB, inputC, inputD));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
@@ -98,7 +98,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.inv2;
                     const output = "" + gate.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.inv2)) {
                     return happs;
                 }
@@ -113,7 +113,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.prop1;
                     const output = "" + gate.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
@@ -127,7 +127,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.prop1;
                     const output = "" + gate.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
@@ -142,7 +142,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.prop1;
                     const inputC = "" + gate.flag2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB, inputC));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB, inputC));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
@@ -156,7 +156,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     const inputB = "" + gate.prop2;
                     const output = "" + gate.flag1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.prop2)) {
                     return happs;
                 }
@@ -171,7 +171,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.inv2;
                     const output = "" + gate.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 }
                 else if (objects.Match("Use", gate.inv1, gate.inv2)) {
                     return happs;
@@ -187,7 +187,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.inv2;
                     const output = "" + gate.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 }
                 else if (objects.Match("Use", gate.inv1, gate.inv2)) {
                     return happs;
@@ -203,7 +203,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const output = "" + gate.inv2;
                     const inputB = "" + gate.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.inv3)) {
                     return happs;
                 }
@@ -218,7 +218,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const output = "" + gate.inv2;
                     const inputB = "" + gate.prop1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
@@ -233,7 +233,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const output = "" + gate.inv2;
                     const inputB = "" + gate.inv3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.inv3)) {
                     return happs;
                 }
@@ -247,7 +247,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.inv1;
                     const inputB = "" + gate.prop1;
                     const output = "" + gate.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
 
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
@@ -264,7 +264,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const output = "" + gate.inv1;
                     const inputA = "" + gate.prop1;
                     const inputB = "" + gate.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.prop2)) {
                     return happs;
                 }
@@ -283,7 +283,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const output = "" + gate.prop1;
                     const inputA = "" + gate.prop2;
                     const inputB = "" + gate.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
@@ -297,7 +297,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     const output = "" + gate.prop2;
                     const inputB = "" + gate.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
                     return happs;
                 }
@@ -310,7 +310,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     const output = "" + gate.prop2;
                     const inputB = "" + gate.prop3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.prop3)) {
                     return happs;
                 }
@@ -324,7 +324,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     const output = "" + gate.prop2;
                     const inputB = "" + gate.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
                     return happs;
                 }
@@ -338,7 +338,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     const output = "" + gate.prop2;
                     const inputB = "" + gate.prop3;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
                     return happs;
                 }
@@ -355,7 +355,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     //const inputB, count = "" + reactionsFile.gates[i].prop2;
                     const output = "" + gate.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
                 } else if (objects.Match("Grab", gate.prop1, "")) {
                     return happs;
                 }
@@ -370,7 +370,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     const output = "" + gate.prop2;
                     const inputB = "" + gate.inv1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
                     return happs;
                 }
@@ -383,7 +383,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.inv1;
                     const inputA = "" + gate.prop1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
                 } else if (objects.Match("Grab", gate.prop1, "")) {
                     return happs;
                 }
@@ -395,7 +395,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.prop2;
                     const inputA = "" + gate.prop1;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
                 } else if (objects.Match("Toggle", gate.prop1, "")) {
                     return happs;
                 }
@@ -407,7 +407,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 if (solutionNodesMappedByInput) {
                     const input = "" + gate.prop1;
                     const output = "" + gate.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, input));
                 } else if (objects.Match("Toggle", gate.prop1, "")) {
                     return happs;
                 }
@@ -420,13 +420,13 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 if (solutionNodesMappedByInput) {
                     const input = "" + gate.prop1;
                     const output = "" + gate.prop2;
-                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, input));
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, input));
                 } else if (objects.Match("Toggle", gate.prop1, "")) {
                     return happs;
                 }
                 break;
             default:
-                console.log("We didn't handle a scriptType that we're supposed to. Check to see if constant names are the same as their values in the schema. " + scriptType);
+                console.log("We didn't handle a gateType that we're supposed to. Check to see if constant names are the same as their values in the schema. " + gateType);
 
         }
     }

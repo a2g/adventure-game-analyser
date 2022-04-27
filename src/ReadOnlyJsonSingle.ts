@@ -44,7 +44,7 @@ export class ReadOnlyJsonSingle implements ReadOnlyJsonInterface,
         const setChars = new Set<string>();
 
         for (const gate of scenario.gates) {
-            const scriptType = gate.gate;
+            const gateType = gate.gate;
             const restrictions = gate.restrictions;
             setInvs.add("" + gate.inv1);
             setInvs.add("" + gate.inv2);
