@@ -49,7 +49,7 @@ export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[],
         else if (is2InInvsPrefixed && is1InPropsPrefixed)// c
             return new MixedObjectsAndVerb(Mix.InvVsProp, verb, "inv_" + strings[2], "prop_" + strings[1]);
         else if (is1InPropsPrefixed && is2InPropsPrefixed)// d
-            return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop" + strings[1], "prop_" + strings[2]);
+            return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop_" + strings[1], "prop_" + strings[2]);
 
         // mixed case a
         else if (is1InInvsRaw && is2InInvsPrefixed)// a
@@ -73,7 +73,7 @@ export function ParseTokenizedCommandLineFromFromThreeStrings(strings: string[],
         else if (is1InPropsRaw && is2InPropsPrefixed)// d
             return new MixedObjectsAndVerb(Mix.PropVsProp, verb, strings[1], "prop_" + strings[2]);
         else if (is1InPropsPrefixed && is2InPropsRaw)// d
-            return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop" + strings[1], strings[2]);
+            return new MixedObjectsAndVerb(Mix.PropVsProp, verb, "prop_" + strings[1], strings[2]);
         return new MixedObjectsAndVerb(Mix.ErrorUseButNoInvOrProp, "", "", "", "Couldn't recognise '" + strings[1] + "' '" + strings[2] + " as something to use");
     }
     return new MixedObjectsAndVerb(Mix.ErrorVerbNotIdentified, "", "", "", "Couldn't recognise '" + strings[1] + " as a verb");

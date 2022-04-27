@@ -303,16 +303,15 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 }
                 break;
             case _.PROP1_BECOMES_PROP2_BY_KEEPING_PROP3:
-                happs.text = "You use the " + gate.prop3 + ", and the " + gate.prop1 + " becomes a " + gate.inv2;
+                happs.text = "You use the " + gate.prop3 + ", and the " + gate.prop1 + " becomes a " + gate.prop2;
                 happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
                 happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop2)));
-                happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
                 if (solutionNodesMappedByInput) {
                     const inputA = "" + gate.prop1;
                     const output = "" + gate.prop2;
                     const inputB = "" + gate.prop3;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, scriptType, count, happs, restrictions, inputA, inputB));
-                } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
+                } else if (objects.Match("Use", gate.prop1, gate.prop3)) {
                     return happs;
                 }
                 break;
