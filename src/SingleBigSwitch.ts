@@ -161,6 +161,34 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+            case _.GIVE_INV1_TO_PROP1_GETS_INV2:
+                happs.text = "You give the " + gate.inv1 + " to the " + gate.prop1 + " and you get the " + gate.inv2 + " in return";
+                happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
+                happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv2)));
+                happs.array.push(new Happening(Happen.PropStays, Stringify(gate.prop1)));
+                if (solutionNodesMappedByInput) {
+                    // keeping prop1
+                    const inputA = "" + gate.inv1;
+                    const inputB = "" + gate.prop1;
+                    const output = "" + gate.inv2;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
+                } else if (objects.Match("Give", gate.inv1, gate.prop1)) {
+                    return happs;
+                }
+                break;
+            case _.GIVE_INV1_TO_PROP1_SETS_FLAG1:
+                happs.text = "Flag is set" + gate.flag1;
+                happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
+                happs.array.push(new Happening(Happen.FlagIsSet, Stringify(gate.flag1)));
+                if (solutionNodesMappedByInput) {
+                    const inputA = "" + gate.inv1;
+                    const inputB = "" + gate.prop1;
+                    const output = "" + gate.flag1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
+                } else if (objects.Match("Give", gate.inv1, gate.prop1)) {
+                    return happs;
+                }
+                break;
             case _.INV1_AND_INV2_FORM_INV3:
                 happs.text = "The " + gate.inv1 + " and the " + gate.inv2 + " has formed an" + gate.inv3;
                 happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
@@ -266,6 +294,18 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + gate.prop2;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Use", gate.prop1, gate.prop2)) {
+                    return happs;
+                }
+                break;
+            case _.PROP1_APPEARS_WHEN_GRAB_PROP2_WITH_FLAG1:
+                happs.text = "You use the " + gate.prop2 + " and, somewhere, a " + gate.inv1 + " appears";
+                happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop1)));
+                if (solutionNodesMappedByInput) {
+                    const output = "" + gate.prop1;
+                    const inputA = "" + gate.flag1;
+                    const inputB = "" + gate.prop2;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
+                } else if (objects.Match("Grab", gate.prop2, "")) {
                     return happs;
                 }
                 break;
@@ -385,6 +425,40 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputA = "" + gate.prop1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
                 } else if (objects.Match("Grab", gate.prop1, "")) {
+                    return happs;
+                }
+                break;
+            case _.PROP1_STAYS_WHEN_GRAB_INV1:
+                happs.text = "You now have a " + gate.inv1;
+                //ly don't mention what happen to the prop you clicked on.  "\n You now have a" + gate.inv1;
+                happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv1)));
+                if (solutionNodesMappedByInput) {
+                    const output = "" + gate.inv1;
+                    const inputA = "" + gate.prop1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
+                } else if (objects.Match("Grab", gate.prop1, "")) {
+                    return happs;
+                }
+                break;
+            case _.TALK_TO_PROP1_GETS_INV1:
+                happs.text = "You now have a " + gate.inv1;
+                happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv1)));
+                if (solutionNodesMappedByInput) {
+                    const output = "" + gate.inv1;
+                    const inputA = "" + gate.prop1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
+                } else if (objects.Match("Talk", gate.prop1, "")) {
+                    return happs;
+                }
+                break;
+            case _.TALK_TO_PROP1_WITH_FLAG1_GETS_INV1:
+                happs.text = "You now have a " + gate.inv1;
+                happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv1)));
+                if (solutionNodesMappedByInput) {
+                    const output = "" + gate.inv1;
+                    const inputA = "" + gate.prop1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA));
+                } else if (objects.Match("Talk", gate.prop1, "")) {
                     return happs;
                 }
                 break;
