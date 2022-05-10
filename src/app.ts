@@ -8,7 +8,7 @@ import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ s
 import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
 import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
 import { ReadOnlyJsonSingle } from './ReadOnlyJsonSingle';
-import { books } from './20210415JsonPrivate/LostBoys/LostBoysCampaign.json'
+import { books } from './20210415JsonPrivate/DruidsDelight/Campaign.json'
 const prompt = promptSync();
 
 function GetLastSeg(path:string) : string{
