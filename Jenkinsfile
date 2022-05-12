@@ -4,12 +4,6 @@ pipeline {
   tools {nodejs "AnthonyNodeJS"}
     
   stages {
-        
-    stage('Git') {
-      steps {
-        git 'https://github.com/a2g/adventure-game-analyser.git'
-      }
-    }
      
     stage('Build') {
       steps {
