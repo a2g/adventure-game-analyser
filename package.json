@@ -10,13 +10,14 @@
     "start": "node src/app.js",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts --reporter mocha-junit-reporter",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
   "devDependencies": {
     "@types/node": "^8.10.66",
     "@types/prompt-sync": "^4.1.0",
     "mocha": "^8.4.0",
+    "mocha-junit-reporter": "^2.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^3.9.9"
   },
