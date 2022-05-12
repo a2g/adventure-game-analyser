@@ -1,27 +1,27 @@
 pipeline {
   agent any
     
-  tools {nodejs "node"}
+  tools {nodejs "AnthonyNodeJS"}
     
   stages {
         
     stage('Git') {
       steps {
-        git 'https://github.com/****/****'
+        git 'https://github.com/a2g/adventure-game-analyser.git'
       }
     }
      
     stage('Build') {
       steps {
         sh 'npm install'
-         sh '<<Build Command>>'
+        sh 'npm run build'
       }
     }  
     
             
     stage('Test') {
       steps {
-        sh 'node test'
+        sh 'npm run test'
       }
     }
   }
