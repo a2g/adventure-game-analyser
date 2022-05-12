@@ -10,7 +10,7 @@
     "start": "node src/app.js",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "mocha -r ts-node/register tests/**/*.test.ts --reporter mocha-junit-reporter",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/junit/mocha-junit.xml",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
   "devDependencies": {
