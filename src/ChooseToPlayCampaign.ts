@@ -7,94 +7,94 @@ import { Playable } from "./Playable";
 import { PlayerAI } from "./PlayerAI";
 import { definitions } from './20210415JsonPrivate/Gate/GateCampaignFramework.json';
 import { SolutionNodeMap } from "./SolutionNodeMap";
-import { books } from './20210415JsonPrivate/LostBoys/LostBoysCampaign.json'
+import LostBoys  from './20210415JsonPrivate/LostBoys/LostBoysCampaign.json'
 
 /*
 * This class isn't used anywhere else
 */
-export class BookSession {
+export class GoalSession {
 
     constructor(happener: Happener, startingThings: Map<string, Set<string>>, solutionNodeMap: SolutionNodeMap) {
         const numberOfAutopilotTurns = 0;
         const player = new PlayerAI(happener, numberOfAutopilotTurns);
         this.playable = new Playable(player, happener, solutionNodeMap);
-        this.prerequisiteFlags = [];
+        this.prerequisiteGoals = [];
         this.prerequisiteType = "";
-        this.sunsetFlags = [];
+        this.sunsetGoals = [];
         this.sunsetType = "";
-        this.flagSetUponCompletion = "";
-        this.bookTitle = "";
+        this.goalEnum = "";
+        this.goalName = "";
         this.startingThings = startingThings;
     }
 
     GetTitle(): string {
-        return this.bookTitle;
+        return this.goalName;
     }
 
-    prerequisiteFlags: string[];
+    prerequisiteGoals: string[];
     prerequisiteType: string;
-    sunsetFlags: string[];
+    sunsetGoals: string[];
     sunsetType: string;
-    flagSetUponCompletion: string;
-    bookTitle: string;
+    goalEnum: string;
+    goalName: string;
     startingThings: Map<string, Set<string>>;
     playable: Playable;
 }
 
-export class BookSessionCollection {
+export class GoalSessionCollection {
 
     constructor() {
-        this.books = new Array<BookSession>();
+        this.goals = new Array<GoalSession>();
     }
 
     IsActive(index: number): boolean {
         const gflags = new Set<string>();
-        if (index < 0 || index >= this.books.length)
+        if (index < 0 || index >= this.goals.length)
             return false;
-        for (let section of this.books) {
+        for (let section of this.goals) {
             if (section.playable.IsCompleted())
-                gflags.add(section.flagSetUponCompletion);
+                gflags.add(section.goalEnum);
         }
         let prerequisitesCompleted = 0;
-        for (let prerequisite of this.books[index].prerequisiteFlags) {
+        for (let prerequisite of this.goals[index].prerequisiteGoals) {
             if (gflags.has(prerequisite))
                 prerequisitesCompleted++;
         }
 
         let sunsetsCompleted = 0;
-        for (let sunset of this.books[index].sunsetFlags) {
+        for (let sunset of this.goals[index].sunsetGoals) {
             if (gflags.has(sunset))
                 sunsetsCompleted++;
         }
 
         let isPrerequisiteSatisfied = false;
-        switch (this.books[index].prerequisiteType) {
-            case definitions.condition_type.oneOrMore:
+        switch (this.goals[index].prerequisiteType) {
+            case definitions.condition_enum_entity.oneOrMore:
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 1;
                 break;
-            case definitions.condition_type.twoOrMore:
+            case definitions.condition_enum_entity.twoOrMore:
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 2;
                 break;
-            case definitions.condition_type.threeOrMore:
+            case definitions.condition_enum_entity.threeOrMore:
                 isPrerequisiteSatisfied = prerequisitesCompleted >= 3;
                 break;
             default:
-                isPrerequisiteSatisfied = prerequisitesCompleted >= this.books[index].prerequisiteFlags.length;
+                isPrerequisiteSatisfied = prerequisitesCompleted >= this.goals[index].prerequisiteGoals.length;
         }
 
         let isSunsetSatisfied = false;
-        switch (this.books[index].sunsetType) {
-            case definitions.condition_type.oneOrMore:
+        switch (this.goals[index].sunsetType) {
+            case definitions.condition_enum_entity.oneOrMore:
                 isSunsetSatisfied = sunsetsCompleted >= 1;
                 break;
-            case definitions.condition_type.twoOrMore:
+            case definitions.condition_enum_entity.twoOrMore:
                 isSunsetSatisfied = sunsetsCompleted >= 2;
                 break;
-            case definitions.condition_type.threeOrMore:
+            case definitions.condition_enum_entity.threeOrMore:
                 isSunsetSatisfied = sunsetsCompleted >= 3;
                 break;
             default:
-                isSunsetSatisfied = sunsetsCompleted >= this.books[index].sunsetFlags.length;
+                isSunsetSatisfied = sunsetsCompleted >= this.goals[index].sunsetGoals.length;
         }
 
         //default to must have completed all
@@ -102,39 +102,60 @@ export class BookSessionCollection {
         return isActive;
     }
 
-    Push(session: BookSession) {
-        this.books.push(session);
+    Push(session: GoalSession) {
+        this.goals.push(session);
     }
 
-    Get(i: number): BookSession {
-        return this.books[i];
+    Get(i: number): GoalSession {
+        return this.goals[i];
     }
 
     Length(): number {
-        return this.books.length;
+        return this.goals.length;
     }
 
-    private books: Array<BookSession>;
+    private goals: Array<GoalSession>;
+}
+
+export class Location {
+   constructor (){
+       this.locationName = "";
+       this.locationEnum = "";
+       this.fileSet = new Array<string>();
+   };
+
+   locationName : string;
+   locationEnum : string; 
+   fileSet : Array<string> ;
 }
 
 export function ChooseToPlayCampaign(): void {
-    const sessions = new BookSessionCollection();
-    for (let book of books) {
-        let fileset = new Array<string>();
-        fileset.push(book.mainFile)
-        for (let extra of book.extraFiles) {
-            fileset.push(extra);
+    const locations = new Map<String, Location>();
+    for(let incoming of LostBoys.locations) {
+        let location = new Location();
+        location.locationName = incoming.locationName;
+        location.locationEnum = incoming.locationEnum;
+        location.fileSet.push(incoming.startingGateFile);
+        for(let file of incoming.extraFiles) {
+            location.fileSet.push(file);
         }
-        let json = new ReadOnlyJsonMultipleCombined(fileset);
-        let happener = new Happener(json);
-        let s = new BookSession(happener, json.GetMapOfAllStartingThings(), json.GenerateSolutionNodesMappedByInput());
-        s.prerequisiteFlags = book.prerequisiteFlags;
-        s.prerequisiteType = book.prerequisiteType;
-        s.flagSetUponCompletion = book.flagSetUponCompletion;
-        s.bookTitle = book.bookName;
-        s.sunsetFlags = book.sunsetFlags;
-        s.sunsetType = book.sunsetType;
-        sessions.Push(s);
+    }
+
+    const sessions = new GoalSessionCollection();
+    for (let goal of LostBoys.goals) {
+        let location = locations.get(goal.location);
+        if (location !== undefined) {
+            let json = new ReadOnlyJsonMultipleCombined(location.fileSet);
+            let happener = new Happener(json);
+            let s = new GoalSession(happener, json.GetMapOfAllStartingThings(), json.GenerateSolutionNodesMappedByInput());
+            s.prerequisiteGoals = goal.prerequisiteGoals;
+            s.prerequisiteType = goal.prerequisiteType;
+            s.goalName = goal.goalName;
+            s.goalEnum = goal.goalEnum;
+            s.sunsetGoals = goal.sunsetGoals;
+            s.sunsetType = goal.sunsetType;
+            sessions.Push(s);
+        }
     }
 
     while (true) {

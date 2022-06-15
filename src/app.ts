@@ -8,7 +8,7 @@ import promptSync from 'prompt-sync';//const prompt = require('prompt-sync')({ s
 import { ReadOnlyJsonMultipleCombined } from './ReadOnlyJsonMultipleCombined';
 import { ReadOnlyJsonInterface } from './ReadOnlyJsonInterface';
 import { ReadOnlyJsonSingle } from './ReadOnlyJsonSingle';
-import { books } from './20210415JsonPrivate/DruidsDelight/Campaign.json'
+import Druids from './20210415JsonPrivate/DruidsDelight/Campaign.json';
 const prompt = promptSync();
 
 function GetLastSeg(path:string) : string{
@@ -30,15 +30,15 @@ function main(): void {
 
         const arrayOfMultiLevels = new Array<Array<string>>();
         let arrayOfSingles = new Array<string>();
-        for (let book of books) {
+        for (let location of Druids.locations) {``
             let newArray = new Array<string>(); 
 
             // push mainFile first, in case we want the
             // ReadOnlyJsonMultipleCombined implementation
             // to know which file is the main
-            newArray.push(book.mainFile);
-            console.log("" + i++ + ". " + GetLastSeg(book.mainFile)+ " (full multi)");
-            for(let file of book.extraFiles){
+            newArray.push(location.startingGateFile);
+            console.log("" + i++ + ". " + GetLastSeg(location.startingGateFile)+ " (full multi)");
+            for(let file of location.extraFiles){
                 newArray.push(file);
             }
 
@@ -46,7 +46,7 @@ function main(): void {
             // if there are some extras then we add all to singles
             // ...but if there is none we don't add any because 
             // you can just choose full to experience it in isolation
-            if(book.extraFiles.length>0)
+            if(location.extraFiles.length>0)
             {
                 arrayOfSingles = arrayOfSingles.concat(newArray);
             }
