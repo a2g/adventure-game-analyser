@@ -1,3 +1,10 @@
+
+big chain of submodules, so pull with this:
+```python:
+  git pull --recurse-submodules
+```
+
+
 # 20210415Json
 To test:
    npm run test
