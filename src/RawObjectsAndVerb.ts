@@ -2,6 +2,7 @@ import { Raw } from "./Raw";
 import { GetDisplayName } from "./GetDisplayName";
 import { Colors } from "./Colors";
 import { Embracketize } from "./Embracketize";
+import { GetTreeSolutionViaOutputMatching } from "./GetTreeSolutionViaOutputMatching";
 
 export class RawObjectsAndVerb {
     constructor(type: Raw, objectA: string, objectB: string, restrictions: Array<string>, typeJustForDebugging: string) {
@@ -19,6 +20,9 @@ export class RawObjectsAndVerb {
         if (enumAsInt >= 0) {
             const verb = GetDisplayName(Raw[enumAsInt]);
             const objectA = GetDisplayName(this.objectA) + GetDisplayName(this.startingCharacterForA, true);
+            if(this.objectB == undefined){
+                this.dumpRaw();
+            }
             const objectB = GetDisplayName(this.objectB) + GetDisplayName(this.startingCharacterForB, true);
 
             const restriction = this.restrictions.length ? Embracketize(GetDisplayName(this.restrictions)) : "";
@@ -50,6 +54,13 @@ export class RawObjectsAndVerb {
             this.startingCharacterForB += ", " + startingCharacterForB;
         else
             this.startingCharacterForB = startingCharacterForB;
+    }
+
+    public dumpRaw(){
+        console.log("Dumping instance of RawObjectsAndVerb");
+        console.log(Raw[this.type]);
+        console.log(this.objectA);
+        console.log(this.objectB);
     }
 
     type: Raw;

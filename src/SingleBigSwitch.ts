@@ -172,7 +172,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + gate.prop1;
                     const output = "" + gate.inv2;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
-                } else if (objects.Match("Give", gate.inv1, gate.prop1)) {
+                } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
                 break;
@@ -185,7 +185,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     const inputB = "" + gate.prop1;
                     const output = "" + gate.flag1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
-                } else if (objects.Match("Give", gate.inv1, gate.prop1)) {
+                } else if (objects.Match("Use", gate.inv1, gate.prop1)) {
                     return happs;
                 }
                 break;
@@ -298,12 +298,15 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                 }
                 break;
             case _.PROP1_APPEARS_WHEN_GRAB_PROP2_WITH_FLAG1:
-                happs.text = "You use the " + gate.prop2 + " and, somewhere, a " + gate.inv1 + " appears";
+                happs.text = "You use the " + gate.prop2 + " and, somewhere, a " + gate.prop1 + " appears";
                 happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop1)));
                 if (solutionNodesMappedByInput) {
                     const output = "" + gate.prop1;
-                    const inputA = "" + gate.flag1;
-                    const inputB = "" + gate.prop2;
+                    // the prop you grab (ie phone) must be input A - the solution creator
+                    // always constructs the solution as "grab inputA"
+                    // so it needs to be input A
+                    const inputA = "" + gate.prop2;
+                    const inputB = "" + gate.flag1;
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
                 } else if (objects.Match("Grab", gate.prop2, "")) {
                     return happs;

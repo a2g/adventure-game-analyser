@@ -127,6 +127,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
                         }
 
                         if (rawObjectsAndVerb.type !== Raw.None)
+                         // this is just here for debugging!
                             rawObjectsAndVerb.WriteToConsole();
 
                         if (rawObjectsAndVerb.type == Raw.You_have_won_the_game) {
@@ -154,17 +155,19 @@ export class ChooseTheGoalToConcoctSolutionFor {
                                 console.log(GetDisplayName(entry));
                             })
                             console.log("-------^^ Above are the leaf nodes laid out in the Solution");
-                            console.log("Below are all the starting things");
+                            console.log("Below is the intersection of startingPropsAndInvs AND leafnodes");
 
                             setAfterReduction.forEach((entry: string) => {
                                 console.log(GetDisplayName(entry));
                             })
-                            console.log("Below are the map");
+                            console.log("Below are the map of starting things and who can have them");
                             for (let blah of startingThingsAndWhoCanHavethem.keys()){
                                 console.log(GetDisplayName(blah));
                             }
 
                             console.log("Spot what needs to be in the starting set - and fix it!");
+                            console.log("A better idea might be to see the props in the Leaf Node solve (4) and put them in starting set");
+                            console.log("I'm still unsure on whether the code above is useful, or I mucked up the derivation when doing a refactor");
                             prompt('Hit a key to continue').toLowerCase();
                         } else {
                             console.log("rawObjectsAndVerb was null, but it looked solvable. WEIRD! debug this.")

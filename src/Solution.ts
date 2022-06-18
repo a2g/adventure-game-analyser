@@ -214,6 +214,8 @@ export class Solution {
                     return new RawObjectsAndVerb(Raw.None, "", "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("grab")) {
                     return new RawObjectsAndVerb(Raw.Grab, node.inputHints[0], "", node.getRestrictions(), node.type);
+                } else if (node.type.toLowerCase().includes("talk")) {
+                    return new RawObjectsAndVerb(Raw.Talk, node.inputHints[0], "", node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("toggle")) {
                     return new RawObjectsAndVerb(Raw.Toggle, node.inputHints[0], node.output, node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("auto")) {
@@ -224,7 +226,7 @@ export class Solution {
                     return new RawObjectsAndVerb(Raw.Auto, node.inputHints[0], node.output, node.getRestrictions(), node.type);
                 } else if (node.type.toLowerCase().includes("use")) {// then its nearly definitely "use", unless I messed up
                     return new RawObjectsAndVerb(Raw.Use, node.inputHints[0], node.inputHints[1], node.getRestrictions(), node.type);
-                } else if (node.inputs.length === 2) { // smoking gun, if something is mislabelled "Use" 
+                } else if (node.inputs.length === 2) { // if they mis-type the verb, then we default to use
                     return new RawObjectsAndVerb(Raw.Use, node.inputHints[0], node.inputHints[1], node.getRestrictions(), node.type);
                 } else if (node.parent == null) {
                     // I think this means tha the root node isn't set properly!
@@ -232,7 +234,7 @@ export class Solution {
                     return new RawObjectsAndVerb(Raw.You_have_won_the_game, node.inputHints[0], "", node.getRestrictions(), node.type);
                 } else {
                     //assert(false && " type not identified");
-                    console.log("Assertion because of type not Identified!: " + node.type + node.inputs[0]);
+                    console.log("Assertion because of type not Identified!: " + node.type + node.inputs[0] + (node.inputs.length>1? node.inputs[0] : "") );
                 }
             }
         };
