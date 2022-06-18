@@ -3,21 +3,15 @@ big chain of submodules, so pull with this:
 ```python:
   git pull --recurse-submodules
 ```
+To debug:
+-----------
+VSCode->Run->Start Debugging
 
-
-# 20210415Json
 To test:
-   npm run test
+-----------
+npm run test
+I must have copied the 'test' script from TravisCI tech page - because I don't understand it!
 
+If I run 'npm run test', then we don't get success message.. but lack of errors indicates success.
 
-Toggle blind(closed)  
-Toggle freezer(closed) 
-Grab sunglasses  
-Toggle window(closed)
-Use Michael(floating-in-the-distance) telephone_with_long_cord 
-Grab frozen_steak  
-Use frozen_steak microwave_oven 
-Use Michael(standing-in-your-room) thawed_out_raw_steak 
-Use Michael(sleepy-on-your-bed) sunglasses 
-Grab Michael_with_keys(asleep-on-your-bed)  
-Use motorbike_keys motorbike 
+I still need a command line to debug mocha tests
