@@ -68,6 +68,15 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, prop1, prop2, prop3, prop4, prop5, prop6));
                 }
                 break;
+                case _.AUTO_FLAG1_SET_BY_INVS: 
+                  if (solutionNodesMappedByInput) {
+                      const output = "" + gate.flag1;
+                      const inv1 = "" + gate.inv1;
+                      const inv2 = "" + gate.inv2;
+                      const inv3 = "" + gate.inv3;
+                      solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inv1, inv2, inv3));
+                  }
+                  break;
             case _.FLAG1_SET_BY_LOSING_INV1_USED_WITH_PROP1_AND_PROPS:
                 happs.text = "With everything set up correctly, you use the" + gate.inv1 + " with the " + gate.prop1 + " and something good happens...";
                 happs.array.push(new Happening(Happen.FlagIsSet, Stringify(gate.flag1)));

@@ -13,7 +13,7 @@ export class SolutionNode {
     constructor(output: string,
         type = "undefined",
         count = 1, // put it here so all the tests don't need to specify it.
-        happs: Happenings | null = null,
+        happenings: Happenings | null = null,
         restrictions: { char: string }[] | null | undefined = null, // put it here so all the tests don't need to specify it.
         inputA = "undefined",
         inputB = "undefined",
@@ -27,7 +27,7 @@ export class SolutionNode {
         this.count = count;
         this.output = output;
         this.type = type;
-        this.happs = happs;
+        this.happenings = happenings;
         this.characterRestrictions = new Array<string>();
         if (!isNullOrUndefined(restrictions)) {
             for (const restriction of restrictions) {
@@ -217,8 +217,8 @@ export class SolutionNode {
 
 
     UpdateMapWithOutcomes(visibleNodes: Map<string, Set<string>>) {
-        if (this.happs) {
-            for (let happ of this.happs.array){
+        if (this.happenings) {
+            for (let happ of this.happenings.array){
                 switch(happ.happen){
                     case Happen.FlagIsSet:
                     case Happen.InvAppears:
@@ -242,7 +242,7 @@ export class SolutionNode {
     parent: SolutionNode | null;// this is not needed for leaf finding - but *is* needed for command finding. 
     count: number;
     characterRestrictions: Array<string>;
-    happs: Happenings | null;
+    happenings: Happenings | null;
 
 }
 
