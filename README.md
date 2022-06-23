@@ -1,4 +1,4 @@
-
+https://youtu.be/v1Fybg-mmRg?t=982
 big chain of submodules, so pull with this:
 ```python:
   git pull --recurse-submodules

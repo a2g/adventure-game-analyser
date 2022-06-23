@@ -290,6 +290,7 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+         
             case _.OBTAIN_INV1_BY_PROP1_WITH_PROP2_LOSE_PROPS:
                 // eg obtain inv_meteor via radiation suit with the meteor.
                 // ^^ this is nearly a two in one, but the radiation suit never becomes inventory: you wear it.
@@ -306,6 +307,21 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+
+            case _.OBTAIN_INV1_BY_INV2_WITH_PROP1_LOSE_BOTH:
+              happs.text = "Obtain the " + gate.inv1 + " by using the " + gate.inv2 + " gets you the " + gate.prop1 + ".";
+              happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv1)));
+              happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv2)));
+              happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
+              if (solutionNodesMappedByInput) {
+                const output = "" + gate.inv1;
+                const inputA = "" + gate.inv2;
+                const inputB = "" + gate.prop1;
+                solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
+              } else if (objects.Match("Use", gate.inv2, gate.prop1)) {
+                return happs;
+              }
+              break;
             case _.PROP1_APPEARS_WHEN_GRAB_PROP2_WITH_FLAG1:
                 happs.text = "You use the " + gate.prop2 + " and, somewhere, a " + gate.prop1 + " appears";
                 happs.array.push(new Happening(Happen.PropAppears, Stringify(gate.prop1)));
@@ -474,6 +490,20 @@ export function SingleBigSwitch(filename: string, solutionNodesMappedByInput: So
                     return happs;
                 }
                 break;
+            case _.THROW_INV1_AT_PROP1_GETS_INV2_LOSE_BOTH:
+                  happs.text = "Throw the " + gate.inv1 + " at the " + gate.prop1 + " gets you the " + gate.inv2 + ".";
+                  happs.array.push(new Happening(Happen.InvGoes, Stringify(gate.inv1)));
+                  happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
+                  happs.array.push(new Happening(Happen.InvAppears, Stringify(gate.inv2)));
+                  if (solutionNodesMappedByInput) {
+                    const output = "" + gate.inv2;
+                    const inputA = "" + gate.prop1;
+                    const inputB = "" + gate.inv1;
+                    solutionNodesMappedByInput.AddToMap(new SolutionNode(output, gateType, count, happs, restrictions, inputA, inputB));
+                  } else if (objects.Match("Use", gate.prop1, gate.inv1)) {
+                    return happs;
+                  }
+                  break;
             case _.TOGGLE_PROP1_BECOMES_PROP2:
                 happs.text = "The " + gate.prop1 + " has become a " + gate.prop2;
                 happs.array.push(new Happening(Happen.PropGoes, Stringify(gate.prop1)));
