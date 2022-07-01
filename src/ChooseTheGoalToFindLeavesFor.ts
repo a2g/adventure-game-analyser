@@ -10,62 +10,62 @@ const prompt = promptSync();
 
 export class ChooseTheGoalToFindLeavesFor {
 
-    public DoStuff(json: ReadOnlyJsonInterfaceFindLeaves): void {
-        while (true) {
-            console.log(" ");
-            let startingThingsAndWhoCanHaveThem = json.GetMapOfAllStartingThings();
-            const collection = new SolverViaRootNode(startingThingsAndWhoCanHaveThem);
-            const objective = "flag_win";
-            collection.GetSolutions().push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
+  public DoStuff(json: ReadOnlyJsonInterfaceFindLeaves): void {
+    while (true) {
+      console.log(" ");
+      let startingThingsAndWhoCanHaveThem = json.GetMapOfAllStartingThings();
+      const collection = new SolverViaRootNode(startingThingsAndWhoCanHaveThem);
+      const objective = "flag_goal_main";
+      collection.GetSecondaryGoals().push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
 
-            do {
-                collection.SolvePartiallyUntilCloning();
-            } while (collection.IsAnyNodesUnprocessed());
+      do {
+        collection.SolvePartiallyUntilCloning();
+      } while (collection.IsAnyNodesUnprocessed());
 
-            for (; ;) {
-                console.log("Number of solutions = " + collection.GetSolutions().length);
-                let numberOfLeaves = 0;
+      for (; ;) {
+        console.log("Number of solutions = " + collection.GetSecondaryGoals().length);
+        let numberOfLeaves = 0;
 
-                // display list
-                collection.GenerateSolutionNamesAndPush(json.GetMapOfAllStartingThings());
-                for(let solution of collection.GetSolutions()){
-                    console.log(GetDisplayName(solution.GetDisplayNamesConcatenated()))
-                    const needs = solution.GetLeafNodes();
-                    for (let node of needs.values()) {
-                        numberOfLeaves++;
+        // display list
+        collection.GenerateSolutionNamesAndPush(json.GetMapOfAllStartingThings());
+        for (let solution of collection.GetSecondaryGoals()) {
+          console.log(GetDisplayName(solution.GetDisplayNamesConcatenated()))
+          const needs = solution.GetLeafNodes();
+          for (let node of needs.values()) {
+            numberOfLeaves++;
 
-                        // display list item
-                        console.log("    " + numberOfLeaves + "." + node.output);
-                    };
-                };
+            // display list item
+            console.log("    " + numberOfLeaves + "." + node.output);
+          };
+        };
 
-                // allow user to choose item
-                const input = prompt("Choose an ingredient of one of the solutions or (b)ack: ").toLowerCase();
-                if (input === null || input === "b") {
-                    return;
-                } else {
-                    // show map entry for chosen item
-                    const number = Number(input);
-                    if (number > 0 && number <= numberOfLeaves) {
-                        let i = 0;
-                        collection.GetSolutions().forEach(function (solution: Solution) {
-                            const needs = solution.GetLeafNodes();
-                            needs.forEach((value: SolutionNode, key: string) => {
-                                i++;
-                                if (i === number) {
-                                    console.log("This is the life of the selected ingredient: ");
-                                    const items: Array<string> = key.split("/");
-                                    const length = items.length;
-                                    for (let j = length - 2; j > 1; j--) {
-                                        console.log("    - " + items[j]);
-                                    };
-                                    prompt("Hit a key to continue...");
-                                }
-                            });
-                        });
-                    }
+        // allow user to choose item
+        const input = prompt("Choose an ingredient of one of the solutions or (b)ack: ").toLowerCase();
+        if (input === null || input === "b") {
+          return;
+        } else {
+          // show map entry for chosen item
+          const number = Number(input);
+          if (number > 0 && number <= numberOfLeaves) {
+            let i = 0;
+            collection.GetSecondaryGoals().forEach(function (solution: Solution) {
+              const needs = solution.GetLeafNodes();
+              needs.forEach((value: SolutionNode, key: string) => {
+                i++;
+                if (i === number) {
+                  console.log("This is the life of the selected ingredient: ");
+                  const items: Array<string> = key.split("/");
+                  const length = items.length;
+                  for (let j = length - 2; j > 1; j--) {
+                    console.log("    - " + items[j]);
+                  };
+                  prompt("Hit a key to continue...");
                 }
-            }
+              });
+            });
+          }
         }
+      }
     }
+  }
 }
