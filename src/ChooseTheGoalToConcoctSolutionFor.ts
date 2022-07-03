@@ -79,32 +79,26 @@ export class ChooseTheGoalToConcoctSolutionFor {
       const arrayOfChapterWins = new Array<Solution>();
       console.log("Choose a solution,  -1 for All or (b)ack: ")
       let isAnyIncomplete = false;
-      for (let i = 0; i < solver.GetSecondaryGoals().length; i++) {
-        let isSubGoal = solver.GetSecondaryGoals()[i].IsChapterWin();
-        isAnyIncomplete = isAnyIncomplete || isSubGoal;
-        console.log(" " + i + ". " + GetDisplayName(solver.GetSecondaryGoals()[i].GetDisplayNamesConcatenated()) + "(" + (solver.GetSecondaryGoals()[i].GetMapOfCurrentlyRemainingNodes().Size()) + ")" + (isSubGoal ? "(subgoal)" : "<--ultimate goal!"));
-      }
-
-      if (isAnyIncomplete) {
-        console.log(" " + solver.GetSecondaryGoals().length + ". Progress subgoals a single level more, and update");
+      for (let i = 0; i < solver.GetSolutionsArray().length; i++) {
+        console.log(" " + i + ". " + GetDisplayName(solver.GetSolutionsArray()[i].GetDisplayNamesConcatenated()) + "(" + (solver.GetSolutionsArray()[i].GetMapOfCurrentlyRemainingNodes().Size()) + ")" + (isSubGoal ? "(subgoal)" : "<--ultimate goal!"));
       }
 
       const choice = prompt('hmmn?').toLowerCase();
       if (choice === "b")
         break;
 
-      if (Number(choice) == solver.GetSecondaryGoals().length) {
-        solver.ProcessChaptersToEndAndUpdateList();
+      if (Number(choice) == solver.GetSolutionsArray().length) {
+        solver.ProgressAllGoalsAndUpdateSolutionList();
         continue;
       }
 
       // go through each one
-      if (Number(choice) < solver.GetSecondaryGoals().length) {
+      if (Number(choice) < solver.GetSolutionsArray().length) {
         // Process an Analyse option from above
-        for (let i = 0; i < solver.GetSecondaryGoals().length; i++) {
+        for (let i = 0; i < solver.GetSolutionsArray().length; i++) {
           if (choice !== "-1" && i !== Number(choice))
             continue;
-          const originalSolution = solver.GetSecondaryGoals()[i];
+          const originalSolution = solver.GetSolutionsArray()[i];
           console.log("Solution called " + originalSolution.GetDisplayNamesConcatenated());
           let solutionToDestroy = originalSolution;
 

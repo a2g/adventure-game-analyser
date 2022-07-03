@@ -9,6 +9,11 @@ import { assert } from 'console';
 
 
 export class SolverViaRootNode {
+  /**
+   *
+   * @param mapOfStartingThingsAndWhoCanHaveThem
+   */
+
   constructor(mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>) {
     this.solutions = new Array<Solution>();
     this.mapOfStartingThingsAndWhoCanHaveThem = new Map<string, Set<string>>();
@@ -57,7 +62,7 @@ export class SolverViaRootNode {
     this.GenerateSolutionNamesAndPush(this.mapOfStartingThingsAndWhoCanHaveThem);
   }
 
-  ProcessChaptersToEndAndUpdateList() {
+  ProgressAllGoalsAndUpdateSolutionList() {
     // this needs to be a member function because we are overwriting this.solutions
     let newList = new Array<Solution>();
     for (let oldSolution of this.solutions) {
@@ -77,7 +82,7 @@ export class SolverViaRootNode {
 
         // there is always a directive to merge in nodes upon chapter completion
         // so find that node, and merge in the new nodes
-        newSolution.MergeInNodesForChapterCompletion(chapterFlag);
+        newSolution.MergeInNodesForSecondaryGoalCompletion(chapterFlag);
 
         let subGroup = new SolverViaRootNode(startingThings);
         subGroup.solutions.push(newSolution);
@@ -119,7 +124,7 @@ export class SolverViaRootNode {
     this.solutions = newList;
   }
 
-  GenerateSolutionNamesAndPush(mapOfStartingThingsAndWhoHasThem: Map<string, Set<string>>) {
+  public GenerateSolutionNamesAndPush(mapOfStartingThingsAndWhoHasThem: Map<string, Set<string>>) {
     for (let i = 0; i < this.solutions.length; i++) {
       // now lets find out the amount leafNode name exists in all the other solutions
       const mapForCounting = new Map<string, number>();
@@ -175,7 +180,7 @@ export class SolverViaRootNode {
     }
   }
 
-  GetSecondaryGoals(): Array<Solution> {
+  GetSolutionsArray(): Array<Solution> {
     return this.solutions;
   }
 
