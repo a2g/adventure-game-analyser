@@ -64,13 +64,14 @@ function IsASupersetOfB(set: Set<string>, subset: Set<string>) {
 }
 
 export class ChooseTheGoalToConcoctSolutionFor {
+  /*
   public DoStuff(json: ReadOnlyJsonInterfaceConcoct): void {
     let startingThingsAndWhoCanHavethem = json.GetMapOfAllStartingThings();
     let mapOfRemainingNodes = json.GenerateSolutionNodesMappedByInput();
 
     // Solve solution nodes
     const solver = new SolverViaRootNode(startingThingsAndWhoCanHavethem);
-    solver.InitializeByCopyingThese(mapOfRemainingNodes, startingThingsAndWhoCanHavethem);
+    solver.InitialkizeByCopyingThese(mapOfRemainingNodes, startingThingsAndWhoCanHavethem);
     solver.SolveUntilZeroUnprocessedNodes();
 
     while (true) {
@@ -110,8 +111,7 @@ export class ChooseTheGoalToConcoctSolutionFor {
               break;
 
             const chars = json.GetArrayOfCharacters();
-            for (let i = 0; i < chars.length; i++) {
-              const char = chars[i];
+            for (const char of chars) {
               const startingSet = json.GetStartingThingsForCharacter(char);
               if (startingSet.has(rawObjectsAndVerb.objectA))
                 rawObjectsAndVerb.appendStartingCharacterForA(char);
@@ -173,5 +173,5 @@ export class ChooseTheGoalToConcoctSolutionFor {
       }
     }
   }
-
+*/
 }

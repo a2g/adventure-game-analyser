@@ -12,10 +12,12 @@ export class ChooseTheGoalToFindLeavesFor {
 
   public DoStuff(json: ReadOnlyJsonInterfaceFindLeaves): void {
     console.log(" ");
-    let startingThingsAndWhoCanHaveThem = json.GetMapOfAllStartingThings();
+    let startingThingsAndWhoCanHaveThem = json.GetStartingThingsInAMap();
     const collection = new SolverViaRootNode(startingThingsAndWhoCanHaveThem);
     const objective = "flag_goal_main";
-    collection.GetSolutionsArray().push(new Solution(new SolutionNode("root via app", "", 1, null, null, objective), json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
+    let rootNodes = new Array<SolutionNode>();
+    rootNodes.push(new SolutionNode("root via app", "", 1, null, null, objective));
+    collection.GetSolutionsArray().push(new Solution(rootNodes, json.GenerateSolutionNodesMappedByInput(), startingThingsAndWhoCanHaveThem));
 
     do {
       collection.SolvePartiallyUntilCloning();
@@ -26,7 +28,7 @@ export class ChooseTheGoalToFindLeavesFor {
       let numberOfLeaves = 0;
 
       // display list
-      collection.GenerateSolutionNamesAndPush(json.GetMapOfAllStartingThings());
+      collection.GenerateSolutionNamesAndPush(json.GetStartingThingsInAMap());
       for (let solution of collection.GetSolutionsArray()) {
         console.log(GetDisplayName(solution.GetDisplayNamesConcatenated()))
         const needs = solution.GetLeafNodes();

@@ -15,9 +15,9 @@ export class Solution {
   // non aggregates
   private solutionNames: Array<string>;
   rootNodes: Array<SolutionNode>;
-  rootNodeSecondaries: Array<SolutionNode>
   remainingNodes: SolutionNodeMap;
   isArchived: boolean;
+  bags: Array<[string, string]>;
 
   // aggregates
   unprocessedNodes: Set<SolutionNode>;
@@ -25,13 +25,20 @@ export class Solution {
   mapOfVisibleThings: Map<string, Set<string>>;// this is updated dynamically in GetNextDoableCommandAndDesconstructTree
   readonly restrictionsEncounteredDuringSolving: Set<string>;
 
-  constructor(rootNodes: Array<SolutionNode>, copyThisMapOfPieces: SolutionNodeMap, startingThingsPassedIn: Map<string, Set<string>>, restrictions: Set<string> | null = null, nameSegments: Array<string> | null = null) {
+  constructor(
+    rootNodes: Array<SolutionNode>,
+    remainingNodes: SolutionNodeMap,
+    startingThingsPassedIn: Map<string, Set<string>>,
+    bags: Array<[string, string]> | null = null,
+    restrictions: Set<string> | null = null,
+    nameSegments: Array<string> | null = null) {
+
     // initialize non aggregates
     {
       this.rootNodes = rootNodes;
-      this.remainingNodes = new SolutionNodeMap(copyThisMapOfPieces);
+      this.remainingNodes = new SolutionNodeMap(remainingNodes);
       this.isArchived = false;
-      this.rootNodeSecondaries = new Array<SolutionNode>();
+      this.bags = new Array<[string, string]>();
     }
 
     // still tossing up whether to add the root to the incompletes
@@ -40,21 +47,6 @@ export class Solution {
     this.unprocessedNodes = new Set<SolutionNode>();
     for (let node of this.rootNodes) {
       this.unprocessedNodes.add(node);//when this became an array, I just added it, I'm not sure if its a good thing
-    }
-
-    // if it is passed in, we deep copy it
-    this.solutionNames = new Array<string>();
-    if (nameSegments) {
-      for (let segment of nameSegments)
-        this.solutionNames.push(segment);
-    }
-
-    // its its passed in we deep copy it
-    this.restrictionsEncounteredDuringSolving = new Set<string>();
-    if (restrictions) {
-      for (let restriction of restrictions) {
-        this.restrictionsEncounteredDuringSolving.add(restriction);
-      }
     }
 
     // its its passed in we deep copy it
@@ -66,6 +58,31 @@ export class Solution {
       }
       this.mapOfVisibleThings.set(key, newSet);
     });
+
+    // if bags is passed in we shallow copy it
+    // (this string couplets will remained coupled during this program)
+    if (bags) {
+      for (const entry of bags) {
+        this.bags.push(entry);
+      }
+    }
+
+    // its its passed in we deep copy it
+    this.restrictionsEncounteredDuringSolving = new Set<string>();
+    if (restrictions) {
+      for (let restriction of restrictions) {
+        this.restrictionsEncounteredDuringSolving.add(restriction);
+      }
+    }
+
+    // if it is passed in, we deep copy it
+    this.solutionNames = new Array<string>();
+    if (nameSegments) {
+      for (let segment of nameSegments)
+        this.solutionNames.push(segment);
+    }
+
+
 
     // interestingly, leaf nodes don't get cloned
     // but it doesn't matter that much because they are just used to
@@ -84,7 +101,7 @@ export class Solution {
       clonedRootNodes.push(clonedRootNode);
     }
 
-    const clonedSolution = new Solution(clonedRootNodes, this.remainingNodes, this.mapOfVisibleThings, this.restrictionsEncounteredDuringSolving, this.solutionNames);
+    const clonedSolution = new Solution(clonedRootNodes, this.remainingNodes, this.mapOfVisibleThings, this.bags, this.restrictionsEncounteredDuringSolving, this.solutionNames);
     clonedSolution.SetIncompleteNodes(incompleteNodes);
     return clonedSolution;
   }

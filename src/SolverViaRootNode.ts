@@ -9,6 +9,9 @@ import { assert } from 'console';
 
 
 export class SolverViaRootNode {
+  private solutions: Array<Solution>;
+  private readonly mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>;
+
   /**
    *
    * @param mapOfStartingThingsAndWhoCanHaveThem
@@ -26,9 +29,11 @@ export class SolverViaRootNode {
     });
   }
 
-  InitializeByCopyingThese(solutionNodesMappedByInput: SolutionNodeMap, mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>) {
-    const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_goal_main");
-    this.solutions.push(new Solution(solutionRootNode, solutionNodesMappedByInput, mapOfStartingThingsAndWhoCanHaveThem));
+  InitializeByCopyingThese(mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>, solutionNodesMappedByInput: SolutionNodeMap, bags: Array<[string, string]>) {
+    const array: Array<SolutionNode> = new Array<SolutionNode>();
+    array.push(new SolutionNode("root comment 1", "", 1, null, null, "flag_goal_main"));
+    let firstSolutionToWorkOn = new Solution(array, solutionNodesMappedByInput, mapOfStartingThingsAndWhoCanHaveThem, bags)
+    this.solutions.push(firstSolutionToWorkOn);
   }
 
   IsAnyNodesUnprocessed(): boolean {
@@ -62,67 +67,64 @@ export class SolverViaRootNode {
     this.GenerateSolutionNamesAndPush(this.mapOfStartingThingsAndWhoCanHaveThem);
   }
 
+  /*
   ProgressAllGoalsAndUpdateSolutionList() {
     // this needs to be a member function because we are overwriting this.solutions
     let newList = new Array<Solution>();
     for (let oldSolution of this.solutions) {
-      if (!oldSolution.IsChapterWin()) {
-        newList.push(oldSolution);
-      } else {
-        let chapterFlag = oldSolution.GetChapterWinFlag();
 
-        // we do this here, we should really do it as part of solving
-        oldSolution.UpdateMapOfVisibleThingsWithAReverseTraversal();
-        let startingThings = oldSolution.GetMapOfVisibleThings();
-        let mapOfRemainingNodes = oldSolution.GetMapOfCurrentlyRemainingNodes();
+      // we do this here, we should really do it as part of solving
+      oldSolution.UpdateMapOfVisibleThingsWithAReverseTraversal();
+      let startingThings = oldSolution.GetMapOfVisibleThings();
+      let mapOfRemainingNodes = oldSolution.GetMapOfCurrentlyRemainingNodes();
 
-        const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_goal_main");
-        let newSolution = new Solution(solutionRootNode, mapOfRemainingNodes, startingThings);
-        oldSolution.CopyNameToVirginSolution(newSolution);
+      const solutionRootNode = new SolutionNode("root comment 1", "", 1, null, null, "flag_goal_main");
+      let newSolution = new Solution(solutionRootNode, mapOfRemainingNodes, startingThings);
+      oldSolution.CopyNameToVirginSolution(newSolution);
 
-        // there is always a directive to merge in nodes upon chapter completion
-        // so find that node, and merge in the new nodes
-        newSolution.MergeInNodesForSecondaryGoalCompletion(chapterFlag);
+      // there is always a directive to merge in nodes upon chapter completion
+      // so find that node, and merge in the new nodes
+      newSolution.MergeInNodesForSecondaryGoalCompletion(chapterFlag);
 
-        let subGroup = new SolverViaRootNode(startingThings);
-        subGroup.solutions.push(newSolution);
-        subGroup.SolveUntilZeroUnprocessedNodes();// - this includes name generation
+      let subGroup = new SolverViaRootNode(startingThings);
+      subGroup.solutions.push(newSolution);
+      subGroup.SolveUntilZeroUnprocessedNodes();// - this includes name generation
 
-        // some of the new solutions could be doubles
-        // so this long process ensures that duplicates
-        // are not added to the newList
-        let debug = subGroup.solutions.length;
-        for (let solution of subGroup.solutions) {
-          let name = solution.GetDisplayNamesConcatenated();
-          let isChapterWin = solution.IsChapterWin();
-          let leafNodes = solution.GetLeafNodes();
-          let isSameLeafNodesFoundInOtherSolution = false;
-          for (let otherSolution of this.solutions) {
-            let otherName = otherSolution.GetDisplayNamesConcatenated();
+      // some of the new solutions could be doubles
+      // so this long process ensures that duplicates
+      // are not added to the newList
+      let debug = subGroup.solutions.length;
+      for (let solution of subGroup.solutions) {
+        let name = solution.GetDisplayNamesConcatenated();
+        let leafNodes = solution.GetLeafNodes();
+        let isSameLeafNodesFoundInOtherSolution = false;
+        for (let otherSolution of this.solutions) {
+          let otherName = otherSolution.GetDisplayNamesConcatenated();
 
-            let isLeafPathMissing = false;
-            otherSolution.GetLeafNodes().forEach((value: SolutionNode, leafPath: string) => {
-              if (!leafNodes.has(leafPath)) {
-                isLeafPathMissing = true;
-              }
-            });
-            if (!isLeafPathMissing) {
-              isSameLeafNodesFoundInOtherSolution = true;
-              break;
+          let isLeafPathMissing = false;
+          otherSolution.GetLeafNodes().forEach((value: SolutionNode, leafPath: string) => {
+            if (!leafNodes.has(leafPath)) {
+              isLeafPathMissing = true;
             }
+          });
+          if (!isLeafPathMissing) {
+            isSameLeafNodesFoundInOtherSolution = true;
+            break;
           }
-          if (!isSameLeafNodesFoundInOtherSolution) {
-            let newName = solution.GetLastDisplayNameSegment();
-            let existingName = oldSolution.GetLastDisplayNameSegment();
-            if (newName != existingName) {
-              newList.push(solution);
-            }
+        }
+        if (!isSameLeafNodesFoundInOtherSolution) {
+          let newName = solution.GetLastDisplayNameSegment();
+          let existingName = oldSolution.GetLastDisplayNameSegment();
+          if (newName != existingName) {
+            newList.push(solution);
           }
         }
       }
     }
+
     this.solutions = newList;
   }
+*/
 
   public GenerateSolutionNamesAndPush(mapOfStartingThingsAndWhoHasThem: Map<string, Set<string>>) {
     for (let i = 0; i < this.solutions.length; i++) {
@@ -184,6 +186,5 @@ export class SolverViaRootNode {
     return this.solutions;
   }
 
-  private solutions: Array<Solution>;
-  private readonly mapOfStartingThingsAndWhoCanHaveThem: Map<string, Set<string>>;
+
 }

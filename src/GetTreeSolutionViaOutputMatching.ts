@@ -3,10 +3,12 @@ import { SolutionNode } from './SolutionNode';
 import { Solution } from './Solution';
 import { SolutionNodeMap } from './SolutionNodeMap';
 
-export function GetTreeSolutionViaOutputMatching(map: SolutionNodeMap, solutionGoal: string, startings: Map<string, Set<string>>): SolverViaRootNode {
+export function GetTreeSolutionViaOutputMatching(map: SolutionNodeMap, solutionGoal: string, startingMap: Map<string, Set<string>>): SolverViaRootNode {
 
-  const collection = new SolverViaRootNode(startings);
-  collection.GetSolutionsArray().push(new Solution(new SolutionNode("theRootNode", "", 1, null, null, solutionGoal), map, startings));
+  const collection = new SolverViaRootNode(startingMap);
+  let rootNodes = new Array<SolutionNode>();
+  rootNodes.push(new SolutionNode("theRootNode", "", 1, null, null, solutionGoal))
+  collection.GetSolutionsArray().push(new Solution(rootNodes, map, startingMap));
 
   do {
     collection.SolvePartiallyUntilCloning();

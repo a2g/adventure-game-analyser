@@ -158,7 +158,7 @@ export class SolutionNode {
 
           // this is only here to make the unit tests make sense
           // something like to fix a bug where cloning doesn't mark node as complete
-          theSolution.MarkNodeAsCompleted(theSolution.rootNode);
+          theSolution.MarkNodeAsCompleted(theSolution.rootNodes[0]);
           if (isCloneBeingUsed)
             solutions.GetSolutionsArray().push(theSolution);
 
