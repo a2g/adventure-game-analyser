@@ -57,12 +57,12 @@
                 "prop_stageB",
                 "prop_stageC",
                 "prop_stageD",
-                "prop_stageE"              
+                "prop_stageE"
             ]
         },
         "flag_type": {
             "enum": [
-                "flag_win"
+                "flag_goal_main"
             ]
         }
     }

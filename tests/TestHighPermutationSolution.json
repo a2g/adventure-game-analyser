@@ -5,7 +5,7 @@
             "gate": "FLAG1_SET_BY_USING_INV1_WITH_PROP1",
             "inv1": "inv_final_catalyst",
             "prop1": "prop_stageE",
-            "flag1": "flag_win"
+            "flag1": "flag_goal_main"
         },
         {
             "gate": "TOGGLE_PROP1_BECOMES_PROP2",
